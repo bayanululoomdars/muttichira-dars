@@ -1360,6 +1360,34 @@
         ════════════════════════════════ -->
         <div class="page" id="page-homepage">
 
+          <!-- Stats Counters -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa fa-bar-chart"></i> Homepage Counter Statistics</div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Students Count</label>
+                <input class="form-control" type="number" id="hpStudents" placeholder="103" value="103">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Usthads Count</label>
+                <input class="form-control" type="number" id="hpUstads" placeholder="6" value="6">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Years of Legacy</label>
+                <input class="form-control" type="number" id="hpYears" placeholder="52" value="52">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Distinguished Alumni</label>
+                <input class="form-control" type="number" id="hpAlumni" placeholder="25" value="25">
+              </div>
+            </div>
+            <button class="btn btn-accent btn-sm" onclick="saveHomeStats()">
+              <i class="fa fa-save"></i> Save Counter Stats
+            </button>
+          </div>
+
           <!-- Sections Editor -->
           <div class="card">
             <div class="card-header">
@@ -1613,6 +1641,20 @@ darsbayanululoom@gmail.com</textarea>
               </button>
             </form>
             <div id="branchListAdmin"></div>
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label class="form-label">Mudarris Name</label>
+                <input class="form-control" type="text" id="hpFooterName" placeholder="Name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Title</label>
+                <input class="form-control" type="text" id="hpFooterTitle" placeholder="Principal Mudarris">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Detail</label>
+                <input class="form-control" type="text" id="hpFooterDetail" placeholder="Muttichira Bayanul Uloom Dars">
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1708,34 +1750,31 @@ darsbayanululoom@gmail.com</textarea>
         ════════════════════════════════ -->
         <div class="page" id="page-gallery">
           
-          <!-- Home Page Gallery Display Settings (Popular, Limit, Category) -->
+          <!-- Home Page Gallery Display Settings -->
           <div class="card" style="border:1.5px solid var(--accent-dim);">
             <div class="card-header">
               <div class="card-title" style="color:var(--accent);"><i class="fa fa-sliders"></i> Home Page Gallery Display Settings</div>
             </div>
             <div class="form-grid-3">
               <div class="form-group">
-                <label class="form-label">Number of Images Setting (Limit)</label>
+                <label class="form-label">Number of Items</label>
                 <select class="form-control" id="homeGalleryLimit">
                   <option value="3">3 Items</option>
                   <option value="6">6 Items</option>
                   <option value="9">9 Items</option>
-                  <option value="12">12 Items</option>
-                  <option value="0">All Items</option>
                 </select>
               </div>
               <div class="form-group">
-                <label class="form-label">Featured Category Filter</label>
+                <label class="form-label">Category Filter</label>
                 <select class="form-control" id="homeGalleryCategory">
                   <option value="all">All Categories</option>
                 </select>
               </div>
               <div class="form-group">
-                <label class="form-label">Display Mode Algorithm</label>
+                <label class="form-label">Display Mode</label>
                 <select class="form-control" id="homeGalleryMode">
-                  <option value="popular">🔥 Most Popular (Most Liked, Most Comments, Views)</option>
-                  <option value="all">🕒 Latest Uploads</option>
-                  <option value="pinned">📌 Pinned / Featured Only</option>
+                  <option value="popular">Popular</option>
+                  <option value="latest">Latest</option>
                 </select>
               </div>
             </div>
@@ -1747,70 +1786,56 @@ darsbayanululoom@gmail.com</textarea>
           <!-- Add Gallery Item -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title"><i class="fa fa-plus-circle"></i> Upload Media (Image / Video)</div>
+              <div class="card-title"><i class="fa fa-upload"></i> Upload Media (Image / Video)</div>
+              <div style="display:flex;gap:6px;">
+                <button type="button" class="btn btn-ghost btn-sm active" id="srcBtnFile" onclick="setGallerySource('file')">Upload File</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="srcBtnUrl" onclick="setGallerySource('url')">Direct URL</button>
+              </div>
             </div>
             <form id="galleryForm" enctype="multipart/form-data">
               <div class="form-grid-2">
                 <div class="form-group">
                   <label class="form-label">Title *</label>
-                  <input class="form-control" type="text" id="galleryTitle" placeholder="Item title" required>
+                  <input class="form-control" type="text" id="galleryTitle" placeholder="Item title..." required>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Category *</label>
                   <select class="form-control" id="galleryCategory" onchange="toggleNewCategoryInput()" required>
                     <option value="">Select Category...</option>
-                    <option value="Programme">Programme</option>
-                    <option value="Collections">Collections</option>
-                    <option value="Design">Design</option>
-                    <option value="__new__">+ Add New Category</option>
                   </select>
                 </div>
               </div>
 
               <div class="form-group" id="galleryNewCategoryWrap" style="display:none;">
-                <label class="form-label">New Category Name</label>
-                <input class="form-control" type="text" id="galleryNewCategoryInput" placeholder="e.g. Friday Talk, Milad, Poster">
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Media Type *</label>
-                <select class="form-control" id="galleryMediaType">
-                  <option value="image">Image</option>
-                  <option value="video">Video / Reel</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Media Source</label>
-                <div class="media-source-toggle">
-                  <button type="button" class="media-source-btn active" id="srcBtnFile" onclick="setGallerySource('file')">
-                    <i class="fa fa-upload"></i> Upload File
-                  </button>
-                  <button type="button" class="media-source-btn" id="srcBtnUrl" onclick="setGallerySource('url')">
-                    <i class="fa fa-link"></i> Paste URL
-                  </button>
-                </div>
-              </div>
-
-              <div class="form-group" id="galleryImageInputGroup">
-                <label class="form-label">Upload Image / Video File</label>
-                <input class="form-control" type="file" id="galleryImage" accept="image/*,video/*">
-              </div>
-
-              <div class="form-group" id="galleryVideoUrlGroup" style="display:none;">
-                <label class="form-label">Direct Media URL / YouTube URL</label>
-                <input class="form-control" type="text" id="galleryVideoUrl" placeholder="https://youtube.com/watch?v=... or direct URL">
+                <label class="form-label">New Category Name *</label>
+                <input class="form-control" type="text" id="galleryNewCategoryInput" placeholder="Enter new category...">
               </div>
 
               <div class="form-grid-2">
                 <div class="form-group">
-                  <label class="form-label">Description / Caption</label>
-                  <textarea class="form-control" id="galleryDesc" rows="3" placeholder="Post description..."></textarea>
+                  <label class="form-label">Media Type</label>
+                  <select class="form-control" id="galleryMediaType">
+                    <option value="image">Image</option>
+                    <option value="video">Video (Reel / YouTube)</option>
+                  </select>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Hashtags (comma-separated)</label>
-                  <input class="form-control" type="text" id="galleryHashtags" placeholder="muttichira, dars, albayan">
+                <div class="form-group" id="galleryImageInputGroup">
+                  <label class="form-label">Media File</label>
+                  <input class="form-control" type="file" id="galleryImage" accept="image/*,video/*">
                 </div>
+                <div class="form-group" id="galleryVideoUrlGroup" style="display:none;">
+                  <label class="form-label">Video URL (Direct link or YouTube link)</label>
+                  <input class="form-control" type="text" id="galleryVideoUrl" placeholder="https://youtube.com/watch?v=...">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Description (optional)</label>
+                <textarea class="form-control" id="galleryDesc" rows="2" placeholder="Short description..."></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hashtags (optional, comma-separated)</label>
+                <input class="form-control" type="text" id="galleryHashtags" placeholder="dars, program, albayan">
               </div>
 
               <button type="submit" class="btn btn-accent">
@@ -1819,24 +1844,17 @@ darsbayanululoom@gmail.com</textarea>
             </form>
           </div>
 
-          <!-- Category Management -->
+          <!-- Category Manager -->
           <div class="card">
             <div class="card-header">
               <div class="card-title"><i class="fa fa-tags"></i> Category Manager</div>
             </div>
-            <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-              <input class="form-control" type="text" id="newCategoryInput"
-                placeholder="Add category name..." style="max-width:280px;">
+            <div style="display:flex;gap:10px;margin-bottom:16px;">
+              <input class="form-control" type="text" id="newCategoryInput" placeholder="New Category Name" style="max-width:300px;">
               <button class="btn btn-accent btn-sm" onclick="addCategoryAdmin()">
                 <i class="fa fa-plus"></i> Add Category
               </button>
             </div>
-            <div id="categoryBadgesList" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-          </div>
-
-          <!-- Gallery Table -->
-          <div class="card">
-            <div class="card-header">
               <div class="card-title"><i class="fa fa-th"></i> All Gallery Items</div>
               <button class="btn btn-ghost btn-sm" onclick="loadGalleryAdmin()"><i class="fa fa-refresh"></i> Refresh</button>
             </div>
