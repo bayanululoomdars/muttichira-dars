@@ -1641,20 +1641,6 @@ darsbayanululoom@gmail.com</textarea>
               </button>
             </form>
             <div id="branchListAdmin"></div>
-            <div class="form-grid-3">
-              <div class="form-group">
-                <label class="form-label">Mudarris Name</label>
-                <input class="form-control" type="text" id="hpFooterName" placeholder="Name">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Title</label>
-                <input class="form-control" type="text" id="hpFooterTitle" placeholder="Principal Mudarris">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Detail</label>
-                <input class="form-control" type="text" id="hpFooterDetail" placeholder="Muttichira Bayanul Uloom Dars">
-              </div>
-            </div>
           </div>
         </div>
 
@@ -1855,7 +1841,13 @@ darsbayanululoom@gmail.com</textarea>
                 <i class="fa fa-plus"></i> Add Category
               </button>
             </div>
-              <div class="card-title"><i class="fa fa-th"></i> All Gallery Items</div>
+            <div class="category-badges" id="categoryBadgesList">Loading categories...</div>
+          </div>
+
+          <!-- Gallery Items Table -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa fa-th-large"></i> All Gallery Items</div>
               <button class="btn btn-ghost btn-sm" onclick="loadGalleryAdmin()"><i class="fa fa-refresh"></i> Refresh</button>
             </div>
             <div class="table-wrap">
@@ -1864,47 +1856,6 @@ darsbayanululoom@gmail.com</textarea>
                   <tr><th>Media</th><th>Title</th><th>Category</th><th>Pin</th><th>Date</th><th>Action</th></tr>
                 </thead>
                 <tbody id="galleryTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Stories Management -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-camera"></i> Stories Manager (24h / 7-Day Stories)</div>
-            </div>
-            <form id="storyForm" enctype="multipart/form-data" style="margin-bottom:20px;">
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Story Title (optional)</label>
-                  <input class="form-control" type="text" id="storyTitle" placeholder="Story title">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Active Duration (days)</label>
-                  <select class="form-control" id="storyDays">
-                    <option value="1">1 Day</option>
-                    <option value="3">3 Days</option>
-                    <option value="7" selected>7 Days</option>
-                    <option value="14">14 Days</option>
-                    <option value="30">30 Days</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Story Image *</label>
-                <input class="form-control" type="file" id="storyImage" accept="image/*" required>
-              </div>
-              <button type="submit" class="btn btn-accent btn-sm">
-                <i class="fa fa-upload"></i> Upload Active Story
-              </button>
-            </form>
-
-            <div class="table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr><th>Image</th><th>Title</th><th>Days</th><th>Expires</th><th>Status</th><th>Action</th></tr>
-                </thead>
-                <tbody id="storiesTableBody"></tbody>
               </table>
             </div>
           </div>
@@ -2201,7 +2152,169 @@ darsbayanululoom@gmail.com</textarea>
      JAVASCRIPT
 ══════════════════════════════════ -->
 <script>
+/* ═══════════════════════════════════════
+   SAFE DOM HELPERS
+═══════════════════════════════════════ */
+function safeSetText(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
 }
+function safeSetHtml(id, html) {
+  var el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+function safeSetValue(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.value = val;
+}
+function safeGetValue(id) {
+  var el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+function safeAddListener(id, event, fn) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener(event, fn);
+}
+
+/* ═══════════════════════════════════════
+   LOAD ALL
+═══════════════════════════════════════ */
+function loadAll() {
+  loadAdmissions();
+  loadNewsAdmin();
+  loadGalleryAdmin();
+  loadContacts();
+  loadSubscribers();
+  loadSectionEditor();
+  loadHomeSettings();
+  loadWhyUsSettings();
+  loadPosterAndBanner();
+  loadCommitteeSettings();
+  loadAllComments();
+  loadHomeGallerySettings();
+}
+
+/* ═══════════════════════════════════════
+   ADMISSION STATUS
+═══════════════════════════════════════ */
+function checkAdmissionStatus() {
+  fetch('/api/settings/admission')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var toggle = document.getElementById('admissionToggle');
+      if (toggle) toggle.checked = data.isOpen;
+      safeSetText('admissionToggleLabel', data.isOpen ? 'Admissions Open' : 'Admissions Closed');
+    })
+    .catch(function() {});
+}
+
+function toggleAdmission(isOpen) {
+  fetch('/api/settings/admission', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ isOpen: isOpen })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) {
+      safeSetText('admissionToggleLabel', data.isOpen ? 'Admissions Open' : 'Admissions Closed');
+      showToast('Admission status updated: ' + (data.isOpen ? 'OPEN' : 'CLOSED'), false);
+    }
+  });
+}
+
+/* ═══════════════════════════════════════
+   BANNER & POSTER
+═══════════════════════════════════════ */
+function loadPosterAndBanner() {
+  fetch('/api/settings/poster')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var previewWrap = document.getElementById('adminPosterPreviewWrap');
+      var noNotice    = document.getElementById('adminNoPosterNotice');
+      var container   = document.getElementById('currentPosterPreviewContainer');
+      if (d.posterUrl) {
+        var isVideo = /\.(mp4|webm)$/i.test(d.posterUrl) || d.posterUrl.includes('youtube.com') || d.posterUrl.includes('youtu.be');
+        if (container) {
+          container.innerHTML = isVideo
+            ? '<video src="' + d.posterUrl + '" controls class="poster-preview-img"></video>'
+            : '<img src="' + d.posterUrl + '" class="poster-preview-img" alt="Poster">';
+        }
+        if (previewWrap) previewWrap.style.display = 'flex';
+        if (noNotice) noNotice.style.display = 'none';
+        var urlInput = document.getElementById('posterUrlInput');
+        if (urlInput && d.posterUrl.startsWith('http')) urlInput.value = d.posterUrl;
+      } else {
+        if (previewWrap) previewWrap.style.display = 'none';
+        if (noNotice) noNotice.style.display = 'flex';
+      }
+    }).catch(function() {});
+
+  fetch('/api/settings/admission-banner')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.title)   safeSetValue('bannerTitle', d.title);
+      if (d.content) safeSetValue('bannerContent', d.content);
+    }).catch(function() {});
+}
+
+/* ═══════════════════════════════════════
+   HOME STATS
+═══════════════════════════════════════ */
+window.saveHomeStats = function() {
+  var data = {
+    statsStudents: parseInt(safeGetValue('hpStudents')) || 103,
+    statsUstads: parseInt(safeGetValue('hpUstads')) || 6,
+    statsYears: parseInt(safeGetValue('hpYears')) || 52,
+    statsAlumni: parseInt(safeGetValue('hpAlumni')) || 25
+  };
+  fetch('/api/home-settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.json(); })
+    .then(function(res) { showToast(res.success ? 'Counter stats saved!' : 'Failed', !res.success); });
+};
+
+/* ═══════════════════════════════════════
+   HOME GALLERY DISPLAY SETTINGS
+═══════════════════════════════════════ */
+function loadHomeGallerySettings() {
+  fetch('/api/settings/home-gallery')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.limit !== undefined) safeSetValue('homeGalleryLimit', d.limit);
+      if (d.category) safeSetValue('homeGalleryCategory', d.category);
+      if (d.mode) safeSetValue('homeGalleryMode', d.mode);
+    }).catch(function() {});
+  // Populate category dropdown
+  fetch('/api/settings/gallery-categories')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var sel = document.getElementById('homeGalleryCategory');
+      if (sel && d.categories) {
+        var current = sel.value;
+        sel.innerHTML = '<option value="all">All Categories</option>';
+        d.categories.forEach(function(c) {
+          sel.innerHTML += '<option value="' + c + '">' + c + '</option>';
+        });
+        sel.value = current || 'all';
+      }
+    }).catch(function() {});
+}
+
+window.saveHomeGallerySettings = function() {
+  fetch('/api/settings/home-gallery', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      limit: parseInt(safeGetValue('homeGalleryLimit')) || 6,
+      category: safeGetValue('homeGalleryCategory') || 'all',
+      mode: safeGetValue('homeGalleryMode') || 'popular'
+    })
+  }).then(function(r) { return r.json(); })
+    .then(function(res) { showToast(res.success ? 'Gallery display settings saved!' : 'Failed', !res.success); });
+};
 
 window.saveBannerText = function() {
   fetch('/api/settings/admission-banner', {
