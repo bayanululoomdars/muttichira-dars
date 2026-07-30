@@ -1360,34 +1360,6 @@
         ════════════════════════════════ -->
         <div class="page" id="page-homepage">
 
-          <!-- Stats Counters -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-bar-chart"></i> Homepage Counter Statistics</div>
-            </div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label class="form-label">Students Count</label>
-                <input class="form-control" type="number" id="hpStudents" placeholder="90">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Usthads Count</label>
-                <input class="form-control" type="number" id="hpUstads" placeholder="6">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Years of Legacy</label>
-                <input class="form-control" type="number" id="hpYears" placeholder="50">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Distinguished Alumni</label>
-                <input class="form-control" type="number" id="hpAlumni" placeholder="25">
-              </div>
-            </div>
-            <button class="btn btn-accent btn-sm" onclick="saveHomeStats()">
-              <i class="fa fa-save"></i> Save Counter Stats
-            </button>
-          </div>
-
           <!-- Sections Editor -->
           <div class="card">
             <div class="card-header">
@@ -1479,16 +1451,16 @@
                 <div class="form-grid-2">
                   <div class="form-group">
                     <label class="form-label">Name</label>
-                    <input class="form-control" type="text" id="hpPrincipalName" placeholder="Principal Name">
+                    <input class="form-control" type="text" id="hpPrincipalName" placeholder="Sheikhuna Ibrahim Baqavi Al Haithami" value="Sheikhuna Ibrahim Baqavi Al Haithami">
                   </div>
                   <div class="form-group">
                     <label class="form-label">Title</label>
-                    <input class="form-control" type="text" id="hpPrincipalTitle" placeholder="Principal Mudarris">
+                    <input class="form-control" type="text" id="hpPrincipalTitle" placeholder="Principal Mudarris" value="Principal Mudarris">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Bio</label>
-                  <textarea class="form-control" id="hpPrincipalBio" rows="2" placeholder="Short biography..."></textarea>
+                  <textarea class="form-control" id="hpPrincipalBio" rows="2" placeholder="Short biography...">Sheikhuna Ibrahim Baqavi Al Haithami</textarea>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Upload Photo</label>
@@ -1556,19 +1528,20 @@
             <div class="form-grid-2">
               <div class="form-group">
                 <label class="form-label">Eligibility Text</label>
-                <textarea class="form-control" id="whyUsEligibility" rows="3" placeholder="Students who completed basic Islamic education..."></textarea>
+                <textarea class="form-control" id="whyUsEligibility" rows="3" placeholder="Students who completed basic Islamic education...">Students who completed basic Islamic education are welcome to apply for advanced religious studies.</textarea>
               </div>
               <div class="form-group">
                 <label class="form-label">Curriculum Text</label>
-                <textarea class="form-control" id="whyUsCurriculum" rows="3" placeholder="Quran, Hadith, Fiqh..."></textarea>
+                <textarea class="form-control" id="whyUsCurriculum" rows="3" placeholder="Quran, Hadith, Fiqh...">Quran, Hadith, Fiqh, Arabic language, and modern subjects guided by experienced Usthads.</textarea>
               </div>
               <div class="form-group">
                 <label class="form-label">Facilities Text</label>
-                <textarea class="form-control" id="whyUsFacilities" rows="3" placeholder="Library, Computer Lab..."></textarea>
+                <textarea class="form-control" id="whyUsFacilities" rows="3" placeholder="Library, Computer Lab...">Library, Computer Lab, Smart Class, Medical Wing & Store for holistic student development.</textarea>
               </div>
               <div class="form-group">
                 <label class="form-label">Enquiry Details</label>
-                <textarea class="form-control" id="whyUsEnquiry" rows="3" placeholder="+91 9526 919 218..."></textarea>
+                <textarea class="form-control" id="whyUsEnquiry" rows="3" placeholder="+91 9526 919 218">+91 9526 919 218
+darsbayanululoom@gmail.com</textarea>
               </div>
             </div>
             <button class="btn btn-accent btn-sm" onclick="saveWhyUsSettings()">
@@ -1583,11 +1556,11 @@
             </div>
             <div class="form-group">
               <label class="form-label">Committee Title</label>
-              <input class="form-control" type="text" id="committeeTitle" placeholder="THE NEW COMMITTEE 2026-27">
+              <input class="form-control" type="text" id="committeeTitle" placeholder="THE NEW COMMITTEE 2026-27" value="THE NEW COMMITTEE 2026-27">
             </div>
             <div class="form-group">
               <label class="form-label">Details</label>
-              <textarea class="form-control" id="committeeDetails" rows="3" placeholder="Committee details..."></textarea>
+              <textarea class="form-control" id="committeeDetails" rows="3" placeholder="Committee details...">anly for belove 12 year old</textarea>
             </div>
             <button class="btn btn-ghost btn-sm" style="margin-bottom:16px;" onclick="saveCommitteeText()">
               <i class="fa fa-save"></i> Save Committee Text
@@ -1640,30 +1613,6 @@
               </button>
             </form>
             <div id="branchListAdmin"></div>
-          </div>
-
-          <!-- Footer Mudarris Info -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-cog"></i> Footer — Mudarris Info</div>
-            </div>
-            <div class="form-grid-3">
-              <div class="form-group">
-                <label class="form-label">Mudarris Name</label>
-                <input class="form-control" type="text" id="hpFooterName" placeholder="Name">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Title</label>
-                <input class="form-control" type="text" id="hpFooterTitle" placeholder="Principal Mudarris">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Detail</label>
-                <input class="form-control" type="text" id="hpFooterDetail" placeholder="Muttichira Bayanul Uloom Dars">
-              </div>
-            </div>
-            <button class="btn btn-accent btn-sm" onclick="saveFooterInfo()">
-              <i class="fa fa-save"></i> Save Footer Info
-            </button>
           </div>
         </div>
 
@@ -2234,227 +2183,6 @@
      JAVASCRIPT
 ══════════════════════════════════ -->
 <script>
-/* ═══════════════════════════════════════
-   PARTICLES
-═══════════════════════════════════════ */
-(function() {
-  var wrap = document.getElementById('loginParticles');
-  for (var i = 0; i < 25; i++) {
-    var s = document.createElement('span');
-    var left = Math.random() * 100;
-    var delay = Math.random() * 8;
-    var duration = 6 + Math.random() * 8;
-    var size = 1 + Math.random() * 3;
-    s.style.cssText = 'left:' + left + '%;bottom:' + (Math.random() * 40) + '%;width:' + size + 'px;height:' + size + 'px;animation-delay:' + delay + 's;animation-duration:' + duration + 's;';
-    wrap.appendChild(s);
-  }
-})();
-
-/* ═══════════════════════════════════════
-   TOAST
-═══════════════════════════════════════ */
-function showToast(msg, isErr) {
-  var c = document.getElementById('toastContainer');
-  var t = document.createElement('div');
-  t.className = 'toast ' + (isErr ? 'error' : 'success');
-  t.innerHTML = '<i class="fa ' + (isErr ? 'fa-times-circle' : 'fa-check-circle') + '"></i>' + msg;
-  c.appendChild(t);
-  setTimeout(function() {
-    t.style.opacity = '0';
-    t.style.transform = 'translateX(100%)';
-    t.style.transition = 'all 0.3s ease';
-    setTimeout(function() { t.remove(); }, 300);
-  }, 3500);
-}
-
-// Alias for backward compatibility
-function showAdminToast(msg, isErr) { showToast(msg, isErr); }
-
-/* ═══════════════════════════════════════
-   MODAL HELPERS
-═══════════════════════════════════════ */
-function openModal(id)  { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-window.onclick = function(e) {
-  ['admissionModal','resetModal'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (e.target === el) el.classList.remove('open');
-  });
-};
-
-/* ═══════════════════════════════════════
-   SIDEBAR
-═══════════════════════════════════════ */
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebarOverlay').classList.toggle('open');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebarOverlay').classList.remove('open');
-}
-
-/* ═══════════════════════════════════════
-   PAGE NAVIGATION
-═══════════════════════════════════════ */
-var pageTitles = {
-  overview: 'Dashboard Overview Panel',
-  homepage: 'Home Page Panel',
-  admissions: 'Admission Page Panel',
-  gallery: 'Gallery Page Panel',
-  messages: 'Message & Comments Panel',
-  reset: 'Full Reset Panel'
-};
-
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.nav-item').forEach(function(b) { b.classList.remove('active'); });
-
-  var pageEl = document.getElementById('page-' + name);
-  if (pageEl) pageEl.classList.add('active');
-
-  var navEl = document.getElementById('nav-' + name);
-  if (navEl) navEl.classList.add('active');
-
-  document.getElementById('topbarTitle').textContent = pageTitles[name] || name;
-  closeSidebar();
-
-  if (name === 'messages') {
-    loadContacts();
-    loadAllComments();
-    loadSubscribers();
-  }
-}
-
-/* ═══════════════════════════════════════
-   AUTH
-═══════════════════════════════════════ */
-function doLogin() {
-  var pw = document.getElementById('loginPassword').value;
-  var btn = document.getElementById('loginBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Signing in...';
-
-  fetch('/api/admin/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: pw })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa fa-lock"></i> Sign In';
-    if (data.success) {
-      sessionStorage.setItem('admin', 'true');
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('loginParticles').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      loadAll();
-      checkAdmissionStatus();
-    } else {
-      document.getElementById('loginError').textContent = data.message || 'Invalid password';
-    }
-  })
-  .catch(function() {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa fa-lock"></i> Sign In';
-    document.getElementById('loginError').textContent = 'Network error. Please try again.';
-  });
-}
-
-function doLogout() {
-  sessionStorage.removeItem('admin');
-  location.reload();
-}
-
-// Auto-login
-if (sessionStorage.getItem('admin')) {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('loginParticles').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  setTimeout(function() { loadAll(); checkAdmissionStatus(); }, 100);
-}
-
-/* ═══════════════════════════════════════
-   LOAD ALL
-═══════════════════════════════════════ */
-function loadAll() {
-  loadAdmissions();
-  loadNewsAdmin();
-  loadGalleryAdmin();
-  loadContacts();
-  loadSubscribers();
-  loadSectionEditor();
-  loadStories();
-  loadHomeSettings();
-  loadWhyUsSettings();
-  loadPosterAndBanner();
-  loadCommitteeSettings();
-}
-
-/* ═══════════════════════════════════════
-   ADMISSION STATUS
-═══════════════════════════════════════ */
-function checkAdmissionStatus() {
-  fetch('/api/settings/admission')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var toggle = document.getElementById('admissionToggle');
-      var label  = document.getElementById('admissionToggleLabel');
-      if (toggle) toggle.checked = data.isOpen;
-      if (label)  label.textContent = data.isOpen ? 'Admissions Open' : 'Admissions Closed';
-    })
-    .catch(function() {});
-}
-
-function toggleAdmission(isOpen) {
-  var label = document.getElementById('admissionToggleLabel');
-  fetch('/api/settings/admission', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ isOpen: isOpen })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.success) {
-      if (label) label.textContent = data.isOpen ? 'Admissions Open' : 'Admissions Closed';
-      showToast('Admission status updated: ' + (data.isOpen ? 'OPEN' : 'CLOSED'), false);
-    }
-  });
-}
-
-/* ═══════════════════════════════════════
-   BANNER & POSTER
-═══════════════════════════════════════ */
-function loadPosterAndBanner() {
-  fetch('/api/settings/poster')
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      var previewWrap = document.getElementById('adminPosterPreviewWrap');
-      var noNotice    = document.getElementById('adminNoPosterNotice');
-      var container   = document.getElementById('currentPosterPreviewContainer');
-      if (d.posterUrl) {
-        var isVideo = /\.(mp4|webm)$/i.test(d.posterUrl) || d.posterUrl.includes('youtube.com') || d.posterUrl.includes('youtu.be');
-        container.innerHTML = isVideo
-          ? '<video src="' + d.posterUrl + '" controls class="poster-preview-img"></video>'
-          : '<img src="' + d.posterUrl + '" class="poster-preview-img" alt="Poster">';
-        previewWrap.style.display = 'flex';
-        noNotice.style.display = 'none';
-        var urlInput = document.getElementById('posterUrlInput');
-        if (urlInput && d.posterUrl.startsWith('http')) urlInput.value = d.posterUrl;
-      } else {
-        previewWrap.style.display = 'none';
-        noNotice.style.display = 'flex';
-      }
-    }).catch(function() {});
-
-  fetch('/api/settings/admission-banner')
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (d.title)   document.getElementById('bannerTitle').value   = d.title;
-      if (d.content) document.getElementById('bannerContent').value = d.content;
-    }).catch(function() {});
 }
 
 window.saveBannerText = function() {
@@ -2462,8 +2190,8 @@ window.saveBannerText = function() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      title:   document.getElementById('bannerTitle').value.trim(),
-      content: document.getElementById('bannerContent').value.trim()
+      title:   safeGetValue('bannerTitle'),
+      content: safeGetValue('bannerContent')
     })
   }).then(function(r) { return r.json(); })
     .then(function(res) { showToast(res.success ? 'Banner text saved!' : (res.message || 'Failed'), !res.success); });
@@ -2476,24 +2204,25 @@ window.removePoster = function() {
     .then(function(res) { showToast(res.success ? 'Poster removed!' : 'Failed', !res.success); loadPosterAndBanner(); });
 };
 
-document.getElementById('posterUploadForm').addEventListener('submit', function(e) {
+safeAddListener('posterUploadForm', 'submit', function(e) {
   e.preventDefault();
   var fd = new FormData();
-  var file = document.getElementById('posterFile').files[0];
-  var url  = document.getElementById('posterUrlInput').value.trim();
+  var fileInput = document.getElementById('posterFile');
+  var file = fileInput && fileInput.files ? fileInput.files[0] : null;
+  var url  = safeGetValue('posterUrlInput');
   if (!file && !url) { showToast('Select a file or enter a URL', true); return; }
   if (file) fd.append('poster', file);
   if (url)  fd.append('posterUrl', url);
   var btn = this.querySelector('button[type=submit]');
-  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...'; }
   fetch('/api/settings/poster', { method: 'POST', body: fd })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Save Poster';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Save Poster'; }
       showToast(data.success ? 'Poster saved!' : (data.message || 'Failed'), !data.success);
       if (data.success) { e.target.reset(); loadPosterAndBanner(); }
     }).catch(function() {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Save Poster';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Save Poster'; }
       showToast('Network error', true);
     });
 });
@@ -2508,8 +2237,8 @@ function loadAdmissions() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       currentAdmissions = data;
-      document.getElementById('statAdmissions').textContent = data.length;
-      document.getElementById('badge-admissions').textContent = data.length;
+      safeSetText('statAdmissions', data.length);
+      safeSetText('badge-admissions', data.length);
 
       var html = '';
       data.forEach(function(item) {
@@ -2526,15 +2255,14 @@ function loadAdmissions() {
           '<button class="btn btn-danger btn-sm" onclick="deleteItem(\'admissions\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button>' +
           '</td></tr>';
       });
-      document.getElementById('admissionsTableBody').innerHTML = html ||
-        '<tr class="empty-row"><td colspan="7">No admission applications yet</td></tr>';
+      safeSetHtml('admissionsTableBody', html || '<tr class="empty-row"><td colspan="7">No admission applications yet</td></tr>');
 
       // Overview panel
       var ovHtml = data.slice(0,5).map(function(a) {
         return '<div style="padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:0.84rem;display:flex;justify-content:space-between;">' +
           '<span>' + a.name + '</span><span style="color:var(--text-muted);">' + new Date(a.createdAt).toLocaleDateString('en-IN') + '</span></div>';
       }).join('');
-      document.getElementById('overviewAdmissions').innerHTML = ovHtml || '<span style="color:var(--text-muted);">No applications yet</span>';
+      safeSetHtml('overviewAdmissions', ovHtml || '<span style="color:var(--text-muted);">No applications yet</span>');
     }).catch(function() {});
 }
 
@@ -2567,39 +2295,41 @@ function viewAdmission(id) {
   });
   html += '</div>';
 
-  document.getElementById('modalBody').innerHTML = html;
+  safeSetHtml('modalBody', html);
   openModal('admissionModal');
 }
 
 function closeAdmissionModal() { closeModal('admissionModal'); }
 
 function fillPdfTemplate(item) {
-  document.getElementById('pdf_name').innerText       = item.name || '';
-  document.getElementById('pdf_fatherName').innerText = item.fatherName || '';
-  document.getElementById('pdf_phone').innerText      = item.phone || '';
-  document.getElementById('pdf_motherName').innerText = item.motherName || '';
-  document.getElementById('pdf_dob').innerText        = item.dob || '';
-  document.getElementById('pdf_houseName').innerText   = item.houseName || '______';
-  document.getElementById('pdf_homePhone').innerText   = item.homePhone || '______';
-  document.getElementById('pdf_place').innerText       = item.place || '______';
-  document.getElementById('pdf_postOffice').innerText  = item.postOffice || '______';
-  document.getElementById('pdf_district').innerText    = item.district || '______';
-  document.getElementById('pdf_pincode').innerText     = item.pincode || '______';
-  document.getElementById('pdf_bloodGroup').innerText  = item.bloodGroup || '______';
-  document.getElementById('pdf_eduRel').innerText      = item.educationReligious || '______';
-  document.getElementById('pdf_eduSec').innerText      = item.educationSecular || '______';
-  document.getElementById('pdf_guardianName').innerText  = item.guardianName || '______';
-  document.getElementById('pdf_relationship').innerText  = item.relationship || '______';
-  document.getElementById('pdf_guardianPhone').innerText = item.guardianPhone || '______';
-  document.getElementById('pdf_date').innerText       = new Date(item.createdAt).toLocaleDateString('en-IN');
-  document.getElementById('pdf_signature').innerText  = (item.name || '').split(' ')[0] || '';
+  safeSetText('pdf_name', item.name || '');
+  safeSetText('pdf_fatherName', item.fatherName || '');
+  safeSetText('pdf_phone', item.phone || '');
+  safeSetText('pdf_motherName', item.motherName || '');
+  safeSetText('pdf_dob', item.dob || '');
+  safeSetText('pdf_houseName', item.houseName || '______');
+  safeSetText('pdf_homePhone', item.homePhone || '______');
+  safeSetText('pdf_place', item.place || '______');
+  safeSetText('pdf_postOffice', item.postOffice || '______');
+  safeSetText('pdf_district', item.district || '______');
+  safeSetText('pdf_pincode', item.pincode || '______');
+  safeSetText('pdf_bloodGroup', item.bloodGroup || '______');
+  safeSetText('pdf_eduRel', item.educationReligious || '______');
+  safeSetText('pdf_eduSec', item.educationSecular || '______');
+  safeSetText('pdf_guardianName', item.guardianName || '______');
+  safeSetText('pdf_relationship', item.relationship || '______');
+  safeSetText('pdf_guardianPhone', item.guardianPhone || '______');
+  safeSetText('pdf_date', new Date(item.createdAt).toLocaleDateString('en-IN'));
+  safeSetText('pdf_signature', (item.name || '').split(' ')[0] || '');
 
   var photoImg   = document.getElementById('pdfPhotoImg');
   var photoLabel = document.getElementById('pdfPhotoLabel');
-  if (item.imageUrl) {
-    photoImg.src = item.imageUrl; photoImg.style.display = 'block'; photoLabel.style.display = 'none';
-  } else {
-    photoImg.style.display = 'none'; photoLabel.style.display = 'block';
+  if (photoImg && photoLabel) {
+    if (item.imageUrl) {
+      photoImg.src = item.imageUrl; photoImg.style.display = 'block'; photoLabel.style.display = 'none';
+    } else {
+      photoImg.style.display = 'none'; photoLabel.style.display = 'block';
+    }
   }
 }
 
@@ -2621,8 +2351,8 @@ function printAdmission(id) {
 ═══════════════════════════════════════ */
 function loadNewsAdmin() {
   fetch('/api/news').then(function(r) { return r.json(); }).then(function(data) {
-    document.getElementById('statNews').textContent = data.length;
-    document.getElementById('badge-news').textContent = data.length;
+    safeSetText('statNews', data.length);
+    safeSetText('badge-news', data.length);
     var html = '';
     data.forEach(function(item) {
       var d = new Date(item.createdAt).toLocaleDateString('en-IN');
@@ -2633,28 +2363,28 @@ function loadNewsAdmin() {
         '<td>' + d + '</td>' +
         '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'news\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
     });
-    document.getElementById('newsTableBody').innerHTML = html ||
-      '<tr class="empty-row"><td colspan="5">No news yet</td></tr>';
+    safeSetHtml('newsTableBody', html || '<tr class="empty-row"><td colspan="5">No news yet</td></tr>');
   }).catch(function() {});
 }
 
-document.getElementById('newsForm').addEventListener('submit', function(e) {
+safeAddListener('newsForm', 'submit', function(e) {
   e.preventDefault();
   var fd = new FormData();
-  fd.append('title', document.getElementById('newsTitle').value);
-  fd.append('description', document.getElementById('newsDesc').value);
-  var img = document.getElementById('newsImage').files[0];
+  fd.append('title', safeGetValue('newsTitle'));
+  fd.append('description', safeGetValue('newsDesc'));
+  var imgInput = document.getElementById('newsImage');
+  var img = imgInput && imgInput.files ? imgInput.files[0] : null;
   if (img) fd.append('image', img);
   var btn = this.querySelector('button[type=submit]');
-  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Adding...';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Adding...'; }
   fetch('/api/news', { method: 'POST', body: fd })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-plus"></i> Add News / Achievement';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-plus"></i> Add News / Achievement'; }
       showToast(data.message, !data.success);
-      if (data.success) { document.getElementById('newsForm').reset(); loadNewsAdmin(); }
+      if (data.success) { e.target.reset(); loadNewsAdmin(); }
     }).catch(function() {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-plus"></i> Add News / Achievement';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-plus"></i> Add News / Achievement'; }
       showToast('Network error', true);
     });
 });
@@ -2666,23 +2396,28 @@ var galleryMediaSource = 'file';
 
 function setGallerySource(src) {
   galleryMediaSource = src;
-  document.getElementById('srcBtnFile').classList.toggle('active', src === 'file');
-  document.getElementById('srcBtnUrl').classList.toggle('active', src === 'url');
-  document.getElementById('galleryImageInputGroup').style.display = src === 'file' ? 'block' : 'none';
-  document.getElementById('galleryVideoUrlGroup').style.display   = src === 'url'  ? 'block' : 'none';
+  var btnFile = document.getElementById('srcBtnFile');
+  var btnUrl  = document.getElementById('srcBtnUrl');
+  var groupImg = document.getElementById('galleryImageInputGroup');
+  var groupVid = document.getElementById('galleryVideoUrlGroup');
+  if (btnFile) btnFile.classList.toggle('active', src === 'file');
+  if (btnUrl)  btnUrl.classList.toggle('active', src === 'url');
+  if (groupImg) groupImg.style.display = src === 'file' ? 'block' : 'none';
+  if (groupVid) groupVid.style.display = src === 'url'  ? 'block' : 'none';
 }
 
 function toggleNewCategoryInput() {
-  var val = document.getElementById('galleryCategory').value;
+  var val = safeGetValue('galleryCategory');
   var wrap = document.getElementById('galleryNewCategoryWrap');
-  wrap.style.display = val === '__new__' ? 'block' : 'none';
-  document.getElementById('galleryNewCategoryInput').required = val === '__new__';
+  var newIn = document.getElementById('galleryNewCategoryInput');
+  if (wrap) wrap.style.display = val === '__new__' ? 'block' : 'none';
+  if (newIn) newIn.required = val === '__new__';
 }
 
 function loadGalleryAdmin() {
   fetch('/api/gallery').then(function(r) { return r.json(); }).then(function(data) {
-    document.getElementById('statGallery').textContent = data.length;
-    document.getElementById('badge-gallery').textContent = data.length;
+    safeSetText('statGallery', data.length);
+    safeSetText('badge-gallery', data.length);
     var html = '';
     data.forEach(function(item) {
       var d = new Date(item.createdAt).toLocaleDateString('en-IN');
@@ -2706,8 +2441,7 @@ function loadGalleryAdmin() {
         '<td>' + d + '</td>' +
         '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'gallery\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
     });
-    document.getElementById('galleryTableBody').innerHTML = html ||
-      '<tr class="empty-row"><td colspan="6">No gallery items yet</td></tr>';
+    safeSetHtml('galleryTableBody', html || '<tr class="empty-row"><td colspan="6">No gallery items yet</td></tr>');
     loadGalleryCategoriesAdmin(loadHomeGallerySettingsAdmin);
   }).catch(function() {});
 }
@@ -2724,32 +2458,35 @@ function loadGalleryCategoriesAdmin(cb) {
     .then(function(d) {
       var categories = d.categories || ['Programme', 'Collections', 'Design'];
       var catSelect = document.getElementById('galleryCategory');
-      var cv = catSelect.value;
-      var html = '<option value="">Select Category...</option>';
-      categories.forEach(function(c) { html += '<option value="' + c + '">' + c + '</option>'; });
-      html += '<option value="__new__">+ Add New Category</option>';
-      catSelect.innerHTML = html;
-      if (cv && cv !== '__new__') catSelect.value = cv;
+      if (catSelect) {
+        var cv = catSelect.value;
+        var html = '<option value="">Select Category...</option>';
+        categories.forEach(function(c) { html += '<option value="' + c + '">' + c + '</option>'; });
+        html += '<option value="__new__">+ Add New Category</option>';
+        catSelect.innerHTML = html;
+        if (cv && cv !== '__new__') catSelect.value = cv;
+      }
 
       var hCat = document.getElementById('homeGalleryCategory');
-      var hv = hCat.value;
-      var hHtml = '<option value="all">All Categories</option>';
-      categories.forEach(function(c) { hHtml += '<option value="' + c + '">' + c + '</option>'; });
-      hCat.innerHTML = hHtml;
-      if (hv) hCat.value = hv;
+      if (hCat) {
+        var hv = hCat.value;
+        var hHtml = '<option value="all">All Categories</option>';
+        categories.forEach(function(c) { hHtml += '<option value="' + c + '">' + c + '</option>'; });
+        hCat.innerHTML = hHtml;
+        if (hv) hCat.value = hv;
+      }
 
       var badgesHtml = categories.map(function(c) {
         return '<div class="category-tag">' + c +
           '<button onclick="deleteCategoryAdmin(\'' + c + '\')">&times;</button></div>';
       }).join('');
-      document.getElementById('categoryBadgesList').innerHTML = badgesHtml ||
-        '<span style="color:var(--text-muted);">No categories yet</span>';
+      safeSetHtml('categoryBadgesList', badgesHtml || '<span style="color:var(--text-muted);">No categories yet</span>');
       if (typeof cb === 'function') cb();
     }).catch(function() {});
 }
 
 function addCategoryAdmin() {
-  var name = document.getElementById('newCategoryInput').value.trim();
+  var name = safeGetValue('newCategoryInput');
   if (!name) { showToast('Enter a category name', true); return; }
   fetch('/api/settings/gallery-categories', {
     method: 'POST',
@@ -2758,7 +2495,7 @@ function addCategoryAdmin() {
   }).then(function(r) { return r.json(); })
     .then(function(res) {
       showToast(res.success ? 'Category added!' : (res.message || 'Error'), !res.success);
-      if (res.success) { document.getElementById('newCategoryInput').value = ''; loadGalleryCategoriesAdmin(); }
+      if (res.success) { safeSetValue('newCategoryInput', ''); loadGalleryCategoriesAdmin(); }
     });
 }
 
@@ -2776,9 +2513,9 @@ function loadHomeGallerySettingsAdmin() {
   fetch('/api/settings/home-gallery')
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      if (d.limit !== undefined) document.getElementById('homeGalleryLimit').value = d.limit;
-      if (d.category) document.getElementById('homeGalleryCategory').value = d.category;
-      if (d.mode) document.getElementById('homeGalleryMode').value = d.mode;
+      if (d.limit !== undefined) safeSetValue('homeGalleryLimit', d.limit);
+      if (d.category) safeSetValue('homeGalleryCategory', d.category);
+      if (d.mode) safeSetValue('homeGalleryMode', d.mode);
     }).catch(function() {});
 }
 
@@ -2787,43 +2524,45 @@ window.saveHomeGallerySettings = function() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      limit:    parseInt(document.getElementById('homeGalleryLimit').value) || 0,
-      category: document.getElementById('homeGalleryCategory').value,
-      mode:     document.getElementById('homeGalleryMode').value
+      limit:    parseInt(safeGetValue('homeGalleryLimit')) || 0,
+      category: safeGetValue('homeGalleryCategory'),
+      mode:     safeGetValue('homeGalleryMode')
     })
   }).then(function(r) { return r.json(); })
     .then(function(res) { showToast(res.success ? 'Display settings saved!' : (res.message || 'Failed'), !res.success); });
 };
 
-document.getElementById('galleryForm').addEventListener('submit', function(e) {
+safeAddListener('galleryForm', 'submit', function(e) {
   e.preventDefault();
   var fd = new FormData();
-  fd.append('title', document.getElementById('galleryTitle').value.trim());
-  var catVal = document.getElementById('galleryCategory').value;
-  if (catVal === '__new__') catVal = document.getElementById('galleryNewCategoryInput').value.trim();
+  fd.append('title', safeGetValue('galleryTitle'));
+  var catVal = safeGetValue('galleryCategory');
+  if (catVal === '__new__') catVal = safeGetValue('galleryNewCategoryInput');
   if (!catVal) { showToast('Please select or enter a category', true); return; }
   fd.append('category', catVal);
-  fd.append('mediaType', document.getElementById('galleryMediaType').value);
-  fd.append('description', document.getElementById('galleryDesc').value.trim());
-  fd.append('hashtags', document.getElementById('galleryHashtags').value.trim());
-  var file = document.getElementById('galleryImage').files[0];
+  fd.append('mediaType', safeGetValue('galleryMediaType'));
+  fd.append('description', safeGetValue('galleryDesc'));
+  fd.append('hashtags', safeGetValue('galleryHashtags'));
+  var fileInput = document.getElementById('galleryImage');
+  var file = fileInput && fileInput.files ? fileInput.files[0] : null;
   if (file) fd.append('image', file);
-  var url = document.getElementById('galleryVideoUrl').value.trim();
+  var url = safeGetValue('galleryVideoUrl');
   if (url) fd.append('mediaUrl', url);
   var btn = this.querySelector('button[type=submit]');
-  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
   fetch('/api/gallery', { method: 'POST', body: fd })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload to Gallery';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload to Gallery'; }
       showToast(data.message, !data.success);
       if (data.success) {
-        document.getElementById('galleryForm').reset();
-        document.getElementById('galleryNewCategoryWrap').style.display = 'none';
+        e.target.reset();
+        var wrap = document.getElementById('galleryNewCategoryWrap');
+        if (wrap) wrap.style.display = 'none';
         loadGalleryAdmin();
       }
     }).catch(function() {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload to Gallery';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload to Gallery'; }
       showToast('Network error', true);
     });
 });
@@ -2833,8 +2572,8 @@ document.getElementById('galleryForm').addEventListener('submit', function(e) {
 ═══════════════════════════════════════ */
 function loadContacts() {
   fetch('/api/contacts').then(function(r) { return r.json(); }).then(function(data) {
-    document.getElementById('statContacts').textContent = data.length;
-    document.getElementById('badge-contacts').textContent = data.length;
+    safeSetText('statContacts', data.length);
+    safeSetText('badge-contacts', data.length);
     var html = '';
     data.forEach(function(item) {
       var d = new Date(item.createdAt).toLocaleDateString('en-IN');
@@ -2846,14 +2585,13 @@ function loadContacts() {
         '<td>' + d + '</td>' +
         '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'contacts\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
     });
-    document.getElementById('contactsTableBody').innerHTML = html ||
-      '<tr class="empty-row"><td colspan="6">No messages yet</td></tr>';
+    safeSetHtml('contactsTableBody', html || '<tr class="empty-row"><td colspan="6">No messages yet</td></tr>');
 
     var ovHtml = data.slice(0,5).map(function(c) {
       return '<div style="padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:0.84rem;display:flex;justify-content:space-between;">' +
         '<span>' + c.name + ': ' + (c.subject || '') + '</span><span style="color:var(--text-muted);">' + new Date(c.createdAt).toLocaleDateString('en-IN') + '</span></div>';
     }).join('');
-    document.getElementById('overviewContacts').innerHTML = ovHtml || '<span style="color:var(--text-muted);">No messages yet</span>';
+    safeSetHtml('overviewContacts', ovHtml || '<span style="color:var(--text-muted);">No messages yet</span>');
   }).catch(function() {});
 }
 
@@ -2862,15 +2600,14 @@ function loadContacts() {
 ═══════════════════════════════════════ */
 function loadSubscribers() {
   fetch('/api/subscribers').then(function(r) { return r.json(); }).then(function(data) {
-    document.getElementById('statSubscribers').textContent = data.length;
-    document.getElementById('badge-subscribers').textContent = data.length;
+    safeSetText('statSubscribers', data.length);
+    safeSetText('badge-subscribers', data.length);
     var html = '';
     data.forEach(function(item, i) {
       var d = new Date(item.subscribedAt).toLocaleDateString('en-IN');
       html += '<tr><td>' + (i + 1) + '</td><td>' + item.email + '</td><td>' + d + '</td></tr>';
     });
-    document.getElementById('subscribersTableBody').innerHTML = html ||
-      '<tr class="empty-row"><td colspan="3">No subscribers yet</td></tr>';
+    safeSetHtml('subscribersTableBody', html || '<tr class="empty-row"><td colspan="3">No subscribers yet</td></tr>');
   }).catch(function() {});
 }
 
@@ -2888,55 +2625,6 @@ function deleteItem(type, id) {
 }
 
 /* ═══════════════════════════════════════
-   STORIES
-═══════════════════════════════════════ */
-document.getElementById('storyForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  var fd = new FormData();
-  fd.append('title', document.getElementById('storyTitle').value);
-  fd.append('image', document.getElementById('storyImage').files[0]);
-  fd.append('daysActive', document.getElementById('storyDays').value);
-  var btn = this.querySelector('button[type=submit]');
-  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...';
-  fetch('/api/stories', { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Story';
-      showToast(res.success ? 'Story uploaded!' : (res.message || 'Failed'), !res.success);
-      if (res.success) { loadStories(); e.target.reset(); }
-    }).catch(function() {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Story';
-      showToast('Network error', true);
-    });
-});
-
-function loadStories() {
-  fetch('/api/stories/all').then(function(r) { return r.json(); }).then(function(stories) {
-    var html = '';
-    stories.forEach(function(s) {
-      var exp = new Date(s.expiresAt);
-      var isActive = exp > new Date();
-      html += '<tr>' +
-        '<td><img src="' + s.imageUrl + '" style="border-radius:50%;"></td>' +
-        '<td>' + (s.title || '-') + '</td>' +
-        '<td>' + s.daysActive + ' days</td>' +
-        '<td>' + exp.toLocaleDateString('en-IN') + '</td>' +
-        '<td><span class="badge ' + (isActive ? 'badge-success' : 'badge-danger') + '">' + (isActive ? 'Active' : 'Expired') + '</span></td>' +
-        '<td><button class="btn btn-danger btn-sm" onclick="deleteStory(\'' + s._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
-    });
-    document.getElementById('storiesTableBody').innerHTML = html ||
-      '<tr class="empty-row"><td colspan="6">No stories</td></tr>';
-  }).catch(function() {});
-}
-
-function deleteStory(id) {
-  if (!confirm('Delete this story?')) return;
-  fetch('/api/stories/' + id, { method: 'DELETE' })
-    .then(function(r) { return r.json(); })
-    .then(function() { loadStories(); });
-}
-
-/* ═══════════════════════════════════════
    SECTIONS
 ═══════════════════════════════════════ */
 var currentSections = [];
@@ -2944,7 +2632,7 @@ var currentSections = [];
 function selectSection(id, btn) {
   document.querySelectorAll('.section-tab-btn').forEach(function(b) { b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
-  document.getElementById('sectionSelector').value = id;
+  safeSetValue('sectionSelector', id);
   loadSectionEditor();
 }
 
@@ -2956,24 +2644,24 @@ function fetchAllSections() {
 
 function loadSectionEditor() {
   fetchAllSections().then(function() {
-    var selectedId = document.getElementById('sectionSelector').value;
+    var selectedId = safeGetValue('sectionSelector');
     var section = currentSections.find(function(s) { return s.sectionId === selectedId; });
-    document.getElementById('sectionTitle').value = section ? (section.title || '') : '';
-    document.getElementById('sectionDesc').value  = section ? (section.description || '') : '';
-    document.getElementById('sectionLink').value  = section ? (section.readMoreLink || '#') : '#';
+    safeSetValue('sectionTitle', section ? (section.title || '') : '');
+    safeSetValue('sectionDesc', section ? (section.description || '') : '');
+    safeSetValue('sectionLink', section ? (section.readMoreLink || '#') : '#');
   });
 }
 
-document.getElementById('sectionForm').addEventListener('submit', function(e) {
+safeAddListener('sectionForm', 'submit', function(e) {
   e.preventDefault();
-  var selectedId = document.getElementById('sectionSelector').value;
+  var selectedId = safeGetValue('sectionSelector');
   fetch('/api/sections/' + selectedId, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      title: document.getElementById('sectionTitle').value,
-      description: document.getElementById('sectionDesc').value,
-      readMoreLink: document.getElementById('sectionLink').value
+      title: safeGetValue('sectionTitle'),
+      description: safeGetValue('sectionDesc'),
+      readMoreLink: safeGetValue('sectionLink')
     })
   }).then(function(r) { return r.json(); })
     .then(function(res) {
@@ -2983,7 +2671,7 @@ document.getElementById('sectionForm').addEventListener('submit', function(e) {
 });
 
 function deleteHomepageSection() {
-  var selectedId = document.getElementById('sectionSelector').value;
+  var selectedId = safeGetValue('sectionSelector');
   if (!confirm('Hide/delete this section from the homepage?')) return;
   fetch('/api/sections/' + selectedId, { method: 'DELETE' })
     .then(function(r) { return r.json(); })
@@ -2998,48 +2686,28 @@ function deleteHomepageSection() {
 ═══════════════════════════════════════ */
 function loadHomeSettings() {
   fetch('/api/home-settings').then(function(r) { return r.json(); }).then(function(s) {
-    document.getElementById('hpStudents').value = s.statsStudents || '';
-    document.getElementById('hpUstads').value   = s.statsUstads   || '';
-    document.getElementById('hpYears').value    = s.statsYears    || '';
-    document.getElementById('hpAlumni').value   = s.statsAlumni   || '';
-    document.getElementById('hpPrincipalName').value  = s.principalName  || '';
-    document.getElementById('hpPrincipalTitle').value = s.principalTitle || '';
-    document.getElementById('hpPrincipalBio').value   = s.principalBio   || '';
+    if (s.principalName)  safeSetValue('hpPrincipalName', s.principalName);
+    if (s.principalTitle) safeSetValue('hpPrincipalTitle', s.principalTitle);
+    if (s.principalBio)   safeSetValue('hpPrincipalBio', s.principalBio);
     if (s.principalImageUrl) {
       var pi = document.getElementById('principalPreview');
-      pi.src = s.principalImageUrl; pi.style.display = 'block';
+      if (pi) { pi.src = s.principalImageUrl; pi.style.display = 'block'; }
     }
-    document.getElementById('hpFooterName').value   = s.footerMudarrisName   || '';
-    document.getElementById('hpFooterTitle').value  = s.footerMudarrisTitle  || '';
-    document.getElementById('hpFooterDetail').value = s.footerMudarrisDetail || '';
     renderAssistants(s.assistantMudarris || []);
     renderBranches(s.branches || []);
   }).catch(function() {});
 }
 
-window.saveHomeStats = function() {
-  fetch('/api/home-settings', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      statsStudents: parseInt(document.getElementById('hpStudents').value) || 0,
-      statsUstads:   parseInt(document.getElementById('hpUstads').value)   || 0,
-      statsYears:    parseInt(document.getElementById('hpYears').value)    || 0,
-      statsAlumni:   parseInt(document.getElementById('hpAlumni').value)   || 0
-    })
-  }).then(function(r) { return r.json(); })
-    .then(function(res) { showToast(res.success ? 'Stats saved!' : 'Failed', !res.success); });
-};
-
 window.savePrincipal = function() {
-  var imgFile = document.getElementById('principalImageFile').files[0];
+  var fileInput = document.getElementById('principalImageFile');
+  var imgFile = fileInput && fileInput.files ? fileInput.files[0] : null;
   fetch('/api/home-settings', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      principalName:  document.getElementById('hpPrincipalName').value,
-      principalTitle: document.getElementById('hpPrincipalTitle').value,
-      principalBio:   document.getElementById('hpPrincipalBio').value
+      principalName:  safeGetValue('hpPrincipalName'),
+      principalTitle: safeGetValue('hpPrincipalTitle'),
+      principalBio:   safeGetValue('hpPrincipalBio')
     })
   }).then(function(r) { return r.json(); }).then(function() {
     if (imgFile) {
@@ -3049,8 +2717,8 @@ window.savePrincipal = function() {
         .then(function(r) { return r.json(); })
         .then(function(imgRes) {
           if (imgRes.success) {
-            document.getElementById('principalPreview').src = imgRes.imageUrl;
-            document.getElementById('principalPreview').style.display = 'block';
+            var pi = document.getElementById('principalPreview');
+            if (pi) { pi.src = imgRes.imageUrl; pi.style.display = 'block'; }
           }
           showToast('Principal info saved!', false);
         });
@@ -3060,26 +2728,14 @@ window.savePrincipal = function() {
   });
 };
 
-window.saveFooterInfo = function() {
-  fetch('/api/home-settings', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      footerMudarrisName:   document.getElementById('hpFooterName').value,
-      footerMudarrisTitle:  document.getElementById('hpFooterTitle').value,
-      footerMudarrisDetail: document.getElementById('hpFooterDetail').value
-    })
-  }).then(function(r) { return r.json(); })
-    .then(function(res) { showToast(res.success ? 'Footer info saved!' : 'Failed', !res.success); });
-};
-
 // Assistants
-document.getElementById('assistantForm').addEventListener('submit', function(e) {
+safeAddListener('assistantForm', 'submit', function(e) {
   e.preventDefault();
   var fd = new FormData();
-  fd.append('name', document.getElementById('assistantName').value);
-  fd.append('role', document.getElementById('assistantRole').value || 'Assistant Mudarris');
-  var img = document.getElementById('assistantImage').files[0];
+  fd.append('name', safeGetValue('assistantName'));
+  fd.append('role', safeGetValue('assistantRole') || 'Assistant Mudarris');
+  var imgInput = document.getElementById('assistantImage');
+  var img = imgInput && imgInput.files ? imgInput.files[0] : null;
   if (img) fd.append('image', img);
   fetch('/api/home-settings/assistant', { method: 'POST', body: fd })
     .then(function(r) { return r.json(); })
@@ -3103,20 +2759,19 @@ function renderAssistants(list) {
       '<div style="flex:1;"><strong>' + a.name + '</strong><br><small style="color:var(--text-muted);">' + a.role + '</small></div>' +
       '<button class="btn btn-danger btn-sm" onclick="deleteAssistant(\'' + a._id + '\')"><i class="fa fa-trash"></i></button></div>';
   }).join('');
-  document.getElementById('assistantListAdmin').innerHTML = html ||
-    '<p style="color:var(--text-muted);">No assistants added yet</p>';
+  safeSetHtml('assistantListAdmin', html || '<p style="color:var(--text-muted);">No assistants added yet</p>');
 }
 
 // Branches
-document.getElementById('branchForm').addEventListener('submit', function(e) {
+safeAddListener('branchForm', 'submit', function(e) {
   e.preventDefault();
   fetch('/api/home-settings/branch', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      name: document.getElementById('branchName').value,
-      location: document.getElementById('branchLocation').value,
-      description: document.getElementById('branchDesc').value
+      name: safeGetValue('branchName'),
+      location: safeGetValue('branchLocation'),
+      description: safeGetValue('branchDesc')
     })
   }).then(function(r) { return r.json(); })
     .then(function(res) {
@@ -3139,8 +2794,7 @@ function renderBranches(list) {
       '<div style="flex:1;"><strong>' + b.name + '</strong>' + (b.location ? '<br><small style="color:var(--text-muted);">' + b.location + '</small>' : '') + '</div>' +
       '<button class="btn btn-danger btn-sm" onclick="deleteBranch(\'' + b._id + '\')"><i class="fa fa-trash"></i></button></div>';
   }).join('');
-  document.getElementById('branchListAdmin').innerHTML = html ||
-    '<p style="color:var(--text-muted);">No branches added yet</p>';
+  safeSetHtml('branchListAdmin', html || '<p style="color:var(--text-muted);">No branches added yet</p>');
 }
 
 /* ═══════════════════════════════════════
@@ -3148,19 +2802,234 @@ function renderBranches(list) {
 ═══════════════════════════════════════ */
 function loadWhyUsSettings() {
   fetch('/api/settings/why-us').then(function(r) { return r.json(); }).then(function(d) {
-    if (d.whyUsEligibility) document.getElementById('whyUsEligibility').value = d.whyUsEligibility;
-    if (d.whyUsCurriculum)  document.getElementById('whyUsCurriculum').value  = d.whyUsCurriculum;
-    if (d.whyUsFacilities)  document.getElementById('whyUsFacilities').value  = d.whyUsFacilities;
-    if (d.whyUsEnquiry)     document.getElementById('whyUsEnquiry').value     = d.whyUsEnquiry;
+    if (d.whyUsEligibility) safeSetValue('whyUsEligibility', d.whyUsEligibility);
+    if (d.whyUsCurriculum)  safeSetValue('whyUsCurriculum', d.whyUsCurriculum);
+    if (d.whyUsFacilities)  safeSetValue('whyUsFacilities', d.whyUsFacilities);
+    if (d.whyUsEnquiry)     safeSetValue('whyUsEnquiry', d.whyUsEnquiry);
     if (d.whyUsMediaUrl) {
       var urlInput = document.getElementById('whyUsMediaUrlInput');
-      if (d.whyUsMediaUrl.startsWith('http')) urlInput.value = d.whyUsMediaUrl;
+      if (urlInput && d.whyUsMediaUrl.startsWith('http')) urlInput.value = d.whyUsMediaUrl;
       var pw = document.getElementById('whyUsMediaPreviewWrap');
       var pc = document.getElementById('whyUsAdminMediaPreview');
       if (pc) {
         var isVideo = /\.(mp4|webm)$/i.test(d.whyUsMediaUrl) || d.whyUsMediaUrl.includes('youtube.com');
         pc.innerHTML = isVideo
           ? '<video src="' + d.whyUsMediaUrl + '" controls style="max-width:150px;border-radius:8px;border:2px solid var(--accent);"></video>'
+          : '<img src="' + d.whyUsMediaUrl + '" style="max-width:150px;border-radius:8px;border:2px solid var(--accent);">';
+        if (pw) pw.style.display = 'block';
+      }
+    }
+  }).catch(function() {});
+}
+
+window.saveWhyUsSettings = function() {
+  var data = {
+    whyUsEligibility: safeGetValue('whyUsEligibility'),
+    whyUsCurriculum:  safeGetValue('whyUsCurriculum'),
+    whyUsFacilities:  safeGetValue('whyUsFacilities'),
+    whyUsEnquiry:     safeGetValue('whyUsEnquiry')
+  };
+  var mediaUrl = safeGetValue('whyUsMediaUrlInput');
+  if (mediaUrl) data.whyUsMediaUrl = mediaUrl;
+  fetch('/api/settings/why-us', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.json(); })
+    .then(function(res) {
+      showToast(res.success ? 'Why Us settings saved!' : (res.message || 'Failed'), !res.success);
+      if (res.success) loadWhyUsSettings();
+    });
+};
+
+safeAddListener('whyUsMediaForm', 'submit', function(e) {
+  e.preventDefault();
+  var fileInput = document.getElementById('whyUsFile');
+  var file = fileInput && fileInput.files ? fileInput.files[0] : null;
+  if (!file) { showToast('Please choose a file', true); return; }
+  var fd = new FormData();
+  fd.append('media', file);
+  var btn = this.querySelector('button[type=submit]');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
+  fetch('/api/settings/why-us/media', { method: 'POST', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload File'; }
+      showToast(res.success ? 'Media uploaded!' : (res.message || 'Failed'), !res.success);
+      if (res.success) { e.target.reset(); loadWhyUsSettings(); }
+    }).catch(function() {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload File'; }
+      showToast('Network error', true);
+    });
+});
+
+/* ═══════════════════════════════════════
+   COMMITTEE
+═══════════════════════════════════════ */
+function loadCommitteeSettings() {
+  fetch('/api/settings/committee').then(function(r) { return r.json(); }).then(function(d) {
+    if (d.title)   safeSetValue('committeeTitle', d.title);
+    if (d.details) safeSetValue('committeeDetails', d.details);
+    var pw = document.getElementById('committeePosterPreviewWrap');
+    var pi = document.getElementById('currentCommitteePosterPreview');
+    var nn = document.getElementById('committeeNoPosterNotice');
+    if (d.posterUrl) {
+      if (pi) pi.src = d.posterUrl;
+      if (pw) pw.style.display = 'block';
+      if (nn) nn.style.display = 'none';
+    } else {
+      if (pw) pw.style.display = 'none';
+      if (nn) nn.style.display = 'flex';
+    }
+  }).catch(function() {});
+}
+
+window.saveCommitteeText = function() {
+  fetch('/api/settings/committee', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      title:   safeGetValue('committeeTitle'),
+      details: safeGetValue('committeeDetails')
+    })
+  }).then(function(r) { return r.json(); })
+    .then(function(res) { showToast(res.success ? 'Committee settings saved!' : 'Failed', !res.success); });
+};
+
+window.removeCommitteePoster = function() {
+  if (!confirm('Remove the committee poster?')) return;
+  fetch('/api/settings/committee/poster', { method: 'DELETE' })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      showToast(res.success ? 'Poster removed!' : 'Failed', !res.success);
+      loadCommitteeSettings();
+    });
+};
+
+safeAddListener('committeePosterUploadForm', 'submit', function(e) {
+  e.preventDefault();
+  var fileInput = document.getElementById('committeePosterFile');
+  var file = fileInput && fileInput.files ? fileInput.files[0] : null;
+  if (!file) { showToast('Please select an image', true); return; }
+  var fd = new FormData();
+  fd.append('poster', file);
+  var btn = this.querySelector('button[type=submit]');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
+  fetch('/api/settings/committee/poster', { method: 'POST', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster'; }
+      showToast(data.success ? 'Poster uploaded!' : (data.message || 'Failed'), !data.success);
+      if (data.success) { e.target.reset(); loadCommitteeSettings(); }
+    }).catch(function() {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster'; }
+      showToast('Network error', true);
+    });
+});
+
+/* ═══════════════════════════════════════
+   COMMENTS
+═══════════════════════════════════════ */
+function loadAllComments() {
+  safeSetHtml('commentsAdminList', '<p style="color:var(--text-muted);padding:20px 0;"><i class="fa fa-spinner fa-spin"></i> Loading...</p>');
+  fetch('/api/gallery').then(function(r) { return r.json(); }).then(function(items) {
+    var html = '';
+    items.forEach(function(item) {
+      if (item.comments && item.comments.length > 0) {
+        item.comments.forEach(function(c) {
+          var user = c.user ? (c.user.name || 'Unknown') : 'Unknown';
+          var date = new Date(c.createdAt || Date.now()).toLocaleDateString('en-IN');
+          html += '<div style="display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid var(--border-soft);">' +
+            '<i class="fa fa-user-circle" style="color:var(--accent);font-size:1.4rem;margin-top:2px;"></i>' +
+            '<div style="flex:1;">' +
+              '<strong>' + user + '</strong> <small style="color:var(--text-muted);margin-left:6px;">' + date + '</small>' +
+              '<div style="margin:4px 0;">' + c.text + '</div>' +
+              '<small style="color:var(--text-muted);">Post: ' + (item.title || item._id) + '</small>' +
+            '</div>' +
+            '<button class="btn btn-danger btn-sm" onclick="deleteComment(\'' + item._id + '\',\'' + c._id + '\')"><i class="fa fa-trash"></i></button>' +
+          '</div>';
+        });
+      }
+    });
+    safeSetHtml('commentsAdminList', html || '<p style="color:var(--text-muted);text-align:center;padding:30px;">No comments found.</p>');
+  }).catch(function() {
+    safeSetHtml('commentsAdminList', '<p style="color:var(--danger);padding:20px;">Failed to load comments.</p>');
+  });
+}
+
+function deleteComment(gId, cId) {
+  if (!confirm('Delete this comment?')) return;
+  fetch('/api/gallery/' + gId + '/comment/' + cId, { method: 'DELETE' })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      showToast(d.success ? 'Comment deleted.' : (d.message || 'Failed'), !d.success);
+      if (d.success) loadAllComments();
+    });
+}
+
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+function openResetModal() {
+  safeSetValue('resetConfirmTextInput', '');
+  safeSetValue('resetPasswordInput', '');
+  safeSetText('resetStatus', '');
+  validateResetTyping();
+  openModal('resetModal');
+}
+
+function validateResetTyping() {
+  var target = "I CONFIRM PERMANENT RESET OF ALL BAYANUL ULOOM DARS DATA";
+  var typed = safeGetValue('resetConfirmTextInput');
+  var btn = document.getElementById('executeResetBtn');
+  if (btn) {
+    if (typed === target) {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.style.cursor = 'pointer';
+    } else {
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      btn.style.cursor = 'not-allowed';
+    }
+  }
+}
+
+function executeReset() {
+  var target = "I CONFIRM PERMANENT RESET OF ALL BAYANUL ULOOM DARS DATA";
+  var typed = safeGetValue('resetConfirmTextInput');
+  var token = safeGetValue('resetPasswordInput');
+
+  if (typed !== target) {
+    safeSetHtml('resetStatus', '<span style="color:var(--danger);">Please type the exact confirmation sentence manually (pasting is disabled).</span>');
+    return;
+  }
+
+  if (!token) {
+    safeSetHtml('resetStatus', '<span style="color:var(--danger);">Please enter your admin password.</span>');
+    return;
+  }
+
+  safeSetHtml('resetStatus', '<i class="fa fa-spinner fa-spin"></i> Resetting all data...');
+  fetch('/api/admin/reset', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: token })
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.success) {
+        safeSetHtml('resetStatus', '<span style="color:var(--success);"><i class="fa fa-check-circle"></i> ' + d.message + '</span>');
+        setTimeout(function() { closeModal('resetModal'); loadAll(); }, 2500);
+      } else {
+        safeSetHtml('resetStatus', '<span style="color:var(--danger);"><i class="fa fa-times-circle"></i> ' + d.message + '</span>');
+      }
+    }).catch(function() {
+      safeSetHtml('resetStatus', '<span style="color:var(--danger);">Server error. Try again.</span>');
+    });
+}
+</script>
+</body>
+</html>sMediaUrl + '" controls style="max-width:150px;border-radius:8px;border:2px solid var(--accent);"></video>'
           : '<img src="' + d.whyUsMediaUrl + '" style="max-width:150px;border-radius:8px;border:2px solid var(--accent);">';
         if (pw) pw.style.display = 'block';
       }
