@@ -932,23 +932,14 @@
       .then(r => r.json())
       .then(res => {
         if (res.success) {
-          // Toggle inside local state
           var item = allGalleryItems.find(i => i._id === id);
           if (item) {
-            var index = item.likes.indexOf(currentUser._id);
-            if (index === -1) {
+            if (!item.likes.includes(currentUser._id)) {
               item.likes.push(currentUser._id);
-            } else {
-              item.likes.splice(index, 1);
             }
-            // Update modal heart state & count
-            document.getElementById('modalLikesCount').textContent = item.likes.length;
+            document.getElementById('modalLikesCount').textContent = res.likes;
             var heartBtn = document.getElementById('modalHeartBtn');
-            if (item.likes.includes(currentUser._id)) {
-              heartBtn.classList.add('liked');
-            } else {
-              heartBtn.classList.remove('liked');
-            }
+            heartBtn.classList.add('liked');
             renderGrid();
           }
         }

@@ -2,16 +2,20 @@ const express = require('express');
 const router = express.Router();
 const https = require('https');
 
-// Helper to send Telegram notifications
-function sendTelegramNotification(text) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+// Helper to send Telegram notifications (supports HTML formatting)
+function sendTelegramNotification(text, parseMode) {
+  const token  = (process.env.TELEGRAM_BOT_TOKEN  || '').trim();
+  const chatId = (process.env.TELEGRAM_CHAT_ID    || '').trim();
   if (!token || !chatId) return;
 
-  const data = JSON.stringify({
+  const payload = {
     chat_id: chatId,
     text: text,
-  });
+    parse_mode: parseMode || 'HTML',
+    disable_web_page_preview: true
+  };
+
+  const data = JSON.stringify(payload);
 
   const options = {
     hostname: 'api.telegram.org',
@@ -25,9 +29,16 @@ function sendTelegramNotification(text) {
   };
 
   const req = https.request(options, (res) => {
-    // Optionally handle response
+    let body = '';
+    res.on('data', chunk => body += chunk);
+    res.on('end', () => {
+      try {
+        const parsed = JSON.parse(body);
+        if (!parsed.ok) console.error('Telegram API error:', parsed.description);
+      } catch(e) {}
+    });
   });
-  req.on('error', (e) => console.error('Telegram API error:', e));
+  req.on('error', (e) => console.error('Telegram request error:', e));
   req.write(data);
   req.end();
 }
@@ -309,23 +320,44 @@ router.delete('/gallery/:id', async (req, res) => {
   }
 });
 
-// POST /api/gallery/:id/like — Toggle Like
+// POST /api/gallery/:id/like — Like a gallery item (One account / email = One time like)
 router.post('/gallery/:id/like', async (req, res) => {
   try {
     const { userId } = req.body;
     if (!userId) return res.status(400).json({ success: false, message: 'User ID required' });
     
-    const item = await GalleryItem.findById(req.params.id);
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    const item = await GalleryItem.findById(req.params.id).populate('likes', 'email');
     if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
 
-    const index = item.likes.indexOf(userId);
-    if (index === -1) {
-      item.likes.push(userId); // Like
-    } else {
-      item.likes.splice(index, 1); // Dislike
+    // Check if user ID or email is already in the likes list
+    const alreadyLiked = item.likes.some(likeUser => {
+      if (!likeUser) return false;
+      if (typeof likeUser === 'object' && likeUser.email) {
+        return likeUser.email === user.email || likeUser._id.toString() === userId.toString();
+      }
+      return likeUser.toString() === userId.toString();
+    });
+
+    if (alreadyLiked) {
+      return res.json({ 
+        success: true, 
+        alreadyLiked: true, 
+        message: 'You have already liked this item (1 like per account allowed).', 
+        likes: item.likes.length 
+      });
     }
+
+    item.likes.push(userId);
     await item.save();
-    res.json({ success: true, likes: item.likes.length });
+    res.json({ 
+      success: true, 
+      alreadyLiked: false, 
+      message: 'Liked successfully!', 
+      likes: item.likes.length 
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -530,13 +562,6 @@ router.post('/admission', (req, res) => {
         return res.status(400).json({ success: false, message: 'Name, Father Name, Mother Name, and Phone are required' });
       }
 
-      // Duplicate check — one submission per phone or email
-      const dupQuery = [{ phone: phone.trim() }];
-      if (email && email.trim()) dupQuery.push({ email: email.trim() });
-      const existing = await Admission.findOne({ $or: dupQuery });
-      if (existing) {
-        return res.status(409).json({ success: false, message: 'An application with this phone number or email already exists. Only one submission is allowed per person.' });
-      }
 
       let imageUrl = '';
       if (req.file) {
@@ -560,9 +585,46 @@ router.post('/admission', (req, res) => {
       });
       await admission.save();
 
-      // Send Telegram Notification
-      const tgMessage = `NEW ADMISSION\nName: ${name}\nParents: ${fatherName} & ${motherName}\nPhone: ${phone.trim()}`;
-      sendTelegramNotification(tgMessage);
+      // Send Telegram Notification — full details
+      const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'short' });
+      const tgMessage = [
+        `🎓 <b>NEW ADMISSION APPLICATION</b>`,
+        `<b>Bayanul Uloom Dars, Muttichira</b>`,
+        ``,
+        `👤 <b>Personal Details</b>`,
+        `📛 Name: <b>${name}</b>`,
+        `🎂 DOB: ${dob || '—'}`,
+        `🩸 Blood Group: ${bloodGroup || '—'}`,
+        ``,
+        `👨‍👩‍👦 <b>Parents</b>`,
+        `👨 Father: ${fatherName}`,
+        `👩 Mother: ${motherName}`,
+        ``,
+        `📞 <b>Contact</b>`,
+        `📱 Phone: <code>${phone.trim()}</code>`,
+        `🏠 Home Phone: ${homePhone || '—'}`,
+        `📧 Email: ${email && email.trim() ? email.trim() : '—'}`,
+        ``,
+        `🏡 <b>Address</b>`,
+        `🏘 House: ${houseName || '—'}`,
+        `📍 Place: ${place || '—'}`,
+        `🏣 Post Office: ${postOffice || '—'}`,
+        `🗺 District: ${district || '—'}`,
+        `📮 Pincode: ${pincode || '—'}`,
+        ``,
+        `📚 <b>Education</b>`,
+        `🕌 Religious (Madrasa): ${educationReligious || '—'}`,
+        `🏫 Secular (School): ${educationSecular || '—'}`,
+        ``,
+        `🛡 <b>Guardian</b>`,
+        `👤 Name: ${guardianName || '—'} (${relationship || '—'})`,
+        `📞 Phone: <code>${guardianPhone || '—'}</code>`,
+        ``,
+        `🕐 Submitted: ${now}`,
+        ``,
+        `✅ <i>View in admin panel: /admin</i>`
+      ].join('\n');
+      sendTelegramNotification(tgMessage, 'HTML');
 
       res.json({ success: true, message: 'Admission application submitted successfully!' });
     } catch (err) {
