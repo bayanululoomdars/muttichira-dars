@@ -1641,6 +1641,20 @@ darsbayanululoom@gmail.com</textarea>
               </button>
             </form>
             <div id="branchListAdmin"></div>
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label class="form-label">Mudarris Name</label>
+                <input class="form-control" type="text" id="hpFooterName" placeholder="Name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Title</label>
+                <input class="form-control" type="text" id="hpFooterTitle" placeholder="Principal Mudarris">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Detail</label>
+                <input class="form-control" type="text" id="hpFooterDetail" placeholder="Muttichira Bayanul Uloom Dars">
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1841,13 +1855,7 @@ darsbayanululoom@gmail.com</textarea>
                 <i class="fa fa-plus"></i> Add Category
               </button>
             </div>
-            <div class="category-badges" id="categoryBadgesList">Loading categories...</div>
-          </div>
-
-          <!-- Gallery Items Table -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-th-large"></i> All Gallery Items</div>
+              <div class="card-title"><i class="fa fa-th"></i> All Gallery Items</div>
               <button class="btn btn-ghost btn-sm" onclick="loadGalleryAdmin()"><i class="fa fa-refresh"></i> Refresh</button>
             </div>
             <div class="table-wrap">
@@ -1856,6 +1864,47 @@ darsbayanululoom@gmail.com</textarea>
                   <tr><th>Media</th><th>Title</th><th>Category</th><th>Pin</th><th>Date</th><th>Action</th></tr>
                 </thead>
                 <tbody id="galleryTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Stories Management -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa fa-camera"></i> Stories Manager (24h / 7-Day Stories)</div>
+            </div>
+            <form id="storyForm" enctype="multipart/form-data" style="margin-bottom:20px;">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Story Title (optional)</label>
+                  <input class="form-control" type="text" id="storyTitle" placeholder="Story title">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Active Duration (days)</label>
+                  <select class="form-control" id="storyDays">
+                    <option value="1">1 Day</option>
+                    <option value="3">3 Days</option>
+                    <option value="7" selected>7 Days</option>
+                    <option value="14">14 Days</option>
+                    <option value="30">30 Days</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Story Image *</label>
+                <input class="form-control" type="file" id="storyImage" accept="image/*" required>
+              </div>
+              <button type="submit" class="btn btn-accent btn-sm">
+                <i class="fa fa-upload"></i> Upload Active Story
+              </button>
+            </form>
+
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Image</th><th>Title</th><th>Days</th><th>Expires</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody id="storiesTableBody"></tbody>
               </table>
             </div>
           </div>
@@ -2152,47 +2201,55 @@ darsbayanululoom@gmail.com</textarea>
      JAVASCRIPT
 ══════════════════════════════════ -->
 <script>
-/* ═══════════════════════════════════════
-   SAFE DOM HELPERS
-═══════════════════════════════════════ */
-function safeSetText(id, text) {
-  var el = document.getElementById(id);
-  if (el) el.textContent = text;
-}
-function safeSetHtml(id, html) {
-  var el = document.getElementById(id);
-  if (el) el.innerHTML = html;
-}
-function safeSetValue(id, val) {
-  var el = document.getElementById(id);
-  if (el) el.value = val;
-}
-function safeGetValue(id) {
-  var el = document.getElementById(id);
-  return el ? el.value.trim() : '';
-}
-function safeAddListener(id, event, fn) {
-  var el = document.getElementById(id);
-  if (el) el.addEventListener(event, fn);
-}
+  /* 
+═══════════════════════════════════════
+     SAFE DOM HELPERS
+═══════════════════════════════════════ 
+*/
+  function safeSetText(id, text) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+  function safeSetHtml(id, html) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  }
+  function safeSetValue(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.value = val;
+  }
+  function safeGetValue(id) {
+    var el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+  function safeAddListener(id, event, fn) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener(event, fn);
+  }
+  
+  /* 
+═══════════════════════════════════════
+     LOAD ALL
+═══════════════════════════════════════ 
+*/
+  function loadAll() {
+    loadAdmissions();
+    loadNewsAdmin();
+    loadGalleryAdmin();
+    loadContacts();
+    loadSubscribers();
+    loadSectionEditor();
+    loadHomeSettings();
+    loadWhyUsSettings();
+    loadPosterAndBanner();
+    loadCommitteeSettings();
+    loadAllComments();
+    loadHomeGallerySettings();
+  }
 
-/* ═══════════════════════════════════════
-   LOAD ALL
-═══════════════════════════════════════ */
-function loadAll() {
-  loadAdmissions();
-  loadNewsAdmin();
-  loadGalleryAdmin();
-  loadContacts();
-  loadSubscribers();
-  loadSectionEditor();
-  loadHomeSettings();
-  loadWhyUsSettings();
-  loadPosterAndBanner();
-  loadCommitteeSettings();
-  loadAllComments();
-  loadHomeGallerySettings();
-}
+  window.addEventListener('DOMContentLoaded', function() {
+    loadAll();
+  });
 
 /* ═══════════════════════════════════════
    ADMISSION STATUS
@@ -3156,225 +3213,6 @@ function executeReset() {
       }
     }).catch(function() {
       safeSetHtml('resetStatus', '<span style="color:var(--danger);">Server error. Try again.</span>');
-    });
-}
-</script>
-</body>
-</html>sMediaUrl + '" controls style="max-width:150px;border-radius:8px;border:2px solid var(--accent);"></video>'
-          : '<img src="' + d.whyUsMediaUrl + '" style="max-width:150px;border-radius:8px;border:2px solid var(--accent);">';
-        if (pw) pw.style.display = 'block';
-      }
-    }
-  }).catch(function() {});
-}
-
-window.saveWhyUsSettings = function() {
-  var data = {
-    whyUsEligibility: document.getElementById('whyUsEligibility').value.trim(),
-    whyUsCurriculum:  document.getElementById('whyUsCurriculum').value.trim(),
-    whyUsFacilities:  document.getElementById('whyUsFacilities').value.trim(),
-    whyUsEnquiry:     document.getElementById('whyUsEnquiry').value.trim()
-  };
-  var mediaUrl = document.getElementById('whyUsMediaUrlInput').value.trim();
-  if (mediaUrl) data.whyUsMediaUrl = mediaUrl;
-  fetch('/api/settings/why-us', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(function(r) { return r.json(); })
-    .then(function(res) {
-      showToast(res.success ? 'Why Us settings saved!' : (res.message || 'Failed'), !res.success);
-      if (res.success) loadWhyUsSettings();
-    });
-};
-
-document.getElementById('whyUsMediaForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  var file = document.getElementById('whyUsFile').files[0];
-  if (!file) { showToast('Please choose a file', true); return; }
-  var fd = new FormData();
-  fd.append('media', file);
-  var btn = this.querySelector('button[type=submit]');
-  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...';
-  fetch('/api/settings/why-us/media', { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload File';
-      showToast(res.success ? 'Media uploaded!' : (res.message || 'Failed'), !res.success);
-      if (res.success) { document.getElementById('whyUsMediaForm').reset(); loadWhyUsSettings(); }
-    }).catch(function() {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload File';
-      showToast('Network error', true);
-    });
-});
-
-/* ═══════════════════════════════════════
-   COMMITTEE
-═══════════════════════════════════════ */
-function loadCommitteeSettings() {
-  fetch('/api/settings/committee').then(function(r) { return r.json(); }).then(function(d) {
-    if (d.title)   document.getElementById('committeeTitle').value   = d.title;
-    if (d.details) document.getElementById('committeeDetails').value = d.details;
-    var pw = document.getElementById('committeePosterPreviewWrap');
-    var pi = document.getElementById('currentCommitteePosterPreview');
-    var nn = document.getElementById('committeeNoPosterNotice');
-    if (d.posterUrl) {
-      pi.src = d.posterUrl; pw.style.display = 'block'; nn.style.display = 'none';
-    } else {
-      pw.style.display = 'none'; nn.style.display = 'flex';
-    }
-  }).catch(function() {});
-}
-
-window.saveCommitteeText = function() {
-  fetch('/api/settings/committee', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      title:   document.getElementById('committeeTitle').value.trim(),
-      details: document.getElementById('committeeDetails').value.trim()
-    })
-  }).then(function(r) { return r.json(); })
-    .then(function(res) { showToast(res.success ? 'Committee settings saved!' : 'Failed', !res.success); });
-};
-
-window.removeCommitteePoster = function() {
-  if (!confirm('Remove the committee poster?')) return;
-  fetch('/api/settings/committee/poster', { method: 'DELETE' })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      showToast(res.success ? 'Poster removed!' : 'Failed', !res.success);
-      loadCommitteeSettings();
-    });
-};
-
-document.getElementById('committeePosterUploadForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  var file = document.getElementById('committeePosterFile').files[0];
-  if (!file) { showToast('Please select an image', true); return; }
-  var fd = new FormData();
-  fd.append('poster', file);
-  var btn = this.querySelector('button[type=submit]');
-  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...';
-  fetch('/api/settings/committee/poster', { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster';
-      showToast(data.success ? 'Poster uploaded!' : (data.message || 'Failed'), !data.success);
-      if (data.success) { e.target.reset(); loadCommitteeSettings(); }
-    }).catch(function() {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster';
-      showToast('Network error', true);
-    });
-});
-
-/* ═══════════════════════════════════════
-   COMMENTS
-═══════════════════════════════════════ */
-function loadAllComments() {
-  document.getElementById('commentsAdminList').innerHTML =
-    '<p style="color:var(--text-muted);padding:20px 0;"><i class="fa fa-spinner fa-spin"></i> Loading...</p>';
-  fetch('/api/gallery').then(function(r) { return r.json(); }).then(function(items) {
-    var html = '';
-    items.forEach(function(item) {
-      if (item.comments && item.comments.length > 0) {
-        item.comments.forEach(function(c) {
-          var user = c.user ? (c.user.name || 'Unknown') : 'Unknown';
-          var date = new Date(c.createdAt || Date.now()).toLocaleDateString('en-IN');
-          html += '<div style="display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid var(--border-soft);">' +
-            '<i class="fa fa-user-circle" style="color:var(--accent);font-size:1.4rem;margin-top:2px;"></i>' +
-            '<div style="flex:1;">' +
-              '<strong>' + user + '</strong> <small style="color:var(--text-muted);margin-left:6px;">' + date + '</small>' +
-              '<div style="margin:4px 0;">' + c.text + '</div>' +
-              '<small style="color:var(--text-muted);">Post: ' + (item.title || item._id) + '</small>' +
-            '</div>' +
-            '<button class="btn btn-danger btn-sm" onclick="deleteComment(\'' + item._id + '\',\'' + c._id + '\')"><i class="fa fa-trash"></i></button>' +
-          '</div>';
-        });
-      }
-    });
-    document.getElementById('commentsAdminList').innerHTML = html ||
-      '<p style="color:var(--text-muted);text-align:center;padding:30px;">No comments found.</p>';
-  }).catch(function() {
-    document.getElementById('commentsAdminList').innerHTML =
-      '<p style="color:var(--danger);padding:20px;">Failed to load comments.</p>';
-  });
-}
-
-function deleteComment(gId, cId) {
-  if (!confirm('Delete this comment?')) return;
-  fetch('/api/gallery/' + gId + '/comment/' + cId, { method: 'DELETE' })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      showToast(d.success ? 'Comment deleted.' : (d.message || 'Failed'), !d.success);
-      if (d.success) loadAllComments();
-    });
-}
-
-/* ═══════════════════════════════════════
-   RESET
-═══════════════════════════════════════ */
-function openResetModal() {
-  var input = document.getElementById('resetConfirmTextInput');
-  if (input) input.value = '';
-  document.getElementById('resetPasswordInput').value = '';
-  document.getElementById('resetStatus').textContent = '';
-  validateResetTyping();
-  openModal('resetModal');
-}
-
-function validateResetTyping() {
-  var target = "I CONFIRM PERMANENT RESET OF ALL BAYANUL ULOOM DARS DATA";
-  var input = document.getElementById('resetConfirmTextInput');
-  var typed = input ? input.value.trim() : '';
-  var btn = document.getElementById('executeResetBtn');
-  if (btn) {
-    if (typed === target) {
-      btn.disabled = false;
-      btn.style.opacity = '1';
-      btn.style.cursor = 'pointer';
-    } else {
-      btn.disabled = true;
-      btn.style.opacity = '0.5';
-      btn.style.cursor = 'not-allowed';
-    }
-  }
-}
-
-function executeReset() {
-  var target = "I CONFIRM PERMANENT RESET OF ALL BAYANUL ULOOM DARS DATA";
-  var input = document.getElementById('resetConfirmTextInput');
-  var typed = input ? input.value.trim() : '';
-  var token = document.getElementById('resetPasswordInput').value.trim();
-
-  if (typed !== target) {
-    document.getElementById('resetStatus').innerHTML = '<span style="color:var(--danger);">Please type the exact confirmation sentence manually (pasting is disabled).</span>';
-    return;
-  }
-
-  if (!token) {
-    document.getElementById('resetStatus').innerHTML = '<span style="color:var(--danger);">Please enter your admin password.</span>';
-    return;
-  }
-
-  document.getElementById('resetStatus').innerHTML = '<i class="fa fa-spinner fa-spin"></i> Resetting all data...';
-  fetch('/api/admin/reset', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token: token })
-  }).then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (d.success) {
-        document.getElementById('resetStatus').innerHTML =
-          '<span style="color:var(--success);"><i class="fa fa-check-circle"></i> ' + d.message + '</span>';
-        setTimeout(function() { closeModal('resetModal'); loadAll(); }, 2500);
-      } else {
-        document.getElementById('resetStatus').innerHTML =
-          '<span style="color:var(--danger);"><i class="fa fa-times-circle"></i> ' + d.message + '</span>';
-      }
-    }).catch(function() {
-      document.getElementById('resetStatus').innerHTML =
-        '<span style="color:var(--danger);">Server error. Try again.</span>';
     });
 }
 </script>
