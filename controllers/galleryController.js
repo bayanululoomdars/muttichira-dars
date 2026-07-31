@@ -80,6 +80,39 @@ exports.deleteGalleryItem = async (req, res) => {
   }
 };
 
+// PUT /api/gallery/:id — Update gallery item
+exports.updateGalleryItem = async (req, res) => {
+  try {
+    const { title, category, mediaType, mediaUrl, description, hashtags } = req.body;
+    const item = await GalleryItem.findById(req.params.id);
+    
+    if (!item) return res.status(404).json({ success: false, message: 'Gallery item not found' });
+
+    if (title) item.title = title;
+    if (category) item.category = category;
+    if (mediaType) item.mediaType = mediaType;
+    if (description !== undefined) item.description = description;
+    if (hashtags) item.hashtags = hashtags.split(',').map(h => h.trim()).filter(h => h);
+
+    if (req.file) {
+      // delete old image from cloudinary if exists
+      if (item.cloudinaryId && isCloudinaryConfigured()) {
+        try { await cloudinary.uploader.destroy(item.cloudinaryId); } catch (e) { /* ignore */ }
+      }
+      item.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      item.cloudinaryId = req.file.filename || '';
+    } else if (mediaUrl && mediaType === 'video') {
+      item.imageUrl = mediaUrl;
+    }
+
+    await item.save();
+    res.json({ success: true, message: 'Gallery item updated successfully!', data: item });
+  } catch (err) {
+    console.error('Gallery update error:', err);
+    res.status(500).json({ success: false, message: 'Failed to update gallery item' });
+  }
+};
+
 // POST /api/gallery/:id/like — Toggle like on item (1 per account)
 exports.likeGalleryItem = async (req, res) => {
   try {

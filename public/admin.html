@@ -1990,6 +1990,56 @@ darsbayanululoom@gmail.com</textarea>
 </div>
 
 <!-- ══════════════════════════════════
+     EDIT GALLERY MODAL
+══════════════════════════════════ -->
+<div class="modal-overlay" id="editGalleryModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('editGalleryModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-edit"></i> Edit Gallery Item</div>
+    <form id="editGalleryForm">
+      <input type="hidden" id="editGalleryId">
+      <div class="form-group">
+        <label>Title *</label>
+        <input class="form-control" type="text" id="editGalleryTitle" required>
+      </div>
+      <div class="form-group">
+        <label>Category *</label>
+        <select class="form-control" id="editGalleryCategory" required></select>
+      </div>
+      <div class="form-group">
+        <label>Media Type *</label>
+        <select class="form-control" id="editGalleryMediaType" required onchange="setEditGallerySource(this.value)">
+          <option value="image">Image File</option>
+          <option value="video">Video URL (YouTube)</option>
+        </select>
+      </div>
+      <div class="form-group" id="editGalleryImageGroup">
+        <label>Change Image (Leave empty to keep current)</label>
+        <input class="form-control" type="file" id="editGalleryImage" accept="image/*">
+        <div style="margin-top:8px;">
+          <img id="editGalleryCurrentImg" src="" style="max-height:80px;border-radius:4px;display:none;">
+        </div>
+      </div>
+      <div class="form-group" id="editGalleryVideoGroup" style="display:none;">
+        <label>Video URL *</label>
+        <input class="form-control" type="url" id="editGalleryVideoUrl" placeholder="https://youtube.com/watch?...">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control" id="editGalleryDesc" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Hashtags</label>
+        <input class="form-control" type="text" id="editGalleryHashtags" placeholder="e.g. event, campus (comma separated)">
+      </div>
+      <button class="btn btn-primary" type="submit" style="width:100%;">
+        <i class="fa fa-save"></i> Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
      RESET CONFIRMATION MODAL (PARAGRAPH TYPING REQUIRED, PASTE DISABLED)
 ══════════════════════════════════ -->
 <div class="modal-overlay" id="resetModal">
@@ -2930,8 +2980,11 @@ function toggleNewCategoryInput() {
   if (newIn) newIn.required = val === '__new__';
 }
 
+var currentGalleryItems = [];
+
 function loadGalleryAdmin() {
   fetch('/api/gallery').then(function(r) { return r.json(); }).then(function(data) {
+    currentGalleryItems = data;
     safeSetText('statGallery', data.length);
     safeSetText('badge-gallery', data.length);
     var html = '';
@@ -2945,7 +2998,7 @@ function loadGalleryAdmin() {
           mediaTag = '<video src="' + item.imageUrl + '" style="width:50px;height:38px;object-fit:cover;border-radius:6px;" muted></video>';
         }
       } else {
-        mediaTag = '<img src="' + item.imageUrl + '">';
+        mediaTag = '<img src="' + item.imageUrl + '" style="width:50px;height:38px;object-fit:cover;border-radius:6px;">';
       }
       var pinned = item.pinned;
       html += '<tr>' +
@@ -2955,7 +3008,8 @@ function loadGalleryAdmin() {
         '<td><button class="btn btn-sm ' + (pinned ? 'btn-accent' : 'btn-ghost') + '" onclick="togglePin(\'' + item._id + '\')">' +
           '<i class="fa fa-thumb-tack"></i> ' + (pinned ? 'Pinned' : 'Pin') + '</button></td>' +
         '<td>' + d + '</td>' +
-        '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'gallery\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        '<td><button class="btn btn-warning btn-sm" onclick="editGalleryItem(\'' + item._id + '\')" style="margin-right:4px;"><i class="fa fa-edit"></i></button>' +
+        '<button class="btn btn-danger btn-sm" onclick="deleteItem(\'gallery\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
     });
     safeSetHtml('galleryTableBody', html || '<tr class="empty-row"><td colspan="6">No gallery items yet</td></tr>');
     loadGalleryCategoriesAdmin(loadHomeGallerySettingsAdmin);
@@ -2981,6 +3035,15 @@ function loadGalleryCategoriesAdmin(cb) {
         html += '<option value="__new__">+ Add New Category</option>';
         catSelect.innerHTML = html;
         if (cv && cv !== '__new__') catSelect.value = cv;
+      }
+      
+      var editCatSelect = document.getElementById('editGalleryCategory');
+      if (editCatSelect) {
+        var ecv = editCatSelect.value;
+        var eHtml = '';
+        categories.forEach(function(c) { eHtml += '<option value="' + c + '">' + c + '</option>'; });
+        editCatSelect.innerHTML = eHtml;
+        if (ecv) editCatSelect.value = ecv;
       }
 
       var hCat = document.getElementById('homeGalleryCategory');
@@ -3082,6 +3145,98 @@ safeAddListener('galleryForm', 'submit', function(e) {
       showToast('Network error', true);
     });
 });
+
+function editGalleryItem(id) {
+  var item = currentGalleryItems.find(function(i) { return i._id === id; });
+  if (!item) return;
+
+  safeSetValue('editGalleryId', item._id);
+  safeSetValue('editGalleryTitle', item.title);
+  
+  // load gallery categories dynamically to the edit form if not already loaded
+  var editCatSelect = document.getElementById('editGalleryCategory');
+  var options = Array.from(document.getElementById('galleryCategory').options);
+  if (editCatSelect && options.length > 0) {
+    var eHtml = '';
+    options.forEach(function(opt) {
+      if(opt.value && opt.value !== '__new__') {
+        eHtml += '<option value="' + opt.value + '">' + opt.text + '</option>';
+      }
+    });
+    editCatSelect.innerHTML = eHtml;
+  }
+  
+  safeSetValue('editGalleryCategory', item.category);
+  safeSetValue('editGalleryMediaType', item.mediaType || 'image');
+  
+  if (item.mediaType === 'video') {
+    safeSetValue('editGalleryVideoUrl', item.imageUrl || '');
+  } else {
+    safeSetValue('editGalleryVideoUrl', '');
+  }
+  
+  safeSetValue('editGalleryDesc', item.description || '');
+  safeSetValue('editGalleryHashtags', item.hashtags ? item.hashtags.join(', ') : '');
+
+  setEditGallerySource(item.mediaType || 'image');
+
+  var currentImg = document.getElementById('editGalleryCurrentImg');
+  if (item.mediaType !== 'video' && item.imageUrl) {
+    currentImg.src = item.imageUrl;
+    currentImg.style.display = 'block';
+  } else {
+    currentImg.style.display = 'none';
+  }
+
+  openModal('editGalleryModal');
+}
+
+function setEditGallerySource(type) {
+  var imgGroup = document.getElementById('editGalleryImageGroup');
+  var vidGroup = document.getElementById('editGalleryVideoGroup');
+  var urlIn = document.getElementById('editGalleryVideoUrl');
+  if (imgGroup) imgGroup.style.display = type === 'image' ? 'block' : 'none';
+  if (vidGroup) vidGroup.style.display = type === 'video' ? 'block' : 'none';
+  if (urlIn) urlIn.required = type === 'video';
+}
+
+safeAddListener('editGalleryForm', 'submit', function(e) {
+  e.preventDefault();
+  var id = safeGetValue('editGalleryId');
+  if (!id) return;
+
+  var fd = new FormData();
+  fd.append('title', safeGetValue('editGalleryTitle'));
+  fd.append('category', safeGetValue('editGalleryCategory'));
+  fd.append('mediaType', safeGetValue('editGalleryMediaType'));
+  fd.append('description', safeGetValue('editGalleryDesc'));
+  fd.append('hashtags', safeGetValue('editGalleryHashtags'));
+  
+  var fileInput = document.getElementById('editGalleryImage');
+  var file = fileInput && fileInput.files ? fileInput.files[0] : null;
+  if (file) fd.append('image', file);
+  
+  var url = safeGetValue('editGalleryVideoUrl');
+  if (url && safeGetValue('editGalleryMediaType') === 'video') fd.append('mediaUrl', url);
+
+  var btn = this.querySelector('button[type=submit]');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...'; }
+
+  fetch('/api/gallery/' + id, { method: 'PUT', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-save"></i> Save Changes'; }
+      showToast(data.message, !data.success);
+      if (data.success) {
+        closeModal('editGalleryModal');
+        loadGalleryAdmin();
+      }
+    }).catch(function() {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-save"></i> Save Changes'; }
+      showToast('Network error', true);
+    });
+});
+
 
 /* ═══════════════════════════════════════
    CONTACTS
