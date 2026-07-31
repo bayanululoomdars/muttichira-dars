@@ -316,20 +316,9 @@
             '<p>Please check back later or contact the administration for more details.</p>';
           document.getElementById('admissionClosedMsg').style.display = 'block';
         } else {
-          // Admission is open — check localStorage hint (actual enforcement is server-side)
-          var alreadySubmitted = localStorage.getItem('admission_submitted');
-          if (alreadySubmitted) {
-            document.getElementById('admissionForm').style.display = 'none';
-            document.getElementById('admissionClosedMsg').innerHTML = 
-              '<i class="fa fa-check-circle fa-2x mb-3 text-success"></i>' +
-              '<h4>You have already submitted an application.</h4>' +
-              '<p>We have received your application. Our team will contact you soon.</p>';
-            document.getElementById('admissionClosedMsg').style.display = 'block';
-          } else {
-            // Make sure form is visible
-            document.getElementById('admissionForm').style.display = '';
-            document.getElementById('admissionClosedMsg').style.display = 'none';
-          }
+          // Admission is open — show the form
+          document.getElementById('admissionForm').style.display = '';
+          document.getElementById('admissionClosedMsg').style.display = 'none';
         }
       })
       .catch(err => {

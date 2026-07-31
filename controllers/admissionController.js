@@ -27,16 +27,6 @@ exports.submitAdmission = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Name, Father Name, Mother Name, and Phone are required' });
     }
 
-    // ── ONE ADMISSION PER PHONE NUMBER (server-side enforcement) ──
-    const existing = await Admission.findOne({ phone: phone.trim() });
-    if (existing) {
-      return res.status(409).json({
-        success: false,
-        alreadySubmitted: true,
-        message: 'An application with this phone number has already been submitted. Only one application is allowed per phone number.'
-      });
-    }
-
     let imageUrl = '';
     if (req.file) {
       imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
@@ -102,14 +92,6 @@ exports.submitAdmission = async (req, res) => {
     res.json({ success: true, message: 'Admission application submitted successfully!' });
   } catch (err) {
     console.error('Admission save error:', err);
-    // Handle MongoDB duplicate key error (phone unique index)
-    if (err.code === 11000) {
-      return res.status(409).json({
-        success: false,
-        alreadySubmitted: true,
-        message: 'An application with this phone number has already been submitted.'
-      });
-    }
     res.status(500).json({ success: false, message: 'Failed to submit admission application' });
   }
 };

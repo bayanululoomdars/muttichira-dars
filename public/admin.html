@@ -1842,6 +1842,9 @@ darsbayanululoom@gmail.com</textarea>
                 <i class="fa fa-plus"></i> Add Category
               </button>
             </div>
+            <div id="categoryBadgesList" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;"></div>
+
+            <div class="card-header" style="margin-top:8px;">
               <div class="card-title"><i class="fa fa-th"></i> All Gallery Items</div>
               <button class="btn btn-ghost btn-sm" onclick="loadGalleryAdmin()"><i class="fa fa-refresh"></i> Refresh</button>
             </div>
@@ -2184,12 +2187,158 @@ darsbayanululoom@gmail.com</textarea>
     loadPosterAndBanner();
     loadCommitteeSettings();
     loadAllComments();
+    loadStoriesAdmin();
     loadHomeGallerySettings();
   }
 
   window.addEventListener('DOMContentLoaded', function() {
-    loadAll();
+    // Generate login particles
+    var pc = document.getElementById('loginParticles');
+    if (pc) {
+      for (var i = 0; i < 30; i++) {
+        var s = document.createElement('span');
+        s.style.left = Math.random()*100 + '%';
+        s.style.animationDuration = (8 + Math.random()*12) + 's';
+        s.style.animationDelay = (Math.random()*8) + 's';
+        s.style.width = s.style.height = (2 + Math.random()*3) + 'px';
+        pc.appendChild(s);
+      }
+    }
   });
+
+/* ===========================================
+   NAVIGATION — showPage
+=========================================== */
+function showPage(page) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  // Remove active from all nav items
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+
+  var pageEl  = document.getElementById('page-' + page);
+  var navEl   = document.getElementById('nav-' + page);
+  var titles  = {
+    overview: 'Dashboard', homepage: 'Home Page Panel',
+    admissions: 'Admission Panel', gallery: 'Gallery Panel',
+    messages: 'Messages & Comments', reset: 'Full Reset'
+  };
+
+  if (pageEl) pageEl.classList.add('active');
+  if (navEl)  navEl.classList.add('active');
+  safeSetText('topbarTitle', titles[page] || page);
+
+  // Close mobile sidebar
+  closeSidebar();
+}
+
+/* ===========================================
+   SIDEBAR TOGGLE (mobile)
+=========================================== */
+function toggleSidebar() {
+  var sidebar  = document.getElementById('sidebar');
+  var overlay  = document.getElementById('sidebarOverlay');
+  if (sidebar)  sidebar.classList.toggle('open');
+  if (overlay)  overlay.classList.toggle('open');
+}
+function closeSidebar() {
+  var sidebar  = document.getElementById('sidebar');
+  var overlay  = document.getElementById('sidebarOverlay');
+  if (sidebar)  sidebar.classList.remove('open');
+  if (overlay)  overlay.classList.remove('open');
+}
+
+/* ===========================================
+   TOAST
+=========================================== */
+function showToast(msg, isError) {
+  var container = document.getElementById('toastContainer');
+  if (!container) return;
+  var toast = document.createElement('div');
+  toast.className = 'toast ' + (isError ? 'error' : 'success');
+  toast.innerHTML = '<i class="fa ' + (isError ? 'fa-times-circle' : 'fa-check-circle') + '"></i> ' + msg;
+  container.appendChild(toast);
+  setTimeout(function() {
+    toast.style.transition = 'opacity 0.4s';
+    toast.style.opacity = '0';
+    setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 400);
+  }, 3500);
+}
+
+/* ===========================================
+   MODAL HELPERS
+=========================================== */
+function openModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.add('open');
+}
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+
+/* ===========================================
+   LOGOUT
+=========================================== */
+function doLogout() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  var particles = document.getElementById('loginParticles');
+  if (particles) particles.style.display = 'block';
+  safeSetValue('loginPassword', '');
+  var err = document.getElementById('loginError');
+  if (err) err.textContent = '';
+  showPage('overview');
+}
+
+/* ===========================================
+   STORIES
+=========================================== */
+function loadStoriesAdmin() {
+  fetch('/api/stories')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var html = '';
+      data.forEach(function(item) {
+        var exp = new Date(item.expiresAt);
+        var now = new Date();
+        var isActive = exp > now;
+        var d = exp.toLocaleDateString('en-IN');
+        html += '<tr>' +
+          '<td><img src="' + item.imageUrl + '" style="width:50px;height:38px;object-fit:cover;border-radius:6px;"></td>' +
+          '<td><strong>' + (item.title || '—') + '</strong></td>' +
+          '<td>' + (item.durationDays || '—') + ' days</td>' +
+          '<td>' + d + '</td>' +
+          '<td><span class="badge ' + (isActive ? 'badge-success' : 'badge-danger') + '">' + (isActive ? 'Active' : 'Expired') + '</span></td>' +
+          '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'stories\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td>' +
+          '</tr>';
+      });
+      safeSetHtml('storiesTableBody', html || '<tr class="empty-row"><td colspan="6">No stories yet</td></tr>');
+    }).catch(function() {});
+}
+
+safeAddListener('storyForm', 'submit', function(e) {
+  e.preventDefault();
+  var fd = new FormData();
+  fd.append('title', safeGetValue('storyTitle'));
+  fd.append('durationDays', safeGetValue('storyDays') || '7');
+  var imgInput = document.getElementById('storyImage');
+  var img = imgInput && imgInput.files ? imgInput.files[0] : null;
+  if (!img) { showToast('Please select an image', true); return; }
+  fd.append('image', img);
+  var btn = this.querySelector('button[type=submit]');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
+  fetch('/api/stories', { method: 'POST', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Active Story'; }
+      showToast(data.success ? 'Story uploaded!' : (data.message || 'Failed'), !data.success);
+      if (data.success) { e.target.reset(); loadStoriesAdmin(); }
+    }).catch(function() {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Active Story'; }
+      showToast('Network error', true);
+    });
+});
+
 
 /* ═══════════════════════════════════════
    LOGIN
@@ -2220,6 +2369,8 @@ async function doLogin() {
       const particles = document.getElementById('loginParticles');
       if (particles) particles.style.display = 'none';
       showToast('Login successful', false);
+      loadAll();
+      showPage('overview');
     } else {
       if (err) err.textContent = data.message || 'Invalid password';
       if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-lock"></i> Sign In'; }

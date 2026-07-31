@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const admissionSchema = new mongoose.Schema({
   name: { type: String, required: true },
   fatherName: { type: String, required: true },
-  phone: { type: String, required: true, unique: true },
+  phone: { type: String, required: true },
   email: { type: String, default: '' },
   motherName: { type: String, required: true },
   houseName: { type: String, default: '' },
