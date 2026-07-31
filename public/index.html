@@ -674,58 +674,31 @@
           if (Array.isArray(news) && news.length > 0) {
             allLoadedNewsItems = news;
             var cardsHtml = '';
-            var tickerTitles = [];
 
             news.forEach(function(item) {
-              if (item.title) tickerTitles.push(item.title);
-
-              var date = item.createdAt 
-                ? new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
-                : '';
-
               var imgHtml = '';
               if (item.imageUrl) {
-                imgHtml = '<div class="news-bar-img-wrapper">' +
-                  '<img src="' + item.imageUrl + '" alt="' + item.title + '" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div style=\\\u0022width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0a4d2e;color:#d4af37;\\\u0022><i class=\\\u0022fa fa-newspaper-o fa-2x\\\u0022></i></div>\';">' +
+                imgHtml = '<div style="flex-shrink:0; width: 140px; height: 140px; padding: 15px;">' +
+                  '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
                   '</div>';
               } else {
-                imgHtml = '<div class="news-bar-img-wrapper" style="background:linear-gradient(135deg, #0a4d2e 0%, #0f6b3f 100%); display:flex; align-items:center; justify-content:center;">' +
-                  '<i class="fa fa-newspaper-o" style="color:#d4af37; font-size:40px;"></i>' +
-                  '</div>';
+                imgHtml = '<div style="flex-shrink:0; width: 140px; height: 140px; padding: 15px;">' +
+                  '<div style="width: 100%; height: 100%; background:linear-gradient(135deg, #0a4d2e 0%, #0f6b3f 100%); display:flex; align-items:center; justify-content:center; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                  '<i class="fa fa-newspaper-o" style="color:#d4af37; font-size:30px;"></i>' +
+                  '</div></div>';
               }
 
               cardsHtml += '<div class="col-12 mb-4">' +
-                '<div class="news-bar-card achievement-card d-flex flex-column flex-md-row bg-white overflow-hidden">' +
+                '<div style="background:#fff; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.06); display:flex; align-items:center; overflow:hidden; transition:transform 0.3s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'none\'">' +
                 imgHtml +
-                '<div class="p-3 p-md-4 achievement-content" style="flex:1; display:flex; flex-direction:column; justify-content:space-between; min-width:0;">' +
-                '  <div>' +
-                '    <h4 style="font-family:\'Outfit\',sans-serif; color:#0a4d2e; font-weight:700; font-size:1.25rem; margin:0 0 8px 0; display:flex; align-items:center; gap:8px;">' +
-                '      <span style="color:#d4af37; font-size:1.3rem;">🏆</span>' +
-                '      <span>' + item.title + '</span>' +
-                '    </h4>' +
-                '    <p style="color:#4a5568; font-size:0.95rem; line-height:1.6; margin:0 0 14px 0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">' + (item.description || '') + '</p>' +
-                '  </div>' +
-                '  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-top:1px solid #edf2f7; padding-top:10px; margin-top:6px;">' +
-                '    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">' +
-                '      <span style="background:rgba(212,175,55,0.15); color:#967718; border:1px solid rgba(212,175,55,0.3); padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:600;">🥇 Achievement</span>' +
-                (date ? '      <span style="color:#718096; font-size:0.85rem; font-weight:500;"><i class="fa fa-calendar" style="color:#d4af37; margin-right:5px;"></i>' + date + '</span>' : '') +
-                '    </div>' +
-                '    <button class="btn btn-sm" style="background:#0a4d2e; color:#fff; border-radius:20px; padding:6px 18px; font-size:0.85rem; font-weight:600; transition:all 0.3s;" onclick="openNewsModal(\'' + item._id + '\')">Read More <i class="fa fa-arrow-right" style="margin-left:4px;"></i></button>' +
-                '  </div>' +
-                '</div></div></div>';
+                '<div style="padding: 15px 20px; flex: 1;">' +
+                '  <h4 style="font-family:\'Outfit\',sans-serif; color:#000; font-weight:700; font-size:1.6rem; margin:0 0 8px 0;">' + item.title + '</h4>' +
+                '  <p style="color:#0056b3; font-size:1.05rem; line-height:1.5; margin:0;">' + (item.description || '') + '</p>' +
+                '</div>' +
+                '</div></div>';
             });
 
-            var tickerHtml = '';
-            if (tickerTitles.length > 0) {
-              tickerHtml = '<div class="col-12 mb-4">' +
-                '<div style="background:#0a4d2e; color:#fff; padding:10px 18px; border-radius:10px; display:flex; align-items:center; overflow:hidden; box-shadow:0 4px 12px rgba(10,77,46,0.15);">' +
-                '<strong style="min-width:95px; margin-right:15px; border-right:2px solid rgba(212,175,55,0.4); padding-right:15px; color:#d4af37; font-size:0.85rem; letter-spacing:0.5px;"><i class="fa fa-bullhorn" style="margin-right:4px;"></i> UPDATES</strong>' +
-                '<marquee scrollamount="6" style="font-weight:500; font-size:1rem; color:#fff;">' +
-                tickerTitles.map(function(t){ return '<span style="margin-right:45px;">&bull; ' + t + '</span>'; }).join('') +
-                '</marquee></div></div>';
-            }
-
-            container.innerHTML = tickerHtml + cardsHtml;
+            container.innerHTML = cardsHtml;
             container.style.display = 'flex';
             container.style.flexWrap = 'wrap';
 

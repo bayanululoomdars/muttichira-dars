@@ -23,7 +23,6 @@ app.use('/api', apiRoutes);
 // ── Page Routes ─────────────────────────────────────────────
 app.get('/', (req, res) => res.redirect('/home'));
 app.get('/home', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
-app.get(['/latest-news', '/lastest-news', '/latestnews', '/news'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'news.html')));
 app.get('/gallery', (req, res) => res.sendFile(path.join(__dirname, 'public', 'gallery.html')));
 app.get('/admission', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admission.html')));
 app.get(['/about', '/about-us', '/about us', '/about  us'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'about.html')));
