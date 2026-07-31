@@ -316,7 +316,7 @@
             '<p>Please check back later or contact the administration for more details.</p>';
           document.getElementById('admissionClosedMsg').style.display = 'block';
         } else {
-          // Admission is open — now check if user already submitted
+          // Admission is open — check localStorage hint (actual enforcement is server-side)
           var alreadySubmitted = localStorage.getItem('admission_submitted');
           if (alreadySubmitted) {
             document.getElementById('admissionForm').style.display = 'none';
@@ -380,15 +380,27 @@
             '<h4>Application Submitted!</h4>' +
             '<p>Thank you! We have received your biodata. Our team will contact you soon.</p>';
           document.getElementById('admissionClosedMsg').style.display = 'block';
+        } else if (resData.alreadySubmitted) {
+          // Server-side duplicate detected
+          localStorage.setItem('admission_submitted', '1');
+          showToast('An application with this phone number already exists.', true);
+          document.getElementById('admissionForm').style.display = 'none';
+          document.getElementById('admissionClosedMsg').innerHTML =
+            '<i class="fa fa-info-circle fa-2x mb-3 text-info"></i>' +
+            '<h4>Application Already Submitted</h4>' +
+            '<p>An application with this phone number has already been received. Only one application is allowed per phone number. Please contact the administration if you need assistance.</p>';
+          document.getElementById('admissionClosedMsg').style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
         } else {
           showToast(resData.message || 'Failed to submit application.', true);
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
         }
       })
       .catch(function(err) {
         console.error(err);
         showToast('Error connecting to server. Please try again.', true);
-      })
-      .finally(function() {
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
       });

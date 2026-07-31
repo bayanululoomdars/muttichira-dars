@@ -2054,39 +2054,7 @@ darsbayanululoom@gmail.com</textarea>
   </div><!-- end app-layout -->
 </div><!-- end dashboard -->
 
-<!-- ══════════════════════════════════
-     ADMISSION DETAIL MODAL
-══════════════════════════════════ -->
-<div class="modal-overlay" id="admissionModal">
-  <div class="modal-box">
-    <button class="modal-close-btn" onclick="closeModal('admissionModal')">&times;</button>
-    <div class="modal-title"><i class="fa fa-graduation-cap"></i> Application Details</div>
-    <div id="modalBody"></div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════
-     RESET CONFIRMATION MODAL
-══════════════════════════════════ -->
-<div class="modal-overlay" id="resetModal">
-  <div class="modal-box" style="max-width:440px;text-align:center;">
-    <button class="modal-close-btn" onclick="closeModal('resetModal')">&times;</button>
-    <div style="font-size:2.5rem;margin-bottom:16px;">🔐</div>
-    <div class="modal-title" style="justify-content:center;color:#f87171;">Confirm Full Reset</div>
-    <p style="color:var(--text-muted);margin-bottom:20px;font-size:0.9rem;">
-      Enter your admin password to confirm. This will wipe all data permanently.
-    </p>
-    <input class="form-control" type="password" id="resetPasswordInput"
-      placeholder="Admin password" style="margin-bottom:14px;text-align:center;">
-    <div style="display:flex;gap:10px;justify-content:center;">
-      <button class="btn btn-ghost" onclick="closeModal('resetModal')">Cancel</button>
-      <button class="btn btn-danger" onclick="executeReset()">
-        <i class="fa fa-trash"></i> Confirm Reset
-      </button>
-    </div>
-    <div id="resetStatus" style="margin-top:14px;font-weight:600;font-size:0.9rem;"></div>
-  </div>
-</div>
+<!-- Duplicate modals removed — single copies kept above -->
 
 <!-- ══════════════════════════════════
      HIDDEN PDF PRINT TEMPLATE
@@ -2204,6 +2172,7 @@ darsbayanululoom@gmail.com</textarea>
 ═══════════════════════════════════════ 
 */
   function loadAll() {
+    checkAdmissionStatus();
     loadAdmissions();
     loadNewsAdmin();
     loadGalleryAdmin();
