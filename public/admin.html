@@ -2059,22 +2059,171 @@ darsbayanululoom@gmail.com</textarea>
 
 <!-- Duplicate modals removed — single copies kept above -->
 
-<!-- ══════════════════════════════════
-     HIDDEN PDF PRINT TEMPLATE
-══════════════════════════════════ -->
-<div id="pdfPrintTemplate">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:25px;border-bottom:3px solid #1a6b3a;padding-bottom:15px;">
+<!-- Hidden PDF Print Template -->
+<div id="pdfPrintTemplate" style="display:none;">
+
+  <!-- ══ HEADER ══ -->
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;padding-bottom:14px;border-bottom:3px solid #1a6b3a;">
     <div style="flex:1;">
-      <h5 style="margin:0;font-size:14px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.5px;">Bayanul Uloom Dars, Muttichira</h5>
-      <p style="margin:2px 0 15px 0;font-size:11px;color:#666;">Shuhada Masjid Muttichira, Thalappara, PIN: 676311</p>
-      <h1 style="margin:0;font-size:32px;font-weight:800;color:#1a6b3a;font-family:'Outfit',sans-serif;line-height:1.1;text-transform:uppercase;letter-spacing:0.5px;">Student Biodata</h1>
-      <h2 style="margin:0;font-size:24px;font-weight:700;color:#222;font-family:'Outfit',sans-serif;text-transform:uppercase;letter-spacing:0.5px;">Application Form</h2>
+      <p style="margin:0 0 2px 0;font-size:13px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:0.4px;">BAYANUL ULOOM DARS, MUTTICHIRA</p>
+      <p style="margin:0 0 14px 0;font-size:11px;color:#555;">Shuhada Masjid Muttichira, Thalappara, PIN: 676311</p>
+      <h1 style="margin:0;font-size:30px;font-weight:900;color:#1a6b3a;font-family:Arial Black,sans-serif;line-height:1;text-transform:uppercase;letter-spacing:0.5px;">STUDENT BIODATA</h1>
+      <h2 style="margin:2px 0 0 0;font-size:18px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.5px;">APPLICATION FORM</h2>
+      <div style="margin-top:6px;width:60px;height:4px;background:#1a6b3a;border-radius:2px;"></div>
     </div>
-    <div style="width:125px;height:160px;border:2px solid #1a6b3a;border-radius:8px;overflow:hidden;background:#f9f9f9;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.05);">
-      <img id="pdfPhotoImg" src="" style="width:100%;height:100%;object-fit:cover;display:none;">
-      <span id="pdfPhotoLabel" style="font-size:12px;color:#aaa;font-weight:600;text-transform:uppercase;">Photo</span>
+    <!-- Photo Box -->
+    <div style="width:110px;height:140px;border:2px solid #1a6b3a;border-radius:6px;overflow:hidden;background:#f8f8f8;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:20px;">
+      <img id="pdfPhotoImg" src="" style="width:100%;height:100%;object-fit:cover;display:none;" alt="Student Photo">
+      <span id="pdfPhotoLabel" style="font-size:10px;color:#aaa;font-weight:600;text-align:center;padding:6px;">PHOTO</span>
     </div>
   </div>
+
+  <!-- ══ SECTION: Personal Details ══ -->
+  <div style="display:flex;align-items:center;gap:8px;margin:14px 0 10px 0;padding-bottom:5px;border-bottom:2px solid #e2e8f0;">
+    <span style="font-size:14px;">👤</span>
+    <span style="font-size:13px;font-weight:700;color:#1a6b3a;text-transform:uppercase;letter-spacing:0.4px;">Personal Details / വ്യക്തിഗത വിവരങ്ങൾ</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Student Name / പേര് *</div>
+      <div id="pdf_name" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Date of Birth / ജനനതീയതി *</div>
+      <div id="pdf_dob" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Father's Name / പിതാവിൻ്റെ പേര് *</div>
+      <div id="pdf_fatherName" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Mother's Name / മാതാവിൻ്റെ പേര് *</div>
+      <div id="pdf_motherName" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Student Phone / ഫോൺ നമ്പർ *</div>
+      <div id="pdf_phone" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Blood Group / രക്ത ഗ്രൂപ്പ് *</div>
+      <div id="pdf_bloodGroup" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION: Address ══ -->
+  <div style="display:flex;align-items:center;gap:8px;margin:14px 0 10px 0;padding-bottom:5px;border-bottom:2px solid #e2e8f0;">
+    <span style="font-size:14px;">🏠</span>
+    <span style="font-size:13px;font-weight:700;color:#1a6b3a;text-transform:uppercase;letter-spacing:0.4px;">Address Details / വിലാസം</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">House Name / വീട്ടിൻ്റെ പേര് *</div>
+      <div id="pdf_houseName" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Home Phone / വീട്ടിലെ ഫോൺ നമ്പർ</div>
+      <div id="pdf_homePhone" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Place / സ്ഥലം *</div>
+      <div id="pdf_place" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Post Office / പോസ്റ്റ് *</div>
+      <div id="pdf_postOffice" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">District / ജില്ല *</div>
+      <div id="pdf_district" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Pincode / പിൻകോഡ് *</div>
+      <div id="pdf_pincode" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+  </div>
+
+  <!-- Education & Guardian Section -->
+  <div style="display:flex;align-items:center;gap:8px;margin:14px 0 10px 0;padding-bottom:5px;border-bottom:2px solid #e2e8f0;">
+    <span style="font-size:14px;">🎓</span>
+    <span style="font-size:13px;font-weight:700;color:#1a6b3a;text-transform:uppercase;letter-spacing:0.4px;">Education &amp; Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ്</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Religious Education / വിദ്യാഭ്യാസം: മദ്രസ *</div>
+      <div id="pdf_eduRel" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Secular Education / വിദ്യാഭ്യാസം: സ്കൂൾ *</div>
+      <div id="pdf_eduSec" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.2fr 0.8fr 1fr;gap:10px;margin-bottom:8px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Guardian Name / രക്ഷിതാവിൻ്റെ പേര് *</div>
+      <div id="pdf_guardianName" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Relationship / ബന്ധം *</div>
+      <div id="pdf_relationship" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Guardian Phone / രക്ഷിതാവിൻ്റെ ഫോൺ *</div>
+      <div id="pdf_guardianPhone" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#111;font-weight:500;"></div>
+    </div>
+  </div>
+
+  <!-- Photo upload row -->
+  <div style="margin-bottom:14px;">
+    <div style="font-size:10px;font-weight:700;color:#333;margin-bottom:3px;">Upload Photo / ഫോട്ടോ (Passport size image)</div>
+    <div id="pdf_photoName" style="border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;min-height:34px;background:#fff;color:#888;display:flex;justify-content:space-between;align-items:center;">
+      <span id="pdf_photoNameText">—</span>
+      <span style="background:#eee;border:1px solid #ccc;border-radius:3px;padding:4px 10px;font-size:11px;color:#555;font-weight:600;">Browse</span>
+    </div>
+  </div>
+
+  <!-- ══ DECLARATION ══ -->
+  <div style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:12px;">
+    <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:28px;">
+      <div style="width:14px;height:14px;border:1.5px solid #1a6b3a;border-radius:2px;background:#1a6b3a;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+        <span style="color:#fff;font-size:10px;font-weight:900;">✓</span>
+      </div>
+      <span style="font-size:10.5px;color:#444;line-height:1.5;">
+        മുകളിൽ നൽകിയ വിവരങ്ങൾ സത്യവും ശരിയും ആണെന്ന് ഞാൻ ഉറപ്പ്നൽകുന്നു.<br>
+        I hereby declare that the above information is true and correct to the best of my knowledge.
+      </span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <div>
+        <div style="font-size:10px;color:#555;margin-bottom:4px;">Date / തീയതി</div>
+        <div id="pdf_date" style="border-bottom:1px solid #94a3b8;width:130px;font-size:12px;padding-bottom:3px;font-weight:600;"></div>
+      </div>
+      <div style="text-align:right;position:relative;width:200px;">
+        <div id="pdf_signature" style="font-family:'Brush Script MT',cursive,Georgia,serif;font-size:26px;color:#1a6b3a;text-align:right;margin-bottom:2px;font-weight:700;"></div>
+        <div style="border-bottom:1px solid #94a3b8;width:100%;margin-bottom:4px;"></div>
+        <div style="font-size:10px;color:#555;">Signature / ഒപ്പ്</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- end pdfPrintTemplate -->
+
 
   <div class="pdf-section-title">👤 Personal Details / വ്യക്തിഗത വിവരങ്ങൾ</div>
   <div class="pdf-grid-2">
@@ -2656,13 +2805,61 @@ function printAdmission(id) {
   var item = currentAdmissions.find(function(a) { return a._id === id; });
   if (!item) return;
   fillPdfTemplate(item);
-  var pw = window.open('', '_blank');
-  pw.document.write('<html><head><title>Print Admission</title><style>body{margin:0;padding:0;font-family:Arial,sans-serif;}</style></head><body>');
-  pw.document.write(document.getElementById('pdfPrintTemplate').outerHTML);
-  pw.document.write('</body></html>');
-  pw.document.close();
-  pw.focus();
-  pw.onload = function() { pw.print(); setTimeout(function() { pw.close(); }, 500); };
+
+  // Wait a tick for fillPdfTemplate to apply, then open print window
+  setTimeout(function() {
+    var tmpl = document.getElementById('pdfPrintTemplate');
+    if (!tmpl) return;
+    var html = tmpl.innerHTML;
+
+    var pw = window.open('', '_blank', 'width=900,height=700');
+    pw.document.write(`<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Biodata – ${item.name}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #fff;
+      color: #111;
+      padding: 32px 40px;
+      max-width: 790px;
+      margin: 0 auto;
+    }
+    @page {
+      size: A4;
+      margin: 18mm 15mm;
+    }
+    @media print {
+      body { padding: 0; }
+      .no-print { display: none !important; }
+    }
+    .print-btn {
+      display: block;
+      margin: 0 auto 22px auto;
+      padding: 10px 32px;
+      background: #1a6b3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+    }
+    .print-btn:hover { background: #155c2f; }
+  </style>
+</head>
+<body>
+  <button class="print-btn no-print" onclick="window.print()">🖨️ Print / Download PDF</button>
+  ${html}
+</body>
+</html>`);
+    pw.document.close();
+  }, 60);
 }
 
 /* ═══════════════════════════════════════
