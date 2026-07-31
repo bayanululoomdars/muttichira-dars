@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
@@ -9,7 +11,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Cloudinary storage for multer
+// Cloudinary storage for Multer
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -20,25 +22,42 @@ const storage = new CloudinaryStorage({
   },
 });
 
-// Multer upload middleware
 const upload = multer({ storage: storage });
+
+// Ensure local upload directory exists
+const uploadDir = path.join(__dirname, '../public/img/uploads/');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Local fallback storage (when Cloudinary is not configured)
 const localStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/img/uploads/');
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
+
 const uploadLocal = multer({ storage: localStorage });
 
-// Check if Cloudinary is configured
+// Check if Cloudinary is fully configured
 const isCloudinaryConfigured = () => {
-  return process.env.CLOUDINARY_CLOUD_NAME && 
-         process.env.CLOUDINARY_API_KEY && 
-         process.env.CLOUDINARY_API_SECRET;
+  return !!(process.env.CLOUDINARY_CLOUD_NAME && 
+            process.env.CLOUDINARY_API_KEY && 
+            process.env.CLOUDINARY_API_SECRET);
 };
 
-module.exports = { cloudinary, upload, uploadLocal, isCloudinaryConfigured };
+// Dynamic uploader selector
+const getUploader = () => {
+  return isCloudinaryConfigured() ? upload : uploadLocal;
+};
+
+module.exports = { 
+  cloudinary, 
+  upload, 
+  uploadLocal, 
+  isCloudinaryConfigured,
+  getUploader
+};
