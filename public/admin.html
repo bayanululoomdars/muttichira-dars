@@ -2223,6 +2223,46 @@ darsbayanululoom@gmail.com</textarea>
   });
 
 /* ═══════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════ */
+async function doLogin() {
+  const password = safeGetValue('loginPassword');
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('loginError');
+  if (!password) {
+    if (err) err.textContent = 'Please enter password';
+    return;
+  }
+  
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Checking...'; }
+  if (err) err.textContent = '';
+  
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      const particles = document.getElementById('loginParticles');
+      if (particles) particles.style.display = 'none';
+      showToast('Login successful', false);
+    } else {
+      if (err) err.textContent = data.message || 'Invalid password';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-lock"></i> Sign In'; }
+    }
+  } catch (error) {
+    if (err) err.textContent = 'Network error. Please try again.';
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-lock"></i> Sign In'; }
+  }
+}
+
+
+/* ═══════════════════════════════════════
    ADMISSION STATUS
 ═══════════════════════════════════════ */
 function checkAdmissionStatus() {
