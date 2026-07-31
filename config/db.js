@@ -9,13 +9,20 @@ const connectDB = async () => {
   }
 
   try {
-    const conn = await mongoose.connect(MONGODB_URI);
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
-    return true;
-  } catch (err) {
-    console.error('❌ MongoDB Connection Error:', err.message);
-    return false;
+  const mongoOptions = {
+    serverSelectionTimeoutMS: 5000,
+  };
+  if (process.env.MONGODB_TLS_INSECURE === 'true') {
+    mongoOptions.tlsAllowInvalidCertificates = true;
+    mongoOptions.tlsInsecure = true;
   }
+  const conn = await mongoose.connect(MONGODB_URI, mongoOptions);
+  console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  return true;
+} catch (err) {
+  console.error('❌ MongoDB Connection Error:', err.message);
+  return false;
+}
 };
 
 mongoose.connection.on('disconnected', () => {

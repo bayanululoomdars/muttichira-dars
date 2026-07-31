@@ -120,6 +120,54 @@
 
 
     
+
+
+    <!--==========================
+      Latest News Section (Dynamic from MongoDB)
+    ============================-->
+    <section id="services" class="section-bg" style="padding:60px 0;">
+      <div class="container">
+        <header class="section-header" id="newsSecHeader" style="text-align:center; margin-bottom:30px;">
+          <h3 style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Latest News</h3>
+          <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">All the news that are relevant for our small community</p>
+          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="newsReadMore">Read more...</a>
+        </header>
+        <!-- Dynamic news from MongoDB -->
+        <div class="row" id="dynamicNews"></div>
+      </div>
+    </section>
+
+    <!--==========================
+      Gallery Section (Dynamic Intro & Teaser from MongoDB)
+    ============================-->
+    <section id="portfolio" class="clearfix" style="padding:60px 0; background:linear-gradient(180deg, #ffffff 0%, #f4f8f5 100%);">
+      <div class="container">
+        <header class="section-header" id="gallerySecHeader" style="text-align:center; margin-bottom:30px;">
+          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Gallery Highlights</h3>
+          <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">
+            Explore the memorable moments, academic programs, Sahithya Samajam activities, and student achievements of Muttichira Bayanul Uloom Dars.
+          </p>
+        </header>
+
+        <!-- Dynamic Category Filter Pills (All / എല്ലാം + custom categories) -->
+        <div id="homeGalleryCategoriesBar" style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
+          <button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery('all', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:#0a4d2e; color:#fff;">
+            All 
+          </button>
+        </div>
+
+        <!-- Dynamic gallery cards from MongoDB (configured by admin "ethra mathi" limit & settings) -->
+        <div class="row" id="homeGalleryRow" style="justify-content:center;"></div>
+
+        <!-- Explore More Button -->
+        <div class="text-center mt-4">
+          <a href="/gallery" class="btn-explore-more" style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:linear-gradient(135deg, #0a4d2e, #106b3f); color:#fff; border-radius:30px; font-weight:700; text-decoration:none; box-shadow:0 4px 15px rgba(10,77,46,0.25); transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+            <i class="fa fa-th"></i> Explore Full Gallery 
+          </a>
+        </div>
+      </div>
+    </section><!-- #portfolio -->
+
     <!--==========================
       Burda Team Section
     ============================-->
@@ -141,14 +189,14 @@
       <div class="container">
         <header class="section-header" id="aboutSecHeader">
           <h3>About Us</h3>
-          <p>Bayanul Uloom Dars, Muttichira is a center of Islamic learning dedicated to nurturing students with authentic religious knowledge, moral values, and good character. Functioning under Shuhada Masjid, Muttichira, Thalappara, the Dars provides a disciplined environment where students receive quality Islamic education guided by experienced Usthadhs. Our mission is to develop knowledgeable, responsible, and spiritually conscious individuals who can positively serve society while upholding the teachings of Islam.</p>
+          <p>It helps you to know and understand something about  Muttichira Bayanul Uloom Dars</p>
           <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="aboutReadMore">Read more...</a>
         </header>
         <div class="divider div-transparent div-arrow-down"></div>
 
         <div class="row about-container">
           <p>
-            <strong style="color: rgb(5, 52, 90);">Muttichira Bayanul Uloom Dars </strong>is located in the historic Muttichira Shuhada Juma Mosque, which is situated near Talappara Town.
+            <strong style="color: rgb(5, 52, 90);">Muttichira Bayanul Uloom Dars </strong>is a center of Islamic learning dedicated to nurturing students with authentic religious knowledge, moral values, and good character. Functioning under Shuhada Masjid, Muttichira, Thalappara, the Dars provides a disciplined environment where students receive quality Islamic education guided by experienced Usthadhs. Our mission is to develop knowledgeable, responsible, and spiritually conscious individuals who can positively serve society while upholding the teachings of Islam.
           </p>
           <div class="text-center w-100 mt-4 mb-4">
             <a href="/about" class="btn btn-outline-success">Read More About Us</a>
@@ -212,54 +260,6 @@
         </div>
       </div>
     </section><!-- #about -->
-
-    <!--==========================
-      Latest News Section (Dynamic from MongoDB)
-    ============================-->
-    <section id="services" class="section-bg" style="padding:60px 0;">
-      <div class="container">
-        <header class="section-header" id="newsSecHeader" style="text-align:center; margin-bottom:30px;">
-          <h3 style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Latest News</h3>
-          <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">All the news that are relevant for our small community</p>
-          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="newsReadMore">Read more...</a>
-        </header>
-        <!-- Dynamic news from MongoDB -->
-        <div class="row" id="dynamicNews"></div>
-      </div>
-    </section>
-
-    <!--==========================
-      Gallery Section (Dynamic Intro & Teaser from MongoDB)
-    ============================-->
-    <section id="portfolio" class="clearfix" style="padding:60px 0; background:linear-gradient(180deg, #ffffff 0%, #f4f8f5 100%);">
-      <div class="container">
-        <header class="section-header" id="gallerySecHeader" style="text-align:center; margin-bottom:30px;">
-          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Gallery Highlights</h3>
-          <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">
-            Explore the memorable moments, academic programs, Sahithya Samajam activities, and student achievements of Muttichira Bayanul Uloom Dars.
-          </p>
-        </header>
-
-        <!-- Dynamic Category Filter Pills (All / എല്ലാം + custom categories) -->
-        <div id="homeGalleryCategoriesBar" style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
-          <button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery('all', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:#0a4d2e; color:#fff;">
-            All 
-          </button>
-        </div>
-
-        <!-- Dynamic gallery cards from MongoDB (configured by admin "ethra mathi" limit & settings) -->
-        <div class="row" id="homeGalleryRow" style="justify-content:center;"></div>
-
-        <!-- Explore More Button -->
-        <div class="text-center mt-4">
-          <a href="/gallery" class="btn-explore-more" style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:linear-gradient(135deg, #0a4d2e, #106b3f); color:#fff; border-radius:30px; font-weight:700; text-decoration:none; box-shadow:0 4px 15px rgba(10,77,46,0.25); transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-            <i class="fa fa-th"></i> Explore Full Gallery 
-          </a>
-        </div>
-      </div>
-    </section><!-- #portfolio -->
-
-
 
     <!--==========================
       Why Us Section
