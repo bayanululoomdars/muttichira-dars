@@ -2862,12 +2862,18 @@ function loadNewsAdmin() {
     var html = '';
     data.forEach(function(item) {
       var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+      var safeTitle = (item.title || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      var safeDesc = (item.description || '').replace(/'/g, "\\'").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
+      
       html += '<tr>' +
         '<td>' + (item.imageUrl ? '<img src="' + item.imageUrl + '">' : '<span style="color:var(--text-muted);">—</span>') + '</td>' +
         '<td><strong>' + item.title + '</strong></td>' +
         '<td style="color:var(--text-muted);">' + (item.description || '').substring(0, 60) + '...</td>' +
         '<td>' + d + '</td>' +
-        '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'news\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        '<td>' +
+        '<button class="btn btn-sm" style="background:var(--accent); color:#1a0e00; margin-right:5px;" onclick="openEditNewsModal(\'' + item._id + '\', \'' + safeTitle + '\', \'' + safeDesc + '\')"><i class="fa fa-edit"></i></button>' +
+        '<button class="btn btn-danger btn-sm" onclick="deleteItem(\'news\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button>' +
+        '</td></tr>';
     });
     safeSetHtml('newsTableBody', html || '<tr class="empty-row"><td colspan="5">No news yet</td></tr>');
   }).catch(function() {});
@@ -3636,6 +3642,79 @@ function executeReset() {
       }
     }).catch(function() {
       safeSetHtml('resetStatus', '<span style="color:var(--danger);">Server error. Try again.</span>');
+    });
+}
+</script>
+
+<!-- Edit News Modal -->
+<div class="modal" id="editNewsModal">
+  <div class="modal-content" style="max-width:500px;">
+    <h3>Edit News / Achievement</h3>
+    <form id="editNewsForm" onsubmit="submitEditNews(event)">
+      <input type="hidden" id="editNewsId">
+      <div class="form-group">
+        <label>Title <span class="required">*</span></label>
+        <input type="text" id="editNewsTitle" class="input-field" required>
+      </div>
+      <div class="form-group mt-3">
+        <label>Description <span class="required">*</span></label>
+        <textarea id="editNewsDesc" class="input-field" rows="4" required></textarea>
+      </div>
+      <div class="form-group mt-3">
+        <label>Image (Optional - Leave blank to keep existing)</label>
+        <div class="file-upload-wrapper">
+          <input type="file" id="editNewsImage" accept="image/*">
+          <i class="fa fa-cloud-upload"></i> Choose a new image
+        </div>
+      </div>
+      <div id="editNewsStatus" style="margin-top:10px; font-weight:600; font-size:0.9rem;"></div>
+      <div class="modal-actions" style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('editNewsModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="editNewsBtn">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openEditNewsModal(id, title, desc) {
+  safeSetValue('editNewsId', id);
+  safeSetValue('editNewsTitle', title);
+  safeSetValue('editNewsDesc', desc);
+  var imgInput = document.getElementById('editNewsImage');
+  if (imgInput) imgInput.value = ''; // clear file input
+  safeSetHtml('editNewsStatus', '');
+  openModal('editNewsModal');
+}
+
+function submitEditNews(e) {
+  e.preventDefault();
+  var id = safeGetValue('editNewsId');
+  var fd = new FormData();
+  fd.append('title', safeGetValue('editNewsTitle'));
+  fd.append('description', safeGetValue('editNewsDesc'));
+  
+  var imgInput = document.getElementById('editNewsImage');
+  var img = imgInput && imgInput.files ? imgInput.files[0] : null;
+  if (img) fd.append('image', img);
+  
+  var btn = document.getElementById('editNewsBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...'; }
+  
+  fetch('/api/news/' + id, { method: 'PUT', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (btn) { btn.disabled = false; btn.innerHTML = 'Save Changes'; }
+      if (data.success) {
+        showToast('News updated successfully', false);
+        closeModal('editNewsModal');
+        loadNewsAdmin();
+      } else {
+        safeSetHtml('editNewsStatus', '<span style="color:var(--danger);">' + (data.message || 'Error updating news') + '</span>');
+      }
+    }).catch(function() {
+      if (btn) { btn.disabled = false; btn.innerHTML = 'Save Changes'; }
+      safeSetHtml('editNewsStatus', '<span style="color:var(--danger);">Network error</span>');
     });
 }
 </script>

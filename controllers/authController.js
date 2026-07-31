@@ -29,7 +29,16 @@ exports.googleAuth = async (req, res) => {
       user = new User({ googleId: sub, name, email, picture });
       await user.save();
     }
-    res.json({ success: true, user });
+    // Store user info in session
+    req.session.user = {
+      id: user._id,
+      googleId: sub,
+      name,
+      email,
+      picture,
+      isAdmin: (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).includes(email.toLowerCase())
+    };
+    res.json({ success: true, user: req.session.user });
   } catch (err) {
     console.error('Google Auth error:', err);
     res.status(401).json({ success: false, message: 'Invalid token' });

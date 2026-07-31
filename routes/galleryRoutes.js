@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const galleryController = require('../controllers/galleryController');
+const { verifyGoogleToken } = require('../middleware/googleAuth');
 const { getUploader } = require('../config/cloudinary');
 
 router.get('/', galleryController.getAllGalleryItems);
@@ -17,9 +18,9 @@ router.put('/:id', (req, res, next) => {
   uploader.single('image')(req, res, next);
 }, galleryController.updateGalleryItem);
 
-router.post('/:id/like', galleryController.likeGalleryItem);
-router.post('/:id/comment', galleryController.addComment);
-router.delete('/:id/comment/:commentId', galleryController.deleteComment);
+router.post('/:id/like', verifyGoogleToken, galleryController.likeGalleryItem);
+router.post('/:id/comment', verifyGoogleToken, galleryController.addComment);
+router.delete('/:id/comment/:commentId', verifyGoogleToken, galleryController.deleteComment);
 router.post('/:id/pin', galleryController.togglePin);
 
 module.exports = router;

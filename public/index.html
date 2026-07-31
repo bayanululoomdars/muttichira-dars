@@ -665,7 +665,7 @@
     var allLoadedNewsItems = [];
 
     function loadNews() {
-      fetch('/api/news')
+      fetch('/api/news?_t=' + new Date().getTime())
         .then(function(res) { return res.json(); })
         .then(function(news) {
           var container = document.getElementById('dynamicNews');

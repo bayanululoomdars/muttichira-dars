@@ -50,3 +50,28 @@ exports.deleteNews = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// PUT /api/news/:id — Update a news item
+exports.updateNews = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const news = await News.findById(req.params.id);
+    if (!news) return res.status(404).json({ message: 'News not found' });
+
+    news.title = title || news.title;
+    news.description = description || news.description;
+
+    if (req.file) {
+      if (news.cloudinaryId && isCloudinaryConfigured()) {
+        try { await cloudinary.uploader.destroy(news.cloudinaryId); } catch (e) {}
+      }
+      news.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      news.cloudinaryId = req.file.filename || '';
+    }
+
+    await news.save();
+    res.json({ success: true, message: 'News updated successfully', data: news });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};

@@ -13,4 +13,9 @@ router.post('/', (req, res, next) => {
 
 router.delete('/:id', newsController.deleteNews);
 
+router.put('/:id', (req, res, next) => {
+  const uploader = getUploader();
+  uploader.single('image')(req, res, next);
+}, newsController.updateNews);
+
 module.exports = router;
