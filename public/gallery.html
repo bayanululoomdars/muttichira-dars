@@ -1059,6 +1059,12 @@
       loadFooterSettings();
     });
   </script>
-
+<script>
+    const tabs = document.querySelector('.ig-tabs');
+    tabs.addEventListener('wheel', (evt) => {
+        evt.preventDefault();
+        tabs.scrollLeft += evt.deltaY;
+    });
+</script>
 </body>
 </html>
