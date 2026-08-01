@@ -496,7 +496,7 @@
   </header>
 
   <!-- Login Modal Popup -->
-  <div id="loginPopupModal" style="display:none; position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;" onclick="if(event.target===this)this.style.display='none';">
+  <div id="loginPopupModal" style="display:none; position:fixed; inset:0; z-index:999999999; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;" onclick="if(event.target===this)this.style.display='none';">
     <div style="background:#fff; border-radius:16px; padding:30px; max-width:360px; width:100%; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.25);">
       <h5 style="color:#0a3d1f; font-weight:700; margin-bottom:15px; font-family:'Outfit',sans-serif;">Authentication Required</h5>
       <p style="font-size:0.9rem; color:#555; margin-bottom:20px;">Please sign in with your Google account to like and comment on our gallery items.</p>
@@ -883,7 +883,12 @@
 
       // Like Button (Heart) Red state
       var heartBtn = document.getElementById('modalHeartBtn');
-      if (currentUser && item.likes && item.likes.includes(currentUser._id)) {
+      var currentUserId = currentUser ? (currentUser._id || currentUser.id) : null;
+      var isLiked = false;
+      if (currentUserId && item.likes) {
+        isLiked = item.likes.some(like => typeof like === 'object' ? like._id === currentUserId : like === currentUserId);
+      }
+      if (isLiked) {
         heartBtn.classList.add('liked');
       } else {
         heartBtn.classList.remove('liked');
@@ -923,28 +928,43 @@
       }
       if (!activeDetailPost) return;
       var id = activeDetailPost._id;
+      var currentUserId = currentUser._id || currentUser.id;
+      if (!currentUserId) {
+        triggerLoginPopup();
+        return;
+      }
 
       fetch('/api/gallery/' + id + '/like', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUser._id })
+        body: JSON.stringify({ userId: currentUserId })
       })
       .then(r => r.json())
       .then(res => {
         if (res.success) {
           var item = allGalleryItems.find(i => i._id === id);
           if (item) {
-            if (!item.likes.includes(currentUser._id)) {
-              item.likes.push(currentUser._id);
-            }
+            // Update likes count from server response
             document.getElementById('modalLikesCount').textContent = res.likes;
             var heartBtn = document.getElementById('modalHeartBtn');
-            heartBtn.classList.add('liked');
-            renderGrid();
+            if (res.alreadyLiked) {
+              heartBtn.classList.add('liked');
+              showToast('You already liked this post!');
+            } else {
+              // Add to local likes array so hover count updates
+              var isLiked = item.likes.some(like => typeof like === 'object' ? String(like._id) === String(currentUserId) : String(like) === String(currentUserId));
+              if (!isLiked) { item.likes.push(currentUserId); }
+              heartBtn.classList.add('liked');
+              renderGrid();
+            }
           }
+        } else {
+          showToast(res.message || 'Could not like. Please try again.');
         }
-      });
+      })
+      .catch(() => showToast('Network error. Please check your connection.'));
     };
+
 
     // Post comment inside modal
     window.postCommentCurrent = function() {
@@ -958,10 +978,11 @@
       if (!text) return;
 
       var id = activeDetailPost._id;
+      var currentUserId = currentUser._id || currentUser.id;
       fetch('/api/gallery/' + id + '/comment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUser._id, text: text })
+        body: JSON.stringify({ userId: currentUserId, text: text })
       })
       .then(r => r.json())
       .then(res => {
