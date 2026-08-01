@@ -170,10 +170,20 @@
 
     /* IG Profile Style Tabs */
     .ig-tabs {
-      display: flex;
-      justify-content: center;
-      border-top: 1px solid #dbdbdb;
-      margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start; /* center മാറ്റി flex-start ആക്കുക */
+    border-top: 1px solid #dbdbdb;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 15px; /* കാറ്റഗറികൾ തമ്മിൽ അകലം ലഭിക്കാൻ */
+    padding: 10px; /* വശങ്ങളിൽ അല്പം സ്ഥലം ലഭിക്കാൻ */
+}
+
+/* Chrome, Safari ബ്രൗസറുകളിൽ സ്ക്രോൾ ബാർ പൂർണ്ണമായി മറയ്ക്കാൻ */
+.ig-tabs::-webkit-scrollbar {
+    display: none;
     }
     .ig-tab-btn {
       background: none;
