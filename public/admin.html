@@ -1474,7 +1474,7 @@
               <div class="card-title"><i class="fa fa-user-circle"></i> Principal Mudarris</div>
             </div>
             <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
-              <img id="principalPreview" src="" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);display:none;">
+              <img id="principalPreview" src="#" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);display:none;">
               <div style="flex:1;min-width:220px;">
                 <div class="form-grid-2">
                   <div class="form-group">
@@ -1596,7 +1596,7 @@ darsbayanululoom@gmail.com</textarea>
 
             <div style="border-top:1px solid var(--border-soft);padding-top:16px;margin-top:8px;">
               <div id="committeePosterPreviewWrap" style="display:none;margin-bottom:12px;">
-                <img id="currentCommitteePosterPreview" src="" style="max-width:150px;border-radius:10px;border:2px solid var(--accent);">
+                <img id="currentCommitteePosterPreview" src="#" style="max-width:150px;border-radius:10px;border:2px solid var(--accent);">
                 <div style="margin-top:8px;">
                   <button class="btn btn-danger btn-sm" onclick="removeCommitteePoster()">
                     <i class="fa fa-trash"></i> Remove Poster
@@ -2017,7 +2017,7 @@ darsbayanululoom@gmail.com</textarea>
         <label>Change Image (Leave empty to keep current)</label>
         <input class="form-control" type="file" id="editGalleryImage" accept="image/*">
         <div style="margin-top:8px;">
-          <img id="editGalleryCurrentImg" src="" style="max-height:80px;border-radius:4px;display:none;">
+          <img id="editGalleryCurrentImg" src="#" style="max-height:80px;border-radius:4px;display:none;">
         </div>
       </div>
       <div class="form-group" id="editGalleryVideoGroup" style="display:none;">
@@ -2075,41 +2075,7 @@ darsbayanululoom@gmail.com</textarea>
     <div id="resetStatus" style="margin-top:14px;font-weight:600;font-size:0.9rem;"></div>
   </div>
 </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ════════════════════════════════
-             RESET PAGE
-        ════════════════════════════════ -->
-        <div class="page" id="page-reset">
-          <div class="card danger-zone-card">
-            <div class="danger-zone-icon">
-              <i class="fa fa-exclamation-triangle"></i>
-            </div>
-            <h2 style="font-family:'Outfit',sans-serif;font-size:1.6rem;color:#f87171;margin-bottom:12px;">
-              Full Admin Reset
-            </h2>
-            <p style="color:var(--text-muted);line-height:1.8;margin-bottom:28px;font-size:0.92rem;">
-              This will permanently delete <strong style="color:#f87171;">ALL data</strong> — news, gallery,
-              admissions, settings, stories, sliders, contacts, and subscribers.
-              <br><strong style="color:var(--text);">This action cannot be undone.</strong>
-            </p>
-            <button class="btn btn-danger" style="padding:14px 36px;font-size:1rem;" onclick="openResetModal()">
-              <i class="fa fa-exclamation-triangle"></i> Proceed to Full Reset
-            </button>
-          </div>
-        </div>
-
-      </div><!-- end page-area -->
-    </div><!-- end main-content -->
-  </div><!-- end app-layout -->
-</div><!-- end dashboard -->
-
-<!-- Duplicate modals removed — single copies kept above -->
-
-<!-- Hidden PDF Print Template -->
+        <!-- Hidden PDF Print Template -->
 <div id="pdfPrintTemplate" style="display:none;">
 
   <!-- ══ HEADER ══ -->
@@ -2123,7 +2089,7 @@ darsbayanululoom@gmail.com</textarea>
     </div>
     <!-- Photo Box -->
     <div style="width:110px;height:140px;border:2px solid #1a6b3a;border-radius:6px;overflow:hidden;background:#f8f8f8;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:20px;">
-      <img id="pdfPhotoImg" src="" style="width:100%;height:100%;object-fit:cover;display:none;" alt="Student Photo">
+      <img id="pdfPhotoImg" src="#" style="width:100%;height:100%;object-fit:cover;display:none;" alt="Student Photo">
       <span id="pdfPhotoLabel" style="font-size:10px;color:#aaa;font-weight:600;text-align:center;padding:6px;">PHOTO</span>
     </div>
   </div>
@@ -3645,36 +3611,6 @@ function executeReset() {
     });
 }
 </script>
-
-<!-- Edit News Modal -->
-<div class="modal" id="editNewsModal">
-  <div class="modal-content" style="max-width:500px;">
-    <h3>Edit News / Achievement</h3>
-    <form id="editNewsForm" onsubmit="submitEditNews(event)">
-      <input type="hidden" id="editNewsId">
-      <div class="form-group">
-        <label>Title <span class="required">*</span></label>
-        <input type="text" id="editNewsTitle" class="input-field" required>
-      </div>
-      <div class="form-group mt-3">
-        <label>Description <span class="required">*</span></label>
-        <textarea id="editNewsDesc" class="input-field" rows="4" required></textarea>
-      </div>
-      <div class="form-group mt-3">
-        <label>Image (Optional - Leave blank to keep existing)</label>
-        <div class="file-upload-wrapper">
-          <input type="file" id="editNewsImage" accept="image/*">
-          <i class="fa fa-cloud-upload"></i> Choose a new image
-        </div>
-      </div>
-      <div id="editNewsStatus" style="margin-top:10px; font-weight:600; font-size:0.9rem;"></div>
-      <div class="modal-actions" style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('editNewsModal')">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="editNewsBtn">Save Changes</button>
-      </div>
-    </form>
-  </div>
-</div>
 
 <script>
 function openEditNewsModal(id, title, desc) {
