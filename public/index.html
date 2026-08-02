@@ -119,68 +119,212 @@
   <main id="main">
 
 
-    
+<section id="services" class="section-bg">
+  <div class="container">
+    <header class="section-header">
+      <h3>Latest News</h3>
+      <p>All the news that are relevant for our small community</p>
+    </header>
 
+    <!-- ന്യൂസ് വരാനുള്ള കാലി div -->
+    <div class="row" id="frontendNewsContainer">
+        <!-- JavaScript വഴി ഇവിടെ ന്യൂസുകൾ ലോഡ് ആകും -->
+    </div>
+  </div>
+        <div class="card-title" style="margin-bottom:16px;"><i class="fa fa-list"></i> All Published News Items</div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Image</th><th>Title</th><th>Description</th><th>Date</th><th>Action</th></tr>
+                </thead>
+                <tbody id="newsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+</section>
 
-    <!--==========================
-      Latest News Section (Dynamic from MongoDB)
-    ============================-->
-    <section id="services" class="section-bg" style="padding:60px 0;">
-      <div class="container">
-        <header class="section-header" id="newsSecHeader" style="text-align:center; margin-bottom:30px;">
-          <h3 style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Latest News</h3>
-          <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">All the news that are relevant for our small community</p>
-          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="newsReadMore">Read more...</a>
-        </header>
-        <!-- Dynamic news from MongoDB -->
-        <div class="row" id="dynamicNews"></div>
-      </div>
-    </section>
-
-    <!--==========================
+        <!--==========================
       Gallery Section (Dynamic Intro & Teaser from MongoDB)
+
     ============================-->
-    <section id="portfolio" class="clearfix" style="padding:60px 0; background:linear-gradient(180deg, #ffffff 0%, #f4f8f5 100%);">
+    <section id="portfolio" class="clearfix">
       <div class="container">
-        <header class="section-header" id="gallerySecHeader" style="text-align:center; margin-bottom:30px;">
-          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Gallery Highlights</h3>
-          <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">
-            Explore the memorable moments, academic programs, Sahithya Samajam activities, and student achievements of Muttichira Bayanul Uloom Dars.
-          </p>
+
+        <header class="section-header">
+          <h3 class="section-title">Gallery</h3>
         </header>
 
-        <!-- Dynamic Category Filter Pills (All / എല്ലാം + custom categories) -->
-        <div id="homeGalleryCategoriesBar" style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
-          <button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery('all', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:#0a4d2e; color:#fff;">
-            All 
-          </button>
+        <div class="row">
+          <div class="col-lg-12">
+            <ul id="portfolio-flters">
+              <li data-filter="*" class="filter-active">All</li>
+              <li data-filter=".filter-app">Programme</li>
+              <li data-filter=".filter-card">Collections</li>
+              <li data-filter=".filter-web">Design</li>
+            </ul>
+          </div>
         </div>
 
-        <!-- Dynamic gallery cards from MongoDB (configured by admin "ethra mathi" limit & settings) -->
-        <div class="row" id="homeGalleryRow" style="justify-content:center;"></div>
+        <div class="row portfolio-container">
 
-        <!-- Explore More Button -->
-        <div class="text-center mt-4">
-          <a href="/gallery" class="btn-explore-more" style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:linear-gradient(135deg, #0a4d2e, #106b3f); color:#fff; border-radius:30px; font-weight:700; text-decoration:none; box-shadow:0 4px 15px rgba(10,77,46,0.25); transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-            <i class="fa fa-th"></i> Explore Full Gallery 
-          </a>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="friday talk 2 and isthifadah workshop.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">App 1</a></h4>
+                <p>App</p>
+                <div>
+                  <a href="img/portfolio/app1.jpg" data-lightbox="portfolio" data-title="App 1" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.1s">
+            <div class="portfolio-wrap">
+              <img src="img/past year symposium.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">App 1</a></h4>
+                <p>App</p>
+                <div>
+                  <a href="img/img/past year symposium.jpg" data-lightbox="portfolio" data-title="App 1" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/e-vara.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Web 3</a></h4>
+                <p>Web</p>
+                <div>
+                  <a href="img/e-vara.png" class="link-preview" data-lightbox="portfolio" data-title="Web 3" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.3s">
+            <div class="portfolio-wrap">
+              <img src="img/3RD PRICE.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">App 2</a></h4>
+                <p>App</p>
+                <div>
+                  <a href="img/3RD PRICE.png" class="link-preview" data-lightbox="portfolio" data-title="App 2" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="img/jalika.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Card 2</a></h4>
+                <p>Card</p>
+                <div>
+                  <a href="img/img/jalika.jpg" class="link-preview" data-lightbox="portfolio" data-title="Card 2" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.1s">
+            <div class="portfolio-wrap">
+              <img src="img/action plan.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Web 2</a></h4>
+                <p>Web</p>
+                <div>
+                  <a href="img/action plan.png" class="link-preview" data-lightbox="portfolio" data-title="Web 2" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/fist epi.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">App 3</a></h4>
+                <p>App</p>
+                <div>
+                  <a href="img/fist epi.png" class="link-preview" data-lightbox="portfolio" data-title="App 3" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="img/friday talk 2 and isthifadah workshop.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Card 1</a></h4>
+                <p>Card</p>
+                <div>
+                  <a href="img/friday talk 2 and isthifadah workshop.png" class="link-preview" data-lightbox="portfolio" data-title="Card 1" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card" data-wow-delay="0.1s">
+            <div class="portfolio-wrap">
+              <img src="img/launchinhg 1.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Card 3</a></h4>
+                <p>Card</p>
+                <div>
+                  <a href="img/launchinhg 1.png" class="link-preview" data-lightbox="portfolio" data-title="Card 3" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/launchinhg.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Web 1</a></h4>
+                <p>Web</p>
+                <div>
+                  <a href="img/launchinhg.png" class="link-preview" data-lightbox="portfolio" data-title="Web 1" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.3s">
+            <div class="portfolio-wrap">
+              <img src="img/launchinhg 2.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Web 1</a></h4>
+                <p>Web</p>
+                <div>
+                  <a href="img/launchinhg 2.png" class="link-preview" data-lightbox="portfolio" data-title="Web 1" title="Preview"><i class="ion ion-eye"></i></a>
+                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
+
       </div>
     </section><!-- #portfolio -->
 
-    <!--==========================
-      Burda Team Section
-    ============================-->
-    <section id="team">
-      <div class="container">
-        <div class="section-header">
-          <h3>Burda Team</h3>
-          <p>Bayanul Uloom Dars Al Bayan Burda Team</p>
-          <img id="burdaTeamImg" src="img/burda team.png" class="rounded mx-auto d-block img-fluid" alt="Burda Team">
-        </div>
-      </div>
-    </section><!-- #team -->
-
+ 
 
     <!--==========================
       About Us Section
@@ -189,14 +333,14 @@
       <div class="container">
         <header class="section-header" id="aboutSecHeader">
           <h3>About Us</h3>
-          <p>It helps you to know and understand something about  Muttichira Bayanul Uloom Dars</p>
+          <p>It helps you to know and understand something about Muttichira Bayanul Uloom Dars</p>
           <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="aboutReadMore">Read more...</a>
         </header>
         <div class="divider div-transparent div-arrow-down"></div>
 
         <div class="row about-container">
           <p>
-            <strong style="color: rgb(5, 52, 90);">Muttichira Bayanul Uloom Dars </strong>is a center of Islamic learning dedicated to nurturing students with authentic religious knowledge, moral values, and good character. Functioning under Shuhada Masjid, Muttichira, Thalappara, the Dars provides a disciplined environment where students receive quality Islamic education guided by experienced Usthadhs. Our mission is to develop knowledgeable, responsible, and spiritually conscious individuals who can positively serve society while upholding the teachings of Islam.
+            <strong style="color: rgb(5, 52, 90);">Muttichira Bayanul Uloom Dars </strong>is located in the historic Muttichira Shuhada Juma Mosque, which is situated near Talappara Town.
           </p>
           <div class="text-center w-100 mt-4 mb-4">
             <a href="/about" class="btn btn-outline-success">Read More About Us</a>
@@ -205,7 +349,7 @@
           <div class="icon-box wow fadeInUp">
             <div class="icon"><i class="fa fa-graduation-cap"></i></div>
             <h4 class="title"><a href="">Student</a></h4>
-            <p class="description">Our Dars has more than <strong id="aboutStudentsCount">100</strong> Students and under the managment of <strong id="aboutUstadsCount">eight</strong> Usthad</p>
+            <p class="description">Our Dars has more than <strong id="aboutStudentsCount">90</strong> Students and under the managment of <strong id="aboutUstadsCount">six</strong> Usthad</p>
           </div>
 
           <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
@@ -260,6 +404,23 @@
         </div>
       </div>
     </section><!-- #about -->
+
+   <!--==========================
+      Burda Team Section
+    ============================-->
+    <section id="team">
+      <div class="container">
+        <div class="section-header">
+          <h3>Burda Team</h3>
+          <p>Bayanul Uloom Dars Al Bayan Burda Team</p>
+          <img id="burdaTeamImg" src="img/burda team.png" class="rounded mx-auto d-block img-fluid" alt="Burda Team">
+        </div>
+      </div>
+    </section><!-- #team -->
+
+
+
+
 
     <!--==========================
       Why Us Section
@@ -665,7 +826,7 @@
     var allLoadedNewsItems = [];
 
     function loadNews() {
-      fetch('/api/news?_t=' + new Date().getTime())
+      fetch('/api/news')
         .then(function(res) { return res.json(); })
         .then(function(news) {
           var container = document.getElementById('dynamicNews');
@@ -674,31 +835,58 @@
           if (Array.isArray(news) && news.length > 0) {
             allLoadedNewsItems = news;
             var cardsHtml = '';
+            var tickerTitles = [];
 
             news.forEach(function(item) {
+              if (item.title) tickerTitles.push(item.title);
+
+              var date = item.createdAt 
+                ? new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
+                : '';
+
               var imgHtml = '';
               if (item.imageUrl) {
-                imgHtml = '<div style="flex-shrink:0; width: 140px; height: 140px; padding: 15px;">' +
-                  '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                imgHtml = '<div class="news-bar-img-wrapper">' +
+                  '<img src="' + item.imageUrl + '" alt="' + item.title + '" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div style=\\\u0022width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0a4d2e;color:#d4af37;\\\u0022><i class=\\\u0022fa fa-newspaper-o fa-2x\\\u0022></i></div>\';">' +
                   '</div>';
               } else {
-                imgHtml = '<div style="flex-shrink:0; width: 140px; height: 140px; padding: 15px;">' +
-                  '<div style="width: 100%; height: 100%; background:linear-gradient(135deg, #0a4d2e 0%, #0f6b3f 100%); display:flex; align-items:center; justify-content:center; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
-                  '<i class="fa fa-newspaper-o" style="color:#d4af37; font-size:30px;"></i>' +
-                  '</div></div>';
+                imgHtml = '<div class="news-bar-img-wrapper" style="background:linear-gradient(135deg, #0a4d2e 0%, #0f6b3f 100%); display:flex; align-items:center; justify-content:center;">' +
+                  '<i class="fa fa-newspaper-o" style="color:#d4af37; font-size:40px;"></i>' +
+                  '</div>';
               }
 
               cardsHtml += '<div class="col-12 mb-4">' +
-                '<div style="background:#fff; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.06); display:flex; align-items:center; overflow:hidden; transition:transform 0.3s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'none\'">' +
+                '<div class="news-bar-card achievement-card d-flex flex-column flex-md-row bg-white overflow-hidden">' +
                 imgHtml +
-                '<div style="padding: 15px 20px; flex: 1;">' +
-                '  <h4 style="font-family:\'Outfit\',sans-serif; color:#000; font-weight:700; font-size:1.6rem; margin:0 0 8px 0;">' + item.title + '</h4>' +
-                '  <p style="color:#0056b3; font-size:1.05rem; line-height:1.5; margin:0;">' + (item.description || '') + '</p>' +
-                '</div>' +
-                '</div></div>';
+                '<div class="p-3 p-md-4 achievement-content" style="flex:1; display:flex; flex-direction:column; justify-content:space-between; min-width:0;">' +
+                '  <div>' +
+                '    <h4 style="font-family:\'Outfit\',sans-serif; color:#0a4d2e; font-weight:700; font-size:1.25rem; margin:0 0 8px 0; display:flex; align-items:center; gap:8px;">' +
+                '      <span style="color:#d4af37; font-size:1.3rem;">🏆</span>' +
+                '      <span>' + item.title + '</span>' +
+                '    </h4>' +
+                '    <p style="color:#4a5568; font-size:0.95rem; line-height:1.6; margin:0 0 14px 0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">' + (item.description || '') + '</p>' +
+                '  </div>' +
+                '  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-top:1px solid #edf2f7; padding-top:10px; margin-top:6px;">' +
+                '    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">' +
+                '      <span style="background:rgba(212,175,55,0.15); color:#967718; border:1px solid rgba(212,175,55,0.3); padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:600;">🥇 Achievement</span>' +
+                (date ? '      <span style="color:#718096; font-size:0.85rem; font-weight:500;"><i class="fa fa-calendar" style="color:#d4af37; margin-right:5px;"></i>' + date + '</span>' : '') +
+                '    </div>' +
+                '    <button class="btn btn-sm" style="background:#0a4d2e; color:#fff; border-radius:20px; padding:6px 18px; font-size:0.85rem; font-weight:600; transition:all 0.3s;" onclick="openNewsModal(\'' + item._id + '\')">Read More <i class="fa fa-arrow-right" style="margin-left:4px;"></i></button>' +
+                '  </div>' +
+                '</div></div></div>';
             });
 
-            container.innerHTML = cardsHtml;
+            var tickerHtml = '';
+            if (tickerTitles.length > 0) {
+              tickerHtml = '<div class="col-12 mb-4">' +
+                '<div style="background:#0a4d2e; color:#fff; padding:10px 18px; border-radius:10px; display:flex; align-items:center; overflow:hidden; box-shadow:0 4px 12px rgba(10,77,46,0.15);">' +
+                '<strong style="min-width:95px; margin-right:15px; border-right:2px solid rgba(212,175,55,0.4); padding-right:15px; color:#d4af37; font-size:0.85rem; letter-spacing:0.5px;"><i class="fa fa-bullhorn" style="margin-right:4px;"></i> UPDATES</strong>' +
+                '<marquee scrollamount="6" style="font-weight:500; font-size:1rem; color:#fff;">' +
+                tickerTitles.map(function(t){ return '<span style="margin-right:45px;">&bull; ' + t + '</span>'; }).join('') +
+                '</marquee></div></div>';
+            }
+
+            container.innerHTML = tickerHtml + cardsHtml;
             container.style.display = 'flex';
             container.style.flexWrap = 'wrap';
 
