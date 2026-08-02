@@ -1721,32 +1721,32 @@ iframe[src*='google.com'], #loginPopupModal, .ig-detail-modal { z-index: 2147483
 
 
 
-/* Gallery Grid Style */
+/* ================= GALLERY BASE STYLE (Desktop - 6 per row) ================= */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* റെസ്പോൺസീവ് ആയി വരാൻ */
-    width: 300px;
-    height: auto;
+    grid-template-columns: repeat(6, 1fr); /* ഡെസ്ക്‌ടോപ്പിൽ 6 എണ്ണം */
+    gap: 12px;
+    margin-top: 30px;
 }
 
 .gallery-item {
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    height: 200px; /* എല്ലാറ്റിനും ഒരേ ഉയരം നൽകാൻ */
+    height: 120px; /* 6 എണ്ണം വരുമ്പോൾ ഒതുങ്ങി നിൽക്കാനുള്ള ഉയരം */
 }
 
-/* ഹോവർ ചെയ്യുമ്പോൾ ചിത്രം ചെറുതായി സൂം ആവാൻ */
 .gallery-item:hover {
-    transform: scale(1.05); 
+    transform: scale(1.05);
     cursor: pointer;
 }
 
-.gallery-item img, .gallery-item video {
+.gallery-item img, 
+.gallery-item video {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* ചിത്രം മുറിഞ്ഞുപോകാതെ കൃത്യമായി ഫിറ്റ് ആവാൻ */
+    object-fit: cover;
     display: block;
 }
 
@@ -1865,13 +1865,24 @@ iframe[src*='google.com'], #loginPopupModal, .ig-detail-modal { z-index: 2147483
     }
 
     /* 2. Gallery 3 Items on Mobile */
-    .gallery-grid {
-        grid-template-columns: repeat(3, 1fr); /* ഒരേ വരിയിൽ 3 എണ്ണം */
-        gap: 8px; /* ഗ്യാപ്പ് കുറച്ചു */
+ .gallery-grid {
+        grid-template-columns: repeat(3, 1fr); /* മൊബൈലിൽ 3 എണ്ണം */
+        gap: 8px; /* മൊബൈലിൽ ചെറിയ ഗ്യാപ്പ് */
     }
-    
+
     .gallery-item {
-        height: 100px; /* മൊബൈലിൽ ഗാലറി ചിത്രങ്ങളുടെ വലിപ്പം കുറച്ചു */
+        height: 95px; /* മൊബൈൽ സ്ക്രീനിന് പറ്റിയ വലിപ്പം */
         border-radius: 6px;
+    }
+}
+/* ================= TABLET RESPONSIVE (Tablet - 4 per row) ================= */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .gallery-grid {
+        grid-template-columns: repeat(4, 1fr); /* ടാബ്‌ലെറ്റിൽ 4 എണ്ണം */
+        gap: 10px;
+    }
+
+    .gallery-item {
+        height: 130px;
     }
 }
