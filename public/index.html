@@ -1357,9 +1357,8 @@ async function loadLatestNews() {
                     <img src="${news.imageUrl}" alt="News Image">
                 </div>
                 <div class="news-content">
-                    <h4>${news.title}</h4>
-                    <p>${news<p>${news.description || news.desc || ''}</p>.description}</p>
-                </div>
+                  <h4>${news.title}</h4>
+                  <p>${news.description || news.desc || ''}</p>
               </div>
             `;
         });
