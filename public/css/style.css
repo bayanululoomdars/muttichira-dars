@@ -473,6 +473,7 @@ h6 {
 
 .section-bg {
   background: #ecf5ff;
+  padding: 50px;
 }
 
 /* About Us Section
@@ -1944,4 +1945,26 @@ iframe[src*='google.com'], #loginPopupModal, .ig-detail-modal { z-index: 2147483
     .gallery-item:nth-child(n+5) {
         display: none !important;
     }
+}
+
+/* News Card Height Fix */
+.news-card {
+    height: auto !important; /* ബോക്സിന്റെ ഉയരം കണ്ടന്റിനനുസരിച്ച് സ്വയം മാറും */
+}
+
+/* News Title Style */
+.news-content h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    margin: 0 0 5px 0;
+}
+
+/* News Description Style */
+.news-content p {
+    display: block !important; /* ഡിസ്ക്രിപ്ഷൻ ഹൈഡ് ആകാതിരിക്കാൻ */
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+    margin: 0;
 }
