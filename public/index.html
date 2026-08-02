@@ -1336,18 +1336,21 @@
     }
   </script>
   <script>
-    const API_URL = "https://your-render-app-url.onrender.com/api/news"; 
+// 1. നിങ്ങളുടെ API ലിങ്കുകൾ ഇവിടെ നൽകുന്നു
+const NEWS_API_URL = "https://muttichira-dars.onrender.com/api/news";
+const GALLERY_API_URL = "https://muttichira-dars.onrender.com/api/gallery"; 
 
+// 2. ന്യൂസ് ലോഡ് ചെയ്യാനുള്ള ഫംഗ്ഷൻ
 async function loadLatestNews() {
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(NEWS_API_URL);
         const newsData = await response.json();
         
         const container = document.getElementById('frontendNewsContainer');
+        if (!container) return; // കണ്ടെയ്നർ ഇല്ലെങ്കിൽ എറർ വരാതിരിക്കാൻ
         container.innerHTML = ''; 
 
         newsData.forEach(news => {
-            // പുതിയ ഡിസൈൻ അനുസരിച്ചുള്ള HTML ഘടന
             container.innerHTML += `
               <div class="news-card">
                 <div class="news-image">
@@ -1365,34 +1368,26 @@ async function loadLatestNews() {
     }
 }
 
-window.onload = loadLatestNews;
-  </script>
-<script>
-  // ഗാലറിയിലെ ഡാറ്റ ലഭിക്കാനുള്ള API ലിങ്ക് (ഇത് നിങ്ങളുടെ റൂട്ടനുസരിച്ച് മാറ്റുക)
-const GALLERY_API_URL = "https://muttichira-dars.onrender.com/api/gallery"; 
-
+// 3. ഗാലറി ലോഡ് ചെയ്യാനുള്ള ഫംഗ്ഷൻ (ഏറ്റവും പുതിയ 4 എണ്ണം മാത്രം)
 async function loadHomeGallery() {
     try {
         const response = await fetch(GALLERY_API_URL);
         const galleryData = await response.json();
         
         const container = document.getElementById('homeGalleryContainer');
+        if (!container) return; // കണ്ടെയ്നർ ഇല്ലെങ്കിൽ എറർ വരാതിരിക്കാൻ
         container.innerHTML = ''; 
 
         // അവസാനത്തെ 4 ചിത്രങ്ങൾ/വീഡിയോകൾ മാത്രം എടുക്കാൻ (Reverse & Slice)
-        // (ഏറ്റവും പുതിയത് ആദ്യം വരാൻ)
         const latestMedia = galleryData.reverse().slice(0, 4); 
 
         latestMedia.forEach(media => {
             let mediaHtml = '';
             
-            // ഇത് വീഡിയോ ആണോ ചിത്രം ആണോ എന്ന് പരിശോധിക്കുന്നു
-            // (നിങ്ങളുടെ ഡാറ്റാബേസിൽ 'type' സേവ് ചെയ്തിട്ടുണ്ടെങ്കിൽ അത് ഉപയോഗിക്കാം, അല്ലെങ്കിൽ ലിങ്കിലെ അവസാന ഭാഗം നോക്കാം)
+            // വീഡിയോ ആണോ ചിത്രം ആണോ എന്ന് നോക്കി സെറ്റ് ചെയ്യുന്നു
             if(media.url.match(/\.(mp4|webm|ogg)$/i)) {
-                // വീഡിയോ ആണെങ്കിൽ (ശബ്ദം ഇല്ലാതെ തനിയെ പ്ലേ ആവാൻ)
                 mediaHtml = `<video src="${media.url}" autoplay muted loop playsinline></video>`;
             } else {
-                // ഫോട്ടോ ആണെങ്കിൽ
                 mediaHtml = `<img src="${media.url}" alt="Gallery Image">`;
             }
 
@@ -1406,6 +1401,12 @@ async function loadHomeGallery() {
         console.error("Gallery load ചെയ്യാൻ കഴിഞ്ഞില്ല:", error);
     }
 }
+
+// 4. പേജ് ലോഡ് ആകുമ്പോൾ രണ്ടും ഒന്നിച്ച് വർക്ക് ചെയ്യാൻ
+document.addEventListener("DOMContentLoaded", () => {
+    loadLatestNews();
+    loadHomeGallery();
+});
 </script>
 
 
