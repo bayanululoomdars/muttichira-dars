@@ -1375,27 +1375,31 @@ async function loadHomeGallery() {
         const galleryData = await response.json();
         
         const container = document.getElementById('homeGalleryContainer');
-        if (!container) return; // കണ്ടെയ്നർ ഇല്ലെങ്കിൽ എറർ വരാതിരിക്കാൻ
+        if (!container) return; 
         container.innerHTML = ''; 
 
-        // അവസാനത്തെ 4 ചിത്രങ്ങൾ/വീഡിയോകൾ മാത്രം എടുക്കാൻ (Reverse & Slice)
+        // അവസാനത്തെ 4 ചിത്രങ്ങൾ/വീഡിയോകൾ മാത്രം എടുക്കാൻ
         const latestMedia = galleryData.reverse().slice(0, 4); 
 
         latestMedia.forEach(media => {
             let mediaHtml = '';
             
-            // വീഡിയോ ആണോ ചിത്രം ആണോ എന്ന് നോക്കി സെറ്റ് ചെയ്യുന്നു
-            if(media.url.match(/\.(mp4|webm|ogg)$/i)) {
-                mediaHtml = `<video src="${media.url}" autoplay muted loop playsinline></video>`;
-            } else {
-                mediaHtml = `<img src="${media.url}" alt="Gallery Image">`;
-            }
+            // നിങ്ങളുടെ ഡാറ്റാബേസിൽ url എന്നാണോ imageUrl എന്നാണോ എന്ന് നോക്കി ലിങ്ക് എടുക്കുന്നു
+            const mediaLink = media.imageUrl || media.url; 
+            
+            if (mediaLink) { // ലിങ്ക് ഉണ്ടെങ്കിൽ മാത്രം വർക്ക് ചെയ്യാൻ
+                if(mediaLink.match(/\.(mp4|webm|ogg)$/i)) {
+                    mediaHtml = `<video src="${mediaLink}" autoplay muted loop playsinline></video>`;
+                } else {
+                    mediaHtml = `<img src="${mediaLink}" alt="Gallery Image">`;
+                }
 
-            container.innerHTML += `
-              <div class="gallery-item">
-                ${mediaHtml}
-              </div>
-            `;
+                container.innerHTML += `
+                  <div class="gallery-item">
+                    ${mediaHtml}
+                  </div>
+                `;
+            }
         });
     } catch (error) {
         console.error("Gallery load ചെയ്യാൻ കഴിഞ്ഞില്ല:", error);
@@ -1408,7 +1412,53 @@ document.addEventListener("DOMContentLoaded", () => {
     loadHomeGallery();
 });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    loadLatestNews();
+    loadHomeGallery();
 
+    // പോപ്പപ്പ് (Modal) കോഡ്
+    const modal = document.getElementById('newsModal');
+    const closeBtn = document.querySelector('.close-modal');
+    const newsContainer = document.getElementById('frontendNewsContainer');
+
+    // ന്യൂസിൽ ക്ലിക്ക് ചെയ്യുമ്പോൾ പോപ്പപ്പ് വരാനുള്ള ഫംഗ്ഷൻ
+    if (newsContainer) {
+        newsContainer.addEventListener('click', (e) => {
+            const card = e.target.closest('.news-card');
+            
+            if (card) {
+                // കാർഡിൽ നിന്നുള്ള വിവരങ്ങൾ എടുക്കുന്നു
+                const title = card.querySelector('h4').innerText;
+                const desc = card.querySelector('p').innerText;
+                const img = card.querySelector('img').src;
+                
+                // പോപ്പപ്പിലേക്ക് നൽകുന്നു
+                document.getElementById('modalTitle').innerText = title;
+                document.getElementById('modalDesc').innerText = desc;
+                document.getElementById('modalImg').src = img;
+                
+                // പോപ്പപ്പ് ഓപ്പൺ ആക്കുന്നു
+                modal.style.display = 'flex';
+            }
+        });
+    }
+
+    // X ബട്ടണിൽ ക്ലിക്ക് ചെയ്യുമ്പോൾ ക്ലോസ് ആവാൻ
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+    }
+    
+    // പോപ്പപ്പിന്റെ പുറത്ത് ക്ലിക്ക് ചെയ്താലും ക്ലോസ് ആവാൻ
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+});
+</script>
 
 
 
@@ -1436,6 +1486,14 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </div>
   </div>
-
+<!-- News Popup (Modal) -->
+<div id="newsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <img id="modalImg" src="" alt="News Image">
+    <h4 id="modalTitle"></h4>
+    <p id="modalDesc"></p>
+  </div>
+</div>
 </body>
 </html>
