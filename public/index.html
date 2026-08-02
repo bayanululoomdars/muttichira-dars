@@ -1368,7 +1368,7 @@ async function loadLatestNews() {
     }
 }
 
-// 3. ഗാലറി ലോഡ് ചെയ്യാനുള്ള ഫംഗ്ഷൻ (ഏറ്റവും പുതിയ 4 എണ്ണം മാത്രം)
+// 3. ഗാലറി ലോഡ് ചെയ്യാനുള്ള ഫംഗ്ഷൻ (ഏറ്റവും പുതിയ 6 എണ്ണം മാത്രം)
 async function loadHomeGallery() {
     try {
         const response = await fetch(GALLERY_API_URL);
@@ -1378,8 +1378,8 @@ async function loadHomeGallery() {
         if (!container) return; 
         container.innerHTML = ''; 
 
-        // അവസാനത്തെ 4 ചിത്രങ്ങൾ/വീഡിയോകൾ മാത്രം എടുക്കാൻ
-        const latestMedia = galleryData.reverse().slice(0, 4); 
+        // അവസാനത്തെ 6 ചിത്രങ്ങൾ/വീഡിയോകൾ മാത്രം എടുക്കാൻ
+        const latestMedia = galleryData.reverse().slice(0, 6); 
 
         latestMedia.forEach(media => {
             let mediaHtml = '';
