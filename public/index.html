@@ -1377,16 +1377,17 @@ async function loadHomeGallery() {
         if (!container) return; 
         container.innerHTML = ''; 
 
-        // അവസാനത്തെ 6 ചിത്രങ്ങൾ/വീഡിയോകൾ മാത്രം എടുക്കാൻ
-        const latestMedia = galleryData.reverse().slice(0, 6); 
+        // 1. [...galleryData]: ഒറിജിനൽ ഡാറ്റ മാറ്റാതെ കോപ്പി എടുക്കുന്നു
+        // 2. reverse(): അവസാനം ചേർത്തത് (പുതിയത്) മുന്നിലേക്ക് കൊണ്ടുവരുന്നു
+        // 3. slice(0, 6): അതിൽ നിന്ന് ഏറ്റവും പുതിയ 6 എണ്ണം മാത്രം എടുക്കുന്നു
+        const latestMedia = [...galleryData].reverse().slice(0, 6); 
 
         latestMedia.forEach(media => {
             let mediaHtml = '';
-            
-            // നിങ്ങളുടെ ഡാറ്റാബേസിൽ url എന്നാണോ imageUrl എന്നാണോ എന്ന് നോക്കി ലിങ്ക് എടുക്കുന്നു
             const mediaLink = media.imageUrl || media.url; 
             
-            if (mediaLink) { // ലിങ്ക് ഉണ്ടെങ്കിൽ മാത്രം വർക്ക് ചെയ്യാൻ
+            if (mediaLink) { 
+                // വീഡിയോ ആണോ ചിത്രം ആണോ എന്ന് നോക്കുന്നു
                 if(mediaLink.match(/\.(mp4|webm|ogg)$/i)) {
                     mediaHtml = `<video src="${mediaLink}" autoplay muted loop playsinline></video>`;
                 } else {
@@ -1404,7 +1405,6 @@ async function loadHomeGallery() {
         console.error("Gallery load ചെയ്യാൻ കഴിഞ്ഞില്ല:", error);
     }
 }
-
 // 4. പേജ് ലോഡ് ആകുമ്പോൾ രണ്ടും ഒന്നിച്ച് വർക്ക് ചെയ്യാൻ
 document.addEventListener("DOMContentLoaded", () => {
     loadLatestNews();
