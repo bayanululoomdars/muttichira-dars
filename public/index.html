@@ -1380,7 +1380,7 @@ async function loadHomeGallery() {
         // 1. [...galleryData]: ഒറിജിനൽ ഡാറ്റ മാറ്റാതെ കോപ്പി എടുക്കുന്നു
         // 2. reverse(): അവസാനം ചേർത്തത് (പുതിയത്) മുന്നിലേക്ക് കൊണ്ടുവരുന്നു
         // 3. slice(0, 6): അതിൽ നിന്ന് ഏറ്റവും പുതിയ 6 എണ്ണം മാത്രം എടുക്കുന്നു
-        const latestMedia = [...galleryData].reverse().slice(0, 6); 
+        const latestMedia = [...galleryData].slice(0, 6); 
 
         latestMedia.forEach(media => {
             let mediaHtml = '';
