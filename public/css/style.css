@@ -10,26 +10,47 @@
 --------------------------------------------------------------*/
 
 /* News Section Background */
-#services {
-    background-color: #f4f7f9; /* ഇളം നീല ബാക്ക്ഗ്രൗണ്ട് */
-    padding: 60px 0;
+/* News Container Fix (കാർഡുകൾ താഴെ താഴെ വരാൻ) */
+#frontendNewsContainer {
+    display: flex;
+    flex-direction: column; /* ഇത് കാർഡുകളെ താഴെ താഴെയാക്കും */
+    gap: 20px; /* കാർഡുകൾ തമ്മിലുള്ള അകലം */
 }
 
-/* News Card Design */
+/* News Card Design & Animation */
 .news-card {
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    margin-bottom: 25px;
     padding: 20px;
-    display: flex; /* ഇത് ഇമേജും ടെക്സ്റ്റും നേരെ കൊണ്ടുവരും */
+    display: flex; 
     align-items: center;
-    gap: 25px; /* ഇമേജിനും ടെക്സ്റ്റിനും ഇടയിലുള്ള അകലം */
-    transition: 0.3s;
+    gap: 25px; 
+    width: 100%; /* സ്ക്രീനിന്റെ മുഴുവൻ വീതിയും ലഭിക്കാൻ */
+    box-sizing: border-box;
+    
+    /* Animation Properties */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.6s ease-out forwards; /* പേജ് ലോഡ് ആകുമ്പോഴുള്ള അനിമേഷൻ */
 }
 
+/* Hover Animation (മൗസ് കൊണ്ടുപോകുമ്പോൾ പൊങ്ങി വരാൻ) */
 .news-card:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px); /* കാർഡ് അല്പം മുകളിലേക്ക് പൊങ്ങും */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* ഷാഡോ കുറച്ചുകൂടി ഡാർക്ക് ആകും */
+    cursor: pointer;
+}
+
+/* Page Load Animation (താഴെ നിന്ന് സ്മൂത്തായി തെളിഞ്ഞു വരാൻ) */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Image Alignment */
@@ -40,7 +61,7 @@
 .news-image img {
     width: 120px;
     height: 120px;
-    object-fit: contain; /* ഇമേജ് മുറിഞ്ഞുപോകാതിരിക്കാൻ */
+    object-fit: contain; 
     border-radius: 5px;
 }
 
@@ -59,7 +80,7 @@
 
 .news-content p {
     font-size: 16px;
-    color: #4a6f8a; /* ചിത്രത്തിലുള്ളത് പോലെ ഒരു നീല കലർന്ന ഗ്രേ കളർ */
+    color: #4a6f8a; 
     margin: 0;
     line-height: 1.5;
 }
@@ -67,7 +88,7 @@
 /* മൊബൈൽ ഫോണുകൾക്ക് വേണ്ടിയുള്ള റെസ്പോൺസീവ് ഡിസൈൻ */
 @media (max-width: 768px) {
     .news-card {
-        flex-direction: column; /* മൊബൈലിൽ ഇമേജ് മുകളിലും ടെക്സ്റ്റ് താഴെയുമാക്കാൻ */
+        flex-direction: column; 
         text-align: center;
     }
     .news-image img {
@@ -76,7 +97,6 @@
         height: auto;
     }
 }
-
 
 body {
   background: #fff;
