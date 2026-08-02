@@ -1365,11 +1365,8 @@ async function loadLatestNews() {
     }
 }
 
-// പേജ് ലോഡ് ആകുമ്പോൾ News ഉം ഗാലറിയും ഒന്നിച്ച് ലോഡ് ആവാൻ
-window.onload = function() {
-    loadLatestNews();
-    loadHomeGallery();
-};  </script>
+window.onload = loadLatestNews;
+  </script>
 <script>
   // ഗാലറിയിലെ ഡാറ്റ ലഭിക്കാനുള്ള API ലിങ്ക് (ഇത് നിങ്ങളുടെ റൂട്ടനുസരിച്ച് മാറ്റുക)
 const GALLERY_API_URL = "https://muttichira-dars.onrender.com/api/gallery"; 
