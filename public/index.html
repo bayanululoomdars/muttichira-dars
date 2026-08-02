@@ -1358,7 +1358,7 @@ async function loadLatestNews() {
                 </div>
                 <div class="news-content">
                     <h4>${news.title}</h4>
-                    <p>${news.description}</p>
+                    <p>${news<p>${news.description || news.desc || ''}</p>.description}</p>
                 </div>
               </div>
             `;
