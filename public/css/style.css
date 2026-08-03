@@ -1792,11 +1792,10 @@ iframe[src*='google.com'], #loginPopupModal, .ig-detail-modal { z-index: 2147483
 
 .modal-content {
     background-color: #fff;
-    padding: 20px;
+    padding: 10px;
     border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    text-align: center;
+    width: 100%;
+    max-width: 100%;
     position: relative;
     animation: zoomIn 0.3s ease;
 }
