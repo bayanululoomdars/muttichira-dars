@@ -72,15 +72,54 @@
       <div class="row justify-content-center">
         <div class="col-lg-10">
           
-          <!-- 1. ADMISSION CLOSED MESSAGE -->
-          <div id="admissionClosedMsg" style="display:none;" class="alert alert-warning text-center p-4 shadow-sm bg-white rounded">
-            <h2 class="form-title text-success font-weight-bold">അഡ്മിഷൻ അവസാനിച്ചു</h2>
-            <h5 class="text-muted mb-3" style="font-family: 'Inter', sans-serif;">ADMISSION CLOSED</h5>
-            <p class="font-weight-bold text-success">മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസ് (Bayanul Uloom Dars, Muttichira)</p>
-            <p class="small text-muted">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ, PIN: 676311 (Shuhada Masjid Muttichira, Thalappara)</p>
-             <i class="fa fa-exclamation-triangle fa-2x mb-3 text-warning"></i>
-             <h4>Admissions are currently closed.</h4>
-             <p>Please check back later or contact the administration for more details.</p>
+          <!-- 1. ENHANCED ADMISSION CLOSED SECTION -->
+          <div id="admissionClosedMsg" style="display:none;" class="bg-white rounded p-4 p-md-5 shadow-sm text-center">
+            
+            <!-- Status Badge -->
+            <div class="mb-3">
+              <span class="badge badge-danger px-3 py-2 font-weight-bold" style="font-size: 13px; border-radius: 20px; letter-spacing: 0.5px;">
+                <i class="fa fa-times-circle mr-1"></i> ADMISSIONS CLOSED / അഡ്മിഷൻ പൂർത്തിയായി
+              </span>
+            </div>
+
+            <!-- Heading -->
+            <h2 class="font-weight-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif;">മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസ്</h2>
+            <p class="text-success font-weight-bold mb-4">BAYANUL ULOOM DARS, MUTTICHIRA</p>
+            <p class="small text-muted mb-4">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ, PIN: 676311 (Shuhada Masjid Muttichira, Thalappara)</p>
+
+            <!-- Brief Note About Dars -->
+            <div class="bg-light p-4 rounded text-left mb-4 mx-auto shadow-sm" style="max-width: 750px; border-left: 4px solid #28a745;">
+              <h5 class="font-weight-bold text-dark mb-2" style="font-size: 16px;">
+                <i class="fa fa-university text-success mr-2"></i> ദർസിനെക്കുറിച്ച് (About Dars):
+              </h5>
+              <p class="text-secondary small mb-0" style="line-height: 1.8; font-size: 14px;">
+                മത-ഭൗതിക വിദ്യാഭ്യാസ രംഗത്ത് സമഗ്രമായ മുന്നേറ്റം കുറിക്കുന്ന പ്രമുഖ കലാലയമാണ് മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസ്. 
+                ശൈഖുനാ ഇബ്രാഹിം ബാഖവി അൽ ഹൈതമി അവർകളുടെ നേതൃത്വത്തിലും ലളിതമായ ശിക്ഷണത്തിലും വിദ്യാർത്ഥികൾക്ക് ഉയർന്ന മതപഠനത്തോടൊപ്പം ഭൗതിക വിദ്യാഭ്യാസവും, 'ബായാനുൽ ഉലൂം സാഹിത്യ സമാജം' വഴി മികച്ച കലാ-സാഹിത്യ പരിശീലനങ്ങളും നൽകിവരുന്നു.
+              </p>
+            </div>
+
+            <!-- Admission Closed Notice Box -->
+            <div class="alert alert-warning mx-auto text-dark p-3 mb-4 shadow-sm" style="max-width: 750px; border-radius: 8px;">
+              <i class="fa fa-exclamation-circle text-warning fa-lg mr-2"></i>
+              <strong>അറിയിപ്പ്:</strong> നിലവിൽ ഈ അധ്യയന വർഷത്തെ അഡ്മിഷൻ നടപടികൾ പൂർത്തിയായിട്ടുണ്ട്. പുതിയ അഡ്മിഷൻ സംബന്ധിച്ച അറിയിപ്പുകൾ പിന്നീട് പ്രസിദ്ധീകരിക്കുന്നതാണ്.
+            </div>
+
+            <!-- Contact & Quick Info -->
+            <div class="mt-4 pt-2">
+              <p class="font-weight-bold text-muted small mb-3">അഡ്മിഷൻ സംബന്ധമായ കൂടുതൽ വിവരങ്ങൾക്ക് ഓഫീസുമായി ബന്ധപ്പെടുക:</p>
+              <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="tel:+919526919218" class="btn btn-outline-success m-1 px-4 py-2 font-weight-bold" style="border-radius: 25px;">
+                  <i class="fa fa-phone mr-1"></i> Call Office
+                </a>
+                <a href="https://wa.me/+919526919218" class="btn btn-success m-1 px-4 py-2 font-weight-bold" target="_blank" style="border-radius: 25px;">
+                  <i class="fa fa-whatsapp mr-1"></i> WhatsApp
+                </a>
+                <a href="/contact" class="btn btn-outline-dark m-1 px-4 py-2 font-weight-bold" style="border-radius: 25px;">
+                  <i class="fa fa-envelope mr-1"></i> Contact Us
+                </a>
+              </div>
+            </div>
+
           </div>
 
           <!-- 2. ADMISSION OPEN DETAILS & APPLY BUTTON -->
@@ -96,7 +135,6 @@
               <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-info-circle text-success mr-2"></i> പ്രധാന നിർദ്ദേശങ്ങൾ / Instructions:</h5>
               <ul class="list-unstyled text-muted" style="line-height: 1.9; font-size: 15px;">
                 <li><i class="fa fa-check-circle text-success mr-2"></i> അപേക്ഷ ഫോം പൂർണ്ണമായും കൃത്യമായും പൂരിപ്പിക്കുക.</li>
-                <li><i class="fa fa-check-circle text-success mr-2"></i> ഒരു ഫോൺ നമ്പറിൽ നിന്ന് ഒരു അപേക്ഷ മാത്രമേ സമർപ്പിക്കാൻ സാധിക്കൂ.</li>
                 <li><i class="fa fa-check-circle text-success mr-2"></i> കുട്ടിയുടെ പാസ്‌പോർട്ട് സൈസ് ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യേണ്ടതാണ്.</li>
                 <li><i class="fa fa-check-circle text-success mr-2"></i> അപേക്ഷ സമർപ്പിച്ചതിന് ശേഷം ദർസ് ഭരണസമിതി നിങ്ങളെ ബന്ധപ്പെടുന്നതാണ്.</li>
               </ul>
@@ -345,7 +383,7 @@
       }
     });
 
-    // Check Admission Status first
+    // Check Admission Status
     fetch('/api/settings/admission')
       .then(res => res.json())
       .then(data => {
