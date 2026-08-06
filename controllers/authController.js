@@ -31,6 +31,7 @@ exports.googleAuth = async (req, res) => {
     }
     // Store user info in session
     req.session.user = {
+      _id: user._id,
       id: user._id,
       googleId: sub,
       name,

@@ -1183,6 +1183,115 @@
       background: #f8fafc; min-height: 38px;
       box-sizing: border-box; font-weight: 500;
     }
+
+
+
+
+
+
+
+
+/* Admin Section Clean & Modern Styling */
+.admin-user-management {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 20px 0;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.add-btn {
+    background-color: #0a4d2e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.add-btn:hover {
+    background-color: #083b23;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.modern-table th, .modern-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.modern-table th {
+    background-color: #f9f9f9;
+    color: #333;
+    font-weight: 600;
+}
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge.usthad {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.badge.student {
+    background-color: #fce4ec;
+    color: #c2185b;
+}
+
+/* Action Buttons */
+.action-buttons button {
+    border: none;
+    padding: 6px 12px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.view-btn { background-color: #f0f0f0; color: #333; }
+.edit-btn { background-color: #fff3cd; color: #856404; }
+.delete-btn { background-color: #f8d7da; color: #721c24; }
+
+.view-btn:hover { background-color: #e2e2e2; }
+.edit-btn:hover { background-color: #ffe8a1; }
+.delete-btn:hover { background-color: #f5c6cb; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </style>
 </head>
 <body>
@@ -1360,75 +1469,6 @@
         ════════════════════════════════ -->
         <div class="page" id="page-homepage">
 
-          <!-- Stats Counters -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-bar-chart"></i> Homepage Counter Statistics</div>
-            </div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label class="form-label">Students Count</label>
-                <input class="form-control" type="number" id="hpStudents" placeholder="103" value="103">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Usthads Count</label>
-                <input class="form-control" type="number" id="hpUstads" placeholder="6" value="6">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Years of Legacy</label>
-                <input class="form-control" type="number" id="hpYears" placeholder="52" value="52">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Distinguished Alumni</label>
-                <input class="form-control" type="number" id="hpAlumni" placeholder="25" value="25">
-              </div>
-            </div>
-            <button class="btn btn-accent btn-sm" onclick="saveHomeStats()">
-              <i class="fa fa-save"></i> Save Counter Stats
-            </button>
-          </div>
-
-          <!-- Sections Editor -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-edit"></i> Edit Homepage Sections</div>
-            </div>
-
-            <div class="section-tabs" id="sectionTabsList">
-              <button class="section-tab-btn active" onclick="selectSection('latestNews', this)">Latest News</button>
-              <button class="section-tab-btn" onclick="selectSection('gallery', this)">Gallery</button>
-              <button class="section-tab-btn" onclick="selectSection('admission', this)">Admission</button>
-              <button class="section-tab-btn" onclick="selectSection('aboutUs', this)">About Us</button>
-              <button class="section-tab-btn" onclick="selectSection('contact', this)">Contact</button>
-            </div>
-
-            <input type="hidden" id="sectionSelector" value="latestNews">
-
-            <form id="sectionForm">
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Section Title</label>
-                  <input class="form-control" type="text" id="sectionTitle" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Read More Link</label>
-                  <input class="form-control" type="text" id="sectionLink" placeholder="e.g., /about or #about" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Introduction Text</label>
-                <textarea class="form-control" id="sectionDesc" rows="4" required></textarea>
-              </div>
-              <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                <button type="submit" class="btn btn-accent">
-                  <i class="fa fa-save"></i> Save Section Details
-                </button>
-                <button type="button" class="btn btn-danger" onclick="deleteHomepageSection()">
-                  <i class="fa fa-eye-slash"></i> Hide Section from Homepage
-                </button>
-              </div>
-            </form>
-          </div>
 
           <!-- Latest News Settings & Management -->
           <div class="card">
@@ -1467,182 +1507,6 @@
               </table>
             </div>
           </div>
-
-          <!-- Principal Mudarris -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-user-circle"></i> Principal Mudarris</div>
-            </div>
-            <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
-              <img id="principalPreview" src="" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);display:none;">
-              <div style="flex:1;min-width:220px;">
-                <div class="form-grid-2">
-                  <div class="form-group">
-                    <label class="form-label">Name</label>
-                    <input class="form-control" type="text" id="hpPrincipalName" placeholder="Sheikhuna Ibrahim Baqavi Al Haithami" value="Sheikhuna Ibrahim Baqavi Al Haithami">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Title</label>
-                    <input class="form-control" type="text" id="hpPrincipalTitle" placeholder="Principal Mudarris" value="Principal Mudarris">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Bio</label>
-                  <textarea class="form-control" id="hpPrincipalBio" rows="2" placeholder="Short biography...">Sheikhuna Ibrahim Baqavi Al Haithami</textarea>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Upload Photo</label>
-                  <input class="form-control" type="file" id="principalImageFile" accept="image/*">
-                </div>
-                <button class="btn btn-accent btn-sm" onclick="savePrincipal()">
-                  <i class="fa fa-save"></i> Save Principal Info
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Assistant Mudarris -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-users"></i> Assistant Mudarris List</div>
-            </div>
-            <form id="assistantForm" enctype="multipart/form-data"
-              style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border-soft);">
-              <div class="form-group" style="flex:1;min-width:130px;margin-bottom:0;">
-                <label class="form-label">Name</label>
-                <input class="form-control" type="text" id="assistantName" placeholder="Name" required>
-              </div>
-              <div class="form-group" style="flex:1;min-width:130px;margin-bottom:0;">
-                <label class="form-label">Role</label>
-                <input class="form-control" type="text" id="assistantRole" placeholder="Assistant Mudarris">
-              </div>
-              <div class="form-group" style="flex:1;min-width:130px;margin-bottom:0;">
-                <label class="form-label">Photo</label>
-                <input class="form-control" type="file" id="assistantImage" accept="image/*">
-              </div>
-              <button type="submit" class="btn btn-accent btn-sm" style="align-self:flex-end;">
-                <i class="fa fa-plus"></i> Add
-              </button>
-            </form>
-            <div id="assistantListAdmin"></div>
-          </div>
-
-          <!-- Why Us Settings -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-info-circle"></i> Why Bayanul Uloom Dars? Settings</div>
-            </div>
-
-            <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border-soft);">
-              <label class="form-label" style="margin-bottom:12px;">Usthad Photo / Section Media</label>
-              <div id="whyUsMediaPreviewWrap" style="max-width:160px;display:none;margin-bottom:12px;">
-                <div id="whyUsAdminMediaPreview"></div>
-              </div>
-              <form id="whyUsMediaForm" enctype="multipart/form-data" style="max-width:400px;">
-                <div class="form-group">
-                  <label class="form-label">Upload File</label>
-                  <input class="form-control" type="file" id="whyUsFile" accept="image/*,video/*">
-                </div>
-                <button type="submit" class="btn btn-ghost btn-sm" style="margin-bottom:12px;">
-                  <i class="fa fa-upload"></i> Upload File
-                </button>
-              </form>
-              <div class="or-divider" style="max-width:400px;">OR PASTE URL</div>
-              <div class="form-group" style="max-width:400px;">
-                <input class="form-control" type="text" id="whyUsMediaUrlInput" placeholder="https://... image/video link or youtube link">
-              </div>
-            </div>
-
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label class="form-label">Eligibility Text</label>
-                <textarea class="form-control" id="whyUsEligibility" rows="3" placeholder="Students who completed basic Islamic education...">Students who completed basic Islamic education are welcome to apply for advanced religious studies.</textarea>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Curriculum Text</label>
-                <textarea class="form-control" id="whyUsCurriculum" rows="3" placeholder="Quran, Hadith, Fiqh...">Quran, Hadith, Fiqh, Arabic language, and modern subjects guided by experienced Usthads.</textarea>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Facilities Text</label>
-                <textarea class="form-control" id="whyUsFacilities" rows="3" placeholder="Library, Computer Lab...">Library, Computer Lab, Smart Class, Medical Wing & Store for holistic student development.</textarea>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Enquiry Details</label>
-                <textarea class="form-control" id="whyUsEnquiry" rows="3" placeholder="+91 9526 919 218">+91 9526 919 218
-darsbayanululoom@gmail.com</textarea>
-              </div>
-            </div>
-            <button class="btn btn-accent btn-sm" onclick="saveWhyUsSettings()">
-              <i class="fa fa-save"></i> Save Why Us Settings
-            </button>
-          </div>
-
-          <!-- Committee Settings -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-group"></i> Committee Settings</div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Committee Title</label>
-              <input class="form-control" type="text" id="committeeTitle" placeholder="THE NEW COMMITTEE 2026-27" value="THE NEW COMMITTEE 2026-27">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Details</label>
-              <textarea class="form-control" id="committeeDetails" rows="3" placeholder="Committee details...">anly for belove 12 year old</textarea>
-            </div>
-            <button class="btn btn-ghost btn-sm" style="margin-bottom:16px;" onclick="saveCommitteeText()">
-              <i class="fa fa-save"></i> Save Committee Text
-            </button>
-
-            <div style="border-top:1px solid var(--border-soft);padding-top:16px;margin-top:8px;">
-              <div id="committeePosterPreviewWrap" style="display:none;margin-bottom:12px;">
-                <img id="currentCommitteePosterPreview" src="" style="max-width:150px;border-radius:10px;border:2px solid var(--accent);">
-                <div style="margin-top:8px;">
-                  <button class="btn btn-danger btn-sm" onclick="removeCommitteePoster()">
-                    <i class="fa fa-trash"></i> Remove Poster
-                  </button>
-                </div>
-              </div>
-              <div id="committeeNoPosterNotice" class="no-poster-notice" style="margin-bottom:12px;">
-                <i class="fa fa-image"></i> No committee poster uploaded.
-              </div>
-              <form id="committeePosterUploadForm" enctype="multipart/form-data">
-                <div class="form-group">
-                  <label class="form-label">Upload Committee Poster</label>
-                  <input class="form-control" type="file" id="committeePosterFile" accept="image/*">
-                </div>
-                <button type="submit" class="btn btn-accent btn-sm">
-                  <i class="fa fa-upload"></i> Upload Poster
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <!-- Branch & Faculty Network -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-sitemap"></i> Branch & Faculty Network</div>
-            </div>
-            <form id="branchForm" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border-soft);">
-              <div class="form-group" style="flex:1;min-width:130px;margin-bottom:0;">
-                <label class="form-label">Branch Name</label>
-                <input class="form-control" type="text" id="branchName" placeholder="Branch name" required>
-              </div>
-              <div class="form-group" style="flex:1;min-width:130px;margin-bottom:0;">
-                <label class="form-label">Location</label>
-                <input class="form-control" type="text" id="branchLocation" placeholder="Location">
-              </div>
-              <div class="form-group" style="flex:1;min-width:130px;margin-bottom:0;">
-                <label class="form-label">Description</label>
-                <input class="form-control" type="text" id="branchDesc" placeholder="Short description">
-              </div>
-              <button type="submit" class="btn btn-accent btn-sm" style="align-self:flex-end;">
-                <i class="fa fa-plus"></i> Add
-              </button>
-            </form>
-            <div id="branchListAdmin"></div>
-
-          </div>
         </div>
 
         <!-- ════════════════════════════════
@@ -1664,53 +1528,7 @@ darsbayanululoom@gmail.com</textarea>
             </div>
           </div>
 
-          <!-- Admission Banner Title/Poster -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-pencil-square-o"></i> Admission Banner Title & Poster Settings</div>
-            </div>
 
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label class="form-label">Banner Title</label>
-                <input class="form-control" type="text" id="bannerTitle" placeholder="2026 പുതിയ അധ്യയന വർഷത്തേക്കുള്ള അഡ്മിഷൻ...">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Banner Content (optional)</label>
-                <textarea class="form-control" id="bannerContent" rows="2" placeholder="Additional text below the title..."></textarea>
-              </div>
-            </div>
-            <button class="btn btn-accent btn-sm" onclick="saveBannerText()">
-              <i class="fa fa-save"></i> Save Banner Text
-            </button>
-
-            <hr style="border:none;border-top:1px solid var(--border-soft);margin:20px 0;">
-
-            <div class="card-title" style="margin-bottom:16px;"><i class="fa fa-image"></i> Admission Poster</div>
-            <div class="poster-preview-wrap" style="margin-bottom:16px;">
-              <div id="adminPosterPreviewWrap" style="display:none;flex-direction:column;gap:8px;align-items:center;">
-                <div id="currentPosterPreviewContainer"></div>
-                <button class="btn btn-danger btn-sm" onclick="removePoster()"><i class="fa fa-trash"></i> Remove Poster</button>
-              </div>
-              <div id="adminNoPosterNotice" class="no-poster-notice">
-                <i class="fa fa-image"></i> No poster uploaded — banner will show default placeholder.
-              </div>
-            </div>
-
-            <form id="posterUploadForm" enctype="multipart/form-data">
-              <div class="form-group">
-                <label class="form-label">Upload Poster File (Image or Video)</label>
-                <input class="form-control" type="file" id="posterFile" accept="image/*,video/*">
-              </div>
-              <div class="or-divider">OR PASTE URL</div>
-              <div class="form-group">
-                <input class="form-control" type="text" id="posterUrlInput" placeholder="https://... image/video or YouTube URL">
-              </div>
-              <button type="submit" class="btn btn-accent btn-sm">
-                <i class="fa fa-upload"></i> Save Poster
-              </button>
-            </form>
-          </div>
 
           <!-- Applications Table -->
           <div class="card">
@@ -1737,38 +1555,6 @@ darsbayanululoom@gmail.com</textarea>
         ════════════════════════════════ -->
         <div class="page" id="page-gallery">
           
-          <!-- Home Page Gallery Display Settings -->
-          <div class="card" style="border:1.5px solid var(--accent-dim);">
-            <div class="card-header">
-              <div class="card-title" style="color:var(--accent);"><i class="fa fa-sliders"></i> Home Page Gallery Display Settings</div>
-            </div>
-            <div class="form-grid-3">
-              <div class="form-group">
-                <label class="form-label">Number of Items</label>
-                <select class="form-control" id="homeGalleryLimit">
-                  <option value="3">3 Items</option>
-                  <option value="6">6 Items</option>
-                  <option value="9">9 Items</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Category Filter</label>
-                <select class="form-control" id="homeGalleryCategory">
-                  <option value="all">All Categories</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Display Mode</label>
-                <select class="form-control" id="homeGalleryMode">
-                  <option value="popular">Popular</option>
-                  <option value="latest">Latest</option>
-                </select>
-              </div>
-            </div>
-            <button class="btn btn-accent btn-sm" onclick="saveHomeGallerySettings()">
-              <i class="fa fa-save"></i> Save Display Settings
-            </button>
-          </div>
 
           <!-- Add Gallery Item -->
           <div class="card">
@@ -1858,46 +1644,6 @@ darsbayanululoom@gmail.com</textarea>
             </div>
           </div>
 
-          <!-- Stories Management -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-camera"></i> Stories Manager (24h / 7-Day Stories)</div>
-            </div>
-            <form id="storyForm" enctype="multipart/form-data" style="margin-bottom:20px;">
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Story Title (optional)</label>
-                  <input class="form-control" type="text" id="storyTitle" placeholder="Story title">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Active Duration (days)</label>
-                  <select class="form-control" id="storyDays">
-                    <option value="1">1 Day</option>
-                    <option value="3">3 Days</option>
-                    <option value="7" selected>7 Days</option>
-                    <option value="14">14 Days</option>
-                    <option value="30">30 Days</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Story Image *</label>
-                <input class="form-control" type="file" id="storyImage" accept="image/*" required>
-              </div>
-              <button type="submit" class="btn btn-accent btn-sm">
-                <i class="fa fa-upload"></i> Upload Active Story
-              </button>
-            </form>
-
-            <div class="table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr><th>Image</th><th>Title</th><th>Days</th><th>Expires</th><th>Status</th><th>Action</th></tr>
-                </thead>
-                <tbody id="storiesTableBody"></tbody>
-              </table>
-            </div>
-          </div>
 
         </div>
 
@@ -1933,21 +1679,7 @@ darsbayanululoom@gmail.com</textarea>
             </div>
           </div>
 
-          <!-- Newsletter Subscribers -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-users"></i> Newsletter Subscribers</div>
-              <button class="btn btn-ghost btn-sm" onclick="loadSubscribers()"><i class="fa fa-refresh"></i> Refresh</button>
-            </div>
-            <div class="table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr><th>#</th><th>Email</th><th>Subscribed Date</th></tr>
-                </thead>
-                <tbody id="subscribersTableBody"></tbody>
-              </table>
-            </div>
-          </div>
+
 
         </div>
 
@@ -2017,7 +1749,7 @@ darsbayanululoom@gmail.com</textarea>
         <label>Change Image (Leave empty to keep current)</label>
         <input class="form-control" type="file" id="editGalleryImage" accept="image/*">
         <div style="margin-top:8px;">
-          <img id="editGalleryCurrentImg" src="" style="max-height:80px;border-radius:4px;display:none;">
+          <img id="editGalleryCurrentImg" src="#" style="max-height:80px;border-radius:4px;display:none;">
         </div>
       </div>
       <div class="form-group" id="editGalleryVideoGroup" style="display:none;">
@@ -2038,6 +1770,79 @@ darsbayanululoom@gmail.com</textarea>
     </form>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Admin Dashboard: User Management Section -->
+<div class="admin-user-management">
+    <div class="header-section">
+        <h2 style="font-family: 'Segoe UI', sans-serif; color: #0a4d2e;">Manage Users</h2>
+        <button class="add-btn" onclick="openAddUserModal()">+ Add New User</button>
+    </div>
+
+    <!-- User Table -->
+    <div class="table-container">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Admission/ID No.</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Example Row 1 -->
+                <tr>
+                    <td>Muhammed Ali</td>
+                    <td><span class="badge usthad">Usthad</span></td>
+                    <td>UST-1001</td>
+                    <td class="action-buttons">
+                        <button class="view-btn" onclick="viewUser('UST-1001')">View</button>
+                        <button class="edit-btn" onclick="editUser('UST-1001')">Edit</button>
+                        <button class="delete-btn" onclick="deleteUser('UST-1001')">Delete</button>
+                    </td>
+                </tr>
+                <!-- Example Row 2 -->
+                <tr>
+                    <td>Rashid Ahmed</td>
+                    <td><span class="badge student">Student</span></td>
+                    <td>STU-2045</td>
+                    <td class="action-buttons">
+                        <button class="view-btn" onclick="viewUser('STU-2045')">View</button>
+                        <button class="edit-btn" onclick="editUser('STU-2045')">Edit</button>
+                        <button class="delete-btn" onclick="deleteUser('STU-2045')">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- ══════════════════════════════════
      RESET CONFIRMATION MODAL (PARAGRAPH TYPING REQUIRED, PASTE DISABLED)
@@ -2075,41 +1880,7 @@ darsbayanululoom@gmail.com</textarea>
     <div id="resetStatus" style="margin-top:14px;font-weight:600;font-size:0.9rem;"></div>
   </div>
 </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ════════════════════════════════
-             RESET PAGE
-        ════════════════════════════════ -->
-        <div class="page" id="page-reset">
-          <div class="card danger-zone-card">
-            <div class="danger-zone-icon">
-              <i class="fa fa-exclamation-triangle"></i>
-            </div>
-            <h2 style="font-family:'Outfit',sans-serif;font-size:1.6rem;color:#f87171;margin-bottom:12px;">
-              Full Admin Reset
-            </h2>
-            <p style="color:var(--text-muted);line-height:1.8;margin-bottom:28px;font-size:0.92rem;">
-              This will permanently delete <strong style="color:#f87171;">ALL data</strong> — news, gallery,
-              admissions, settings, stories, sliders, contacts, and subscribers.
-              <br><strong style="color:var(--text);">This action cannot be undone.</strong>
-            </p>
-            <button class="btn btn-danger" style="padding:14px 36px;font-size:1rem;" onclick="openResetModal()">
-              <i class="fa fa-exclamation-triangle"></i> Proceed to Full Reset
-            </button>
-          </div>
-        </div>
-
-      </div><!-- end page-area -->
-    </div><!-- end main-content -->
-  </div><!-- end app-layout -->
-</div><!-- end dashboard -->
-
-<!-- Duplicate modals removed — single copies kept above -->
-
-<!-- Hidden PDF Print Template -->
+        <!-- Hidden PDF Print Template -->
 <div id="pdfPrintTemplate" style="display:none;">
 
   <!-- ══ HEADER ══ -->
@@ -2123,7 +1894,7 @@ darsbayanululoom@gmail.com</textarea>
     </div>
     <!-- Photo Box -->
     <div style="width:110px;height:140px;border:2px solid #1a6b3a;border-radius:6px;overflow:hidden;background:#f8f8f8;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:20px;">
-      <img id="pdfPhotoImg" src="" style="width:100%;height:100%;object-fit:cover;display:none;" alt="Student Photo">
+      <img id="pdfPhotoImg" src="#" style="width:100%;height:100%;object-fit:cover;display:none;" alt="Student Photo">
       <span id="pdfPhotoLabel" style="font-size:10px;color:#aaa;font-weight:600;text-align:center;padding:6px;">PHOTO</span>
     </div>
   </div>
@@ -3646,36 +3417,6 @@ function executeReset() {
 }
 </script>
 
-<!-- Edit News Modal -->
-<div class="modal" id="editNewsModal">
-  <div class="modal-content" style="max-width:500px;">
-    <h3>Edit News / Achievement</h3>
-    <form id="editNewsForm" onsubmit="submitEditNews(event)">
-      <input type="hidden" id="editNewsId">
-      <div class="form-group">
-        <label>Title <span class="required">*</span></label>
-        <input type="text" id="editNewsTitle" class="input-field" required>
-      </div>
-      <div class="form-group mt-3">
-        <label>Description <span class="required">*</span></label>
-        <textarea id="editNewsDesc" class="input-field" rows="4" required></textarea>
-      </div>
-      <div class="form-group mt-3">
-        <label>Image (Optional - Leave blank to keep existing)</label>
-        <div class="file-upload-wrapper">
-          <input type="file" id="editNewsImage" accept="image/*">
-          <i class="fa fa-cloud-upload"></i> Choose a new image
-        </div>
-      </div>
-      <div id="editNewsStatus" style="margin-top:10px; font-weight:600; font-size:0.9rem;"></div>
-      <div class="modal-actions" style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('editNewsModal')">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="editNewsBtn">Save Changes</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <script>
 function openEditNewsModal(id, title, desc) {
   safeSetValue('editNewsId', id);
@@ -3718,5 +3459,56 @@ function submitEditNews(e) {
     });
 }
 </script>
+
+
+
+
+
+
+
+
+
+
+<script>
+    // Add New User (Modal or Redirect)
+    function openAddUserModal() {
+        // Ivide ningalkku add user form kanikkan ulla code ezhutham
+        alert("Add New Student/Usthad form will open here.");
+    }
+
+    // View Details
+    function viewUser(id) {
+        // Database-il ninnum full details eduthu kanikkan ulla code
+        alert("Viewing full details for ID: " + id);
+    }
+
+    // Edit User
+    function editUser(id) {
+        // Edit cheyyan ulla form open aakan ulla code
+        alert("Editing details for ID: " + id);
+    }
+
+    // Delete User
+    function deleteUser(id) {
+        // Delete cheyyunnathinu munpu confirm cheyyuka
+        if(confirm("Are you sure you want to delete this user? (ID: " + id + ")")) {
+            alert("User " + id + " has been deleted.");
+            // Ivide delete cheyyan ulla backend request varum
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

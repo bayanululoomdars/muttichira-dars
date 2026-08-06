@@ -14,7 +14,7 @@
 
 /* ── MODERN NAVBAR ────────────────────────────── */
 #header {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%) !important;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #0a3d1f 50%, var(--primary-light) 100%) !important;
   box-shadow: 0 4px 30px rgba(0,0,0,0.3) !important;
   height: auto !important;
   padding: 0 !important;
@@ -955,3 +955,9 @@
   }
 }
 
+
+/* Global Mobile Fixes */
+html, body { overflow-x: hidden; max-width: 100vw; }
+/* Google Login Popup Highest Z-index */
+iframe[src*='google.com'], #loginPopupModal, .ig-detail-modal { z-index: 2147483647 !important; }
+@media (max-width: 768px) { .ig-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 4px; } }
