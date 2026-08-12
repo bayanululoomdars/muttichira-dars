@@ -95,9 +95,13 @@
     ═══════════════════════════════════════════════ */
     .login-screen {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
       background: radial-gradient(ellipse at 30% 50%, rgba(10,77,46,0.35) 0%, transparent 60%),
                   radial-gradient(ellipse at 70% 20%, rgba(212,175,55,0.08) 0%, transparent 50%),
                   var(--bg);
@@ -2415,6 +2419,15 @@ function showPage(page) {
   if (pageEl) pageEl.classList.add('active');
   if (navEl)  navEl.classList.add('active');
   safeSetText('topbarTitle', titles[page] || page);
+
+  // Load data for specific pages
+  if (page === 'homepage') loadNews();
+  if (page === 'gallery') loadGallery();
+  if (page === 'admissions') loadAdmissions();
+  if (page === 'messages') { loadContacts(); loadSubscribers(); }
+  if (page === 'overview') loadOverview();
+  if (page === 'students') loadStudentsAdmin();
+  if (page === 'usthads') loadUsthadsAdmin();
 
   // Close mobile sidebar
   closeSidebar();

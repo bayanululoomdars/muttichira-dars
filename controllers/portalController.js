@@ -202,13 +202,16 @@ const memoryMessages = [
 
 // Helper: Find Student (DB or Memory)
 async function findStudentByIdentifier(query) {
-  try {
-    const student = await Student.findOne({
-      $or: [{ admissionNo: query }, { phone: query }]
-    });
-    if (student) return student;
-  } catch (e) {
-    // DB offline
+  const mongoose = require('mongoose');
+  if (mongoose.connection.readyState === 1) {
+    try {
+      const student = await Student.findOne({
+        $or: [{ admissionNo: query }, { phone: query }]
+      }).maxTimeMS(2000);
+      if (student) return student;
+    } catch (e) {
+      // DB offline or timeout
+    }
   }
   const qUpper = String(query).trim().toUpperCase();
   return memoryStudents.find(s => 
@@ -218,13 +221,16 @@ async function findStudentByIdentifier(query) {
 
 // Helper: Find Usthad (DB or Memory)
 async function findUsthadByIdentifier(query) {
-  try {
-    const usthad = await Usthad.findOne({
-      $or: [{ usthadId: query }, { phone: query }]
-    });
-    if (usthad) return usthad;
-  } catch (e) {
-    // DB offline
+  const mongoose = require('mongoose');
+  if (mongoose.connection.readyState === 1) {
+    try {
+      const usthad = await Usthad.findOne({
+        $or: [{ usthadId: query }, { phone: query }]
+      }).maxTimeMS(2000);
+      if (usthad) return usthad;
+    } catch (e) {
+      // DB offline
+    }
   }
   const qUpper = String(query).trim().toUpperCase();
   return memoryUsthads.find(u => 

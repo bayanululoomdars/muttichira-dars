@@ -439,7 +439,7 @@
 
             <div class="input-group-custom">
               <i class="fa fa-lock input-icon"></i>
-              <input type="password" id="inputPassword" class="form-control-custom" placeholder="Enter Password (Default is Phone No)">
+              <input type="password" id="inputPassword" class="form-control-custom" placeholder="Enter Password (Default is Phone No)" onkeypress="if(event.key==='Enter') submitLogin()">
               <button type="button" class="btn text-muted" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);" onclick="togglePasswordVis()">
                 <i class="fa fa-eye" id="passEyeIcon"></i>
               </button>
