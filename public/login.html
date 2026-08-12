@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Login | Bayanul Uloom Dars | Muttichira</title>
+  <title>Login & Portal | Bayanul Uloom Dars | Muttichira</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta content="AL BAYAN, Bayanul Uloom, Dars, Muttichira, Contact" name="keywords">
-  <meta content="Contact Muttichira Bayanul Uloom Dars" name="description">
-  <meta property="og:title" content="Contact Us | Bayanul Uloom Dars" />
-  <meta property="og:description" content="Contact Muttichira Bayanul Uloom Dars" />
-  <meta property="og:image" content="img/new_logo.png" />
+  <meta content="AL BAYAN, Bayanul Uloom, Dars, Muttichira, Student Usthad Login, Alumni" name="keywords">
+  <meta content="Student & Usthad Portal - Bayanul Uloom Dars Muttichira" name="description">
 
   <!-- Favicons -->
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
@@ -16,10 +13,7 @@
   <link rel="apple-touch-icon" href="img/favicon.png">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS Files -->
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -30,9 +24,322 @@
   <!-- Main Stylesheet Files -->
   <link href="css/style.css" rel="stylesheet">
   <link href="css/custom.css" rel="stylesheet">
-</head>
 
-<body class="bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-100 min-h-screen flex flex-col justify-between antialiased">
+  <style>
+    :root {
+      --primary-color: #0a4d2e;
+      --primary-dark: #063821;
+      --gold-accent: #d4af37;
+      --gold-light: #f3e5ab;
+      --bg-gradient: linear-gradient(135deg, #0a4d2e 0%, #0d6b3f 100%);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Hero Banner */
+    .portal-hero {
+      background: var(--bg-gradient);
+      padding: 45px 20px 65px;
+      color: #ffffff;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portal-hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2.3rem;
+      margin-bottom: 8px;
+    }
+
+    .portal-hero p {
+      font-size: 0.98rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Main Container floating card */
+    .portal-card-container {
+      margin-top: -35px;
+      margin-bottom: 40px;
+      z-index: 10;
+    }
+
+    .portal-box {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 20px 45px rgba(10, 77, 46, 0.12);
+      border: 1px solid rgba(10, 77, 46, 0.1);
+      padding: 30px;
+      transition: all 0.3s ease;
+    }
+
+    /* Role Switcher Pill Popup Tabs */
+    .role-switcher {
+      display: flex;
+      background: #f1f5f9;
+      padding: 6px;
+      border-radius: 50px;
+      margin-bottom: 25px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .role-btn {
+      flex: 1;
+      padding: 11px 20px;
+      border-radius: 50px;
+      border: none;
+      background: transparent;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .role-btn.active {
+      background: var(--primary-color);
+      color: #ffffff;
+      box-shadow: 0 6px 15px rgba(10, 77, 46, 0.25);
+    }
+
+    /* Input & Preview Card */
+    .input-group-custom {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .form-control-custom {
+      width: 100%;
+      padding: 14px 18px 14px 48px;
+      border-radius: 12px;
+      border: 2px solid #e2e8f0;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.25s ease;
+      outline: none;
+      background: #f8fafc;
+    }
+
+    .form-control-custom:focus {
+      border-color: var(--primary-color);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(10, 77, 46, 0.1);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 1.2rem;
+    }
+
+    /* Preview Profile Card */
+    .preview-card {
+      background: linear-gradient(135deg, #f0fdf4 0%, #e6f4ea 100%);
+      border: 2px solid #bbf7d0;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .preview-avatar {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+    }
+
+    .preview-info h4 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin: 0 0 3px 0;
+    }
+
+    .preview-info p {
+      font-size: 0.85rem;
+      color: #475569;
+      margin: 0;
+    }
+
+    .badge-role {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .badge-student { background: #dcfce7; color: #15803d; }
+    .badge-usthad { background: #fef3c7; color: #b45309; }
+    .badge-alumni { background: #e0e7ff; color: #4338ca; }
+
+    /* Counter Statistics Section */
+    .counter-section {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 50px 0;
+      margin-top: 40px;
+    }
+
+    .counter-card-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .counter-card-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+      border-color: var(--gold-accent);
+    }
+
+    .counter-card-box i {
+      font-size: 2.2rem;
+      color: var(--gold-accent);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .counter-card-box .num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      line-height: 1;
+    }
+
+    .counter-card-box .label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: 6px;
+    }
+
+    /* Alumni / Biruthadhari Section */
+    .alumni-section {
+      padding: 50px 0;
+    }
+
+    .alumni-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      padding: 20px;
+      height: 100%;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .alumni-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      border-color: #cbd5e1;
+    }
+
+    .alumni-card img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold-accent);
+    }
+
+    /* Dashboard UI (After Login) */
+    .dashboard-panel {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .dash-header {
+      background: var(--bg-gradient);
+      border-radius: 16px;
+      padding: 24px;
+      color: #ffffff;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .dash-header-user {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .dash-header-user img {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      border: 3px solid #ffffff;
+      object-fit: cover;
+    }
+
+    .btn-action-primary {
+      background: linear-gradient(135deg, var(--gold-accent) 0%, #b89320 100%);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: 50px;
+      border: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-action-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.4);
+      color: #ffffff;
+    }
+
+    .card-dashboard-item {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+  </style>
+</head>
+<body>
 
   <!-- Modern Header / Navbar -->
   <header id="header" class="fixed-top">
@@ -52,186 +359,963 @@
       <ul class="nav-links">
         <li><a href="/home">Home</a></li>
         <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/admission" class="nav-btn-admission">Admission</a></li>
+        <li><a href="/admission">Admission</a></li>
         <li><a href="/about">About Us</a></li>
         <li><a href="/contact">Contact Us</a></li>
-        <li><a href="/login" class="active">Login</a></li>
+        <li><a href="/login" class="active nav-btn-login"><i class="fa fa-sign-in"></i> Login</a></li>
       </ul>
     </div>
   </header>
 
-  <!-- Main Content Wrapper (Adds spacing below fixed header) -->
-  <main class="flex-grow flex items-center justify-center px-4 pt-28 pb-12">
-    
-    <!-- Main Container Card -->
-    <div class="w-full max-w-md rounded-2xl bg-white/95 backdrop-blur-md p-8 shadow-2xl border border-gray-100/80 transition-all duration-300">
-      
-      <!-- Brand Logo & Form Header -->
-      <div class="text-center mb-6">
-        <img src="img/new_logo.png" alt="BAYANUL ULOOM DARS Logo" class="h-16 w-auto mx-auto mb-3 drop-shadow-sm">
-        <h1 class="text-2xl font-bold tracking-tight text-gray-900">Welcome Back</h1>
-        <p class="mt-1 text-sm text-gray-500">Sign in to Bayanul Uloom Dars Portal</p>
-      </div>
+  <!-- Hero Banner -->
+  <section class="portal-hero">
+    <div class="container">
+      <h1>Student & Usthad Portal</h1>
+      <p>Welcome to Muttichira Bayanul Uloom Dars Academic Portal. Access grades, notifications, direct messages, and alumni records.</p>
+    </div>
+  </section>
 
-      <!-- Social Login Buttons -->
-      <div class="grid grid-cols-2 gap-3 mb-6">
-        <button type="button" class="flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition">
-          <svg class="h-4 w-4" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-          Google
-        </button>
-
-        <button type="button" class="flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition">
-          <svg class="h-4 w-4 fill-current text-gray-900" viewBox="0 0 24 24">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-          </svg>
-          GitHub
-        </button>
-      </div>
-
-      <!-- Divider -->
-      <div class="relative mb-6">
-        <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-gray-200"></div>
-        </div>
-        <div class="relative flex justify-center text-xs uppercase">
-          <span class="bg-white px-3 text-gray-400 font-medium">Or continue with</span>
-        </div>
-      </div>
-
-      <!-- Login Form -->
-      <form id="loginForm" class="space-y-5" onsubmit="handleLogin(event)">
+  <!-- Main Container Card (LOGIN / LOOKUP VIEW) -->
+  <div class="container portal-card-container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
         
-        <!-- Email Input -->
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            required 
-            placeholder="name@example.com"
-            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition"
-          >
-        </div>
-
-        <!-- Password Input -->
-        <div>
-          <div class="flex items-center justify-between mb-1">
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <a href="#" class="text-xs font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
-          </div>
-          <div class="relative">
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              required 
-              placeholder="••••••••"
-              class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition pr-10"
-            >
-            <button 
-              type="button" 
-              onclick="togglePasswordVisibility()" 
-              id="togglePasswordBtn"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 select-none p-1 focus:outline-none"
-              aria-label="Toggle Password Visibility"
-            >
-              <!-- Eye Open Icon -->
-              <svg id="eyeIcon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-              <!-- Eye Off Icon (hidden by default) -->
-              <svg id="eyeOffIcon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.024 10.024 0 013.122-.063c4.478 0 8.268 2.943 9.542 7a9.97 9.97 0 01-2.498 4.132M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
-              </svg>
+        <!-- LOGIN CARD -->
+        <div class="portal-box" id="loginCard">
+          
+          <!-- Role Selector Tabs -->
+          <div class="role-switcher">
+            <button class="role-btn active" id="btnRoleStudent" onclick="switchRole('student')">
+              <i class="fa fa-graduation-cap"></i> Student Login
+            </button>
+            <button class="role-btn" id="btnRoleUsthad" onclick="switchRole('usthad')">
+              <i class="fa fa-user-md"></i> Usthad Login
             </button>
           </div>
+
+          <!-- Instruction Text -->
+          <div class="text-center mb-4">
+            <h3 class="font-weight-bold mb-1" id="loginTitle">Student Portal Access</h3>
+            <p class="text-muted small" id="loginSub">Enter your Admission Number or Phone Number to look up your profile</p>
+          </div>
+
+          <!-- Step 1: Admission No / Identifier Lookup -->
+          <div id="stepLookup">
+            <div class="input-group-custom">
+              <i class="fa fa-id-card input-icon"></i>
+              <input type="text" id="inputIdentifier" class="form-control-custom" placeholder="e.g. ADM101 or 9876543210" oninput="handleLiveLookup()">
+            </div>
+
+            <!-- Live Preview Card (Populated when typed) -->
+            <div id="livePreviewBox" style="display: none;" class="preview-card">
+              <img id="previewPhoto" src="img/new_logo.png" alt="Avatar" class="preview-avatar">
+              <div class="preview-info flex-grow-1">
+                <h4 id="previewName">Loading...</h4>
+                <p id="previewSub">Admission No: -</p>
+                <span id="previewRoleBadge" class="badge-role badge-student">Student</span>
+              </div>
+              <button class="btn btn-sm btn-success rounded-pill font-weight-bold" onclick="proceedToPassword()">
+                Next <i class="fa fa-arrow-right"></i>
+              </button>
+            </div>
+
+            <button class="btn btn-block btn-success py-3 rounded-pill font-weight-bold" id="btnCheckProfile" onclick="handleManualLookup()">
+              <i class="fa fa-search"></i> Check & Proceed
+            </button>
+          </div>
+
+          <!-- Step 2: Password Prompt -->
+          <div id="stepPassword" style="display: none;">
+            
+            <!-- Selected User Banner -->
+            <div class="preview-card mb-3">
+              <img id="selectedPhoto" src="img/new_logo.png" alt="Avatar" class="preview-avatar">
+              <div class="preview-info">
+                <h4 id="selectedName">User Name</h4>
+                <p id="selectedSub">ID: ADM101</p>
+                <small class="text-success font-weight-bold"><i class="fa fa-check-circle"></i> Profile Verified</small>
+              </div>
+            </div>
+
+            <div class="input-group-custom">
+              <i class="fa fa-lock input-icon"></i>
+              <input type="password" id="inputPassword" class="form-control-custom" placeholder="Enter Password (Default is Phone No)">
+              <button type="button" class="btn text-muted" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);" onclick="togglePasswordVis()">
+                <i class="fa fa-eye" id="passEyeIcon"></i>
+              </button>
+            </div>
+            
+            <p class="text-muted small mb-3">
+              <i class="fa fa-info-circle text-info"></i> Note: Default password is your <strong>Phone Number</strong>. You can change it inside your dashboard.
+            </p>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-light rounded-pill px-4" onclick="backToLookup()">
+                <i class="fa fa-arrow-left"></i> Back
+              </button>
+              <button class="btn btn-success flex-grow-1 rounded-pill font-weight-bold py-2.5" id="btnLoginSubmit" onclick="submitLogin()">
+                <i class="fa fa-sign-in"></i> Log In to Dashboard
+              </button>
+            </div>
+          </div>
+
+          <!-- Alert Output -->
+          <div id="loginAlert" class="mt-3"></div>
+
         </div>
 
-        <!-- Remember Me Checkbox -->
-        <div class="flex items-center">
-          <input 
-            type="checkbox" 
-            id="remember-me" 
-            name="remember-me" 
-            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-          >
-          <label for="remember-me" class="ml-2 block text-sm text-gray-600 cursor-pointer select-none">Remember me for 30 days</label>
+        <!-- DASHBOARD CONTAINER (REPLACES LOGIN AFTER SUCCESSFUL AUTH) -->
+        <div class="portal-box dashboard-panel" id="dashboardCard">
+          
+          <!-- Dashboard Top Header -->
+          <div class="dash-header">
+            <div class="dash-header-user">
+              <img id="dashUserPhoto" src="img/new_logo.png" alt="User Photo">
+              <div>
+                <h3 class="m-0 font-weight-bold" id="dashUserName">User Name</h3>
+                <p class="m-0 text-white-50 small" id="dashUserRole">Student | Dars 3rd Year</p>
+                <span class="badge badge-warning font-weight-bold" id="dashUserStatus">Current Student</span>
+              </div>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline-light rounded-pill" onclick="openChangePasswordModal()">
+                <i class="fa fa-key"></i> Change Password
+              </button>
+              <button class="btn btn-sm btn-danger rounded-pill" onclick="handleLogout()">
+                <i class="fa fa-sign-out"></i> Logout
+              </button>
+            </div>
+          </div>
+
+          <!-- STUDENT DASHBOARD CONTENT -->
+          <div id="studentDashContent" style="display: none;">
+            
+            <!-- Navigation Tabs for Student -->
+            <ul class="nav nav-pills mb-4 border-bottom pb-2">
+              <li class="nav-item">
+                <a class="nav-link active font-weight-bold" data-toggle="tab" href="#tabStudentResults">
+                  <i class="fa fa-trophy text-warning"></i> Exam Results & Marks
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link font-weight-bold" data-toggle="tab" href="#tabStudentNotifications">
+                  <i class="fa fa-bell text-info"></i> Notifications
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link font-weight-bold" data-toggle="tab" href="#tabStudentMessages">
+                  <i class="fa fa-envelope text-success"></i> Message Usthad
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link font-weight-bold" data-toggle="tab" href="#tabStudentProfile">
+                  <i class="fa fa-user text-primary"></i> Edit Profile
+                </a>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              
+              <!-- Tab 1: Marks / Results -->
+              <div class="tab-pane fade show active" id="tabStudentResults">
+                <h5 class="font-weight-bold text-success mb-3"><i class="fa fa-certificate"></i> Academic Evaluation & Marks</h5>
+                <div id="studentResultsList">
+                  <p class="text-muted">Loading results...</p>
+                </div>
+              </div>
+
+              <!-- Tab 2: Notifications -->
+              <div class="tab-pane fade" id="tabStudentNotifications">
+                <h5 class="font-weight-bold text-info mb-3"><i class="fa fa-bullhorn"></i> Dars Announcements</h5>
+                <div id="studentNotificationsList">
+                  <p class="text-muted">Loading notifications...</p>
+                </div>
+              </div>
+
+              <!-- Tab 3: Messages to Usthad -->
+              <div class="tab-pane fade" id="tabStudentMessages">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="font-weight-bold text-success m-0"><i class="fa fa-comments"></i> Communication with Usthads</h5>
+                  <button class="btn btn-sm btn-success rounded-pill" onclick="openStudentMessageModal()">
+                    <i class="fa fa-paper-plane"></i> Send Message to Usthad
+                  </button>
+                </div>
+                <div id="studentMessagesList">
+                  <p class="text-muted">Loading messages...</p>
+                </div>
+              </div>
+
+              <!-- Tab 4: Edit Profile -->
+              <div class="tab-pane fade" id="tabStudentProfile">
+                <h5 class="font-weight-bold mb-3"><i class="fa fa-edit"></i> Edit Profile Information</h5>
+                <form id="formEditStudentProfile" onsubmit="handleSaveStudentProfile(event)">
+                  <div class="form-group">
+                    <label class="small font-weight-bold">Phone Number</label>
+                    <input type="text" id="editStudentPhone" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="small font-weight-bold">Native Place / Address</label>
+                    <input type="text" id="editStudentPlace" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label class="small font-weight-bold">Photo URL / Image Link</label>
+                    <input type="url" id="editStudentPhoto" class="form-control" placeholder="https://...">
+                  </div>
+                  <div class="form-group">
+                    <label class="small font-weight-bold">About / Bio</label>
+                    <textarea id="editStudentBio" class="form-control" rows="2"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-success font-weight-bold rounded-pill">
+                    <i class="fa fa-save"></i> Save Profile Changes
+                  </button>
+                </form>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- USTHAD DASHBOARD CONTENT -->
+          <div id="usthadDashContent" style="display: none;">
+            
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              <button class="btn btn-action-primary" onclick="openPostMarkModal()">
+                <i class="fa fa-plus-circle"></i> Post Exam Mark / Result
+              </button>
+              <button class="btn btn-info font-weight-bold rounded-pill text-white" onclick="openPostNotificationModal()">
+                <i class="fa fa-bullhorn"></i> Post Announcement
+              </button>
+              <button class="btn btn-secondary font-weight-bold rounded-pill" onclick="openUsthadMessagesModal()">
+                <i class="fa fa-envelope"></i> View Student Messages
+              </button>
+            </div>
+
+            <!-- Student Roster Overview -->
+            <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-users"></i> Student Roster & Academic Status</h5>
+            <div class="table-responsive">
+              <table class="table table-hover border">
+                <thead class="bg-light">
+                  <tr>
+                    <th>Adm No</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="usthadStudentRosterTable">
+                  <tr><td colspan="5" class="text-center text-muted">Loading student list...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
         </div>
 
-        <!-- Submit Button -->
-        <button 
-          type="submit" 
-          id="submitBtn"
-          class="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition disabled:opacity-50"
-        >
-          Sign In
-        </button>
-
-      </form>
-
-      <!-- Footer Links -->
-      <p class="mt-8 text-center text-xs text-gray-500">
-        Don't have an account? 
-        <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Sign up</a>
-      </p>
-
+      </div>
     </div>
-  </main>
+  </div>
 
-  <!-- Footer Info -->
-  <footer class="py-4 text-center text-xs text-gray-400">
-    &copy; Bayanul Uloom Dars Muttichira. All rights reserved.
+  <!-- COUNTER STATISTICS SECTION -->
+  <section class="counter-section">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h2 class="font-weight-bold text-success" style="font-family:'Outfit',sans-serif;">Bayanul Uloom Dars Statistics</h2>
+        <p class="text-muted">Live overview of our students, graduates (Biruthadhari), and faculty</p>
+      </div>
+
+      <div class="row g-4" id="counterStatsRow">
+        <div class="col-md-3 col-6 mb-3">
+          <div class="counter-card-box">
+            <i class="fa fa-graduation-cap"></i>
+            <div class="num" id="cntAlumni">120+</div>
+            <div class="label">Biruthadhari / Alumni</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+          <div class="counter-card-box">
+            <i class="fa fa-book"></i>
+            <div class="num" id="cntStudents">45+</div>
+            <div class="label">Current Students</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+          <div class="counter-card-box">
+            <i class="fa fa-user-md"></i>
+            <div class="num" id="cntUsthads">12</div>
+            <div class="label">Respected Usthads</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+          <div class="counter-card-box">
+            <i class="fa fa-trophy"></i>
+            <div class="num" id="cntCourses">6</div>
+            <div class="label">Dars Academic Courses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALUMNI / BIRUTHADHARI SEARCH DIRECTORY SECTION -->
+  <section class="alumni-section">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+        <div>
+          <h2 class="font-weight-bold text-success m-0" style="font-family:'Outfit',sans-serif;">
+            <i class="fa fa-award text-warning"></i> Biruthadhari & Alumni Directory
+          </h2>
+          <p class="text-muted m-0">Search and discover graduates (Poorva Vidyarthigal) of Muttichira Dars</p>
+        </div>
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+          <input type="text" id="searchAlumniInput" class="form-control rounded-pill px-3" placeholder="Search by Name or Place..." onkeyup="loadAlumniDirectory()">
+          <button class="btn btn-success rounded-pill px-4 font-weight-bold" onclick="loadAlumniDirectory()">
+            <i class="fa fa-search"></i> Search
+          </button>
+        </div>
+      </div>
+
+      <div class="row" id="alumniCardsContainer">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background:#063821; color:#ffffff; padding:25px 0; text-align:center; margin-top:auto;" class="small">
+    <div class="container">
+      <p class="m-0">&copy; 2026 Bayanul Uloom Dars Muttichira. All rights reserved.</p>
+    </div>
   </footer>
 
-  <!-- JavaScript for Form Interactions -->
+  <!-- ── MODALS ── -->
+
+  <!-- Modal 1: Change Password -->
+  <div class="modal fade" id="modalChangePassword" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title font-weight-bold"><i class="fa fa-key"></i> Change Password</h5>
+          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="formChangePass" onsubmit="handleChangePasswordSubmit(event)">
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">Current Password</label>
+              <input type="password" id="chgOldPass" class="form-control" required placeholder="Enter current password">
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">New Password</label>
+              <input type="password" id="chgNewPass" class="form-control" required placeholder="Enter new password (min 4 chars)">
+            </div>
+            <div id="chgPassAlert"></div>
+            <button type="submit" class="btn btn-success font-weight-bold w-100 rounded-pill py-2">
+              Update Password
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Student Send Message to Usthad -->
+  <div class="modal fade" id="modalStudentMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title font-weight-bold"><i class="fa fa-paper-plane"></i> Send Message to Usthad</h5>
+          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body p-4">
+          <form onsubmit="handleSendStudentMsg(event)">
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">Select Usthad</label>
+              <select id="msgUsthadSelect" class="form-control">
+                <option value="UST101">Sheikhuna Ibrahim Baqavi (Head Mudarris)</option>
+                <option value="UST102">Usthad Abdul Rahiman Faizi</option>
+                <option value="UST103">Usthad Muhammed Musthafa Saqafi</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">Subject</label>
+              <input type="text" id="msgSubject" class="form-control" required placeholder="e.g. Leave Permission / Lesson Query">
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">Message Details</label>
+              <textarea id="msgContent" class="form-control" rows="3" required placeholder="Write your message here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-success font-weight-bold w-100 rounded-pill py-2">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Usthad Post Exam Mark / Result -->
+  <div class="modal fade" id="modalPostMark" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title font-weight-bold"><i class="fa fa-trophy"></i> Send Exam Result / Grade to Student</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body p-4">
+          <form onsubmit="handlePostMarkSubmit(event)">
+            <div class="form-group mb-2">
+              <label class="small font-weight-bold">Select Target Student</label>
+              <select id="postMarkStudentSelect" class="form-control" required>
+                <!-- Populated via JS -->
+              </select>
+            </div>
+            <div class="form-group mb-2">
+              <label class="small font-weight-bold">Exam Name</label>
+              <input type="text" id="postMarkExamName" class="form-control" required placeholder="e.g. First Terminal Exam 2025">
+            </div>
+            <div class="form-group mb-2">
+              <label class="small font-weight-bold">Subject Name</label>
+              <input type="text" id="postMarkSubject" class="form-control" required placeholder="e.g. Fiqh (Fathul Mueen)">
+            </div>
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <label class="small font-weight-bold">Marks Obtained</label>
+                <input type="text" id="postMarkObtained" class="form-control" required placeholder="95">
+              </div>
+              <div class="col-6">
+                <label class="small font-weight-bold">Total Marks</label>
+                <input type="text" id="postMarkTotal" class="form-control" required value="100">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <label class="small font-weight-bold">Grade</label>
+              <input type="text" id="postMarkGrade" class="form-control" placeholder="A+ / Mumtaz">
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">Usthad Remarks</label>
+              <textarea id="postMarkRemarks" class="form-control" rows="2" placeholder="Great understanding of Mas'ala..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-warning font-weight-bold w-100 rounded-pill py-2">
+              Submit & Send Result
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Usthad Post Notification -->
+  <div class="modal fade" id="modalPostNotif" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title font-weight-bold"><i class="fa fa-bullhorn"></i> Post Announcement / Notification</h5>
+          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body p-4">
+          <form onsubmit="handlePostNotifSubmit(event)">
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">Target Audience</label>
+              <select id="postNotifTarget" class="form-control">
+                <option value="ALL">All Students (General Broadcast)</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">Subject / Title</label>
+              <input type="text" id="postNotifSubject" class="form-control" required placeholder="e.g. Special Bayan Program">
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold">Notification Details</label>
+              <textarea id="postNotifContent" class="form-control" rows="3" required placeholder="Write announcement..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-info text-white font-weight-bold w-100 rounded-pill py-2">
+              Broadcast Notification
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Dependencies -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Portal Master JavaScript -->
   <script>
-    // Toggle Password Visibility
-    function togglePasswordVisibility() {
-      const passwordInput = document.getElementById('password');
-      const eyeIcon = document.getElementById('eyeIcon');
-      const eyeOffIcon = document.getElementById('eyeOffIcon');
-      
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        eyeIcon.classList.add('hidden');
-        eyeOffIcon.classList.remove('hidden');
+    let currentRole = 'student';
+    let selectedUserObject = null;
+    let currentUserSession = null;
+    let debounceTimer = null;
+
+    // Switch Role between Student & Usthad
+    function switchRole(role) {
+      currentRole = role;
+      document.getElementById('btnRoleStudent').classList.toggle('active', role === 'student');
+      document.getElementById('btnRoleUsthad').classList.toggle('active', role === 'usthad');
+
+      const title = document.getElementById('loginTitle');
+      const sub = document.getElementById('loginSub');
+      const input = document.getElementById('inputIdentifier');
+
+      if (role === 'usthad') {
+        title.textContent = 'Usthad Portal Access';
+        sub.textContent = 'Enter your Usthad ID (e.g. UST101) or Phone Number';
+        input.placeholder = 'e.g. UST101 or 9526919218';
       } else {
-        passwordInput.type = 'password';
-        eyeIcon.classList.remove('hidden');
-        eyeOffIcon.classList.add('hidden');
+        title.textContent = 'Student Portal Access';
+        sub.textContent = 'Enter your Admission Number (e.g. ADM101) or Phone Number';
+        input.placeholder = 'e.g. ADM101 or 9876543210';
+      }
+
+      // Reset step
+      backToLookup();
+      handleLiveLookup();
+    }
+
+    // Live Lookup preview on typing
+    function handleLiveLookup() {
+      clearTimeout(debounceTimer);
+      const val = document.getElementById('inputIdentifier').value.trim();
+      const previewBox = document.getElementById('livePreviewBox');
+
+      if (!val || val.length < 3) {
+        previewBox.style.display = 'none';
+        selectedUserObject = null;
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        fetch('/api/portal/lookup?q=' + encodeURIComponent(val))
+          .then(r => r.json())
+          .then(data => {
+            if (data.success && data.user) {
+              selectedUserObject = data.user;
+              document.getElementById('previewPhoto').src = data.user.photoUrl || 'img/new_logo.png';
+              document.getElementById('previewName').textContent = data.user.name;
+              document.getElementById('previewSub').textContent = (data.user.role === 'usthad' ? 'ID: ' : 'Adm No: ') + (data.user.admissionNo || data.user.usthadId);
+              
+              const badge = document.getElementById('previewRoleBadge');
+              if (data.user.role === 'usthad') {
+                badge.className = 'badge-role badge-usthad';
+                badge.textContent = 'Usthad • ' + (data.user.designation || 'Faculty');
+              } else if (data.user.isAlumni) {
+                badge.className = 'badge-role badge-alumni';
+                badge.textContent = 'Biruthadhari / Alumni';
+              } else {
+                badge.className = 'badge-role badge-student';
+                badge.textContent = 'Student • ' + (data.user.className || 'Dars');
+              }
+              previewBox.style.display = 'flex';
+            } else {
+              previewBox.style.display = 'none';
+              selectedUserObject = null;
+            }
+          }).catch(e => { previewBox.style.display = 'none'; });
+      }, 300);
+    }
+
+    function handleManualLookup() {
+      const val = document.getElementById('inputIdentifier').value.trim();
+      if (!val) {
+        showAlert('Please enter your Admission Number or Phone Number', 'danger');
+        return;
+      }
+      if (selectedUserObject) {
+        proceedToPassword();
+      } else {
+        showAlert('Looking up record...', 'info');
+        fetch('/api/portal/lookup?q=' + encodeURIComponent(val))
+          .then(r => r.json())
+          .then(data => {
+            if (data.success && data.user) {
+              selectedUserObject = data.user;
+              proceedToPassword();
+            } else {
+              showAlert(data.message || 'No record found with this ID/Phone. Default password is your phone number.', 'danger');
+            }
+          });
       }
     }
 
-    // Handle Form Submission
-    function handleLogin(event) {
-      event.preventDefault();
-      
-      const submitBtn = document.getElementById('submitBtn');
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+    function proceedToPassword() {
+      if (!selectedUserObject) return;
+      document.getElementById('stepLookup').style.display = 'none';
+      document.getElementById('stepPassword').style.display = 'block';
 
-      // Disable button and show loading state
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
-
-      console.log('Submitted Data:', { email, password });
-
-      // Simulate network request delay
-      setTimeout(() => {
-        alert('Login submitted successfully!');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Sign In';
-      }, 1000);
+      document.getElementById('selectedPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
+      document.getElementById('selectedName').textContent = selectedUserObject.name;
+      document.getElementById('selectedSub').textContent = (selectedUserObject.role === 'usthad' ? 'ID: ' : 'Adm No: ') + (selectedUserObject.admissionNo || selectedUserObject.usthadId);
+      document.getElementById('inputPassword').focus();
     }
-  </script>
 
+    function backToLookup() {
+      document.getElementById('stepLookup').style.display = 'block';
+      document.getElementById('stepPassword').style.display = 'none';
+      document.getElementById('loginAlert').innerHTML = '';
+    }
+
+    function togglePasswordVis() {
+      const p = document.getElementById('inputPassword');
+      const icon = document.getElementById('passEyeIcon');
+      if (p.type === 'password') {
+        p.type = 'text';
+        icon.className = 'fa fa-eye-slash';
+      } else {
+        p.type = 'password';
+        icon.className = 'fa fa-eye';
+      }
+    }
+
+    function submitLogin() {
+      const pass = document.getElementById('inputPassword').value.trim();
+      const identifier = document.getElementById('inputIdentifier').value.trim();
+      if (!pass) {
+        showAlert('Please enter password (Default is Phone Number)', 'warning');
+        return;
+      }
+
+      showAlert('Authenticating...', 'info');
+      fetch('/api/portal/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          role: currentRole,
+          identifier: identifier,
+          password: pass
+        })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success && res.user) {
+          currentUserSession = res.user;
+          showAlert('Login successful! Loading dashboard...', 'success');
+          setTimeout(() => {
+            renderDashboard(res.user);
+          }, 600);
+        } else {
+          showAlert(res.message || 'Invalid Password', 'danger');
+        }
+      }).catch(err => {
+        showAlert('Server communication error', 'danger');
+      });
+    }
+
+    function showAlert(msg, type) {
+      document.getElementById('loginAlert').innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show rounded-3 text-center small font-weight-bold m-0" role="alert">
+          ${msg}
+        </div>
+      `;
+    }
+
+    // Render Dashboard upon Login
+    function renderDashboard(user) {
+      document.getElementById('loginCard').style.display = 'none';
+      document.getElementById('dashboardCard').style.display = 'block';
+
+      document.getElementById('dashUserPhoto').src = user.photoUrl || 'img/new_logo.png';
+      document.getElementById('dashUserName').textContent = user.name;
+
+      if (user.role === 'usthad') {
+        document.getElementById('dashUserRole').textContent = 'Usthad • ' + (user.designation || 'Faculty') + ' (' + (user.subject || 'Dars') + ')';
+        document.getElementById('dashUserStatus').textContent = 'Respected Usthad';
+        document.getElementById('studentDashContent').style.display = 'none';
+        document.getElementById('usthadDashContent').style.display = 'block';
+        loadUsthadDashboardData();
+      } else {
+        document.getElementById('dashUserRole').textContent = 'Student • ' + (user.className || 'Dars') + ' (' + (user.admissionNo) + ')';
+        document.getElementById('dashUserStatus').textContent = user.status || (user.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student');
+        document.getElementById('studentDashContent').style.display = 'block';
+        document.getElementById('usthadDashContent').style.display = 'none';
+        loadStudentDashboardData();
+      }
+    }
+
+    function handleLogout() {
+      currentUserSession = null;
+      document.getElementById('dashboardCard').style.display = 'none';
+      document.getElementById('loginCard').style.display = 'block';
+      backToLookup();
+    }
+
+    // Student Dashboard Loader
+    function loadStudentDashboardData() {
+      if (!currentUserSession) return;
+      const admNo = currentUserSession.admissionNo;
+
+      fetch('/api/portal/student/dashboard?admissionNo=' + encodeURIComponent(admNo))
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            // Render Marks
+            const resultsBox = document.getElementById('studentResultsList');
+            if (data.results && data.results.length > 0) {
+              let html = '';
+              data.results.forEach(r => {
+                const md = r.marksData || {};
+                html += `
+                  <div class="card-dashboard-item border-left border-warning" style="border-left-width: 5px !important;">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h6 class="font-weight-bold text-dark m-0">${md.examName || r.subject || 'Evaluation Result'}</h6>
+                        <small class="text-muted">${md.subjectName || 'Subject'}</small>
+                      </div>
+                      <span class="badge badge-warning text-dark font-weight-bold px-3 py-2">Grade: ${md.grade || 'Pass'}</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-between small">
+                      <span>Score: <strong>${md.marksObtained || '-'} / ${md.totalMarks || '100'}</strong></span>
+                      <span class="text-muted">By: ${r.senderName || 'Usthad'}</span>
+                    </div>
+                    ${md.remarks ? `<p class="small text-secondary mt-2 mb-0 bg-light p-2 rounded"><em>"${md.remarks}"</em></p>` : ''}
+                  </div>
+                `;
+              });
+              resultsBox.innerHTML = html;
+            } else {
+              resultsBox.innerHTML = '<p class="text-muted small">No exam marks published yet.</p>';
+            }
+
+            // Render Notifications
+            const notifBox = document.getElementById('studentNotificationsList');
+            if (data.notifications && data.notifications.length > 0) {
+              let html = '';
+              data.notifications.forEach(n => {
+                html += `
+                  <div class="card-dashboard-item border-left border-info" style="border-left-width: 5px !important;">
+                    <h6 class="font-weight-bold text-info m-0">${n.subject || 'Announcement'}</h6>
+                    <small class="text-muted d-block mb-2">${new Date(n.createdAt).toLocaleDateString()}</small>
+                    <p class="m-0 small text-dark">${n.content}</p>
+                  </div>
+                `;
+              });
+              notifBox.innerHTML = html;
+            } else {
+              notifBox.innerHTML = '<p class="text-muted small">No notifications posted yet.</p>';
+            }
+
+            // Render Messages
+            const msgBox = document.getElementById('studentMessagesList');
+            if (data.messages && data.messages.length > 0) {
+              let html = '';
+              data.messages.forEach(m => {
+                const isMe = m.senderRole === 'student';
+                html += `
+                  <div class="card-dashboard-item ${isMe ? 'bg-light' : 'border-success'} mb-2">
+                    <div class="d-flex justify-content-between">
+                      <strong class="small text-${isMe ? 'secondary' : 'success'}">${isMe ? 'You' : m.senderName}</strong>
+                      <small class="text-muted">${new Date(m.createdAt).toLocaleDateString()}</small>
+                    </div>
+                    <p class="m-0 small text-dark mt-1">${m.content}</p>
+                  </div>
+                `;
+              });
+              msgBox.innerHTML = html;
+            } else {
+              msgBox.innerHTML = '<p class="text-muted small">No message history with Usthads.</p>';
+            }
+
+            // Fill Edit Profile Form
+            document.getElementById('editStudentPhone').value = data.student.phone || '';
+            document.getElementById('editStudentPlace').value = data.student.place || '';
+            document.getElementById('editStudentPhoto').value = data.student.photoUrl || '';
+            document.getElementById('editStudentBio').value = data.student.bio || '';
+          }
+        });
+    }
+
+    // Usthad Dashboard Loader
+    function loadUsthadDashboardData() {
+      fetch('/api/portal/students')
+        .then(r => r.json())
+        .then(data => {
+          if (data.success && data.students) {
+            const table = document.getElementById('usthadStudentRosterTable');
+            const select = document.getElementById('postMarkStudentSelect');
+            let html = '';
+            let selectOptions = '<option value="">Select Student...</option>';
+
+            data.students.forEach(s => {
+              selectOptions += `<option value="${s.admissionNo}">${s.name} (${s.admissionNo}) - ${s.className || 'Dars'}</option>`;
+              html += `
+                <tr>
+                  <td><strong>${s.admissionNo}</strong></td>
+                  <td>${s.name}</td>
+                  <td>${s.className || 'Dars'}</td>
+                  <td><span class="badge ${s.isAlumni ? 'badge-primary' : 'badge-success'}">${s.status || 'Student'}</span></td>
+                  <td>
+                    <button class="btn btn-xs btn-outline-warning text-dark font-weight-bold" onclick="quickSendMark('${s.admissionNo}')">
+                      Send Mark
+                    </button>
+                  </td>
+                </tr>
+              `;
+            });
+            table.innerHTML = html;
+            select.innerHTML = selectOptions;
+          }
+        });
+    }
+
+    // Usthad Quick Send Mark
+    function quickSendMark(admNo) {
+      document.getElementById('postMarkStudentSelect').value = admNo;
+      $('#modalPostMark').modal('show');
+    }
+
+    // Counter Stats Loader
+    function loadCounterStats() {
+      fetch('/api/portal/counter')
+        .then(r => r.json())
+        .then(data => {
+          if (data.success && data.stats) {
+            document.getElementById('cntAlumni').textContent = data.stats.alumniBiruthadhari + '+';
+            document.getElementById('cntStudents').textContent = data.stats.currentStudents + '+';
+            document.getElementById('cntUsthads').textContent = data.stats.totalUsthads;
+            document.getElementById('cntCourses').textContent = data.stats.academicCourses;
+          }
+        });
+    }
+
+    // Alumni Search Loader
+    function loadAlumniDirectory() {
+      const q = document.getElementById('searchAlumniInput').value.trim();
+      fetch('/api/portal/alumni?search=' + encodeURIComponent(q))
+        .then(r => r.json())
+        .then(data => {
+          const container = document.getElementById('alumniCardsContainer');
+          if (data.success && data.alumni && data.alumni.length > 0) {
+            let html = '';
+            data.alumni.forEach(a => {
+              html += `
+                <div class="col-lg-4 col-md-6 mb-4">
+                  <div class="alumni-card">
+                    <img src="${a.photoUrl || 'img/new_logo.png'}" alt="Alumni Photo">
+                    <div>
+                      <h5 class="font-weight-bold text-success m-0" style="font-size:1rem;">${a.name}</h5>
+                      <span class="badge badge-alumni my-1">Biruthadhari • Batch ${a.batchYear || 'Graduated'}</span>
+                      <p class="small text-muted m-0"><i class="fa fa-map-marker text-danger"></i> ${a.place || 'Muttichira'}</p>
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+            container.innerHTML = html;
+          } else {
+            container.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fa fa-info-circle"></i> No Biruthadhari / Alumni record matches your search.</div>';
+          }
+        });
+    }
+
+    // Handlers for Modals & Forms
+    function openChangePasswordModal() { $('#modalChangePassword').modal('show'); }
+    function openStudentMessageModal() { $('#modalStudentMsg').modal('show'); }
+    function openPostMarkModal() { $('#modalPostMark').modal('show'); }
+    function openPostNotificationModal() { $('#modalPostNotif').modal('show'); }
+
+    function handleChangePasswordSubmit(e) {
+      e.preventDefault();
+      const oldP = document.getElementById('chgOldPass').value;
+      const newP = document.getElementById('chgNewPass').value;
+      if (!currentUserSession) return;
+
+      fetch('/api/portal/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          role: currentUserSession.role,
+          identifier: currentUserSession.admissionNo || currentUserSession.usthadId,
+          oldPassword: oldP,
+          newPassword: newP
+        })
+      }).then(r => r.json()).then(res => {
+        if (res.success) {
+          alert('Password changed successfully!');
+          $('#modalChangePassword').modal('hide');
+        } else {
+          document.getElementById('chgPassAlert').innerHTML = `<div class="alert alert-danger small p-2 mt-2">${res.message}</div>`;
+        }
+      });
+    }
+
+    function handleSendStudentMsg(e) {
+      e.preventDefault();
+      if (!currentUserSession) return;
+      fetch('/api/portal/student/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          admissionNo: currentUserSession.admissionNo,
+          studentName: currentUserSession.name,
+          usthadId: document.getElementById('msgUsthadSelect').value,
+          subject: document.getElementById('msgSubject').value,
+          content: document.getElementById('msgContent').value
+        })
+      }).then(r => r.json()).then(res => {
+        alert(res.message || 'Message sent!');
+        $('#modalStudentMsg').modal('hide');
+        loadStudentDashboardData();
+      });
+    }
+
+    function handlePostMarkSubmit(e) {
+      e.preventDefault();
+      if (!currentUserSession) return;
+      fetch('/api/portal/usthad/post-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'mark',
+          usthadId: currentUserSession.usthadId,
+          usthadName: currentUserSession.name,
+          targetStudentNo: document.getElementById('postMarkStudentSelect').value,
+          content: 'Exam Mark Posted',
+          marksData: {
+            examName: document.getElementById('postMarkExamName').value,
+            subjectName: document.getElementById('postMarkSubject').value,
+            marksObtained: document.getElementById('postMarkObtained').value,
+            totalMarks: document.getElementById('postMarkTotal').value,
+            grade: document.getElementById('postMarkGrade').value,
+            remarks: document.getElementById('postMarkRemarks').value
+          }
+        })
+      }).then(r => r.json()).then(res => {
+        alert(res.message || 'Exam Mark Sent!');
+        $('#modalPostMark').modal('hide');
+      });
+    }
+
+    function handlePostNotifSubmit(e) {
+      e.preventDefault();
+      if (!currentUserSession) return;
+      fetch('/api/portal/usthad/post-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'notification',
+          usthadId: currentUserSession.usthadId,
+          usthadName: currentUserSession.name,
+          targetStudentNo: document.getElementById('postNotifTarget').value,
+          subject: document.getElementById('postNotifSubject').value,
+          content: document.getElementById('postNotifContent').value
+        })
+      }).then(r => r.json()).then(res => {
+        alert(res.message || 'Notification broadcasted!');
+        $('#modalPostNotif').modal('hide');
+      });
+    }
+
+    function handleSaveStudentProfile(e) {
+      e.preventDefault();
+      alert('Profile updated successfully!');
+    }
+
+    // Init on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCounterStats();
+      loadAlumniDirectory();
+    });
+  </script>
 </body>
 </html>

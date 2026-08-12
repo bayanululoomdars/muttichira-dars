@@ -13,6 +13,7 @@ const sectionRoutes = require('./sectionRoutes');
 const storyRoutes = require('./storyRoutes');
 const homeSettingsRoutes = require('./homeSettingsRoutes');
 const settingsRoutes = require('./settingsRoutes');
+const portalRoutes = require('./portalRoutes');
 const settingsController = require('../controllers/settingsController');
 
 // Mount sub-routers
@@ -30,6 +31,7 @@ router.use('/sections', sectionRoutes);
 router.use('/stories', storyRoutes);
 router.use('/home-settings', homeSettingsRoutes);
 router.use('/settings', settingsRoutes);
+router.use('/portal', portalRoutes);
 
 // Admin reset route
 router.post('/admin/reset', settingsController.adminReset);

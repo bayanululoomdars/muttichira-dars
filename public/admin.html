@@ -1369,6 +1369,19 @@
           <span class="nav-badge" id="badge-contacts">0</span>
         </button>
 
+        
+        <div class="sidebar-section-label" style="color:var(--accent);">Portal Management</div>
+
+        <button class="nav-item" id="nav-students" onclick="showPage('students')">
+          <i class="fa fa-graduation-cap"></i> Manage Students & Alumni
+          <span class="nav-badge" id="badge-students">0</span>
+        </button>
+
+        <button class="nav-item" id="nav-usthads" onclick="showPage('usthads')">
+          <i class="fa fa-user-md"></i> Manage Usthads / Faculty
+          <span class="nav-badge" id="badge-usthads">0</span>
+        </button>
+
         <div class="sidebar-section-label">System</div>
 
         <button class="nav-item danger" id="nav-reset" onclick="showPage('reset')">
@@ -1880,6 +1893,151 @@
     <div id="resetStatus" style="margin-top:14px;font-weight:600;font-size:0.9rem;"></div>
   </div>
 </div>
+        
+        <!-- ════════════════════════════════
+             STUDENTS & ALUMNI PANEL
+        ════════════════════════════════ -->
+        <div class="page" id="page-students">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa fa-graduation-cap"></i> Add New Student / Biruthadhari</div>
+            </div>
+            <form id="formAddStudentAdmin" onsubmit="submitAddStudentAdmin(event)">
+              <div class="form-grid-3">
+                <div class="form-group">
+                  <label class="form-label">Student Name *</label>
+                  <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number (Default Password) *</label>
+                  <input type="text" id="adminStudentPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Admission No (Optional)</label>
+                  <input type="text" id="adminStudentAdmNo" class="form-control" placeholder="Auto-generated if empty (ADM101)">
+                </div>
+              </div>
+              <div class="form-grid-3 mt-2">
+                <div class="form-group">
+                  <label class="form-label">Status</label>
+                  <select id="adminStudentStatus" class="form-control">
+                    <option value="Current Student">Current Student</option>
+                    <option value="Biruthadhari / Alumni">Biruthadhari / Alumni (Graduate)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Class / Course</label>
+                  <input type="text" id="adminStudentClass" class="form-control" placeholder="e.g. Dars 3rd Year">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Batch Year</label>
+                  <input type="text" id="adminStudentBatch" class="form-control" placeholder="e.g. 2025">
+                </div>
+              </div>
+              <div class="form-grid-2 mt-2">
+                <div class="form-group">
+                  <label class="form-label">Native Place / District</label>
+                  <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira, Malappuram">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Photo URL (Optional)</label>
+                  <input type="url" id="adminStudentPhoto" class="form-control" placeholder="https://...">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-accent mt-3"><i class="fa fa-plus-circle"></i> Add Student Record</button>
+            </form>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-header">
+              <div class="card-title"><i class="fa fa-users"></i> Registered Students & Alumni List</div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Adm No</th>
+                    <th>Name</th>
+                    <th>Phone / Password</th>
+                    <th>Status</th>
+                    <th>Class / Batch</th>
+                    <th>Place</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tableStudentsAdmin">
+                  <tr><td colspan="7" class="text-center text-muted">Loading students...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════
+             USTHADS / FACULTY PANEL
+        ════════════════════════════════ -->
+        <div class="page" id="page-usthads">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa fa-user-md"></i> Add New Usthad / Faculty</div>
+            </div>
+            <form id="formAddUsthadAdmin" onsubmit="submitAddUsthadAdmin(event)">
+              <div class="form-grid-3">
+                <div class="form-group">
+                  <label class="form-label">Usthad Name *</label>
+                  <input type="text" id="adminUsthadName" class="form-control" placeholder="e.g. Sheikhuna Ibrahim Baqavi" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number (Default Password) *</label>
+                  <input type="text" id="adminUsthadPhone" class="form-control" placeholder="e.g. 9526919218" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Usthad ID (Optional)</label>
+                  <input type="text" id="adminUsthadId" class="form-control" placeholder="Auto-generated if empty (UST101)">
+                </div>
+              </div>
+              <div class="form-grid-3 mt-2">
+                <div class="form-group">
+                  <label class="form-label">Designation</label>
+                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris / Senior Usthad">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Subject / Kitab</label>
+                  <input type="text" id="adminUsthadSubject" class="form-control" placeholder="e.g. Tafseer & Fiqh">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Place</label>
+                  <input type="text" id="adminUsthadPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-accent mt-3"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
+            </form>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-header">
+              <div class="card-title"><i class="fa fa-user-md"></i> Respected Usthads & Faculty Roster</div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Usthad ID</th>
+                    <th>Name</th>
+                    <th>Phone / Password</th>
+                    <th>Designation</th>
+                    <th>Subject</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tableUsthadsAdmin">
+                  <tr><td colspan="6" class="text-center text-muted">Loading usthads...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
         <!-- Hidden PDF Print Template -->
 <div id="pdfPrintTemplate" style="display:none;">
 
@@ -2084,7 +2242,127 @@
      LOAD ALL
 ═══════════════════════════════════════ 
 */
-  function loadAll() {
+  
+function loadStudentsAdmin() {
+  fetch('/api/portal/students')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.students) {
+        safeSetText('badge-students', data.students.length);
+        let html = '';
+        data.students.forEach(s => {
+          html += '<tr>' +
+            '<td><strong>' + (s.admissionNo) + '</strong></td>' +
+            '<td>' + (s.name) + '</td>' +
+            '<td><code>' + (s.password || s.phone) + '</code> <small class="text-muted">(Phone)</small></td>' +
+            '<td><span class="badge ' + (s.isAlumni ? 'badge-accent' : 'badge-success') + '">' + (s.status || 'Student') + '</span></td>' +
+            '<td>' + (s.className || 'Dars') + ' (' + (s.batchYear || '') + ')</td>' +
+            '<td>' + (s.place || 'Muttichira') + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteStudentAdmin(\'' + (s._id || s.admissionNo) + '\')"><i class="fa fa-trash"></i></button></td>' +
+          '</tr>';
+        });
+        safeSetHtml('tableStudentsAdmin', html || '<tr><td colspan="7" class="text-center text-muted">No students found.</td></tr>');
+      }
+    });
+}
+
+function submitAddStudentAdmin(e) {
+  e.preventDefault();
+  const payload = {
+    name: safeGetValue('adminStudentName'),
+    phone: safeGetValue('adminStudentPhone'),
+    admissionNo: safeGetValue('adminStudentAdmNo'),
+    status: safeGetValue('adminStudentStatus'),
+    className: safeGetValue('adminStudentClass'),
+    batchYear: safeGetValue('adminStudentBatch'),
+    place: safeGetValue('adminStudentPlace'),
+    photoUrl: safeGetValue('adminStudentPhoto')
+  };
+  fetch('/api/portal/student', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(r => r.json()).then(res => {
+    showToast(res.message || 'Student added!', !res.success);
+    if (res.success) {
+      safeSetValue('adminStudentName', '');
+      safeSetValue('adminStudentPhone', '');
+      safeSetValue('adminStudentAdmNo', '');
+      loadStudentsAdmin();
+    }
+  });
+}
+
+function deleteStudentAdmin(id) {
+  if (!confirm('Delete this student record?')) return;
+  fetch('/api/portal/student/' + id, { method: 'DELETE' })
+    .then(r => r.json())
+    .then(res => {
+      showToast(res.message || 'Deleted', !res.success);
+      loadStudentsAdmin();
+    });
+}
+
+function loadUsthadsAdmin() {
+  fetch('/api/portal/usthads')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.usthads) {
+        safeSetText('badge-usthads', data.usthads.length);
+        let html = '';
+        data.usthads.forEach(u => {
+          html += '<tr>' +
+            '<td><strong>' + (u.usthadId) + '</strong></td>' +
+            '<td>' + (u.name) + '</td>' +
+            '<td><code>' + (u.password || u.phone) + '</code> <small class="text-muted">(Phone)</small></td>' +
+            '<td><span class="badge badge-accent">' + (u.designation || 'Usthad') + '</span></td>' +
+            '<td>' + (u.subject || 'Dars') + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteUsthadAdmin(\'' + (u._id || u.usthadId) + '\')"><i class="fa fa-trash"></i></button></td>' +
+          '</tr>';
+        });
+        safeSetHtml('tableUsthadsAdmin', html || '<tr><td colspan="6" class="text-center text-muted">No usthads found.</td></tr>');
+      }
+    });
+}
+
+function submitAddUsthadAdmin(e) {
+  e.preventDefault();
+  const payload = {
+    name: safeGetValue('adminUsthadName'),
+    phone: safeGetValue('adminUsthadPhone'),
+    usthadId: safeGetValue('adminUsthadId'),
+    designation: safeGetValue('adminUsthadDesignation'),
+    subject: safeGetValue('adminUsthadSubject'),
+    place: safeGetValue('adminUsthadPlace')
+  };
+  fetch('/api/portal/usthad', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(r => r.json()).then(res => {
+    showToast(res.message || 'Usthad added!', !res.success);
+    if (res.success) {
+      safeSetValue('adminUsthadName', '');
+      safeSetValue('adminUsthadPhone', '');
+      safeSetValue('adminUsthadId', '');
+      loadUsthadsAdmin();
+    }
+  });
+}
+
+function deleteUsthadAdmin(id) {
+  if (!confirm('Delete this usthad record?')) return;
+  fetch('/api/portal/usthad/' + id, { method: 'DELETE' })
+    .then(r => r.json())
+    .then(res => {
+      showToast(res.message || 'Deleted', !res.success);
+      loadUsthadsAdmin();
+    });
+}
+
+function loadAll() {
+  loadStudentsAdmin();
+  loadUsthadsAdmin();
     checkAdmissionStatus();
     loadAdmissions();
     loadNewsAdmin();
@@ -2130,7 +2408,8 @@ function showPage(page) {
   var titles  = {
     overview: 'Dashboard', homepage: 'Home Page Panel',
     admissions: 'Admission Panel', gallery: 'Gallery Panel',
-    messages: 'Messages & Comments', reset: 'Full Reset'
+    messages: 'Messages & Comments', students: 'Students & Alumni Panel',
+    usthads: 'Usthads & Faculty Panel', reset: 'Full Reset'
   };
 
   if (pageEl) pageEl.classList.add('active');
