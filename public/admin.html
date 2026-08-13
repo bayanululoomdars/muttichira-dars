@@ -1386,6 +1386,11 @@
           <span class="nav-badge" id="badge-usthads">0</span>
         </button>
 
+        <button class="nav-item" id="nav-users" onclick="showPage('users')">
+          <i class="fa fa-users"></i> Manage Users (Google)
+          <span class="nav-badge" id="badge-users">0</span>
+        </button>
+
         <div class="sidebar-section-label">System</div>
 
         <button class="nav-item danger" id="nav-reset" onclick="showPage('reset')">
@@ -2042,6 +2047,36 @@
           </div>
         </div>
 
+        <!-- ════════════════════════════════
+             USERS MANAGEMENT PANEL (Google Sign-In Users)
+        ════════════════════════════════ -->
+        <div class="page" id="page-users">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa fa-users"></i> Google Authenticated Users</div>
+            </div>
+            <p style="padding:0 20px 8px;color:#64748b;font-size:0.85rem;">All users who signed in via Google on the Gallery page. These users can like and comment on gallery posts.</p>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width:50px;">#</th>
+                    <th>Profile</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Joined</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tableUsersAdmin">
+                  <tr><td colspan="7" class="text-center text-muted">Loading users...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
         <!-- Hidden PDF Print Template -->
 <div id="pdfPrintTemplate" style="display:none;">
 
@@ -2364,9 +2399,50 @@ function deleteUsthadAdmin(id) {
     });
 }
 
+/* ===========================================
+   USER MANAGEMENT (Google Auth Users)
+=========================================== */
+function loadUsersAdmin() {
+  fetch('/api/users')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.users) {
+        safeSetText('badge-users', data.users.length);
+        let html = '';
+        data.users.forEach((u, idx) => {
+          var joinDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+          html += '<tr>' +
+            '<td>' + (idx + 1) + '</td>' +
+            '<td><img src="' + (u.picture || '') + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0;" onerror="this.style.display=\'none\'"></td>' +
+            '<td><strong>' + (u.name || '—') + '</strong></td>' +
+            '<td><code style="font-size:0.8rem;">' + (u.email || '—') + '</code></td>' +
+            '<td>' + joinDate + '</td>' +
+            '<td><span class="badge ' + (u.role === 'admin' ? 'badge-accent' : 'badge-success') + '">' + (u.role || 'user') + '</span></td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteUserAdmin(\'' + u._id + '\')"><i class="fa fa-trash"></i></button></td>' +
+          '</tr>';
+        });
+        safeSetHtml('tableUsersAdmin', html || '<tr><td colspan="7" class="text-center text-muted">No users found. Users will appear here when they sign in via Google on the Gallery page.</td></tr>');
+      }
+    })
+    .catch(() => {
+      safeSetHtml('tableUsersAdmin', '<tr><td colspan="7" class="text-center text-muted">Could not load users. Database may be offline.</td></tr>');
+    });
+}
+
+function deleteUserAdmin(id) {
+  if (!confirm('Delete this user? They will need to sign in again via Google.')) return;
+  fetch('/api/users/' + id, { method: 'DELETE' })
+    .then(r => r.json())
+    .then(res => {
+      showToast(res.message || 'Deleted', !res.success);
+      loadUsersAdmin();
+    });
+}
+
 function loadAll() {
   loadStudentsAdmin();
   loadUsthadsAdmin();
+  loadUsersAdmin();
     checkAdmissionStatus();
     loadAdmissions();
     loadNewsAdmin();
@@ -2413,7 +2489,7 @@ function showPage(page) {
     overview: 'Dashboard', homepage: 'Home Page Panel',
     admissions: 'Admission Panel', gallery: 'Gallery Panel',
     messages: 'Messages & Comments', students: 'Students & Alumni Panel',
-    usthads: 'Usthads & Faculty Panel', reset: 'Full Reset'
+    usthads: 'Usthads & Faculty Panel', users: 'User Management', reset: 'Full Reset'
   };
 
   if (pageEl) pageEl.classList.add('active');
@@ -2428,6 +2504,7 @@ function showPage(page) {
   if (page === 'overview') loadOverview();
   if (page === 'students') loadStudentsAdmin();
   if (page === 'usthads') loadUsthadsAdmin();
+  if (page === 'users') loadUsersAdmin();
 
   // Close mobile sidebar
   closeSidebar();

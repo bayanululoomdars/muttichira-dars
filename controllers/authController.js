@@ -57,3 +57,23 @@ exports.adminLogin = (req, res) => {
     res.status(401).json({ success: false, message: 'Invalid password' });
   }
 };
+
+// GET /api/users — List all Google-authenticated users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().sort({ createdAt: -1 });
+    res.json({ success: true, users });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// DELETE /api/users/:id — Delete a user
+exports.deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'User deleted' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};

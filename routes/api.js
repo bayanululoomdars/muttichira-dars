@@ -36,4 +36,9 @@ router.use('/portal', portalRoutes);
 // Admin reset route
 router.post('/admin/reset', settingsController.adminReset);
 
+// User management routes (admin)
+const authController = require('../controllers/authController');
+router.get('/users', authController.getAllUsers);
+router.delete('/users/:id', authController.deleteUser);
+
 module.exports = router;

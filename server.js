@@ -35,8 +35,8 @@ app.get('/gallery', (req, res) => res.sendFile(path.join(__dirname, 'public', 'g
 app.get('/admission', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admission.html')));
 app.get(['/about', '/about-us', '/about us', '/about  us'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'about.html')));
 app.get(['/contact', '/contact-us', '/contact us'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'contact.html')));
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
+app.get(['/login', '/Login'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+app.get(['/admin', '/Admin'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
 
 // ── Error Handling Middleware ──────────────────────────────
 app.use(errorHandler);
