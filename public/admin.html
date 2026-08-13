@@ -1296,6 +1296,35 @@
 
 
 
+    /* Unified User Management Styles */
+    .admin-user-management { background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .add-btn { background: #0a4d2e; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .add-btn:hover { background: #073a22; transform: translateY(-1px); }
+    .modern-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .modern-table th { background: #f8fafc; padding: 12px 15px; color: #64748b; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+    .modern-table td { padding: 15px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+    .modern-table tr:hover { background: #f8fafc; }
+    .badge.usthad { background: #e0e7ff; color: #3730a3; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .badge.student { background: #dcfce7; color: #166534; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .action-buttons button { border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; margin-right: 5px; font-weight: 500; }
+    .view-btn { background: #f1f5f9; color: #475569; }
+    .view-btn:hover { background: #e2e8f0; }
+    .edit-btn { background: #eff6ff; color: #2563eb; }
+    .edit-btn:hover { background: #dbeafe; }
+    .delete-btn { background: #fef2f2; color: #dc2626; }
+    .delete-btn:hover { background: #fee2e2; }
+
+    /* Unified User Modal */
+    .unified-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center; }
+    .unified-modal.show { display: flex; }
+    .unified-modal-content { background: #fff; width: 90%; max-width: 600px; border-radius: 12px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
+    .unified-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
+    .unified-modal-header h3 { margin: 0; color: #0a4d2e; font-family: 'Segoe UI', sans-serif; }
+    .unified-modal-close { background: none; border: none; font-size: 1.5rem; color: #64748b; cursor: pointer; }
+    .unified-role-selector { display: flex; gap: 10px; margin-bottom: 20px; }
+    .unified-role-btn { flex: 1; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; background: #fff; color: #64748b; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .unified-role-btn.active { border-color: #0a4d2e; color: #0a4d2e; background: #f0fdf4; }
   </style>
 </head>
 <body>
@@ -1904,34 +1933,67 @@
 </div>
         
         <!-- ════════════════════════════════
-             STUDENTS & ALUMNI PANEL
+             UNIFIED PORTAL USERS PANEL
         ════════════════════════════════ -->
-        <div class="page" id="page-students">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-graduation-cap"></i> Add New Student / Biruthadhari</div>
+        <div class="page" id="page-portal-users">
+          <div class="admin-user-management">
+            <div class="header-section">
+                <h2 style="font-family: 'Segoe UI', sans-serif; color: #0a4d2e;"><i class="fa fa-users"></i> Manage Users</h2>
+                <button class="add-btn" onclick="openAddUserModal()">+ Add New User</button>
             </div>
-            <form id="formAddStudentAdmin" onsubmit="submitAddStudentAdmin(event)">
-              <div class="form-grid-3">
+
+            <!-- User Table -->
+            <div class="table-container">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Admission/ID No.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <tr><td colspan="4" class="text-center text-muted">Loading users...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unified Add User Modal -->
+        <div class="unified-modal" id="unifiedAddUserModal">
+          <div class="unified-modal-content">
+            <div class="unified-modal-header">
+              <h3>Add New User</h3>
+              <button class="unified-modal-close" onclick="closeAddUserModal()">&times;</button>
+            </div>
+            
+            <div class="unified-role-selector">
+              <button class="unified-role-btn active" id="btnUnifiedStudent" onclick="switchUnifiedRole('student')">Student</button>
+              <button class="unified-role-btn" id="btnUnifiedUsthad" onclick="switchUnifiedRole('usthad')">Usthad</button>
+            </div>
+
+            <!-- Form for Student -->
+            <form id="formAddStudentAdmin" class="unified-form" onsubmit="submitAddStudentAdmin(event)">
+              <div class="form-grid-2">
                 <div class="form-group">
                   <label class="form-label">Student Name *</label>
                   <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Phone Number (Default Password) *</label>
+                  <label class="form-label">Phone Number (Password) *</label>
                   <input type="text" id="adminStudentPhone" class="form-control" placeholder="e.g. 9876543210" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Admission No (Optional)</label>
-                  <input type="text" id="adminStudentAdmNo" class="form-control" placeholder="Auto-generated if empty (ADM101)">
+                  <input type="text" id="adminStudentAdmNo" class="form-control" placeholder="Auto-generated if empty">
                 </div>
-              </div>
-              <div class="form-grid-3 mt-2">
                 <div class="form-group">
                   <label class="form-label">Status</label>
                   <select id="adminStudentStatus" class="form-control">
                     <option value="Current Student">Current Student</option>
-                    <option value="Biruthadhari / Alumni">Biruthadhari / Alumni (Graduate)</option>
+                    <option value="Biruthadhari / Alumni">Biruthadhari / Alumni</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -1942,73 +2004,36 @@
                   <label class="form-label">Batch Year</label>
                   <input type="text" id="adminStudentBatch" class="form-control" placeholder="e.g. 2025">
                 </div>
-              </div>
-              <div class="form-grid-2 mt-2">
                 <div class="form-group">
-                  <label class="form-label">Native Place / District</label>
-                  <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira, Malappuram">
+                  <label class="form-label">Native Place</label>
+                  <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Photo URL (Optional)</label>
+                  <label class="form-label">Photo URL</label>
                   <input type="url" id="adminStudentPhoto" class="form-control" placeholder="https://...">
                 </div>
               </div>
-              <button type="submit" class="btn btn-accent mt-3"><i class="fa fa-plus-circle"></i> Add Student Record</button>
+              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-plus-circle"></i> Add Student Record</button>
             </form>
-          </div>
 
-          <div class="card mt-4">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-users"></i> Registered Students & Alumni List</div>
-            </div>
-            <div class="table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Adm No</th>
-                    <th>Name</th>
-                    <th>Phone / Password</th>
-                    <th>Status</th>
-                    <th>Class / Batch</th>
-                    <th>Place</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="tableStudentsAdmin">
-                  <tr><td colspan="7" class="text-center text-muted">Loading students...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ════════════════════════════════
-             USTHADS / FACULTY PANEL
-        ════════════════════════════════ -->
-        <div class="page" id="page-usthads">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-user-md"></i> Add New Usthad / Faculty</div>
-            </div>
-            <form id="formAddUsthadAdmin" onsubmit="submitAddUsthadAdmin(event)">
-              <div class="form-grid-3">
+            <!-- Form for Usthad -->
+            <form id="formAddUsthadAdmin" class="unified-form" style="display: none;" onsubmit="submitAddUsthadAdmin(event)">
+              <div class="form-grid-2">
                 <div class="form-group">
                   <label class="form-label">Usthad Name *</label>
                   <input type="text" id="adminUsthadName" class="form-control" placeholder="e.g. Sheikhuna Ibrahim Baqavi" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Phone Number (Default Password) *</label>
+                  <label class="form-label">Phone Number (Password) *</label>
                   <input type="text" id="adminUsthadPhone" class="form-control" placeholder="e.g. 9526919218" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Usthad ID (Optional)</label>
-                  <input type="text" id="adminUsthadId" class="form-control" placeholder="Auto-generated if empty (UST101)">
+                  <input type="text" id="adminUsthadId" class="form-control" placeholder="Auto-generated if empty">
                 </div>
-              </div>
-              <div class="form-grid-3 mt-2">
                 <div class="form-group">
                   <label class="form-label">Designation</label>
-                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris / Senior Usthad">
+                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Subject / Kitab</label>
@@ -2019,31 +2044,8 @@
                   <input type="text" id="adminUsthadPlace" class="form-control" placeholder="e.g. Muttichira">
                 </div>
               </div>
-              <button type="submit" class="btn btn-accent mt-3"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
+              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
             </form>
-          </div>
-
-          <div class="card mt-4">
-            <div class="card-header">
-              <div class="card-title"><i class="fa fa-user-md"></i> Respected Usthads & Faculty Roster</div>
-            </div>
-            <div class="table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Usthad ID</th>
-                    <th>Name</th>
-                    <th>Phone / Password</th>
-                    <th>Designation</th>
-                    <th>Subject</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="tableUsthadsAdmin">
-                  <tr><td colspan="6" class="text-center text-muted">Loading usthads...</td></tr>
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
 
@@ -2282,27 +2284,72 @@
 ═══════════════════════════════════════ 
 */
   
-function loadStudentsAdmin() {
-  fetch('/api/portal/students')
-    .then(r => r.json())
-    .then(data => {
-      if (data.success && data.students) {
-        safeSetText('badge-students', data.students.length);
-        let html = '';
-        data.students.forEach(s => {
-          html += '<tr>' +
-            '<td><strong>' + (s.admissionNo) + '</strong></td>' +
-            '<td>' + (s.name) + '</td>' +
-            '<td><code>' + (s.password || s.phone) + '</code> <small class="text-muted">(Phone)</small></td>' +
-            '<td><span class="badge ' + (s.isAlumni ? 'badge-accent' : 'badge-success') + '">' + (s.status || 'Student') + '</span></td>' +
-            '<td>' + (s.className || 'Dars') + ' (' + (s.batchYear || '') + ')</td>' +
-            '<td>' + (s.place || 'Muttichira') + '</td>' +
-            '<td><button class="btn btn-danger btn-sm" onclick="deleteStudentAdmin(\'' + (s._id || s.admissionNo) + '\')"><i class="fa fa-trash"></i></button></td>' +
-          '</tr>';
-        });
-        safeSetHtml('tableStudentsAdmin', html || '<tr><td colspan="7" class="text-center text-muted">No students found.</td></tr>');
+/* ===========================================
+   UNIFIED PORTAL USERS MANAGEMENT
+=========================================== */
+function loadPortalUsersAdmin() {
+  Promise.all([
+    fetch('/api/portal/students').then(r => r.json()),
+    fetch('/api/portal/usthads').then(r => r.json())
+  ]).then(([studentsData, usthadsData]) => {
+    let users = [];
+    if (studentsData.success && studentsData.students) {
+      users = users.concat(studentsData.students.map(s => ({ ...s, role: 'student' })));
+    }
+    if (usthadsData.success && usthadsData.usthads) {
+      users = users.concat(usthadsData.usthads.map(u => ({ ...u, role: 'usthad' })));
+    }
+    
+    safeSetText('badge-portal-users', users.length);
+    let html = '';
+    
+    users.forEach(u => {
+      if (u.role === 'student') {
+        html += `
+          <tr>
+            <td><strong>${u.name}</strong></td>
+            <td><span class="badge student">Student</span></td>
+            <td>${u.admissionNo}</td>
+            <td class="action-buttons">
+              <button class="delete-btn" onclick="deleteStudentAdmin('${u._id || u.admissionNo}')">Delete</button>
+            </td>
+          </tr>`;
+      } else {
+        html += `
+          <tr>
+            <td><strong>${u.name}</strong></td>
+            <td><span class="badge usthad">Usthad</span></td>
+            <td>${u.usthadId}</td>
+            <td class="action-buttons">
+              <button class="delete-btn" onclick="deleteUsthadAdmin('${u._id || u.usthadId}')">Delete</button>
+            </td>
+          </tr>`;
       }
     });
+    
+    safeSetHtml('userTableBody', html || '<tr><td colspan="4" class="text-center text-muted">No portal users found.</td></tr>');
+  });
+}
+
+function openAddUserModal() {
+  document.getElementById('unifiedAddUserModal').classList.add('show');
+}
+
+function closeAddUserModal() {
+  document.getElementById('unifiedAddUserModal').classList.remove('show');
+}
+
+function switchUnifiedRole(role) {
+  document.querySelectorAll('.unified-role-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.unified-form').forEach(f => f.style.display = 'none');
+  
+  if (role === 'student') {
+    document.getElementById('btnUnifiedStudent').classList.add('active');
+    document.getElementById('formAddStudentAdmin').style.display = 'block';
+  } else {
+    document.getElementById('btnUnifiedUsthad').classList.add('active');
+    document.getElementById('formAddUsthadAdmin').style.display = 'block';
+  }
 }
 
 function submitAddStudentAdmin(e) {
@@ -2324,10 +2371,9 @@ function submitAddStudentAdmin(e) {
   }).then(r => r.json()).then(res => {
     showToast(res.message || 'Student added!', !res.success);
     if (res.success) {
-      safeSetValue('adminStudentName', '');
-      safeSetValue('adminStudentPhone', '');
-      safeSetValue('adminStudentAdmNo', '');
-      loadStudentsAdmin();
+      document.getElementById('formAddStudentAdmin').reset();
+      closeAddUserModal();
+      loadPortalUsersAdmin();
     }
   });
 }
@@ -2338,29 +2384,7 @@ function deleteStudentAdmin(id) {
     .then(r => r.json())
     .then(res => {
       showToast(res.message || 'Deleted', !res.success);
-      loadStudentsAdmin();
-    });
-}
-
-function loadUsthadsAdmin() {
-  fetch('/api/portal/usthads')
-    .then(r => r.json())
-    .then(data => {
-      if (data.success && data.usthads) {
-        safeSetText('badge-usthads', data.usthads.length);
-        let html = '';
-        data.usthads.forEach(u => {
-          html += '<tr>' +
-            '<td><strong>' + (u.usthadId) + '</strong></td>' +
-            '<td>' + (u.name) + '</td>' +
-            '<td><code>' + (u.password || u.phone) + '</code> <small class="text-muted">(Phone)</small></td>' +
-            '<td><span class="badge badge-accent">' + (u.designation || 'Usthad') + '</span></td>' +
-            '<td>' + (u.subject || 'Dars') + '</td>' +
-            '<td><button class="btn btn-danger btn-sm" onclick="deleteUsthadAdmin(\'' + (u._id || u.usthadId) + '\')"><i class="fa fa-trash"></i></button></td>' +
-          '</tr>';
-        });
-        safeSetHtml('tableUsthadsAdmin', html || '<tr><td colspan="6" class="text-center text-muted">No usthads found.</td></tr>');
-      }
+      loadPortalUsersAdmin();
     });
 }
 
@@ -2381,10 +2405,9 @@ function submitAddUsthadAdmin(e) {
   }).then(r => r.json()).then(res => {
     showToast(res.message || 'Usthad added!', !res.success);
     if (res.success) {
-      safeSetValue('adminUsthadName', '');
-      safeSetValue('adminUsthadPhone', '');
-      safeSetValue('adminUsthadId', '');
-      loadUsthadsAdmin();
+      document.getElementById('formAddUsthadAdmin').reset();
+      closeAddUserModal();
+      loadPortalUsersAdmin();
     }
   });
 }
@@ -2395,7 +2418,7 @@ function deleteUsthadAdmin(id) {
     .then(r => r.json())
     .then(res => {
       showToast(res.message || 'Deleted', !res.success);
-      loadUsthadsAdmin();
+      loadPortalUsersAdmin();
     });
 }
 
@@ -2440,8 +2463,7 @@ function deleteUserAdmin(id) {
 }
 
 function loadAll() {
-  loadStudentsAdmin();
-  loadUsthadsAdmin();
+  loadPortalUsersAdmin();
   loadUsersAdmin();
     checkAdmissionStatus();
     loadAdmissions();
@@ -2488,8 +2510,8 @@ function showPage(page) {
   var titles  = {
     overview: 'Dashboard', homepage: 'Home Page Panel',
     admissions: 'Admission Panel', gallery: 'Gallery Panel',
-    messages: 'Messages & Comments', students: 'Students & Alumni Panel',
-    usthads: 'Usthads & Faculty Panel', users: 'User Management', reset: 'Full Reset'
+    messages: 'Messages & Comments', 'portal-users': 'Manage Portal Users',
+    users: 'User Management', reset: 'Full Reset'
   };
 
   if (pageEl) pageEl.classList.add('active');
@@ -2502,8 +2524,7 @@ function showPage(page) {
   if (page === 'admissions') loadAdmissions();
   if (page === 'messages') { loadContacts(); loadSubscribers(); }
   if (page === 'overview') loadOverview();
-  if (page === 'students') loadStudentsAdmin();
-  if (page === 'usthads') loadUsthadsAdmin();
+  if (page === 'portal-users') loadPortalUsersAdmin();
   if (page === 'users') loadUsersAdmin();
 
   // Close mobile sidebar
