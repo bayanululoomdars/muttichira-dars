@@ -1,63 +1,57 @@
-const fs = require('fs');
-const path = require('path');
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
+const { uploadToTelegram } = require('./telegramStorage');
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+// Mock Cloudinary object so controllers calling cloudinary.uploader.destroy don't throw errors
+const cloudinary = {
+  uploader: {
+    destroy: async (publicId) => {
+      console.log(`[Telegram Storage Mock] Request to delete fileId: ${publicId} (No-op on Telegram)`);
+      return { result: 'ok' };
+    }
+  }
+};
 
-// Cloudinary storage for Multer
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'albayan',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'mp4', 'webm'],
-    resource_type: 'auto',
-    transformation: [{ width: 1200, quality: 'auto' }],
-  },
-});
-
+// Memory storage for multer to accept the file upload and store in buffer
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Ensure local upload directory exists
-const uploadDir = path.join(__dirname, '../public/img/uploads/');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// We return true so that the controllers always evaluate:
+// `imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename`
+// and write `req.file.path` (which we populate with the Telegram proxy URL) into the database.
+const isCloudinaryConfigured = () => true;
 
-// Local fallback storage (when Cloudinary is not configured)
-const localStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
-
-const uploadLocal = multer({ storage: localStorage });
-
-// Check if Cloudinary is fully configured
-const isCloudinaryConfigured = () => {
-  return !!(process.env.CLOUDINARY_CLOUD_NAME && 
-            process.env.CLOUDINARY_API_KEY && 
-            process.env.CLOUDINARY_API_SECRET);
-};
-
-// Dynamic uploader selector
+// Custom uploader middleware that intercepts multer, uploads to Telegram, and mutates req.file
 const getUploader = () => {
-  return isCloudinaryConfigured() ? upload : uploadLocal;
+  return {
+    single: (fieldName) => {
+      const multerSingle = upload.single(fieldName);
+      return (req, res, next) => {
+        multerSingle(req, res, async (err) => {
+          if (err) return next(err);
+          if (!req.file) return next();
+
+          try {
+            // Upload to Telegram
+            const fileId = await uploadToTelegram(req.file.buffer, req.file.originalname, req.file.mimetype);
+            
+            // Set properties expected by the controller to route to the proxy
+            req.file.path = `/api/media/tg/${fileId}`;
+            req.file.filename = fileId;
+            next();
+          } catch (uploadErr) {
+            console.error('Error uploading file to Telegram via middleware:', uploadErr);
+            return next(uploadErr);
+          }
+        });
+      };
+    }
+  };
 };
 
-module.exports = { 
-  cloudinary, 
-  upload, 
-  uploadLocal, 
+module.exports = {
+  cloudinary,
+  upload,
+  uploadLocal: upload, // Fallback mapping
   isCloudinaryConfigured,
   getUploader
 };

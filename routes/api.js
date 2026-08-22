@@ -41,4 +41,65 @@ const authController = require('../controllers/authController');
 router.get('/users', authController.getAllUsers);
 router.delete('/users/:id', authController.deleteUser);
 
+// Telegram Media Streaming Proxy with in-memory Cache (TTL: 45 minutes)
+const { Readable } = require('stream');
+const tgPathCache = new Map();
+
+router.get('/media/tg/:fileId', async (req, res) => {
+  try {
+    const { fileId } = req.params;
+    const token = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
+    if (!token) {
+      return res.status(500).send('Telegram Bot Token not configured in .env');
+    }
+
+    let filePath = null;
+    const cached = tgPathCache.get(fileId);
+    
+    if (cached && cached.expiry > Date.now()) {
+      filePath = cached.filePath;
+    } else {
+      const getFileUrl = `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`;
+      const fileRes = await fetch(getFileUrl);
+      if (!fileRes.ok) {
+        return res.status(fileRes.status).send(`Failed to fetch file info from Telegram. Status: ${fileRes.status}`);
+      }
+      
+      const fileData = await fileRes.json();
+      if (!fileData.ok) {
+        return res.status(400).send(`Telegram API Error: ${fileData.description}`);
+      }
+      
+      filePath = fileData.result.file_path;
+      // Cache the file path for 45 minutes (Telegram link lasts 1 hour)
+      tgPathCache.set(fileId, {
+        filePath,
+        expiry: Date.now() + 45 * 60 * 1000
+      });
+    }
+
+    const downloadUrl = `https://api.telegram.org/file/bot${token}/${filePath}`;
+    const mediaRes = await fetch(downloadUrl);
+    if (!mediaRes.ok) {
+      return res.status(mediaRes.status).send(`Failed to stream media from Telegram. Status: ${mediaRes.status}`);
+    }
+
+    // Set response headers
+    const contentType = mediaRes.headers.get('content-type');
+    if (contentType) res.setHeader('Content-Type', contentType);
+
+    const contentLength = mediaRes.headers.get('content-length');
+    if (contentLength) res.setHeader('Content-Length', contentLength);
+
+    // Cache static assets on client/CDN for 1 year
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+
+    // Stream back to client
+    Readable.fromWeb(mediaRes.body).pipe(res);
+  } catch (err) {
+    console.error('Error in Telegram media proxy:', err);
+    res.status(500).send('Server error streaming media');
+  }
+});
+
 module.exports = router;

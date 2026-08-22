@@ -961,3 +961,328 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 /* Google Login Popup Highest Z-index */
 iframe[src*='google.com'], #loginPopupModal, .ig-detail-modal { z-index: 2147483647 !important; }
 @media (max-width: 768px) { .ig-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 4px; } }
+
+/* ── 3D FLIPBOOK SECTION ── */
+#digital-manuscript-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f4f8f5 0%, #e2ece6 100%);
+  position: relative;
+  overflow: hidden;
+  border-top: 4px solid var(--accent);
+  border-bottom: 4px solid var(--accent);
+}
+
+.manuscript-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  color: var(--primary-dark);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.manuscript-title span {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--primary-light);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 5px;
+}
+
+/* Glassmorphic Cover Card */
+.glass-cover-card {
+  background: rgba(10, 61, 31, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+  padding: 30px;
+  color: #fff;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), var(--shadow-gold);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.glass-cover-card h4 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+  padding-bottom: 10px;
+}
+
+.glass-cover-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.toc-list li {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 6px;
+}
+
+.toc-list li:hover {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--accent);
+  padding-left: 18px;
+}
+
+/* QR Code Section inside cover card */
+.qr-container {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px dashed var(--accent);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.qr-code-img {
+  width: 90px;
+  height: 90px;
+  background: #fff;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.qr-info h5 {
+  font-size: 0.9rem;
+  color: var(--accent);
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.qr-info p {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+/* 3D Flipbook Core */
+.book-viewport {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  perspective: 1800px;
+}
+
+.book-container-3d {
+  width: 600px; /* Width of double page spread (300px per page) */
+  height: 420px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.book-sheet-3d {
+  position: absolute;
+  width: 50%; /* One half of the book */
+  height: 100%;
+  top: 0;
+  left: 50%; /* Spine is at the center (50%) */
+  transform-origin: left center; /* Hinges at the spine */
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+.book-page-3d {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  box-shadow: inset 3px 0 20px rgba(0,0,0,0.08);
+  border-radius: 0 8px 8px 0;
+  overflow: hidden;
+}
+
+.book-page-3d.page-front-3d {
+  z-index: 2;
+  background: #fbf8f0;
+}
+
+.book-page-3d.page-back-3d {
+  transform: rotateY(180deg); /* Face backwards */
+  z-index: 1;
+  background: #fbf8f0;
+  border-radius: 8px 0 0 8px;
+}
+
+/* When flipped, rotate sheet by -180deg */
+.book-sheet-3d.flipped-sheet-3d {
+  transform: rotateY(-180deg);
+}
+
+/* Realistic Spine Shadow Overlay */
+.book-spine-3d {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 10px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.15) 100%);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Fallback Parchment Page Styling */
+.parchment-page {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f7f1e3 0%, #efe5cd 100%);
+  border: 12px double #8c6a21;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: inset 0 0 40px rgba(139,94,26,0.15);
+  position: relative;
+}
+
+.parchment-page::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border: 1px solid rgba(140, 106, 33, 0.3);
+  pointer-events: none;
+}
+
+.parchment-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #5d401b;
+  text-align: center;
+  border-bottom: 1px solid rgba(139,94,26,0.2);
+  padding-bottom: 5px;
+}
+
+.parchment-content-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #3e270f;
+  text-align: center;
+  margin: auto 0;
+  padding: 10px 0;
+}
+
+.parchment-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #8c6a21;
+  font-weight: 600;
+  border-top: 1px solid rgba(139,94,26,0.15);
+  padding-top: 5px;
+}
+
+/* Cover Page (Sheet 1 Front) specific parchment styling */
+.parchment-cover-page {
+  background: linear-gradient(135deg, #5c4017 0%, #2f200b 100%);
+  border: 12px double var(--accent);
+  color: #fff;
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+}
+
+.parchment-cover-page .parchment-title {
+  color: var(--accent);
+  font-size: 1.5rem;
+  border-bottom-color: rgba(212,175,55,0.3);
+  margin-top: 20px;
+}
+
+.parchment-cover-page .parchment-content-text {
+  color: #f5eedc;
+}
+
+.parchment-cover-page .parchment-footer {
+  color: var(--accent);
+  border-top-color: rgba(212,175,55,0.3);
+}
+
+/* Nav Controls */
+.flipbook-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.flipbook-controls button {
+  background: var(--primary-dark);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.flipbook-controls button:hover {
+  background: var(--accent);
+  color: var(--primary-dark);
+}
+
+.flipbook-controls span {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--primary-dark);
+  min-width: 100px;
+  text-align: center;
+}
+
+.flipbook-select-jump {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--primary);
+  background: #fff;
+  color: var(--primary-dark);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Media Queries for responsive scaling */
+@media (max-width: 768px) {
+  .book-container-3d {
+    margin: 20px auto;
+  }
+}
