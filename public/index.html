@@ -169,73 +169,16 @@
     </section><!-- #portfolio -->
 
     <!--==========================
-      Digital Manuscript (Kaypusthakam) Section with 3D Page Flip
+      Digital Manuscript (Kaypusthakam) Launcher Bar
     ============================-->
-    <section id="digital-manuscript-section">
-      <div class="container">
-        <header class="section-header">
-          <h3 class="section-title manuscript-title" style="text-align:center;">ഡിജിറ്റൽ കൈപ്പുസ്തകം <span>Digital Manuscript</span></h3>
-        </header>
-
-        <div class="row align-items-stretch">
-          
-          <!-- LEFT SIDE: 3D Flipbook -->
-          <div class="col-lg-7 d-flex flex-column align-items-center justify-content-center" style="position: relative;">
-            
-            <div class="book-viewport">
-              <div class="book-container-3d" id="flipbook">
-                <div class="book-spine-3d"></div>
-              </div>
-            </div>
-
-            <!-- Navigation Controls -->
-            <div class="flipbook-controls">
-              <button onclick="flipPrev()"><i class="fa fa-chevron-left"></i> മുൻപിലേക്ക്</button>
-              <span id="pageIndicator">തൂവൽ 1 / 28</span>
-              <button onclick="flipNext()">തുടരുക <i class="fa fa-chevron-right"></i></button>
-              
-              <!-- Direct Jump Select -->
-              <select class="flipbook-select-jump" id="pageJumpSelect" onchange="jumpToPage(this.value)">
-                <!-- Populate dynamically -->
-              </select>
-            </div>
-
-          </div>
-
-          <!-- RIGHT SIDE: Glassmorphic Transparent Book Cover Card -->
-          <div class="col-lg-5 mt-4 mt-lg-0">
-            <div class="glass-cover-card">
-              <div>
-                <h4>കൈപ്പുസ്തകം വിവരണം</h4>
-                <p>
-                  മുട്ടിച്ചിറ ബയാനുൽ ഉലൂം ദർസ് വിദ്യാർത്ഥികൾ തയ്യാറാക്കിയ 28 താളുകളുള്ള ഡിജിറ്റൽ കൈപ്പുസ്തകമാണിത്. 
-                  ഇതിൽ ദർസിന്റെ ചരിത്രം, പാരമ്പര്യം, ആത്മീയ പാതകൾ, വിദ്യാർത്ഥികളുടെ സർഗ്ഗാത്മക രചനകൾ എന്നിവ ഡിജിറ്റലായി ഉൾപ്പെടുത്തിയിരിക്കുന്നു.
-                </p>
-                
-                <h5 style="color:var(--accent); font-size:1rem; font-weight:700; margin-top:20px; border-bottom:1px solid rgba(212,175,55,0.15); padding-bottom:5px;">വിഷയസൂചിക (Index)</h5>
-                <ul class="toc-list" id="tocList">
-                  <!-- Toc populated dynamically -->
-                </ul>
-              </div>
-
-              <!-- QR Code Section -->
-              <div class="qr-container">
-                <img id="manuscriptQRCode" class="qr-code-img" src="" alt="QR Code">
-                <div class="qr-info">
-                  <h5>സ്കാൻ ചെയ്ത് വായിക്കാം!</h5>
-                  <p>ഈ ക്യൂആർ കോഡ് സ്കാൻ ചെയ്ത് നിങ്ങളുടെ മൊബൈൽ ഫോണിൽ കൈപ്പുസ്തകം നേരിട്ട് തുറക്കാം.</p>
-                  <a id="downloadQRBtn" href="" download="manuscript_qr.png" class="btn btn-xs btn-outline-warning" style="font-size:0.75rem; border-radius:20px; padding:3px 12px; font-weight:700; border-color:var(--accent); color:var(--accent);">
-                    <i class="fa fa-download"></i> QR ഡൗൺലോഡ്
-                  </a>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
+    <div class="brochure-launcher-bar" style="background: linear-gradient(135deg, #0a4d2e 0%, #06301c 100%); margin-top: 0; border-top: 2px solid #d4af37; border-bottom: 4px solid #d4af37; padding: 25px 30px;">
+      <div class="bar-logo" style="color: #fff; font-size: 1.4rem; font-weight: 700; font-family: 'Outfit', sans-serif; text-transform: none; letter-spacing: normal;">
+        <i class="fa fa-book" style="color:#d4af37; margin-right:12px;"></i>ഡിജിറ്റൽ കൈപ്പുസ്തകം | Digital Manuscript
       </div>
-    </section>
+      <button class="launch-btn" onclick="toggleManuscriptBook(true)" style="background: #d4af37; color: #0a4d2e; border: none; padding: 12px 30px; font-weight: 700; border-radius: 30px; font-size: 1rem; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(212,175,55,0.3); text-transform: none; letter-spacing: normal;">
+        <i class="fa fa-book-open"></i> വായിക്കുക (Open Book)
+      </button>
+    </div>
 
     <!--==========================
       Burda Team Section
@@ -1555,7 +1498,7 @@
     }
 
     function scaleBook() {
-      const viewport = document.querySelector('.book-viewport');
+      const viewport = document.querySelector('#manuscriptOverlay .book-viewport');
       const book = document.getElementById('flipbook');
       if (!viewport || !book) return;
 
@@ -1573,6 +1516,28 @@
     }
 
     window.addEventListener('resize', scaleBook);
+
+    function toggleManuscriptBook(open) {
+      const overlay = document.getElementById('manuscriptOverlay');
+      if (!overlay) return;
+      if (open) {
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        manuscriptSheetIndex = 0;
+        updateFlipbook();
+        setTimeout(scaleBook, 150);
+      } else {
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // Auto-open manuscript modal if hash is matched
+    window.addEventListener('load', () => {
+      if (window.location.hash === '#digital-manuscript-section' || window.location.hash === '#manuscript') {
+        setTimeout(() => toggleManuscriptBook(true), 500);
+      }
+    });
   </script>
 
   <!-- DIGITAL BOOK BROCHURE MODAL WITH BLURRED BACKDROP -->
@@ -1628,6 +1593,65 @@
              <img src="img/dars brousher page 8.jpg" alt="Dars Brochure Page 8" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIGITAL MANUSCRIPT MODAL WITH BLURRED BACKDROP -->
+  <div class="book-overlay" id="manuscriptOverlay">
+    <button class="close-brochure" onclick="toggleManuscriptBook(false)">&times;</button>
+    
+    <div class="container" style="margin-top: 50px;">
+      <div class="row align-items-center">
+        
+        <!-- LEFT: 3D Flipbook -->
+        <div class="col-lg-7 d-flex flex-column align-items-center justify-content-center" style="position: relative; min-height: 480px;">
+          <div class="book-viewport">
+            <div class="book-container-3d" id="flipbook">
+              <div class="book-spine-3d"></div>
+            </div>
+          </div>
+          
+          <div class="flipbook-controls">
+            <button onclick="flipPrev()"><i class="fa fa-chevron-left"></i> മുൻപിലേക്ക്</button>
+            <span id="pageIndicator" style="color: #fff;">തൂവൽ 1 / 28</span>
+            <button onclick="flipNext()">തുടരുക <i class="fa fa-chevron-right"></i></button>
+            
+            <select class="flipbook-select-jump" id="pageJumpSelect" onchange="jumpToPage(this.value)">
+              <!-- Populate dynamically -->
+            </select>
+          </div>
+        </div>
+        
+        <!-- RIGHT: Glassmorphic Cover Card -->
+        <div class="col-lg-5 mt-4 mt-lg-0">
+          <div class="glass-cover-card">
+            <div>
+              <h4>ഡിജിറ്റൽ കൈപ്പുസ്തകം</h4>
+              <p>
+                മുട്ടിച്ചിറ ബയാനുൽ ഉലൂം ദർസ് വിദ്യാർത്ഥികൾ തയ്യാറാക്കിയ 28 താളുകളുള്ള ഡിജിറ്റൽ കൈപ്പുസ്തകമാണിത്. 
+                ഇതിൽ ദർസിന്റെ ചരിത്രം, പാരമ്പര്യം, ആത്മീയ പാതകൾ, വിദ്യാർത്ഥികളുടെ സർഗ്ഗാത്മക രചനകൾ എന്നിവ ഡിജിറ്റലായി ഉൾപ്പെടുത്തിയിരിക്കുന്നു.
+              </p>
+              
+              <h5 style="color:var(--accent); font-size:1rem; font-weight:700; margin-top:20px; border-bottom:1px solid rgba(212,175,55,0.15); padding-bottom:5px;">വിഷയസൂചിക (Index)</h5>
+              <ul class="toc-list" id="tocList">
+                <!-- Toc populated dynamically -->
+              </ul>
+            </div>
+            
+            <div class="qr-container">
+              <img id="manuscriptQRCode" class="qr-code-img" src="" alt="QR Code">
+              <div class="qr-info">
+                <h5>സ്കാൻ ചെയ്ത് വായിക്കാം!</h5>
+                <p>ഈ ക്യൂആർ കോഡ് സ്കാൻ ചെയ്ത് നിങ്ങളുടെ മൊബൈൽ ഫോണിൽ കൈപ്പുസ്തകം നേരിട്ട് തുറക്കാം.</p>
+                <a id="downloadQRBtn" href="" download="manuscript_qr.png" class="btn btn-xs btn-outline-warning" style="font-size:0.75rem; border-radius:20px; padding:3px 12px; font-weight:700; border-color:var(--accent); color:var(--accent);">
+                  <i class="fa fa-download"></i> QR ഡൗൺലോഡ്
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </div>
   </div>
