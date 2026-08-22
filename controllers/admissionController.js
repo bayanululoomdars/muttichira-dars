@@ -1,6 +1,6 @@
 const Admission = require('../models/Admission');
 const Settings = require('../models/Settings');
-const { isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
+const { deleteFile } = require('../config/storage');
 const { sendTelegramNotification } = require('../services/telegramService');
 
 // GET /api/admissions — Get all admissions (admin)
@@ -29,7 +29,7 @@ exports.submitAdmission = async (req, res) => {
 
     let imageUrl = '';
     if (req.file) {
-      imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      imageUrl = req.file.path;
     }
 
     const admission = new Admission({
@@ -102,10 +102,10 @@ exports.deleteAdmission = async (req, res) => {
     const admission = await Admission.findById(req.params.id);
     if (!admission) return res.status(404).json({ message: 'Admission not found' });
 
-    if (admission.imageUrl && isCloudinaryConfigured()) {
+    if (admission.imageUrl) {
       try {
-        const publicId = admission.imageUrl.split('/').pop().split('.')[0];
-        await cloudinary.uploader.destroy(publicId);
+        const fileId = admission.imageUrl.split('/').pop();
+        await deleteFile(fileId);
       } catch (e) { /* ignore */ }
     }
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const homeSettingsController = require('../controllers/homeSettingsController');
-const { getUploader } = require('../config/cloudinary');
+const { getUploader } = require('../config/storage');
 
 router.get('/', homeSettingsController.getHomeSettings);
 router.post('/', homeSettingsController.updateHomeSettings);

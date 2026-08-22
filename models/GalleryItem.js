@@ -9,7 +9,7 @@ const galleryItemSchema = new mongoose.Schema({
     required: true 
   },
   imageUrl: { type: String, required: true },
-  cloudinaryId: { type: String, default: '' },
+  telegramFileId: { type: String, default: '' },
   mediaType: { type: String, enum: ['image', 'video'], default: 'image' },
   pinned: { type: Boolean, default: false },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],

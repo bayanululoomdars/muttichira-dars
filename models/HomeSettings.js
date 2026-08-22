@@ -18,7 +18,7 @@ const homeSettingsSchema = new mongoose.Schema({
     name: { type: String, required: true },
     role: { type: String, default: 'Assistant Mudarris' },
     imageUrl: { type: String, default: '' },
-    cloudinaryId: { type: String, default: '' }
+    telegramFileId: { type: String, default: '' }
   }],
 
   // Branch & Faculty Network

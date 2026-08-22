@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sliderController = require('../controllers/sliderController');
-const { getUploader } = require('../config/cloudinary');
+const { getUploader } = require('../config/storage');
 
 router.get('/', sliderController.getAllSliders);
 

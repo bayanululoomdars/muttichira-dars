@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const admissionController = require('../controllers/admissionController');
-const { getUploader } = require('../config/cloudinary');
+const { getUploader } = require('../config/storage');
 
 router.get('/', admissionController.getAllAdmissions);
 

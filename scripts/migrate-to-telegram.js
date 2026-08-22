@@ -158,7 +158,7 @@ async function runMigration() {
     const result = await processUrlOrPath(item.imageUrl);
     if (result) {
       item.imageUrl = result.newUrl;
-      item.cloudinaryId = result.fileId;
+      item.telegramFileId = result.fileId;
       await item.save();
     }
   }
@@ -171,7 +171,7 @@ async function runMigration() {
     const result = await processUrlOrPath(item.imageUrl);
     if (result) {
       item.imageUrl = result.newUrl;
-      item.cloudinaryId = result.fileId;
+      item.telegramFileId = result.fileId;
       await item.save();
     }
   }
@@ -184,7 +184,7 @@ async function runMigration() {
     const result = await processUrlOrPath(item.mediaUrl);
     if (result) {
       item.mediaUrl = result.newUrl;
-      item.cloudinaryId = result.fileId;
+      item.telegramFileId = result.fileId;
       await item.save();
     }
   }
@@ -197,7 +197,7 @@ async function runMigration() {
     const result = await processUrlOrPath(item.imageUrl);
     if (result) {
       item.imageUrl = result.newUrl;
-      item.cloudinaryId = result.fileId;
+      item.telegramFileId = result.fileId;
       await item.save();
     }
   }
@@ -225,7 +225,7 @@ async function runMigration() {
           const result = await processUrlOrPath(assistant.imageUrl);
           if (result) {
             assistant.imageUrl = result.newUrl;
-            assistant.cloudinaryId = result.fileId;
+            assistant.telegramFileId = result.fileId;
             modified = true;
           }
         }

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const storySchema = new mongoose.Schema({
   title: { type: String, default: '' },
   imageUrl: { type: String, required: true },
-  cloudinaryId: { type: String, default: '' },
+  telegramFileId: { type: String, default: '' },
   daysActive: { type: Number, default: 1 },
   expiresAt: { type: Date, required: true },
   createdAt: { type: Date, default: Date.now }

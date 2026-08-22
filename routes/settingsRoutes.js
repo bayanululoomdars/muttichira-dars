@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const settingsController = require('../controllers/settingsController');
 const admissionController = require('../controllers/admissionController');
-const { getUploader } = require('../config/cloudinary');
+const { getUploader } = require('../config/storage');
 
 // Admission Status (this was partially in admission logic, but fits settings well)
 router.get('/admission', admissionController.getAdmissionStatus);

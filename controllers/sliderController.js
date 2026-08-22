@@ -1,5 +1,5 @@
 const Slider = require('../models/Slider');
-const { isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
+const { deleteFile } = require('../config/storage');
 
 // GET /api/sliders — Get all sliders
 exports.getAllSliders = async (req, res) => {
@@ -22,8 +22,8 @@ exports.createSlider = async (req, res) => {
     const sliderData = {
       title: title || '',
       mediaType: mediaType || 'image',
-      mediaUrl: isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename,
-      cloudinaryId: req.file.filename || '',
+      mediaUrl: req.file.path,
+      telegramFileId: req.file.filename || '',
     };
     const slider = new Slider(sliderData);
     await slider.save();
@@ -39,8 +39,8 @@ exports.deleteSlider = async (req, res) => {
   try {
     const item = await Slider.findById(req.params.id);
     if (!item) return res.status(404).json({ message: 'Slider not found' });
-    if (item.cloudinaryId && isCloudinaryConfigured()) {
-      try { await cloudinary.uploader.destroy(item.cloudinaryId); } catch (e) { /* ignore */ }
+    if (item.telegramFileId) {
+      try { await deleteFile(item.telegramFileId); } catch (e) { /* ignore */ }
     }
     await Slider.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Slider deleted' });

@@ -1,7 +1,7 @@
 const GalleryItem = require('../models/GalleryItem');
 const Settings = require('../models/Settings');
 const User = require('../models/User');
-const { isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
+const { deleteFile } = require('../config/storage');
 
 // GET /api/gallery — Get all gallery items with populated likes & comments
 exports.getAllGalleryItems = async (req, res) => {
@@ -33,8 +33,8 @@ exports.createGalleryItem = async (req, res) => {
     };
 
     if (req.file) {
-      itemData.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
-      itemData.cloudinaryId = req.file.filename || '';
+      itemData.imageUrl = req.file.path;
+      itemData.telegramFileId = req.file.filename || '';
     } else if (mediaUrl) {
       itemData.imageUrl = mediaUrl;
     } else {
@@ -70,8 +70,8 @@ exports.deleteGalleryItem = async (req, res) => {
   try {
     const item = await GalleryItem.findById(req.params.id);
     if (!item) return res.status(404).json({ message: 'Gallery item not found' });
-    if (item.cloudinaryId && isCloudinaryConfigured()) {
-      try { await cloudinary.uploader.destroy(item.cloudinaryId); } catch (e) { /* ignore */ }
+    if (item.telegramFileId) {
+      try { await deleteFile(item.telegramFileId); } catch (e) { /* ignore */ }
     }
     await GalleryItem.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Gallery item deleted' });
@@ -95,12 +95,12 @@ exports.updateGalleryItem = async (req, res) => {
     if (hashtags) item.hashtags = hashtags.split(',').map(h => h.trim()).filter(h => h);
 
     if (req.file) {
-      // delete old image from cloudinary if exists
-      if (item.cloudinaryId && isCloudinaryConfigured()) {
-        try { await cloudinary.uploader.destroy(item.cloudinaryId); } catch (e) { /* ignore */ }
+      // delete old image from Telegram if exists
+      if (item.telegramFileId) {
+        try { await deleteFile(item.telegramFileId); } catch (e) { /* ignore */ }
       }
-      item.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
-      item.cloudinaryId = req.file.filename || '';
+      item.imageUrl = req.file.path;
+      item.telegramFileId = req.file.filename || '';
     } else if (mediaUrl && mediaType === 'video') {
       item.imageUrl = mediaUrl;
     }

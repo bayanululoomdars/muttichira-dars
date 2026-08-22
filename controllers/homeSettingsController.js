@@ -1,5 +1,5 @@
 const HomeSettings = require('../models/HomeSettings');
-const { isCloudinaryConfigured } = require('../config/cloudinary');
+const { deleteFile } = require('../config/storage');
 
 // GET /api/home-settings — Get homepage settings
 exports.getHomeSettings = async (req, res) => {
@@ -43,7 +43,7 @@ exports.updateHomeSettings = async (req, res) => {
 exports.uploadPrincipalImage = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
-    const imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+    const imageUrl = req.file.path;
 
     let settings = await HomeSettings.findOne();
     if (!settings) settings = new HomeSettings();
@@ -67,8 +67,8 @@ exports.addAssistantMudarris = async (req, res) => {
 
     const assistant = { name, role: role || 'Assistant Mudarris' };
     if (req.file) {
-      assistant.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
-      assistant.cloudinaryId = req.file.filename || '';
+      assistant.imageUrl = req.file.path;
+      assistant.telegramFileId = req.file.filename || '';
     }
 
     settings.assistantMudarris.push(assistant);
@@ -84,6 +84,11 @@ exports.deleteAssistantMudarris = async (req, res) => {
   try {
     let settings = await HomeSettings.findOne();
     if (!settings) return res.status(404).json({ message: 'Not found' });
+
+    const assistant = settings.assistantMudarris.id(req.params.id);
+    if (assistant && assistant.telegramFileId) {
+      try { await deleteFile(assistant.telegramFileId); } catch (e) { /* ignore */ }
+    }
 
     settings.assistantMudarris = settings.assistantMudarris.filter(
       a => a._id.toString() !== req.params.id

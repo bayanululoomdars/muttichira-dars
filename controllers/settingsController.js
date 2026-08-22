@@ -1,5 +1,5 @@
 const Settings = require('../models/Settings');
-const { isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
+const { deleteFile } = require('../config/storage');
 
 // GET /api/settings/poster — Get admission poster URL
 exports.getPoster = async (req, res) => {
@@ -16,7 +16,7 @@ exports.savePoster = async (req, res) => {
   try {
     let posterUrl = req.body.posterUrl;
     if (req.file) {
-      posterUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      posterUrl = req.file.path;
     }
     if (!posterUrl) {
       return res.status(400).json({ success: false, message: 'No file or URL provided' });
@@ -39,10 +39,10 @@ exports.deletePoster = async (req, res) => {
   try {
     const setting = await Settings.findOne({ key: 'admissionPosterUrl' });
     if (setting) {
-      if (isCloudinaryConfigured() && setting.value) {
+      if (setting.value) {
         try {
-          const publicId = setting.value.split('/').slice(-1)[0].split('.')[0];
-          await cloudinary.uploader.destroy(publicId);
+          const fileId = setting.value.split('/').pop();
+          await deleteFile(fileId);
         } catch (e) { /* ignore */ }
       }
       setting.value = null;
@@ -102,7 +102,7 @@ exports.updateWhyUs = async (req, res) => {
 exports.uploadWhyUsMedia = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
-    const mediaUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+    const mediaUrl = req.file.path;
 
     let setting = await Settings.findOne({ key: 'whyUsMediaUrl' });
     if (!setting) {
@@ -203,7 +203,7 @@ exports.saveCommittee = async (req, res) => {
 exports.uploadCommitteePoster = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
-    const posterUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+    const posterUrl = req.file.path;
     let setting = await Settings.findOne({ key: 'committeePosterUrl' });
     if (!setting) {
       setting = new Settings({ key: 'committeePosterUrl', value: posterUrl });
@@ -222,10 +222,10 @@ exports.deleteCommitteePoster = async (req, res) => {
   try {
     const posterSetting = await Settings.findOne({ key: 'committeePosterUrl' });
     if (posterSetting) {
-      if (isCloudinaryConfigured() && posterSetting.value) {
+      if (posterSetting.value) {
         try {
-          const publicId = posterSetting.value.split('/').slice(-1)[0].split('.')[0];
-          await cloudinary.uploader.destroy(publicId);
+          const fileId = posterSetting.value.split('/').pop();
+          await deleteFile(fileId);
         } catch (e) { /* ignore */ }
       }
       posterSetting.value = null;
@@ -339,7 +339,7 @@ exports.getBurda = async (req, res) => {
 exports.uploadBurda = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
-    const imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+    const imageUrl = req.file.path;
     let setting = await Settings.findOne({ key: 'burdaTeamImageUrl' });
     if (!setting) {
       setting = new Settings({ key: 'burdaTeamImageUrl', value: imageUrl });

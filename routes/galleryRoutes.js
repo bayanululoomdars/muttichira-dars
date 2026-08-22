@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const galleryController = require('../controllers/galleryController');
 const { verifyGoogleToken, requireUser } = require('../middleware/googleAuth');
-const { getUploader } = require('../config/cloudinary');
+const { getUploader } = require('../config/storage');
 
 router.get('/', galleryController.getAllGalleryItems);
 

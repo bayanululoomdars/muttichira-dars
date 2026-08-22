@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const storyController = require('../controllers/storyController');
-const { getUploader } = require('../config/cloudinary');
+const { getUploader } = require('../config/storage');
 
 router.get('/', storyController.getActiveStories);
 router.get('/all', storyController.getAllStories);

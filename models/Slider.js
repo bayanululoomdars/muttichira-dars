@@ -8,7 +8,7 @@ const sliderSchema = new mongoose.Schema({
     enum: ['image', 'video'],
     required: true 
   },
-  cloudinaryId: { type: String, default: '' },
+  telegramFileId: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now }
 });
 

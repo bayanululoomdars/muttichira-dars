@@ -1,5 +1,5 @@
 const News = require('../models/News');
-const { isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
+const { deleteFile } = require('../config/storage');
 
 // GET /api/news — Get all news
 exports.getAllNews = async (req, res) => {
@@ -21,8 +21,8 @@ exports.createNews = async (req, res) => {
 
     const newsData = { title, description };
     if (req.file) {
-      newsData.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
-      newsData.cloudinaryId = req.file.filename || '';
+      newsData.imageUrl = req.file.path;
+      newsData.telegramFileId = req.file.filename || '';
     }
 
     const news = new News(newsData);
@@ -40,8 +40,8 @@ exports.deleteNews = async (req, res) => {
     const news = await News.findById(req.params.id);
     if (!news) return res.status(404).json({ message: 'News not found' });
 
-    if (news.cloudinaryId && isCloudinaryConfigured()) {
-      try { await cloudinary.uploader.destroy(news.cloudinaryId); } catch (e) { /* ignore */ }
+    if (news.telegramFileId) {
+      try { await deleteFile(news.telegramFileId); } catch (e) { /* ignore */ }
     }
 
     await News.findByIdAndDelete(req.params.id);
@@ -62,11 +62,11 @@ exports.updateNews = async (req, res) => {
     news.description = description || news.description;
 
     if (req.file) {
-      if (news.cloudinaryId && isCloudinaryConfigured()) {
-        try { await cloudinary.uploader.destroy(news.cloudinaryId); } catch (e) {}
+      if (news.telegramFileId) {
+        try { await deleteFile(news.telegramFileId); } catch (e) {}
       }
-      news.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
-      news.cloudinaryId = req.file.filename || '';
+      news.imageUrl = req.file.path;
+      news.telegramFileId = req.file.filename || '';
     }
 
     await news.save();
