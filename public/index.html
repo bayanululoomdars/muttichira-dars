@@ -179,9 +179,6 @@
         <button class="launch-btn" onclick="toggleManuscriptBook(true)" style="background: #d4af37; color: #0a4d2e; border: none; padding: 12px 30px; font-weight: 700; border-radius: 30px; font-size: 1rem; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(212,175,55,0.3); text-transform: none; letter-spacing: normal;">
           <i class="fa fa-book-open"></i> വായിക്കുക (Open Book)
         </button>
-        <button class="launch-btn" id="downloadQRBtnLauncher" style="background: transparent; color: #d4af37; border: 2px solid #d4af37; padding: 10px 24px; font-weight: 700; border-radius: 30px; font-size: 0.95rem; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: normal; box-shadow: none;">
-          <i class="fa fa-qrcode"></i> QR Code ഡൗൺലോഡ്
-        </button>
       </div>
     </div>
 
@@ -1376,9 +1373,6 @@
         select.appendChild(optBack);
       }
 
-      // 4. Set QR Code
-      generateQRCode();
-
       // 5. Initial update & scale
       updateFlipbook();
       scaleBook();
@@ -1467,32 +1461,7 @@
       jumpToPage(targetSheet);
     }
 
-    function generateQRCode() {
-      const currentUrl = window.location.origin + window.location.pathname + '#digital-manuscript-section';
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(currentUrl)}`;
-      
-      const downloadBtn = document.getElementById('downloadQRBtnLauncher');
-      if (downloadBtn) {
-        downloadBtn.addEventListener('click', async (e) => {
-          e.preventDefault();
-          try {
-            const response = await fetch(qrUrl);
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
-            const tempLink = document.createElement('a');
-            tempLink.href = blobUrl;
-            tempLink.download = 'albayan_manuscript_qr.png';
-            document.body.appendChild(tempLink);
-            tempLink.click();
-            document.body.removeChild(tempLink);
-            URL.revokeObjectURL(blobUrl);
-          } catch (err) {
-            console.error('Failed to download QR code:', err);
-            window.open(qrUrl, '_blank');
-          }
-        });
-      }
-    }
+
 
     function scaleBook() {
       const viewport = document.querySelector('#manuscriptOverlay .book-viewport');
