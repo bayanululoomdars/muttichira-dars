@@ -171,14 +171,21 @@
     <!--==========================
       Digital Manuscript (Kaypusthakam) Launcher Bar
     ============================-->
-    <div class="brochure-launcher-bar" style="background: linear-gradient(135deg, #0a4d2e 0%, #06301c 100%); margin-top: 0; border-top: 2px solid #d4af37; border-bottom: 4px solid #d4af37; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-      <div class="bar-logo" style="color: #fff; font-size: 1.4rem; font-weight: 700; font-family: 'Outfit', sans-serif; text-transform: none; letter-spacing: normal;">
-        <i class="fa fa-book" style="color:#d4af37; margin-right:12px;"></i>ഡിജിറ്റൽ കൈപ്പുസ്തകം | Digital Manuscript
+    <div class="brochure-launcher-bar" style="background: linear-gradient(135deg, #0a4d2e 0%, #06301c 100%); margin-top: 0; border-top: 2px solid #d4af37; border-bottom: 4px solid #d4af37; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="bar-logo" style="color: #fff; font-size: 1.4rem; font-weight: 700; font-family: 'Outfit', sans-serif; text-transform: none; letter-spacing: normal;">
+          <i class="fa fa-book" style="color:#d4af37; margin-right:12px;"></i>ഡിജിറ്റൽ കൈപ്പുസ്തകം | Digital Manuscript
+        </div>
+        <div>
+          <button class="launch-btn" onclick="toggleManuscriptBook(true)" style="background: #d4af37; color: #0a4d2e; border: none; padding: 12px 30px; font-weight: 700; border-radius: 30px; font-size: 1rem; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(212,175,55,0.3); text-transform: none; letter-spacing: normal;">
+            <i class="fa fa-book-open"></i> വായിക്കുക (Open Book)
+          </button>
+        </div>
       </div>
-      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-        <button class="launch-btn" onclick="toggleManuscriptBook(true)" style="background: #d4af37; color: #0a4d2e; border: none; padding: 12px 30px; font-weight: 700; border-radius: 30px; font-size: 1rem; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(212,175,55,0.3); text-transform: none; letter-spacing: normal;">
-          <i class="fa fa-book-open"></i> വായിക്കുക (Open Book)
-        </button>
+      
+      <!-- Right Side Book Cover Thumbnail -->
+      <div class="bar-poster-container" style="position: relative; cursor: pointer;" onclick="toggleManuscriptBook(true)">
+        <img src="img/kaypusthakam/page1.jpg" onerror="this.src='img/favicon.png'" alt="Book Cover" style="width: 80px; height: 110px; object-fit: cover; border-radius: 6px; border: 2px solid #d4af37; box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05) rotate(2deg)'" onmouseout="this.style.transform=''">
       </div>
     </div>
 
@@ -1430,6 +1437,8 @@
       if (select) {
         select.value = manuscriptSheetIndex;
       }
+
+      scaleBook(); // Update translation and scale
     }
 
     function flipNext() {
@@ -1471,12 +1480,20 @@
       const viewportWidth = viewport.clientWidth;
       const bookWidth = 600;
       
+      // Calculate translation for centering first/last sheet
+      let tx = 0;
+      if (manuscriptSheetIndex === 0) {
+        tx = -150; // Shift left by half-page width to center right page (page 1)
+      } else if (manuscriptSheetIndex === manuscriptTotalSheets) {
+        tx = 150; // Shift right by half-page width to center left page (page 28)
+      }
+
       if (viewportWidth < bookWidth) {
         const scale = (viewportWidth - 10) / bookWidth;
-        book.style.transform = `scale(${scale})`;
+        book.style.transform = `scale(${scale}) translateX(${tx}px)`;
         viewport.style.height = `${420 * scale}px`;
       } else {
-        book.style.transform = 'scale(1)';
+        book.style.transform = `scale(1) translateX(${tx}px)`;
         viewport.style.height = '420px';
       }
     }

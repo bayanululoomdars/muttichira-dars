@@ -1353,3 +1353,40 @@ iframe[src*='google.com'], #loginPopupModal, .ig-detail-modal { z-index: 2147483
     margin-top: 30px;
   }
 }
+
+/* Mobile Phone Optimizations for Digital Manuscript Modal */
+@media (max-width: 576px) {
+  #manuscriptOverlay .flipbook-controls {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 10px;
+    width: 100%;
+    max-width: 320px;
+  }
+  #manuscriptOverlay .flipbook-controls button {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+  #manuscriptOverlay .flipbook-controls span {
+    font-size: 0.95rem;
+    min-width: 90px;
+  }
+  #manuscriptOverlay .flipbook-select-jump {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    width: 100%;
+    max-width: 200px;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  /* Close button adjustment on mobile */
+  #manuscriptOverlay .close-brochure {
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+  }
+}
