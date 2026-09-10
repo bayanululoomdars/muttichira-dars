@@ -1630,10 +1630,10 @@
   </div>
 
   <!-- DIGITAL MANUSCRIPT MODAL WITH BLURRED BACKDROP -->
-  <div class="book-overlay" id="manuscriptOverlay">
-    <button class="close-brochure" onclick="toggleManuscriptBook(false)">&times;</button>
+  <div class="book-overlay" id="manuscriptOverlay" onclick="if(event.target === this) { toggleManuscriptBook(false); history.replaceState(null, '', window.location.pathname); }">
+    <button class="close-brochure" onclick="toggleManuscriptBook(false); history.replaceState(null, '', window.location.pathname);">&times;</button>
     
-    <div class="d-flex flex-column align-items-center justify-content-center w-100" style="min-height: 100vh; padding: 20px; position: relative;">
+    <div class="d-flex flex-column align-items-center justify-content-center w-100" style="min-height: 100vh; padding: 20px; position: relative;" onclick="if(event.target === this) { toggleManuscriptBook(false); history.replaceState(null, '', window.location.pathname); }">
       <!-- 3D Flipbook -->
       <div class="book-viewport">
         <div class="book-container-3d" id="flipbook">
