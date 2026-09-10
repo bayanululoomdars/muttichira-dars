@@ -556,7 +556,17 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', initManuscriptFlipbook);
+    document.addEventListener('DOMContentLoaded', () => {
+      initManuscriptFlipbook();
+      
+      // Override mobile/browser back button to redirect to Home (/) instead of exiting
+      window.history.replaceState(null, null, window.location.pathname);
+      window.history.pushState(null, null, window.location.pathname);
+      window.addEventListener('popstate', function(event) {
+        window.location.href = '/';
+      });
+    });
+    
     window.addEventListener('resize', scaleBook);
   </script>
 </body>
