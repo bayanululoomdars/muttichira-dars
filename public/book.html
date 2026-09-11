@@ -1,31 +1,293 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Bayanul Uloom Digital Manuscript</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="img/favicon.png" rel="icon">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+  
+  <style>
+    body {
+      background: #021a0e url('img/intro-carousel/4.jpg') center center/cover no-repeat;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    /* Make the page look like the modal directly */
+    .standalone-book-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(4, 37, 21, 0.85); /* Dark emerald tint */
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 9999;
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  </style>
 </head>
-<body style="background-color: #06301c; color: #d4af37; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center;">
-  <div>
-    <div style="margin-bottom: 20px; font-size: 1.2rem; font-weight: bold;">Loading Digital Book...</div>
-    <!-- Fallback if redirect is blocked -->
-    <a href="/?openBook=true" style="color: #fff; background: #d4af37; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Click Here if not redirected</a>
+<body>
+
+  <!-- STANDALONE DIGITAL MANUSCRIPT -->
+  <div class="standalone-book-overlay" id="manuscriptOverlay" onclick="if(event.target === this) closeBook();">
+    <button class="close-brochure" onclick="closeBook()">&times;</button>
+    
+    <div class="d-flex flex-column align-items-center justify-content-center w-100" style="min-height: 100vh; padding: 20px; position: relative;" onclick="if(event.target === this) closeBook();">
+      <!-- 3D Flipbook -->
+      <div class="book-viewport">
+        <div class="book-container-3d" id="flipbook">
+          <div class="book-spine-3d"></div>
+        </div>
+      </div>
+      
+      <!-- Navigation Controls -->
+      <div class="flipbook-controls" style="margin-top: 30px;">
+        <button onclick="flipPrev()"><i class="fa fa-chevron-left"></i> മുൻപിലേക്ക്</button>
+        <span id="pageIndicator" style="color: #fff; font-size: 1.15rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.6); min-width: 140px; text-align: center;">തൂവൽ 1 / 28</span>
+        <button onclick="flipNext()">തുടരുക <i class="fa fa-chevron-right"></i></button>
+        
+        <select class="flipbook-select-jump" id="pageJumpSelect" onchange="jumpToPage(this.value)" style="border-color: #d4af37; font-weight: 700; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;">
+          <!-- Populate dynamically -->
+        </select>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Try instant redirect
-    try {
-      window.location.replace('/?openBook=true');
-    } catch(e) {
-      window.location.href = '/?openBook=true';
+    // Redirect to home when closed
+    function closeBook() {
+      window.location.href = '/';
     }
     
-    // Backup redirect on load
-    window.onload = function() {
-      setTimeout(function() {
-        window.location.href = '/?openBook=true';
-      }, 500);
-    };
+    let manuscriptSheetIndex = 0;
+    const manuscriptTotalSheets = 14;
+
+    const manuscriptPagesData = [
+      { title: "കൈപ്പുസ്തകം കവർ", desc: "ബയാനുൽ ഉലൂം ദർസ് ഡിജിറ്റൽ കൈപ്പുസ്തകം 2026", label: "Cover Page" },
+      { title: "മുഖവുര (Introduction)", desc: "മുട്ടിച്ചിറ മഹല്ലിന്റെയും ബയാനുൽ ഉലൂം ദർസിന്റെയും പാരമ്പര്യം വിളിച്ചോതുന്ന മുഖവുര.", label: "Introduction" },
+      { title: "ദർസ് ചരിത്രം (History)", desc: "നൂറ്റാണ്ടുകളുടെ ചരിത്രമുള്ള Muttichira Bayanul Uloom Dars-ന്റെ കടന്നുവരവും വികാസവും.", label: "Dars History" },
+      { title: "സ്ഥാപക ഉസ്താദുമാർ", desc: "നമ്മെ നയിച്ച മുൻകാല മഹാരഥന്മാരും ഉസ്താദുമാരും അവരുടെ ജീവിതവഴികളും.", label: "Founding Usthads" },
+      { title: "ഇന്നത്തെ സാരഥികൾ", desc: "ദർസിന് നേതൃത്വം നൽകുന്ന ബഹുമാനപ്പെട്ട പ്രധാന മുദരിസും മറ്റ് മുദരിസുമാരും.", label: "Present Leaders" },
+      { title: "പാഠ്യപദ്ധതി (Syllabus)", desc: "ദർസിലെ ആഴത്തിലുള്ള ഇസ്‌ലാമിക പ്രമാണ പഠന ക്രമങ്ങളും പാഠപുസ്തകങ്ങളും.", label: "Syllabus" },
+      { title: "കലാ-സാഹിത്യ വേദി", desc: "വിദ്യാർത്ഥികളുടെ സർഗ്ഗാത്മക ശേഷിയും സാഹിത്യ സമാജ പ്രക്രിയകളും.", label: "Arts & Culture" },
+      { title: "ബുർദ ആലാപനം", desc: "അൽ ബയാൻ ബുർദ ടീം - പ്രവാചക മദ്ഹ് പ്രകീർത്തനങ്ങളുടെ ആത്മീയ അനുഭവം.", label: "Burda Team" },
+      { title: "ആത്മീയ സദസ്സുകൾ", desc: "ദർസിലെ ദിവസേനയുള്ള പ്രാർത്ഥനാ മജ്‌ലിസുകളും ആത്മീയ ക്ലാസ്സുകളും.", label: "Spiritual Events" },
+      { title: "സാമൂഹിക സേവനം", desc: "വിദ്യാർത്ഥികളുടെ നേതൃത്വത്തിൽ നടക്കുന്ന സന്നദ്ധ പ്രവർത്തനങ്ങൾ.", label: "Social Services" },
+      { title: "ഗ്രന്ഥാലയം (Library)", desc: "അമൂല്യമായ നിരവധി ഇസ്‌ലാമിക കിതാബുകളും ആധുനിക പുസ്തകങ്ങളുമുള്ള വായനശാല.", label: "Library" },
+      { title: "അഡ്മിഷൻ വിവരങ്ങൾ", desc: "പുതിയ അഡ്മിഷൻ പ്രക്രിയകളും അർഹതയും രജിസ്ട്രേഷൻ വിവരങ്ങളും.", label: "Admissions" },
+      { title: "പൂർവ്വ വിദ്യാർത്ഥി കൂട്ടായ്മ", desc: "ലോകത്തിന്റെ വിവിധ കോണുകളിൽ സേവനം ചെയ്യുന്ന ബയാൻ പൂർവ്വ വിദ്യാർത്ഥികൾ.", label: "Alumni Network" },
+      { title: "വിജ്ഞാന സന്ദേശങ്ങൾ", desc: "പണ്ഡിതന്മാരുടെ പ്രധാനപ്പെട്ട ഉദ്ധരണികളും ആത്മീയ ഉപദേശങ്ങളും.", label: "Scholar Messages" },
+      { title: "വിദ്യാർത്ഥി രചനകൾ - കവിതകൾ", desc: "വിദ്യാർത്ഥികൾ സ്വയം രചിച്ച മലയാളം, അറബിക് ഭക്തിസാന്ദ്രമായ കവിതകൾ.", label: "Student Poems" },
+      { title: "ലേഖനങ്ങൾ & പ്രബന്ധങ്ങൾ", desc: "ആധുനിക സാമൂഹിക വിഷയങ്ങളിലുള്ള പഠനാർഹമായ ലേഖനങ്ങൾ.", label: "Student Articles" },
+      { title: "അറബി ഭാഷാ പഠനം", desc: "അറബി ഭാഷ പ്രയോഗത്തിലും എഴുത്തിലും വിദ്യാർത്ഥികൾ കൈവരിച്ച പുരോഗതി.", label: "Arabic Writing" },
+      { title: "ചിത്രരചനകൾ", desc: "വിദ്യാർത്ഥികളുടെ ക്യാൻവാസിലെ മനോഹരമായ അറബിക് കാലിഗ്രാഫികളും ചിത്രങ്ങളും.", label: "Calligraphy & Art" },
+      { title: "ക്വിസ് & പൊതുവിജ്ഞാനം", desc: "വിശ്വാസ കാര്യങ്ങളെയും ഇസ്‌ലാമിക ചരിത്രത്തെയും അടിസ്ഥാനമാക്കിയുള്ള ചോദ്യങ്ങൾ.", label: "Islamic Quiz" },
+      { title: "ദർസ് ദിനചര്യകൾ", desc: "വിദ്യാർത്ഥികളുടെ ഒരു ദിവസത്തെ പഠന-ആരാധനാ സമയക്രമങ്ങൾ.", label: "Daily Schedule" },
+      { title: "അൽ ബയാൻ മീഡിയ വിംഗ്", desc: "ദർസിന്റെ പ്രവർത്തനങ്ങൾ ഡിജിറ്റലായി ലോകത്തെ അറിയിക്കുന്ന മീഡിയ പ്ലാറ്റ്ഫോം.", label: "Al Bayan Media" },
+      { title: "കായിക വിനോദങ്ങൾ", desc: "ശാരീരിക ആരോഗ്യത്തിനായി ദർസിൽ സംഘടിപ്പിക്കുന്ന ഇൻഡോർ-ഔട്ടഡോർ ഗെയിമുകൾ.", label: "Sports Activities" },
+      { title: "ക്യാമ്പ് ഓർമ്മകൾ", desc: "കഴിഞ്ഞ അധ്യയന വർഷങ്ങളിൽ നടത്തിയ സ്റ്റഡി ക്യാമ്പുകളുടെ ഓർമ്മച്ചിത്രങ്ങൾ.", label: "Study Camps" },
+      { title: "വിശിഷ്ട അതിഥികൾ", desc: "ദർസ് സന്ദർശിച്ച സയ്യിദന്മാരും പണ്ഡിത ശ്രേഷ്ഠരും അവരുടെ സന്ദേശങ്ങളും.", label: "Guest Messages" },
+      { title: "സ്നേഹോപഹാരങ്ങൾ", desc: "വിവിധ മത്സരങ്ങളിൽ ദർസിന് ലഭിച്ച ട്രോഫികളും സ്വർണ്ണ മെഡലുകളും.", label: "Achievements" },
+      { title: "നന്ദി പ്രകാശനം", desc: "സഹകരിച്ച എല്ലാവർക്കും ദർസ് കമ്മിറ്റിയുടെ ഹൃദയം നിറഞ്ഞ നന്ദി.", label: "Acknowledgement" },
+      { title: "പ്രത്യാശയുടെ നാളുകൾ", desc: "ബയാനുൽ ഉലൂം ദർസിന്റെ വരുംകാല പുരോഗതികൾക്കുള്ള പ്രാർത്ഥനകൾ.", label: "Future Visions" },
+      { title: "പിൻ കവർ (Back Cover)", desc: "അൽ ബയാൻ മീഡിയ - മുട്ടിച്ചിറ ദർസ് അഡ്മിഷൻ ഓപ്പൺ 2026", label: "Back Cover" }
+    ];
+
+    function initManuscriptFlipbook() {
+      const flipbook = document.getElementById('flipbook');
+      if (!flipbook) return;
+
+      flipbook.innerHTML = '<div class="book-spine-3d"></div>';
+      for (let i = 0; i < manuscriptTotalSheets; i++) {
+        const sheet = document.createElement('div');
+        sheet.className = 'book-sheet-3d';
+        sheet.id = `sheet-${i}`;
+        
+        const idxFront = 2 * i;
+        const idxBack = 2 * i + 1;
+        
+        const pageFront = manuscriptPagesData[idxFront] || { title: "", desc: "", label: "" };
+        const pageBack = manuscriptPagesData[idxBack] || { title: "", desc: "", label: "" };
+        
+        const numFront = idxFront + 1;
+        const numBack = idxBack + 1;
+        
+        sheet.innerHTML = `
+          <div class="book-page-3d page-front-3d" onclick="flipNext()">
+            <img src="img/kaypusthakam/page (${numFront}).jpg" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%; height:100%; object-fit:contain;" alt="Page ${numFront}">
+            <div class="parchment-page ${numFront === 1 ? 'parchment-cover-page' : ''}">
+              <div class="parchment-title">${pageFront.title}</div>
+              <div class="parchment-content-text">${pageFront.desc}</div>
+              <div class="parchment-footer">
+                <span>ബയാനുൽ ഉലൂം</span>
+                <span>താൾ ${numFront}</span>
+              </div>
+            </div>
+          </div>
+          <div class="book-page-3d page-back-3d" onclick="flipPrev()">
+            <img src="img/kaypusthakam/page (${numBack}).jpg" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%; height:100%; object-fit:contain;" alt="Page ${numBack}">
+            <div class="parchment-page ${numBack === 28 ? 'parchment-cover-page' : ''}">
+              <div class="parchment-title">${pageBack.title}</div>
+              <div class="parchment-content-text">${pageBack.desc}</div>
+              <div class="parchment-footer">
+                <span>താൾ ${numBack}</span>
+                <span>ബയാനുൽ ഉലൂം</span>
+              </div>
+            </div>
+          </div>
+        `;
+        flipbook.appendChild(sheet);
+      }
+
+      const select = document.getElementById('pageJumpSelect');
+      if (select) {
+        select.innerHTML = '';
+        const optCover = document.createElement('option');
+        optCover.value = 0;
+        optCover.innerText = "കവർ പേജ് (തൂവൽ 1)";
+        select.appendChild(optCover);
+        
+        for (let i = 1; i < manuscriptTotalSheets; i++) {
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.innerText = `താൾ ${2 * i} - ${2 * i + 1}`;
+          select.appendChild(opt);
+        }
+        
+        const optBack = document.createElement('option');
+        optBack.value = manuscriptTotalSheets;
+        optBack.innerText = "പിൻ കവർ (തൂവൽ 28)";
+        select.appendChild(optBack);
+      }
+
+      updateFlipbook();
+      scaleBook();
+
+      // Bind touch swipe gestures
+      const bookViewport = document.querySelector('.book-viewport');
+      if (bookViewport) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        bookViewport.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        bookViewport.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          const swipeThreshold = 50;
+          if (touchStartX - touchEndX > swipeThreshold) {
+            flipNext();
+          } else if (touchEndX - touchStartX > swipeThreshold) {
+            flipPrev();
+          }
+        }, { passive: true });
+      }
+    }
+
+    function updateFlipbook() {
+      for (let i = 0; i < manuscriptTotalSheets; i++) {
+        const sheet = document.getElementById(`sheet-${i}`);
+        if (!sheet) continue;
+        
+        if (i < manuscriptSheetIndex) {
+          sheet.classList.add('flipped-sheet-3d');
+          sheet.style.zIndex = i + 1;
+        } else {
+          sheet.classList.remove('flipped-sheet-3d');
+          sheet.style.zIndex = manuscriptTotalSheets - i;
+        }
+      }
+      
+      const indicator = document.getElementById('pageIndicator');
+      if (indicator) {
+        if (manuscriptSheetIndex === 0) {
+          indicator.innerText = `തൂവൽ 1 / 28`;
+        } else if (manuscriptSheetIndex === manuscriptTotalSheets) {
+          indicator.innerText = `തൂവൽ 28 / 28`;
+        } else {
+          const leftPage = manuscriptSheetIndex * 2;
+          const rightPage = manuscriptSheetIndex * 2 + 1;
+          indicator.innerText = `താൾ ${leftPage} - ${rightPage} / 28`;
+        }
+      }
+
+      const select = document.getElementById('pageJumpSelect');
+      if (select) {
+        select.value = manuscriptSheetIndex;
+      }
+      scaleBook();
+    }
+
+    function flipNext() {
+      if (manuscriptSheetIndex < manuscriptTotalSheets) {
+        manuscriptSheetIndex++;
+        updateFlipbook();
+      }
+    }
+
+    function flipPrev() {
+      if (manuscriptSheetIndex > 0) {
+        manuscriptSheetIndex--;
+        updateFlipbook();
+      }
+    }
+
+    function jumpToPage(sheetIdx) {
+      manuscriptSheetIndex = parseInt(sheetIdx);
+      updateFlipbook();
+    }
+
+    function scaleBook() {
+      const bookContainer = document.querySelector('.book-container-3d');
+      if (!bookContainer) return;
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      let scale = 1;
+      let translateY = 0;
+      let translateX = 0;
+
+      if (viewportWidth < 500) {
+        scale = (viewportWidth / 800) * 0.9; 
+        translateY = manuscriptSheetIndex === 0 ? 5 : (manuscriptSheetIndex === manuscriptTotalSheets ? 5 : 30);
+        translateX = manuscriptSheetIndex === 0 ? -15 : (manuscriptSheetIndex === manuscriptTotalSheets ? 15 : 0);
+      } else if (viewportWidth < 768) {
+        scale = (viewportWidth / 800) * 0.85;
+        translateY = 30;
+      } else {
+        const heightScale = viewportHeight / 700;
+        const widthScale = viewportWidth / 1200;
+        scale = Math.min(heightScale, widthScale) * 0.95;
+        translateY = 40;
+      }
+      
+      bookContainer.style.transform = `scale(${scale}) translateY(${translateY}px) translateX(${translateX}px)`;
+    }
+
+    window.addEventListener('resize', scaleBook);
+    
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      initManuscriptFlipbook();
+      // Handle physical back button on Android
+      window.history.pushState({ page: 'book' }, '', window.location.href);
+      window.addEventListener('popstate', (e) => {
+        closeBook();
+      });
+    });
   </script>
 </body>
 </html>
