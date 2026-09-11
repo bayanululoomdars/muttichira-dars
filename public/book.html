@@ -4,14 +4,28 @@
   <meta charset="utf-8">
   <title>Bayanul Uloom Digital Manuscript</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script>
-    // Robustly redirect to home page with openBook=true query parameter
-    // This guarantees the homepage will catch it and open the book instantly.
-    // Replace state is used so that this book.html redirect page is wiped from history.
-    window.location.replace('/?openBook=true');
-  </script>
 </head>
-<body style="background-color: #06301c; color: #d4af37; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
-  <p>Loading Digital Book...</p>
+<body style="background-color: #06301c; color: #d4af37; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center;">
+  <div>
+    <div style="margin-bottom: 20px; font-size: 1.2rem; font-weight: bold;">Loading Digital Book...</div>
+    <!-- Fallback if redirect is blocked -->
+    <a href="/?openBook=true" style="color: #fff; background: #d4af37; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Click Here if not redirected</a>
+  </div>
+
+  <script>
+    // Try instant redirect
+    try {
+      window.location.replace('/?openBook=true');
+    } catch(e) {
+      window.location.href = '/?openBook=true';
+    }
+    
+    // Backup redirect on load
+    window.onload = function() {
+      setTimeout(function() {
+        window.location.href = '/?openBook=true';
+      }, 500);
+    };
+  </script>
 </body>
 </html>

@@ -1302,9 +1302,6 @@
       fetch('/api/settings/burda').then(r=>r.json()).then(d=>{
         if (d.imageUrl) document.getElementById('burdaTeamImg').src = d.imageUrl;
       }).catch(()=>{});
-
-      // Initialize Digital Manuscript Flipbook
-      initManuscriptFlipbook();
     });
 
     // ── DIGITAL MANUSCRIPT FLIPBOOK CODE ─────────────────────
@@ -1558,6 +1555,8 @@
     window.addEventListener('resize', scaleBook);
 
     function toggleManuscriptBook(open, isPopState = false) {
+      ensureManuscriptInitialized();
+      
       const overlay = document.getElementById('manuscriptOverlay');
       if (!overlay) return;
       
@@ -1584,7 +1583,18 @@
     }
 
     // Auto-open manuscript modal robustly
+    let isManuscriptInitialized = false;
+    
+    function ensureManuscriptInitialized() {
+      if (!isManuscriptInitialized) {
+        initManuscriptFlipbook();
+        isManuscriptInitialized = true;
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      ensureManuscriptInitialized();
+      
       const urlParams = new URLSearchParams(window.location.search);
       const hash = window.location.hash;
       
