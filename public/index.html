@@ -1309,7 +1309,7 @@
 
     // ── DIGITAL MANUSCRIPT FLIPBOOK CODE ─────────────────────
     let manuscriptSheetIndex = 0;
-    const manuscriptTotalSheets = 14;
+    const manuscriptTotalSheets = 13;
 
     const manuscriptPagesData = [
       { title: "കൈപ്പുസ്തകം കവർ", desc: "ബയാനുൽ ഉലൂം ദർസ് ഡിജിറ്റൽ കൈപ്പുസ്തകം 2026", label: "Cover Page" },
@@ -1356,15 +1356,15 @@
         const idxFront = 2 * i;
         const idxBack = 2 * i + 1;
         
-        const pageFront = manuscriptPagesData[idxFront];
-        const pageBack = manuscriptPagesData[idxBack];
+        const pageFront = manuscriptPagesData[idxFront] || { title: "", desc: "", label: "" };
+        const pageBack = manuscriptPagesData[idxBack] || { title: "", desc: "", label: "" };
         
         const numFront = idxFront + 1;
         const numBack = idxBack + 1;
         
         sheet.innerHTML = `
           <div class="book-page-3d page-front-3d" onclick="flipNext()">
-            <img src="img/kaypusthakam/page${numFront}.jpg" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%; height:100%; object-fit:contain;" alt="Page ${numFront}">
+            <img src="img/kaypusthakam/page (${numFront}).jpg" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%; height:100%; object-fit:contain;" alt="Page ${numFront}">
             <div class="parchment-page ${numFront === 1 ? 'parchment-cover-page' : ''}">
               <div class="parchment-title">${pageFront.title}</div>
               <div class="parchment-content-text">${pageFront.desc}</div>
@@ -1375,8 +1375,8 @@
             </div>
           </div>
           <div class="book-page-3d page-back-3d" onclick="flipPrev()">
-            <img src="img/kaypusthakam/page${numBack}.jpg" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%; height:100%; object-fit:contain;" alt="Page ${numBack}">
-            <div class="parchment-page ${numBack === 28 ? 'parchment-cover-page' : ''}">
+            <img src="img/kaypusthakam/page (${numBack}).jpg" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%; height:100%; object-fit:contain;" alt="Page ${numBack}">
+            <div class="parchment-page ${numBack === 26 ? 'parchment-cover-page' : ''}">
               <div class="parchment-title">${pageBack.title}</div>
               <div class="parchment-content-text">${pageBack.desc}</div>
               <div class="parchment-footer">
@@ -1433,7 +1433,7 @@
         
         const optBack = document.createElement('option');
         optBack.value = manuscriptTotalSheets;
-        optBack.innerText = "പിൻ കവർ (തൂവൽ 28)";
+        optBack.innerText = "പിൻ കവർ (തൂവൽ 26)";
         select.appendChild(optBack);
       }
 
@@ -1480,13 +1480,13 @@
       const indicator = document.getElementById('pageIndicator');
       if (indicator) {
         if (manuscriptSheetIndex === 0) {
-          indicator.innerText = `തൂവൽ 1 / 28`;
+          indicator.innerText = `തൂവൽ 1 / 26`;
         } else if (manuscriptSheetIndex === manuscriptTotalSheets) {
-          indicator.innerText = `തൂവൽ 28 / 28`;
+          indicator.innerText = `തൂവൽ 26 / 26`;
         } else {
           const leftPage = manuscriptSheetIndex * 2;
           const rightPage = manuscriptSheetIndex * 2 + 1;
-          indicator.innerText = `താൾ ${leftPage} - ${rightPage} / 28`;
+          indicator.innerText = `താൾ ${leftPage} - ${rightPage} / 26`;
         }
       }
 
@@ -1677,7 +1677,7 @@
       <!-- Navigation Controls -->
       <div class="flipbook-controls" style="margin-top: 30px;">
         <button onclick="flipPrev()"><i class="fa fa-chevron-left"></i> മുൻപിലേക്ക്</button>
-        <span id="pageIndicator" style="color: #fff; font-size: 1.15rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.6); min-width: 140px; text-align: center;">തൂവൽ 1 / 28</span>
+        <span id="pageIndicator" style="color: #fff; font-size: 1.15rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.6); min-width: 140px; text-align: center;">തൂവൽ 1 / 26</span>
         <button onclick="flipNext()">തുടരുക <i class="fa fa-chevron-right"></i></button>
         
         <select class="flipbook-select-jump" id="pageJumpSelect" onchange="jumpToPage(this.value)" style="border-color: #d4af37; font-weight: 700; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;">
