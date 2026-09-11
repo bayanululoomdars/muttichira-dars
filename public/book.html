@@ -5,9 +5,10 @@
   <title>Bayanul Uloom Digital Manuscript</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-    // Redirect to the home page with the manuscript open in the modal overlay.
-    // This provides the "blurred home page" background effect the user requested.
-    window.location.replace('/#manuscript');
+    // Robustly redirect to home page with openBook=true query parameter
+    // This guarantees the homepage will catch it and open the book instantly.
+    // Replace state is used so that this book.html redirect page is wiped from history.
+    window.location.replace('/?openBook=true');
   </script>
 </head>
 <body style="background-color: #06301c; color: #d4af37; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">

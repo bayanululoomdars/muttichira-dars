@@ -1557,26 +1557,51 @@
 
     window.addEventListener('resize', scaleBook);
 
-    function toggleManuscriptBook(open) {
+    function toggleManuscriptBook(open, isPopState = false) {
       const overlay = document.getElementById('manuscriptOverlay');
       if (!overlay) return;
+      
       if (open) {
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
         manuscriptSheetIndex = 0;
         updateFlipbook();
         setTimeout(scaleBook, 150);
+        
+        // Push state for hardware back button if we're not responding to a popstate
+        if (!isPopState) {
+          window.history.pushState({ modal: 'open' }, '', window.location.pathname);
+        }
       } else {
         overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
+        
+        // If closed manually via X or click outside, we should go back in history to pop the state
+        if (!isPopState && window.history.state && window.history.state.modal === 'open') {
+          window.history.back();
+        }
       }
     }
 
-    // Auto-open manuscript modal if hash is matched
-    window.addEventListener('load', () => {
-      if (window.location.hash === '#digital-manuscript-section' || window.location.hash === '#manuscript') {
-        setTimeout(() => toggleManuscriptBook(true), 500);
+    // Auto-open manuscript modal robustly
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const hash = window.location.hash;
+      
+      if (urlParams.get('openBook') === 'true' || hash === '#digital-manuscript-section' || hash === '#manuscript') {
+        // Clean URL to home
+        window.history.replaceState(null, '', window.location.pathname);
+        // Open the book instantly
+        toggleManuscriptBook(true);
       }
+      
+      // Handle hardware back button
+      window.addEventListener('popstate', (e) => {
+        const overlay = document.getElementById('manuscriptOverlay');
+        if (overlay && overlay.classList.contains('active')) {
+          toggleManuscriptBook(false, true);
+        }
+      });
     });
   </script>
 
@@ -1638,10 +1663,10 @@
   </div>
 
   <!-- DIGITAL MANUSCRIPT MODAL WITH BLURRED BACKDROP -->
-  <div class="book-overlay" id="manuscriptOverlay" onclick="if(event.target === this) { toggleManuscriptBook(false); history.replaceState(null, '', window.location.pathname); }">
-    <button class="close-brochure" onclick="toggleManuscriptBook(false); history.replaceState(null, '', window.location.pathname);">&times;</button>
+  <div class="book-overlay" id="manuscriptOverlay" onclick="if(event.target === this) toggleManuscriptBook(false);">
+    <button class="close-brochure" onclick="toggleManuscriptBook(false);">&times;</button>
     
-    <div class="d-flex flex-column align-items-center justify-content-center w-100" style="min-height: 100vh; padding: 20px; position: relative;" onclick="if(event.target === this) { toggleManuscriptBook(false); history.replaceState(null, '', window.location.pathname); }">
+    <div class="d-flex flex-column align-items-center justify-content-center w-100" style="min-height: 100vh; padding: 20px; position: relative;" onclick="if(event.target === this) toggleManuscriptBook(false);">
       <!-- 3D Flipbook -->
       <div class="book-viewport">
         <div class="book-container-3d" id="flipbook">
