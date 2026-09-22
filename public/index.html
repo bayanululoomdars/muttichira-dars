@@ -1531,25 +1531,39 @@
       const book = document.getElementById('flipbook');
       if (!viewport || !book) return;
 
-      const viewportWidth = viewport.clientWidth;
+      const viewportWidth = viewport.clientWidth || window.innerWidth;
+      const viewportHeight = window.innerHeight;
       const bookWidth = 600;
       
-      // Calculate translation for centering first/last sheet
+      let scale = 1;
       let tx = 0;
+      let ty = 0;
+
+      // Center the visible page on first/last sheet
       if (manuscriptSheetIndex === 0) {
-        tx = -150; // Shift left by half-page width to center right page (page 1)
+        tx = -150;
       } else if (manuscriptSheetIndex === manuscriptTotalSheets) {
-        tx = 150; // Shift right by half-page width to center left page (page 28)
+        tx = 150;
       }
 
-      if (viewportWidth < bookWidth) {
-        const scale = (viewportWidth - 10) / bookWidth;
-        book.style.transform = `scale(${scale}) translateX(${tx}px)`;
-        viewport.style.height = `${420 * scale}px`;
+      if (viewportWidth < 500) {
+        scale = (viewportWidth / 800) * 0.9;
+        ty = manuscriptSheetIndex === 0 ? 5 : (manuscriptSheetIndex === manuscriptTotalSheets ? 5 : 30);
+        if (manuscriptSheetIndex === 0) tx = -15;
+        else if (manuscriptSheetIndex === manuscriptTotalSheets) tx = 15;
+        else tx = 0;
+      } else if (viewportWidth < 768) {
+        scale = (viewportWidth / 800) * 0.85;
+        ty = 30;
       } else {
-        book.style.transform = `scale(1) translateX(${tx}px)`;
-        viewport.style.height = '420px';
+        const heightScale = viewportHeight / 700;
+        const widthScale = viewportWidth / 1200;
+        scale = Math.min(heightScale, widthScale) * 0.95;
+        ty = 40;
       }
+
+      book.style.transform = `scale(${scale}) translateY(${ty}px) translateX(${tx}px)`;
+      viewport.style.height = `${420 * scale + 40}px`;
     }
 
     window.addEventListener('resize', scaleBook);
@@ -1566,6 +1580,7 @@
         manuscriptSheetIndex = 0;
         updateFlipbook();
         setTimeout(scaleBook, 150);
+        setTimeout(scaleBook, 500);
         
         // Push state for hardware back button if we're not responding to a popstate
         if (!isPopState) {
