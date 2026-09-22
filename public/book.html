@@ -8,8 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   
-  <!-- PageFlip Library (Realistic 3D Book Turn) -->
-  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+  <!-- PageFlip Library (Realistic 3D Book Turn) - Local -->
+  <script src="js/page-flip.min.js"></script>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -252,66 +252,70 @@
     }
     
     // Initialize PageFlip
-    const pageFlip = new St.PageFlip(bookEl, {
-        width: 420,           // Base page width
-        height: 594,          // Base page height (A4 proportion)
-        size: "fit",          // Scale to fit container
-        minWidth: 200,
-        maxWidth: 600,
-        minHeight: 300,
-        maxHeight: 900,
-        showCover: true,      // First & Last page centered!
-        usePortrait: false,   // Force double-page spread on mobile
-        maxShadowOpacity: 0.5,
-        drawShadow: true,
-        flippingTime: 700,    // Book turning speed
-        swipeDistance: 30,    // Easy swipe threshold
-        autoSize: true
-    });
-    
-    // Load pages
-    pageFlip.loadFromHTML(document.querySelectorAll('.page'));
-    
-    // Remove loader once the flipbook is ready
-    setTimeout(() => {
-        loader.style.display = 'none';
-    }, 1000);
-    
-    // UI Elements
-    const btnPrev = document.getElementById('btnPrev');
-    const btnNext = document.getElementById('btnNext');
-    const pageInfo = document.getElementById('pageInfo');
-    
-    btnPrev.addEventListener('click', () => { pageFlip.flipPrev(); });
-    btnNext.addEventListener('click', () => { pageFlip.flipNext(); });
-    
-    // Listen to flip event to update page numbers
-    pageFlip.on('flip', (e) => {
-        // e.data is the array index (0 to 27)
-        const curIndex = e.data;
-        const pageNum = curIndex + 1;
+    try {
+        const pageFlip = new St.PageFlip(bookEl, {
+            width: 420,           // Base page width
+            height: 594,          // Base page height (A4 proportion)
+            size: "fit",          // Scale to fit container
+            minWidth: 200,
+            maxWidth: 600,
+            minHeight: 300,
+            maxHeight: 900,
+            showCover: true,      // First & Last page centered!
+            usePortrait: false,   // Force double-page spread on mobile
+            maxShadowOpacity: 0.5,
+            drawShadow: true,
+            flippingTime: 700,    // Book turning speed
+            swipeDistance: 30,    // Easy swipe threshold
+            autoSize: true
+        });
         
-        if (curIndex === 0) {
-            pageInfo.textContent = 'കവർ പേജ് (Cover)';
-        } else if (curIndex === TOTAL_PAGES - 1) {
-            pageInfo.textContent = 'പിൻ കവർ (Back Cover)';
-        } else {
-            // For spreads, show both page numbers
-            const rightPage = pageNum + 1;
-            if(rightPage <= TOTAL_PAGES) {
-                pageInfo.textContent = `താൾ ${pageNum} - ${rightPage}`;
+        // Load pages
+        pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+        
+        // UI Elements
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const pageInfo = document.getElementById('pageInfo');
+        
+        btnPrev.addEventListener('click', () => { pageFlip.flipPrev(); });
+        btnNext.addEventListener('click', () => { pageFlip.flipNext(); });
+        
+        // Listen to flip event to update page numbers
+        pageFlip.on('flip', (e) => {
+            const curIndex = e.data;
+            const pageNum = curIndex + 1;
+            
+            if (curIndex === 0) {
+                pageInfo.textContent = 'കവർ പേജ് (Cover)';
+            } else if (curIndex === TOTAL_PAGES - 1) {
+                pageInfo.textContent = 'പിൻ കവർ (Back Cover)';
             } else {
-                pageInfo.textContent = `താൾ ${pageNum}`;
+                const rightPage = pageNum + 1;
+                if(rightPage <= TOTAL_PAGES) {
+                    pageInfo.textContent = `താൾ ${pageNum} - ${rightPage}`;
+                } else {
+                    pageInfo.textContent = `താൾ ${pageNum}`;
+                }
             }
-        }
-    });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') pageFlip.flipNext();
-        if (e.key === 'ArrowLeft') pageFlip.flipPrev();
-        if (e.key === 'Escape') window.location.href = '/';
-    });
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') pageFlip.flipNext();
+            if (e.key === 'ArrowLeft') pageFlip.flipPrev();
+            if (e.key === 'Escape') window.location.href = '/';
+        });
+
+    } catch(err) {
+        console.error("Book Init Error:", err);
+        alert("പുസ്തകം ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല. ദയവായി പേജ് റിഫ്രഷ് ചെയ്യുക.");
+    } finally {
+        // Always hide loader after a short delay
+        setTimeout(() => {
+            if(loader) loader.style.display = 'none';
+        }, 500);
+    }
     
     // Hardware Back Button (Android)
     window.history.pushState({ p: 'book' }, '', window.location.href);
