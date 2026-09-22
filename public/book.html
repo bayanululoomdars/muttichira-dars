@@ -3,291 +3,467 @@
 <head>
   <meta charset="utf-8">
   <title>Bayanul Uloom Digital Manuscript</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
   <link href="img/favicon.png" rel="icon">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/custom.css" rel="stylesheet">
   
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
-      background: #021a0e url('img/intro-carousel/4.jpg') center center/cover no-repeat;
-      margin: 0;
+      background: #021a0e;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      overflow: hidden;
       height: 100vh;
+      height: 100dvh;
+      touch-action: pan-y;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .book-app {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #031a0c 0%, #042515 50%, #021008 100%);
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
     }
-    
-    /* Make the page look like the modal directly */
-    .standalone-book-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
+
+    /* ── HEADER BAR ── */
+    .book-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212,175,55,0.2);
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .book-header .title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #d4af37;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .book-header .subtitle {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.6);
+      font-weight: 400;
+    }
+
+    .close-btn {
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.4);
+      color: #d4af37;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+
+    .close-btn:hover, .close-btn:active {
+      background: #d4af37;
+      color: #042515;
+    }
+
+    /* ── PAGE VIEWER (MAIN AREA) ── */
+    .page-viewer {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+    }
+
+    .page-container {
+      position: relative;
       width: 100%;
       height: 100%;
-      background: rgba(4, 37, 21, 0.85); /* Dark emerald tint */
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-img {
+      max-width: 95%;
+      max-height: 95%;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      transition: opacity 0.3s ease;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    /* Swipe hint arrows */
+    .swipe-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.3);
+      color: #d4af37;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      transition: all 0.3s;
+    }
+
+    .swipe-arrow:hover, .swipe-arrow:active {
+      background: rgba(212,175,55,0.4);
+    }
+
+    .swipe-arrow.left { left: 8px; }
+    .swipe-arrow.right { right: 8px; }
+
+    .swipe-arrow.disabled {
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    /* ── BOTTOM CONTROLS ── */
+    .book-controls {
+      padding: 10px 12px 14px;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(212,175,55,0.15);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    /* Progress bar */
+    .progress-bar-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #d4af37, #f0d060);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.3);
+      color: #d4af37;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:active {
+      background: #d4af37;
+      color: #042515;
+      transform: scale(0.95);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .page-info {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      min-width: 80px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .page-jump {
+      width: 100%;
+      max-width: 200px;
+      margin: 8px auto 0;
       display: block;
-      opacity: 1;
-      visibility: visible;
-      overflow-y: auto;
-      overflow-x: hidden;
+      padding: 6px 12px;
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 16px;
+      background: rgba(0,0,0,0.3);
+      color: #d4af37;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-align: center;
+      cursor: pointer;
+      -webkit-appearance: none;
+    }
+
+    /* ── LOADING SPINNER ── */
+    .page-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(212,175,55,0.2);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SAFE AREA for notch phones ── */
+    @supports (padding: env(safe-area-inset-bottom)) {
+      .book-controls {
+        padding-bottom: calc(14px + env(safe-area-inset-bottom));
+      }
+      .book-header {
+        padding-top: calc(10px + env(safe-area-inset-top));
+      }
+    }
+
+    /* Desktop: slightly larger arrows */
+    @media (min-width: 768px) {
+      .swipe-arrow {
+        width: 54px;
+        height: 54px;
+        font-size: 1.3rem;
+      }
+      .swipe-arrow.left { left: 20px; }
+      .swipe-arrow.right { right: 20px; }
+      .page-info { font-size: 1rem; }
+      .nav-btn { padding: 10px 22px; font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- STANDALONE DIGITAL MANUSCRIPT -->
-  <div class="standalone-book-overlay" id="manuscriptOverlay" onclick="if(event.target === this) closeBook();">
-    <button class="close-brochure" onclick="closeBook()">&times;</button>
-    
-    <div class="d-flex flex-column align-items-center justify-content-center w-100" style="min-height: 100vh; padding: 20px; position: relative;" onclick="if(event.target === this) closeBook();">
-      <!-- 3D Flipbook -->
-      <div class="book-viewport">
-        <div class="book-container-3d" id="flipbook">
-          <div class="book-spine-3d"></div>
-        </div>
-      </div>
-      
-      <!-- Navigation Controls -->
-      <div class="flipbook-controls" style="margin-top: 30px;">
-        <button onclick="flipPrev()"><i class="fa fa-chevron-left"></i> മുൻപിലേക്ക്</button>
-        <span id="pageIndicator" style="color: #fff; font-size: 1.15rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.6); min-width: 140px; text-align: center;">തൂവൽ 1 / 28</span>
-        <button onclick="flipNext()">തുടരുക <i class="fa fa-chevron-right"></i></button>
-        
-        <select class="flipbook-select-jump" id="pageJumpSelect" onchange="jumpToPage(this.value)" style="border-color: #d4af37; font-weight: 700; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;">
-          <!-- Populate dynamically -->
-        </select>
-      </div>
+<div class="book-app">
+  <!-- Header -->
+  <div class="book-header">
+    <div>
+      <div class="title">ബയാനുൽ ഉലൂം ഡിജിറ്റൽ കൈപ്പുസ്തകം</div>
+      <div class="subtitle">Bayanul Uloom Digital Manuscript 2026</div>
     </div>
+    <button class="close-btn" onclick="closeBook()" aria-label="Close">&times;</button>
   </div>
 
-  <script>
-    // Redirect to home when closed
-    function closeBook() {
-      window.location.href = '/';
+  <!-- Page Viewer -->
+  <div class="page-viewer" id="pageViewer">
+    <div class="page-container" id="pageContainer">
+      <div class="page-loading" id="pageLoading"><div class="spinner"></div></div>
+      <img class="page-img" id="pageImg" src="" alt="Page">
+    </div>
+    <button class="swipe-arrow left" id="arrowLeft" onclick="goPage(-1)"><i class="fa fa-chevron-left"></i></button>
+    <button class="swipe-arrow right" id="arrowRight" onclick="goPage(1)"><i class="fa fa-chevron-right"></i></button>
+  </div>
+
+  <!-- Bottom Controls -->
+  <div class="book-controls">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="controls-row">
+      <button class="nav-btn" id="prevBtn" onclick="goPage(-1)"><i class="fa fa-chevron-left"></i> മുൻപ്</button>
+      <span class="page-info" id="pageInfo">1 / 28</span>
+      <button class="nav-btn" id="nextBtn" onclick="goPage(1)">അടുത്തത് <i class="fa fa-chevron-right"></i></button>
+    </div>
+    <select class="page-jump" id="pageJump" onchange="jumpTo(this.value)"></select>
+  </div>
+</div>
+
+<script>
+  const TOTAL_PAGES = 28;
+  let currentPage = 1;
+  let isAnimating = false;
+
+  const pageImg = document.getElementById('pageImg');
+  const pageInfo = document.getElementById('pageInfo');
+  const progressFill = document.getElementById('progressFill');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const arrowLeft = document.getElementById('arrowLeft');
+  const arrowRight = document.getElementById('arrowRight');
+  const pageLoading = document.getElementById('pageLoading');
+  const pageJump = document.getElementById('pageJump');
+  const pageViewer = document.getElementById('pageViewer');
+
+  // Populate page jump selector
+  for (let i = 1; i <= TOTAL_PAGES; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    if (i === 1) opt.text = 'കവർ പേജ് (Cover)';
+    else if (i === TOTAL_PAGES) opt.text = 'പിൻ കവർ (Back Cover)';
+    else opt.text = `താൾ ${i} / ${TOTAL_PAGES}`;
+    pageJump.appendChild(opt);
+  }
+
+  // Preload adjacent images for smooth experience
+  function preloadPage(num) {
+    if (num >= 1 && num <= TOTAL_PAGES) {
+      const img = new Image();
+      img.src = `img/kaypusthakam/page (${num}).jpg`;
     }
+  }
+
+  function showPage(num) {
+    if (num < 1 || num > TOTAL_PAGES || isAnimating) return;
+    isAnimating = true;
+    currentPage = num;
+
+    // Show loading
+    pageLoading.style.display = 'flex';
+    pageImg.style.opacity = '0';
+
+    const src = `img/kaypusthakam/page (${num}).jpg`;
     
-    let manuscriptSheetIndex = 0;
-    const manuscriptTotalSheets = 14;
+    // Create new image to detect load
+    const tempImg = new Image();
+    tempImg.onload = function() {
+      pageImg.src = src;
+      pageImg.style.opacity = '1';
+      pageLoading.style.display = 'none';
+      isAnimating = false;
+    };
+    tempImg.onerror = function() {
+      // Show fallback — still show the page
+      pageImg.src = src;
+      pageImg.style.opacity = '1';
+      pageLoading.style.display = 'none';
+      isAnimating = false;
+    };
+    tempImg.src = src;
 
-    const manuscriptPagesData = [
-      { title: "കൈപ്പുസ്തകം കവർ", desc: "ബയാനുൽ ഉലൂം ദർസ് ഡിജിറ്റൽ കൈപ്പുസ്തകം 2026", label: "Cover Page" },
-      { title: "മുഖവുര (Introduction)", desc: "മുട്ടിച്ചിറ മഹല്ലിന്റെയും ബയാനുൽ ഉലൂം ദർസിന്റെയും പാരമ്പര്യം വിളിച്ചോതുന്ന മുഖവുര.", label: "Introduction" },
-      { title: "ദർസ് ചരിത്രം (History)", desc: "നൂറ്റാണ്ടുകളുടെ ചരിത്രമുള്ള Muttichira Bayanul Uloom Dars-ന്റെ കടന്നുവരവും വികാസവും.", label: "Dars History" },
-      { title: "സ്ഥാപക ഉസ്താദുമാർ", desc: "നമ്മെ നയിച്ച മുൻകാല മഹാരഥന്മാരും ഉസ്താദുമാരും അവരുടെ ജീവിതവഴികളും.", label: "Founding Usthads" },
-      { title: "ഇന്നത്തെ സാരഥികൾ", desc: "ദർസിന് നേതൃത്വം നൽകുന്ന ബഹുമാനപ്പെട്ട പ്രധാന മുദരിസും മറ്റ് മുദരിസുമാരും.", label: "Present Leaders" },
-      { title: "പാഠ്യപദ്ധതി (Syllabus)", desc: "ദർസിലെ ആഴത്തിലുള്ള ഇസ്‌ലാമിക പ്രമാണ പഠന ക്രമങ്ങളും പാഠപുസ്തകങ്ങളും.", label: "Syllabus" },
-      { title: "കലാ-സാഹിത്യ വേദി", desc: "വിദ്യാർത്ഥികളുടെ സർഗ്ഗാത്മക ശേഷിയും സാഹിത്യ സമാജ പ്രക്രിയകളും.", label: "Arts & Culture" },
-      { title: "ബുർദ ആലാപനം", desc: "അൽ ബയാൻ ബുർദ ടീം - പ്രവാചക മദ്ഹ് പ്രകീർത്തനങ്ങളുടെ ആത്മീയ അനുഭവം.", label: "Burda Team" },
-      { title: "ആത്മീയ സദസ്സുകൾ", desc: "ദർസിലെ ദിവസേനയുള്ള പ്രാർത്ഥനാ മജ്‌ലിസുകളും ആത്മീയ ക്ലാസ്സുകളും.", label: "Spiritual Events" },
-      { title: "സാമൂഹിക സേവനം", desc: "വിദ്യാർത്ഥികളുടെ നേതൃത്വത്തിൽ നടക്കുന്ന സന്നദ്ധ പ്രവർത്തനങ്ങൾ.", label: "Social Services" },
-      { title: "ഗ്രന്ഥാലയം (Library)", desc: "അമൂല്യമായ നിരവധി ഇസ്‌ലാമിക കിതാബുകളും ആധുനിക പുസ്തകങ്ങളുമുള്ള വായനശാല.", label: "Library" },
-      { title: "അഡ്മിഷൻ വിവരങ്ങൾ", desc: "പുതിയ അഡ്മിഷൻ പ്രക്രിയകളും അർഹതയും രജിസ്ട്രേഷൻ വിവരങ്ങളും.", label: "Admissions" },
-      { title: "പൂർവ്വ വിദ്യാർത്ഥി കൂട്ടായ്മ", desc: "ലോകത്തിന്റെ വിവിധ കോണുകളിൽ സേവനം ചെയ്യുന്ന ബയാൻ പൂർവ്വ വിദ്യാർത്ഥികൾ.", label: "Alumni Network" },
-      { title: "വിജ്ഞാന സന്ദേശങ്ങൾ", desc: "പണ്ഡിതന്മാരുടെ പ്രധാനപ്പെട്ട ഉദ്ധരണികളും ആത്മീയ ഉപദേശങ്ങളും.", label: "Scholar Messages" },
-      { title: "വിദ്യാർത്ഥി രചനകൾ - കവിതകൾ", desc: "വിദ്യാർത്ഥികൾ സ്വയം രചിച്ച മലയാളം, അറബിക് ഭക്തിസാന്ദ്രമായ കവിതകൾ.", label: "Student Poems" },
-      { title: "ലേഖനങ്ങൾ & പ്രബന്ധങ്ങൾ", desc: "ആധുനിക സാമൂഹിക വിഷയങ്ങളിലുള്ള പഠനാർഹമായ ലേഖനങ്ങൾ.", label: "Student Articles" },
-      { title: "അറബി ഭാഷാ പഠനം", desc: "അറബി ഭാഷ പ്രയോഗത്തിലും എഴുത്തിലും വിദ്യാർത്ഥികൾ കൈവരിച്ച പുരോഗതി.", label: "Arabic Writing" },
-      { title: "ചിത്രരചനകൾ", desc: "വിദ്യാർത്ഥികളുടെ ക്യാൻവാസിലെ മനോഹരമായ അറബിക് കാലിഗ്രാഫികളും ചിത്രങ്ങളും.", label: "Calligraphy & Art" },
-      { title: "ക്വിസ് & പൊതുവിജ്ഞാനം", desc: "വിശ്വാസ കാര്യങ്ങളെയും ഇസ്‌ലാമിക ചരിത്രത്തെയും അടിസ്ഥാനമാക്കിയുള്ള ചോദ്യങ്ങൾ.", label: "Islamic Quiz" },
-      { title: "ദർസ് ദിനചര്യകൾ", desc: "വിദ്യാർത്ഥികളുടെ ഒരു ദിവസത്തെ പഠന-ആരാധനാ സമയക്രമങ്ങൾ.", label: "Daily Schedule" },
-      { title: "അൽ ബയാൻ മീഡിയ വിംഗ്", desc: "ദർസിന്റെ പ്രവർത്തനങ്ങൾ ഡിജിറ്റലായി ലോകത്തെ അറിയിക്കുന്ന മീഡിയ പ്ലാറ്റ്ഫോം.", label: "Al Bayan Media" },
-      { title: "കായിക വിനോദങ്ങൾ", desc: "ശാരീരിക ആരോഗ്യത്തിനായി ദർസിൽ സംഘടിപ്പിക്കുന്ന ഇൻഡോർ-ഔട്ടഡോർ ഗെയിമുകൾ.", label: "Sports Activities" },
-      { title: "ക്യാമ്പ് ഓർമ്മകൾ", desc: "കഴിഞ്ഞ അധ്യയന വർഷങ്ങളിൽ നടത്തിയ സ്റ്റഡി ക്യാമ്പുകളുടെ ഓർമ്മച്ചിത്രങ്ങൾ.", label: "Study Camps" },
-      { title: "വിശിഷ്ട അതിഥികൾ", desc: "ദർസ് സന്ദർശിച്ച സയ്യിദന്മാരും പണ്ഡിത ശ്രേഷ്ഠരും അവരുടെ സന്ദേശങ്ങളും.", label: "Guest Messages" },
-      { title: "സ്നേഹോപഹാരങ്ങൾ", desc: "വിവിധ മത്സരങ്ങളിൽ ദർസിന് ലഭിച്ച ട്രോഫികളും സ്വർണ്ണ മെഡലുകളും.", label: "Achievements" },
-      { title: "നന്ദി പ്രകാശനം", desc: "സഹകരിച്ച എല്ലാവർക്കും ദർസ് കമ്മിറ്റിയുടെ ഹൃദയം നിറഞ്ഞ നന്ദി.", label: "Acknowledgement" },
-      { title: "പ്രത്യാശയുടെ നാളുകൾ", desc: "ബയാനുൽ ഉലൂം ദർസിന്റെ വരുംകാല പുരോഗതികൾക്കുള്ള പ്രാർത്ഥനകൾ.", label: "Future Visions" },
-      { title: "പിൻ കവർ (Back Cover)", desc: "അൽ ബയാൻ മീഡിയ - മുട്ടിച്ചിറ ദർസ് അഡ്മിഷൻ ഓപ്പൺ 2026", label: "Back Cover" }
-    ];
+    // Update UI
+    pageInfo.textContent = `${num} / ${TOTAL_PAGES}`;
+    progressFill.style.width = `${(num / TOTAL_PAGES) * 100}%`;
+    pageJump.value = num;
 
-    function initManuscriptFlipbook() {
-      const flipbook = document.getElementById('flipbook');
-      if (!flipbook) return;
+    // Update button states
+    prevBtn.disabled = (num <= 1);
+    nextBtn.disabled = (num >= TOTAL_PAGES);
+    arrowLeft.classList.toggle('disabled', num <= 1);
+    arrowRight.classList.toggle('disabled', num >= TOTAL_PAGES);
 
-      flipbook.innerHTML = '<div class="book-spine-3d"></div>';
-      for (let i = 0; i < manuscriptTotalSheets; i++) {
-        const sheet = document.createElement('div');
-        sheet.className = 'book-sheet-3d';
-        sheet.id = `sheet-${i}`;
-        
-        const idxFront = 2 * i;
-        const idxBack = 2 * i + 1;
-        
-        const pageFront = manuscriptPagesData[idxFront] || { title: "", desc: "", label: "" };
-        const pageBack = manuscriptPagesData[idxBack] || { title: "", desc: "", label: "" };
-        
-        const numFront = idxFront + 1;
-        const numBack = idxBack + 1;
-        
-        sheet.innerHTML = `
-          <div class="book-page-3d page-front-3d" onclick="flipNext()">
-            <img src="img/kaypusthakam/page (${numFront}).jpg" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%; height:100%; object-fit:contain;" alt="Page ${numFront}">
-            <div class="parchment-page ${numFront === 1 ? 'parchment-cover-page' : ''}">
-              <div class="parchment-title">${pageFront.title}</div>
-              <div class="parchment-content-text">${pageFront.desc}</div>
-              <div class="parchment-footer">
-                <span>ബയാനുൽ ഉലൂം</span>
-                <span>താൾ ${numFront}</span>
-              </div>
-            </div>
-          </div>
-          <div class="book-page-3d page-back-3d" onclick="flipPrev()">
-            <img src="img/kaypusthakam/page (${numBack}).jpg" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%; height:100%; object-fit:contain;" alt="Page ${numBack}">
-            <div class="parchment-page ${numBack === 28 ? 'parchment-cover-page' : ''}">
-              <div class="parchment-title">${pageBack.title}</div>
-              <div class="parchment-content-text">${pageBack.desc}</div>
-              <div class="parchment-footer">
-                <span>താൾ ${numBack}</span>
-                <span>ബയാനുൽ ഉലൂം</span>
-              </div>
-            </div>
-          </div>
-        `;
-        flipbook.appendChild(sheet);
-      }
+    // Preload neighbors
+    preloadPage(num + 1);
+    preloadPage(num - 1);
+  }
 
-      const select = document.getElementById('pageJumpSelect');
-      if (select) {
-        select.innerHTML = '';
-        const optCover = document.createElement('option');
-        optCover.value = 0;
-        optCover.innerText = "കവർ പേജ് (തൂവൽ 1)";
-        select.appendChild(optCover);
-        
-        for (let i = 1; i < manuscriptTotalSheets; i++) {
-          const opt = document.createElement('option');
-          opt.value = i;
-          opt.innerText = `താൾ ${2 * i} - ${2 * i + 1}`;
-          select.appendChild(opt);
-        }
-        
-        const optBack = document.createElement('option');
-        optBack.value = manuscriptTotalSheets;
-        optBack.innerText = "പിൻ കവർ (തൂവൽ 28)";
-        select.appendChild(optBack);
-      }
+  function goPage(dir) {
+    showPage(currentPage + dir);
+  }
 
-      updateFlipbook();
-      scaleBook();
+  function jumpTo(val) {
+    showPage(parseInt(val));
+  }
 
-      // Bind touch swipe gestures
-      const bookViewport = document.querySelector('.book-viewport');
-      if (bookViewport) {
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        bookViewport.addEventListener('touchstart', (e) => {
-          touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-        
-        bookViewport.addEventListener('touchend', (e) => {
-          touchEndX = e.changedTouches[0].screenX;
-          const swipeThreshold = 50;
-          if (touchStartX - touchEndX > swipeThreshold) {
-            flipNext();
-          } else if (touchEndX - touchStartX > swipeThreshold) {
-            flipPrev();
-          }
-        }, { passive: true });
-      }
+  function closeBook() {
+    window.location.href = '/';
+  }
+
+  // ── TOUCH SWIPE HANDLING ──
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+  let isSwiping = false;
+
+  pageViewer.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+    isSwiping = true;
+  }, { passive: true });
+
+  pageViewer.addEventListener('touchmove', (e) => {
+    if (!isSwiping) return;
+    const dx = Math.abs(e.touches[0].clientX - touchStartX);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY);
+    // If horizontal movement dominates, prevent scroll
+    if (dx > dy && dx > 10) {
+      e.preventDefault();
     }
+  }, { passive: false });
 
-    function updateFlipbook() {
-      for (let i = 0; i < manuscriptTotalSheets; i++) {
-        const sheet = document.getElementById(`sheet-${i}`);
-        if (!sheet) continue;
-        
-        if (i < manuscriptSheetIndex) {
-          sheet.classList.add('flipped-sheet-3d');
-          sheet.style.zIndex = i + 1;
-        } else {
-          sheet.classList.remove('flipped-sheet-3d');
-          sheet.style.zIndex = manuscriptTotalSheets - i;
-        }
-      }
-      
-      const indicator = document.getElementById('pageIndicator');
-      if (indicator) {
-        if (manuscriptSheetIndex === 0) {
-          indicator.innerText = `തൂവൽ 1 / 28`;
-        } else if (manuscriptSheetIndex === manuscriptTotalSheets) {
-          indicator.innerText = `തൂവൽ 28 / 28`;
-        } else {
-          const leftPage = manuscriptSheetIndex * 2;
-          const rightPage = manuscriptSheetIndex * 2 + 1;
-          indicator.innerText = `താൾ ${leftPage} - ${rightPage} / 28`;
-        }
-      }
-
-      const select = document.getElementById('pageJumpSelect');
-      if (select) {
-        select.value = manuscriptSheetIndex;
-      }
-      scaleBook();
-    }
-
-    function flipNext() {
-      if (manuscriptSheetIndex < manuscriptTotalSheets) {
-        manuscriptSheetIndex++;
-        updateFlipbook();
-      }
-    }
-
-    function flipPrev() {
-      if (manuscriptSheetIndex > 0) {
-        manuscriptSheetIndex--;
-        updateFlipbook();
-      }
-    }
-
-    function jumpToPage(sheetIdx) {
-      manuscriptSheetIndex = parseInt(sheetIdx);
-      updateFlipbook();
-    }
-
-    function scaleBook() {
-      const bookContainer = document.querySelector('.book-container-3d');
-      if (!bookContainer) return;
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      
-      let scale = 1;
-      let translateY = 0;
-      let translateX = 0;
-
-      if (viewportWidth < 500) {
-        scale = (viewportWidth / 800) * 0.9; 
-        translateY = manuscriptSheetIndex === 0 ? 5 : (manuscriptSheetIndex === manuscriptTotalSheets ? 5 : 30);
-        translateX = manuscriptSheetIndex === 0 ? -15 : (manuscriptSheetIndex === manuscriptTotalSheets ? 15 : 0);
-      } else if (viewportWidth < 768) {
-        scale = (viewportWidth / 800) * 0.85;
-        translateY = 30;
+  pageViewer.addEventListener('touchend', (e) => {
+    if (!isSwiping) return;
+    isSwiping = false;
+    
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dt = Date.now() - touchStartTime;
+    
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+    
+    // Only trigger if horizontal, fast enough, and far enough
+    if (absDx > 40 && absDx > absDy * 1.5 && dt < 500) {
+      if (dx < 0) {
+        goPage(1); // Swipe left → next page
       } else {
-        const heightScale = viewportHeight / 700;
-        const widthScale = viewportWidth / 1200;
-        scale = Math.min(heightScale, widthScale) * 0.95;
-        translateY = 40;
+        goPage(-1); // Swipe right → previous page
       }
-      
-      bookContainer.style.transform = `scale(${scale}) translateY(${translateY}px) translateX(${translateX}px)`;
     }
+  }, { passive: true });
 
-    window.addEventListener('resize', scaleBook);
-    
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', () => {
-      initManuscriptFlipbook();
-      // Handle physical back button on Android
-      window.history.pushState({ page: 'book' }, '', window.location.href);
-      window.addEventListener('popstate', (e) => {
-        closeBook();
-      });
-    });
-  </script>
+  // ── KEYBOARD SUPPORT ──
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goPage(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goPage(-1); }
+    if (e.key === 'Escape') closeBook();
+  });
+
+  // ── BACK BUTTON SUPPORT ──
+  window.history.pushState({ page: 'book' }, '', window.location.href);
+  window.addEventListener('popstate', () => closeBook());
+
+  // ── INIT ──
+  showPage(1);
+</script>
 </body>
 </html>
