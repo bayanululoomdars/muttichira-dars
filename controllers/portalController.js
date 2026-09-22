@@ -463,19 +463,19 @@ exports.getAlumniList = async (req, res) => {
       alumniList = await Student.find(query).sort({ batchYear: -1 });
     } catch (e) {}
 
-    if (alumniList.length === 0) {
-      alumniList = memoryStudents.filter(s => {
-        if (!s.isAlumni) return false;
-        if (batchYear && s.batchYear !== batchYear) return false;
-        if (search) {
-          const matchName = s.name.toLowerCase().includes(search);
-          const matchAdm = s.admissionNo.toLowerCase().includes(search);
-          const matchPlace = s.place.toLowerCase().includes(search);
-          return matchName || matchAdm || matchPlace;
-        }
-        return true;
-      });
-    }
+    const memAlumni = memoryStudents.filter(s => {
+      if (!s.isAlumni) return false;
+      if (batchYear && s.batchYear !== batchYear) return false;
+      if (search) {
+        const matchName = s.name.toLowerCase().includes(search);
+        const matchAdm = s.admissionNo.toLowerCase().includes(search);
+        const matchPlace = s.place.toLowerCase().includes(search);
+        return matchName || matchAdm || matchPlace;
+      }
+      return true;
+    });
+
+    alumniList = [...alumniList, ...memAlumni];
 
     res.json({ success: true, count: alumniList.length, alumni: alumniList });
   } catch (err) {
@@ -490,10 +490,8 @@ exports.getStudentsAdmin = async (req, res) => {
     try {
       students = await Student.find().sort({ createdAt: -1 });
     } catch (e) {}
-    if (students.length === 0) {
-      students = memoryStudents;
-    }
-    res.json({ success: true, students });
+    const allStudents = [...students, ...memoryStudents];
+    res.json({ success: true, students: allStudents });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -560,10 +558,8 @@ exports.getUsthadsAdmin = async (req, res) => {
     try {
       usthads = await Usthad.find().sort({ createdAt: -1 });
     } catch (e) {}
-    if (usthads.length === 0) {
-      usthads = memoryUsthads;
-    }
-    res.json({ success: true, usthads });
+    const allUsthads = [...usthads, ...memoryUsthads];
+    res.json({ success: true, usthads: allUsthads });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

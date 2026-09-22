@@ -1406,12 +1406,12 @@
         <div class="sidebar-section-label" style="color:var(--accent);">Portal Management</div>
 
         <button class="nav-item" id="nav-students" onclick="showPage('students')">
-          <i class="fa fa-graduation-cap"></i> Manage Students & Alumni
+          <i class="fa fa-book"></i> Manage Students & Alumni
           <span class="nav-badge" id="badge-students">0</span>
         </button>
 
         <button class="nav-item" id="nav-usthads" onclick="showPage('usthads')">
-          <i class="fa fa-user-md"></i> Manage Usthads / Faculty
+          <i class="fa fa-users"></i> Manage Usthads / Faculty
           <span class="nav-badge" id="badge-usthads">0</span>
         </button>
 
@@ -1834,51 +1834,7 @@
 
 
 
-<!-- Admin Dashboard: User Management Section -->
-<div class="admin-user-management">
-    <div class="header-section">
-        <h2 style="font-family: 'Segoe UI', sans-serif; color: #0a4d2e;">Manage Users</h2>
-        <button class="add-btn" onclick="openAddUserModal()">+ Add New User</button>
-    </div>
 
-    <!-- User Table -->
-    <div class="table-container">
-        <table class="modern-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Admission/ID No.</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="userTableBody">
-                <!-- Example Row 1 -->
-                <tr>
-                    <td>Muhammed Ali</td>
-                    <td><span class="badge usthad">Usthad</span></td>
-                    <td>UST-1001</td>
-                    <td class="action-buttons">
-                        <button class="view-btn" onclick="viewUser('UST-1001')">View</button>
-                        <button class="edit-btn" onclick="editUser('UST-1001')">Edit</button>
-                        <button class="delete-btn" onclick="deleteUser('UST-1001')">Delete</button>
-                    </td>
-                </tr>
-                <!-- Example Row 2 -->
-                <tr>
-                    <td>Rashid Ahmed</td>
-                    <td><span class="badge student">Student</span></td>
-                    <td>STU-2045</td>
-                    <td class="action-buttons">
-                        <button class="view-btn" onclick="viewUser('STU-2045')">View</button>
-                        <button class="edit-btn" onclick="editUser('STU-2045')">Edit</button>
-                        <button class="delete-btn" onclick="deleteUser('STU-2045')">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
 
 
 
@@ -1937,9 +1893,25 @@
         ════════════════════════════════ -->
         <div class="page" id="page-portal-users">
           <div class="admin-user-management">
-            <div class="header-section">
-                <h2 style="font-family: 'Segoe UI', sans-serif; color: #0a4d2e;"><i class="fa fa-users"></i> Manage Users</h2>
+            <div class="header-section" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+                <div>
+                  <h2 style="font-family: 'Segoe UI', sans-serif; color: #0a4d2e; margin:0;"><i class="fa fa-users"></i> Manage Portal Users</h2>
+                  <small style="color: var(--text-soft);">Manage Students & Usthads credentials and records</small>
+                </div>
                 <button class="add-btn" onclick="openAddUserModal()">+ Add New User</button>
+            </div>
+
+            <!-- Search & Filter Bar -->
+            <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center; background:var(--bg-card); padding:14px; border-radius:12px; border:1px solid var(--border-soft);">
+              <input type="text" id="portalSearchInput" oninput="filterPortalUsersAdmin()" placeholder="🔍 Search student/usthad name, ID, place..." class="form-control" style="flex:1; min-width:220px; background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button class="btn btn-outline-secondary btn-sm portal-filter-btn active" id="pfilter-all" onclick="setPortalFilter('all')">All</button>
+                <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-student" onclick="setPortalFilter('student')">Students</button>
+                <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-Senior" onclick="setPortalFilter('Senior')">Senior</button>
+                <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-Junior" onclick="setPortalFilter('Junior')">Junior</button>
+                <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-Sub Junior" onclick="setPortalFilter('Sub Junior')">Sub Junior</button>
+                <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter('usthad')">Usthads</button>
+              </div>
             </div>
 
             <!-- User Table -->
@@ -1948,13 +1920,15 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Role</th>
-                            <th>Admission/ID No.</th>
+                            <th>Role / Status</th>
+                            <th>ID / Adm No</th>
+                            <th>Class / Details</th>
+                            <th>Phone / Login Password</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="userTableBody">
-                        <tr><td colspan="4" class="text-center text-muted">Loading users...</td></tr>
+                        <tr><td colspan="6" class="text-center text-muted">Loading users...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -2010,7 +1984,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Photo URL</label>
-                  <input type="url" id="adminStudentPhoto" class="form-control" placeholder="https://...">
+                  <input type="file" id="adminStudentPhoto" class="form-control" accept="image/*" name="photo">
                 </div>
               </div>
               <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-plus-circle"></i> Add Student Record</button>
@@ -2287,6 +2261,9 @@
 /* ===========================================
    UNIFIED PORTAL USERS MANAGEMENT
 =========================================== */
+let allPortalUsersCache = [];
+let currentPortalFilter = 'all';
+
 function loadPortalUsersAdmin() {
   Promise.all([
     fetch('/api/portal/students').then(r => r.json()),
@@ -2300,35 +2277,68 @@ function loadPortalUsersAdmin() {
       users = users.concat(usthadsData.usthads.map(u => ({ ...u, role: 'usthad' })));
     }
     
+    allPortalUsersCache = users;
     safeSetText('badge-portal-users', users.length);
-    let html = '';
-    
-    users.forEach(u => {
-      if (u.role === 'student') {
-        html += `
-          <tr>
-            <td><strong>${u.name}</strong></td>
-            <td><span class="badge student">Student</span></td>
-            <td>${u.admissionNo}</td>
-            <td class="action-buttons">
-              <button class="delete-btn" onclick="deleteStudentAdmin('${u._id || u.admissionNo}')">Delete</button>
-            </td>
-          </tr>`;
-      } else {
-        html += `
-          <tr>
-            <td><strong>${u.name}</strong></td>
-            <td><span class="badge usthad">Usthad</span></td>
-            <td>${u.usthadId}</td>
-            <td class="action-buttons">
-              <button class="delete-btn" onclick="deleteUsthadAdmin('${u._id || u.usthadId}')">Delete</button>
-            </td>
-          </tr>`;
-      }
-    });
-    
-    safeSetHtml('userTableBody', html || '<tr><td colspan="4" class="text-center text-muted">No portal users found.</td></tr>');
+    renderPortalUsersAdmin();
+  }).catch(() => {
+    safeSetHtml('userTableBody', '<tr><td colspan="6" class="text-center text-danger py-4">Failed to load portal users. Check connection.</td></tr>');
   });
+}
+
+function setPortalFilter(cat) {
+  currentPortalFilter = cat;
+  document.querySelectorAll('.portal-filter-btn').forEach(b => b.classList.remove('active'));
+  var btn = document.getElementById('pfilter-' + cat.replace(/\s+/g, '-'));
+  if (!btn) btn = document.getElementById('pfilter-' + cat);
+  if (btn) btn.classList.add('active');
+  renderPortalUsersAdmin();
+}
+
+function filterPortalUsersAdmin() {
+  renderPortalUsersAdmin();
+}
+
+function renderPortalUsersAdmin() {
+  var query = (safeGetValue('portalSearchInput') || '').toLowerCase().trim();
+  var filtered = allPortalUsersCache.filter(u => {
+    if (currentPortalFilter !== 'all') {
+      if (currentPortalFilter === 'student' && u.role !== 'student') return false;
+      if (currentPortalFilter === 'usthad' && u.role !== 'usthad') return false;
+      if (['Senior', 'Junior', 'Sub Junior'].includes(currentPortalFilter)) {
+        if ((u.status || '').toLowerCase() !== currentPortalFilter.toLowerCase()) return false;
+      }
+    }
+    if (query) {
+      var nameMatch = (u.name || '').toLowerCase().includes(query);
+      var idMatch = String(u.admissionNo || u.usthadId || '').toLowerCase().includes(query);
+      var placeMatch = (u.place || '').toLowerCase().includes(query);
+      var statusMatch = (u.status || u.className || u.designation || '').toLowerCase().includes(query);
+      return nameMatch || idMatch || placeMatch || statusMatch;
+    }
+    return true;
+  });
+
+  let html = '';
+  filtered.forEach(u => {
+    var idVal = u.admissionNo || u.usthadId || '—';
+    var statusText = u.role === 'usthad' ? (u.designation || 'Usthad') : (u.status || 'Student');
+    var badgeClass = u.role === 'usthad' ? 'badge-accent' : (u.status === 'Senior' ? 'badge-primary' : (u.status === 'Junior' ? 'badge-info' : 'badge-success'));
+    var details = u.role === 'usthad' ? (u.subject || '—') : (u.className || '—');
+    var phoneVal = u.phone || '—';
+
+    html += '<tr>' +
+      '<td><strong>' + (u.name || '—') + '</strong></td>' +
+      '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>' +
+      '<td><code style="font-weight:700;color:var(--accent);">' + idVal + '</code></td>' +
+      '<td>' + details + (u.place ? ' <small style="color:var(--text-soft);">(' + u.place + ')</small>' : '') + '</td>' +
+      '<td><code style="color:var(--text-soft);">' + phoneVal + '</code></td>' +
+      '<td class="action-buttons">' +
+        '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')"><i class="fa fa-trash"></i> Delete</button>' +
+      '</td>' +
+    '</tr>';
+  });
+
+  safeSetHtml('userTableBody', html || '<tr><td colspan="6" class="text-center text-muted py-4">No matching records found.</td></tr>');
 }
 
 function openAddUserModal() {
@@ -2354,28 +2364,30 @@ function switchUnifiedRole(role) {
 
 function submitAddStudentAdmin(e) {
   e.preventDefault();
-  const payload = {
-    name: safeGetValue('adminStudentName'),
-    phone: safeGetValue('adminStudentPhone'),
-    admissionNo: safeGetValue('adminStudentAdmNo'),
-    status: safeGetValue('adminStudentStatus'),
-    className: safeGetValue('adminStudentClass'),
-    batchYear: safeGetValue('adminStudentBatch'),
-    place: safeGetValue('adminStudentPlace'),
-    photoUrl: safeGetValue('adminStudentPhoto')
-  };
+  const photoInput = document.getElementById('adminStudentPhoto');
+  const photoFile = photoInput && photoInput.files ? photoInput.files[0] : null;
+
+  let fd = new FormData();
+  fd.append('name', safeGetValue('adminStudentName'));
+  fd.append('phone', safeGetValue('adminStudentPhone'));
+  fd.append('admissionNo', safeGetValue('adminStudentAdmNo'));
+  fd.append('status', safeGetValue('adminStudentStatus'));
+  fd.append('className', safeGetValue('adminStudentClass'));
+  fd.append('batchYear', safeGetValue('adminStudentBatch'));
+  fd.append('place', safeGetValue('adminStudentPlace'));
+  if (photoFile) fd.append('photo', photoFile);
+
   fetch('/api/portal/student', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: fd
   }).then(r => r.json()).then(res => {
-    showToast(res.message || 'Student added!', !res.success);
+    showToast(res.message || 'Student record added!', !res.success);
     if (res.success) {
       document.getElementById('formAddStudentAdmin').reset();
       closeAddUserModal();
       loadPortalUsersAdmin();
     }
-  });
+  }).catch(() => showToast('Error adding student record', true));
 }
 
 function deleteStudentAdmin(id) {
@@ -2390,26 +2402,29 @@ function deleteStudentAdmin(id) {
 
 function submitAddUsthadAdmin(e) {
   e.preventDefault();
-  const payload = {
-    name: safeGetValue('adminUsthadName'),
-    phone: safeGetValue('adminUsthadPhone'),
-    usthadId: safeGetValue('adminUsthadId'),
-    designation: safeGetValue('adminUsthadDesignation'),
-    subject: safeGetValue('adminUsthadSubject'),
-    place: safeGetValue('adminUsthadPlace')
-  };
+  const photoInput = document.getElementById('adminUsthadPhoto');
+  const photoFile = photoInput && photoInput.files ? photoInput.files[0] : null;
+
+  let fd = new FormData();
+  fd.append('name', safeGetValue('adminUsthadName'));
+  fd.append('phone', safeGetValue('adminUsthadPhone'));
+  fd.append('usthadId', safeGetValue('adminUsthadId'));
+  fd.append('designation', safeGetValue('adminUsthadDesignation'));
+  fd.append('subject', safeGetValue('adminUsthadSubject'));
+  fd.append('place', safeGetValue('adminUsthadPlace'));
+  if (photoFile) fd.append('photo', photoFile);
+
   fetch('/api/portal/usthad', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: fd
   }).then(r => r.json()).then(res => {
-    showToast(res.message || 'Usthad added!', !res.success);
+    showToast(res.message || 'Usthad record added!', !res.success);
     if (res.success) {
       document.getElementById('formAddUsthadAdmin').reset();
       closeAddUserModal();
       loadPortalUsersAdmin();
     }
-  });
+  }).catch(() => showToast('Error adding usthad record', true));
 }
 
 function deleteUsthadAdmin(id) {
@@ -2493,6 +2508,17 @@ function loadAll() {
         s.style.width = s.style.height = (2 + Math.random()*3) + 'px';
         pc.appendChild(s);
       }
+    }
+
+    // Auto-login if session exists
+    if (sessionStorage.getItem('bud_admin_logged_in') === 'true') {
+      var loginScreen = document.getElementById('loginScreen');
+      var dashboard = document.getElementById('dashboard');
+      if (loginScreen) loginScreen.style.display = 'none';
+      if (dashboard) dashboard.style.display = 'block';
+      if (pc) pc.style.display = 'none';
+      loadAll();
+      showPage('overview');
     }
   });
 
@@ -2580,6 +2606,7 @@ function closeModal(id) {
    LOGOUT
 =========================================== */
 function doLogout() {
+  sessionStorage.removeItem('bud_admin_logged_in');
   document.getElementById('dashboard').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   var particles = document.getElementById('loginParticles');
@@ -2664,6 +2691,7 @@ async function doLogin() {
     const data = await res.json();
     
     if (data.success) {
+      sessionStorage.setItem('bud_admin_logged_in', 'true');
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       const particles = document.getElementById('loginParticles');
@@ -3859,34 +3887,7 @@ function submitEditNews(e) {
 
 
 
-<script>
-    // Add New User (Modal or Redirect)
-    function openAddUserModal() {
-        // Ivide ningalkku add user form kanikkan ulla code ezhutham
-        alert("Add New Student/Usthad form will open here.");
-    }
 
-    // View Details
-    function viewUser(id) {
-        // Database-il ninnum full details eduthu kanikkan ulla code
-        alert("Viewing full details for ID: " + id);
-    }
-
-    // Edit User
-    function editUser(id) {
-        // Edit cheyyan ulla form open aakan ulla code
-        alert("Editing details for ID: " + id);
-    }
-
-    // Delete User
-    function deleteUser(id) {
-        // Delete cheyyunnathinu munpu confirm cheyyuka
-        if(confirm("Are you sure you want to delete this user? (ID: " + id + ")")) {
-            alert("User " + id + " has been deleted.");
-            // Ivide delete cheyyan ulla backend request varum
-        }
-    }
-</script>
 
 
 
