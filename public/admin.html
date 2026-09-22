@@ -2266,25 +2266,54 @@ let currentPortalFilter = 'all';
 
 function loadPortalUsersAdmin() {
   Promise.all([
-    fetch('/api/portal/students').then(r => r.json()),
-    fetch('/api/portal/usthads').then(r => r.json())
+    fetch('/api/portal/students').then(r => r.json()).catch(() => ({ success: false })),
+    fetch('/api/portal/usthads').then(r => r.json()).catch(() => ({ success: false }))
   ]).then(([studentsData, usthadsData]) => {
     let users = [];
-    if (studentsData.success && studentsData.students) {
-      users = users.concat(studentsData.students.map(s => ({ ...s, role: 'student' })));
-    }
-    if (usthadsData.success && usthadsData.usthads) {
-      users = users.concat(usthadsData.usthads.map(u => ({ ...u, role: 'usthad' })));
-    }
+    
+    let stList = [];
+    if (Array.isArray(studentsData)) stList = studentsData;
+    else if (studentsData && Array.isArray(studentsData.students)) stList = studentsData.students;
+    else if (studentsData && Array.isArray(studentsData.data)) stList = studentsData.data;
+
+    let ustList = [];
+    if (Array.isArray(usthadsData)) ustList = usthadsData;
+    else if (usthadsData && Array.isArray(usthadsData.usthads)) ustList = usthadsData.usthads;
+    else if (usthadsData && Array.isArray(usthadsData.data)) ustList = usthadsData.data;
+
+    users = [
+      ...stList.map(s => ({ ...s, role: 'student' })),
+      ...ustList.map(u => ({ ...u, role: 'usthad' }))
+    ];
     
     allPortalUsersCache = users;
     safeSetText('badge-portal-users', users.length);
-    safeSetText('badge-students', users.filter(u => u.role === 'student').length);
-    safeSetText('badge-usthads', users.filter(u => u.role === 'usthad').length);
+    safeSetText('badge-students', stList.length);
+    safeSetText('badge-usthads', ustList.length);
     renderPortalUsersAdmin();
-  }).catch(() => {
+  }).catch((err) => {
+    console.error('Portal users load error:', err);
     safeSetHtml('userTableBody', '<tr><td colspan="6" class="text-center text-danger py-4">Failed to load portal users. Check connection.</td></tr>');
   });
+}
+
+function loadOverview() {
+  loadPortalUsersAdmin();
+  fetch('/api/admissions').then(r => r.json()).then(d => {
+    safeSetText('statAdmissions', Array.isArray(d) ? d.length : (d.admissions ? d.admissions.length : 0));
+  }).catch(() => {});
+  fetch('/api/news').then(r => r.json()).then(d => {
+    safeSetText('statNews', Array.isArray(d) ? d.length : 0);
+  }).catch(() => {});
+  fetch('/api/gallery').then(r => r.json()).then(d => {
+    safeSetText('statGallery', Array.isArray(d) ? d.length : 0);
+  }).catch(() => {});
+  fetch('/api/contacts').then(r => r.json()).then(d => {
+    safeSetText('statContacts', Array.isArray(d) ? d.length : 0);
+  }).catch(() => {});
+  fetch('/api/subscribers').then(r => r.json()).then(d => {
+    safeSetText('statSubscribers', Array.isArray(d) ? d.length : 0);
+  }).catch(() => {});
 }
 
 function setPortalFilter(cat) {
