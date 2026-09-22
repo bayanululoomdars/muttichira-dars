@@ -1228,84 +1228,88 @@
 }
 
 .table-container {
+    width: 100%;
     overflow-x: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    margin-top: 15px;
 }
 
 .modern-table {
     width: 100%;
     border-collapse: collapse;
+    text-align: left;
+    white-space: nowrap;
 }
 
 .modern-table th, .modern-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #eeeeee;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: middle;
 }
 
 .modern-table th {
-    background-color: #f9f9f9;
-    color: #333;
+    background: var(--bg-card-2);
+    color: var(--accent);
     font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modern-table td {
+    color: var(--text);
+    font-size: 0.92rem;
+}
+
+.modern-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .badge {
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: bold;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: inline-block;
 }
 
-.badge.usthad {
-    background-color: #e3f2fd;
-    color: #1976d2;
+.badge-accent {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
-.badge.student {
-    background-color: #fce4ec;
-    color: #c2185b;
+.badge-primary {
+    background: rgba(10, 77, 46, 0.3);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-info {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-success {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.modern-table .action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    white-space: nowrap;
 }
 
 /* Action Buttons */
 .action-buttons button {
     border: none;
     padding: 6px 12px;
-    margin-right: 5px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.view-btn { background-color: #f0f0f0; color: #333; }
-.edit-btn { background-color: #fff3cd; color: #856404; }
-.delete-btn { background-color: #f8d7da; color: #721c24; }
-
-.view-btn:hover { background-color: #e2e2e2; }
-.edit-btn:hover { background-color: #ffe8a1; }
-.delete-btn:hover { background-color: #f5c6cb; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /* Unified User Management Styles */
-    .admin-user-management { background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .add-btn { background: #0a4d2e; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .add-btn:hover { background: #073a22; transform: translateY(-1px); }
-    .modern-table { width: 100%; border-collapse: collapse; text-align: left; }
-    .modern-table th { background: #f8fafc; padding: 12px 15px; color: #64748b; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
-    .modern-table td { padding: 15px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
-    .modern-table tr:hover { background: #f8fafc; }
-    .badge.usthad { background: #e0e7ff; color: #3730a3; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
     .badge.student { background: #dcfce7; color: #166534; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
     .action-buttons button { border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; margin-right: 5px; font-weight: 500; }
     .view-btn { background: #f1f5f9; color: #475569; }
@@ -2352,20 +2356,21 @@ function renderPortalUsersAdmin() {
   filtered.forEach(u => {
     var idVal = u.admissionNo || u.usthadId || '—';
     var statusText = u.role === 'usthad' ? (u.designation || 'Usthad') : (u.status || 'Student');
-    var badgeClass = u.role === 'usthad' ? 'badge-accent' : (u.status === 'Senior' ? 'badge-primary' : (u.status === 'Junior' ? 'badge-info' : 'badge-success'));
+    var isAlumniUser = u.isAlumni || (u.status || '').toLowerCase().includes('alumni') || (u.status || '').toLowerCase().includes('biruthadhari');
+    var badgeClass = u.role === 'usthad' ? 'badge-accent' : (isAlumniUser ? 'badge-info' : 'badge-success');
     var details = u.role === 'usthad' ? (u.subject || '—') : (u.className || '—');
     var phoneVal = u.phone || '—';
 
     html += '<tr>' +
-      '<td><strong>' + (u.name || '—') + '</strong></td>' +
+      '<td><strong style="color:var(--text); font-weight:600;">' + (u.name || '—') + '</strong></td>' +
       '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>' +
       '<td><code style="font-weight:700;color:var(--accent);">' + idVal + '</code></td>' +
       '<td>' + details + (u.place ? ' <small style="color:var(--text-soft);">(' + u.place + ')</small>' : '') + '</td>' +
       '<td><code style="color:var(--text-soft);">' + phoneVal + '</code></td>' +
-      '<td class="action-buttons">' +
-        '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')" style="margin-right:5px;"><i class="fa fa-edit"></i> Edit</button>' +
+      '<td><div class="action-buttons">' +
+        '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')"><i class="fa fa-edit"></i> Edit</button>' +
         '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')"><i class="fa fa-trash"></i> Delete</button>' +
-      '</td>' +
+      '</div></td>' +
     '</tr>';
   });
 
