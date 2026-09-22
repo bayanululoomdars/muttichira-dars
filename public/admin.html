@@ -1909,7 +1909,8 @@
                 <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-student" onclick="setPortalFilter('student')">Students</button>
                 <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-Senior" onclick="setPortalFilter('Senior')">Senior</button>
                 <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-Junior" onclick="setPortalFilter('Junior')">Junior</button>
-                <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-Sub Junior" onclick="setPortalFilter('Sub Junior')">Sub Junior</button>
+                <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-Sub-Junior" onclick="setPortalFilter('Sub Junior')">Sub Junior</button>
+                <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-Alumni" onclick="setPortalFilter('Alumni')">Alumni / Biruthadhari</button>
                 <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter('usthad')">Usthads</button>
               </div>
             </div>
@@ -2335,7 +2336,10 @@ function renderPortalUsersAdmin() {
     if (currentPortalFilter !== 'all') {
       if (currentPortalFilter === 'student' && u.role !== 'student') return false;
       if (currentPortalFilter === 'usthad' && u.role !== 'usthad') return false;
-      if (['Senior', 'Junior', 'Sub Junior'].includes(currentPortalFilter)) {
+      if (currentPortalFilter === 'Alumni' || currentPortalFilter === 'Biruthadhari') {
+        var isAlum = u.isAlumni || (u.status || '').toLowerCase().includes('alumni') || (u.status || '').toLowerCase().includes('biruthadhari');
+        if (!isAlum) return false;
+      } else if (['Senior', 'Junior', 'Sub Junior'].includes(currentPortalFilter)) {
         if ((u.status || '').toLowerCase() !== currentPortalFilter.toLowerCase()) return false;
       }
     }
