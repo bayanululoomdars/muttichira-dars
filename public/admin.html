@@ -2279,6 +2279,8 @@ function loadPortalUsersAdmin() {
     
     allPortalUsersCache = users;
     safeSetText('badge-portal-users', users.length);
+    safeSetText('badge-students', users.filter(u => u.role === 'student').length);
+    safeSetText('badge-usthads', users.filter(u => u.role === 'usthad').length);
     renderPortalUsersAdmin();
   }).catch(() => {
     safeSetHtml('userTableBody', '<tr><td colspan="6" class="text-center text-danger py-4">Failed to load portal users. Check connection.</td></tr>');
@@ -2576,32 +2578,43 @@ function loadAll() {
    NAVIGATION — showPage
 =========================================== */
 function showPage(page) {
+  var targetPage = page;
+  if (page === 'students' || page === 'usthads') {
+    targetPage = 'portal-users';
+  }
+
   // Hide all pages
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   // Remove active from all nav items
   document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
 
-  var pageEl  = document.getElementById('page-' + page);
-  var navEl   = document.getElementById('nav-' + page);
+  var pageEl  = document.getElementById('page-' + targetPage);
+  var navEl   = document.getElementById('nav-' + page) || document.getElementById('nav-' + targetPage);
   var titles  = {
     overview: 'Dashboard', homepage: 'Home Page Panel',
     admissions: 'Admission Panel', gallery: 'Gallery Panel',
     messages: 'Messages & Comments', 'portal-users': 'Manage Portal Users',
+    students: 'Manage Students & Alumni', usthads: 'Manage Usthads & Faculty',
     users: 'User Management', reset: 'Full Reset'
   };
 
   if (pageEl) pageEl.classList.add('active');
   if (navEl)  navEl.classList.add('active');
-  safeSetText('topbarTitle', titles[page] || page);
+  safeSetText('topbarTitle', titles[page] || titles[targetPage] || page);
 
   // Load data for specific pages
-  if (page === 'homepage') loadNews();
-  if (page === 'gallery') loadGallery();
-  if (page === 'admissions') loadAdmissions();
-  if (page === 'messages') { loadContacts(); loadSubscribers(); }
-  if (page === 'overview') loadOverview();
-  if (page === 'portal-users') loadPortalUsersAdmin();
-  if (page === 'users') loadUsersAdmin();
+  if (targetPage === 'homepage') loadNews();
+  if (targetPage === 'gallery') loadGallery();
+  if (targetPage === 'admissions') loadAdmissions();
+  if (targetPage === 'messages') { loadContacts(); loadSubscribers(); }
+  if (targetPage === 'overview') loadOverview();
+  if (targetPage === 'portal-users') {
+    loadPortalUsersAdmin();
+    if (page === 'students') setPortalFilter('student');
+    else if (page === 'usthads') setPortalFilter('usthad');
+    else setPortalFilter('all');
+  }
+  if (targetPage === 'users') loadUsersAdmin();
 
   // Close mobile sidebar
   closeSidebar();
