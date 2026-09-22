@@ -256,7 +256,7 @@
         const pageFlip = new St.PageFlip(bookEl, {
             width: 420,           // Base page width
             height: 594,          // Base page height (A4 proportion)
-            size: "fit",          // Scale to fit container
+            size: "stretch",      // MUST BE 'stretch' or 'fixed'
             minWidth: 200,
             maxWidth: 600,
             minHeight: 300,
