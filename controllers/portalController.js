@@ -537,6 +537,27 @@ exports.addStudentAdmin = async (req, res) => {
   }
 };
 
+exports.updateStudentAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let student = null;
+    try { student = await Student.findById(id); } catch(e) {}
+    const isMemory = !student;
+    if (!student) student = memoryStudents.find(s => s._id === id || s.admissionNo === id);
+    if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
+
+    const updates = req.body;
+    if (req.file) updates.photoUrl = req.file.path;
+    if (updates.isAlumni !== undefined) updates.isAlumni = Boolean(updates.isAlumni === true || updates.isAlumni === 'true' || updates.status === 'Biruthadhari / Alumni');
+
+    Object.assign(student, updates);
+    if (!isMemory && student.save) await student.save();
+    res.json({ success: true, message: 'Student updated successfully!', student });
+  } catch(err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 exports.deleteStudentAdmin = async (req, res) => {
   try {
     const { id } = req.params;
@@ -598,6 +619,26 @@ exports.addUsthadAdmin = async (req, res) => {
       return res.json({ success: true, message: 'Usthad added to system!', usthad: memObj });
     }
   } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+exports.updateUsthadAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let usthad = null;
+    try { usthad = await Usthad.findById(id); } catch(e) {}
+    const isMemory = !usthad;
+    if (!usthad) usthad = memoryUsthads.find(u => u._id === id || u.usthadId === id);
+    if (!usthad) return res.status(404).json({ success: false, message: 'Usthad not found' });
+
+    const updates = req.body;
+    if (req.file) updates.photoUrl = req.file.path;
+
+    Object.assign(usthad, updates);
+    if (!isMemory && usthad.save) await usthad.save();
+    res.json({ success: true, message: 'Usthad updated successfully!', usthad });
+  } catch(err) {
     res.status(500).json({ success: false, message: err.message });
   }
 };

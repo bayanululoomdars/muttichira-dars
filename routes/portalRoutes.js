@@ -13,10 +13,11 @@ router.get('/alumni', portalController.getAlumniList);
 // Admin Management for Students & Usthads
 router.get('/students', portalController.getStudentsAdmin);
 router.post('/student', getUploader().single('photo'), portalController.addStudentAdmin);
+router.put('/student/:id', getUploader().single('photo'), portalController.updateStudentAdmin);
 router.delete('/student/:id', portalController.deleteStudentAdmin);
-
 router.get('/usthads', portalController.getUsthadsAdmin);
 router.post('/usthad', getUploader().single('photo'), portalController.addUsthadAdmin);
+router.put('/usthad/:id', getUploader().single('photo'), portalController.updateUsthadAdmin);
 router.delete('/usthad/:id', portalController.deleteUsthadAdmin);
 
 // Student & Usthad Dashboards

@@ -2333,6 +2333,7 @@ function renderPortalUsersAdmin() {
       '<td>' + details + (u.place ? ' <small style="color:var(--text-soft);">(' + u.place + ')</small>' : '') + '</td>' +
       '<td><code style="color:var(--text-soft);">' + phoneVal + '</code></td>' +
       '<td class="action-buttons">' +
+        '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')" style="margin-right:5px;"><i class="fa fa-edit"></i> Edit</button>' +
         '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')"><i class="fa fa-trash"></i> Delete</button>' +
       '</td>' +
     '</tr>';
@@ -2341,8 +2342,46 @@ function renderPortalUsersAdmin() {
   safeSetHtml('userTableBody', html || '<tr><td colspan="6" class="text-center text-muted py-4">No matching records found.</td></tr>');
 }
 
+let editingUserId = null;
+let editingUserRole = null;
+
 function openAddUserModal() {
+  editingUserId = null;
+  editingUserRole = null;
+  document.getElementById('formAddStudentAdmin').reset();
+  document.getElementById('formAddUsthadAdmin').reset();
+  document.querySelector('#formAddStudentAdmin button[type="submit"]').innerHTML = 'Save Student Record';
+  document.querySelector('#formAddUsthadAdmin button[type="submit"]').innerHTML = 'Save Usthad Record';
   document.getElementById('unifiedAddUserModal').classList.add('show');
+}
+
+function editUserAdmin(id, role) {
+  const user = allPortalUsersCache.find(u => (u._id === id || u.admissionNo === id || u.usthadId === id));
+  if (!user) return;
+  editingUserId = user._id || id;
+  editingUserRole = role;
+
+  document.getElementById('unifiedAddUserModal').classList.add('show');
+  switchUnifiedRole(role);
+  
+  if (role === 'student') {
+    safeSetVal('adminStudentName', user.name);
+    safeSetVal('adminStudentPhone', user.phone);
+    safeSetVal('adminStudentAdmNo', user.admissionNo);
+    safeSetVal('adminStudentStatus', user.status);
+    safeSetVal('adminStudentClass', user.className);
+    safeSetVal('adminStudentBatch', user.batchYear);
+    safeSetVal('adminStudentPlace', user.place);
+    document.querySelector('#formAddStudentAdmin button[type="submit"]').innerHTML = '<i class="fa fa-save"></i> Update Student';
+  } else {
+    safeSetVal('adminUsthadName', user.name);
+    safeSetVal('adminUsthadPhone', user.phone);
+    safeSetVal('adminUsthadId', user.usthadId);
+    safeSetVal('adminUsthadDesignation', user.designation);
+    safeSetVal('adminUsthadSubject', user.subject);
+    safeSetVal('adminUsthadPlace', user.place);
+    document.querySelector('#formAddUsthadAdmin button[type="submit"]').innerHTML = '<i class="fa fa-save"></i> Update Usthad';
+  }
 }
 
 function closeAddUserModal() {
@@ -2362,6 +2401,11 @@ function switchUnifiedRole(role) {
   }
 }
 
+function safeSetVal(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val || '';
+}
+
 function submitAddStudentAdmin(e) {
   e.preventDefault();
   const photoInput = document.getElementById('adminStudentPhoto');
@@ -2377,17 +2421,20 @@ function submitAddStudentAdmin(e) {
   fd.append('place', safeGetValue('adminStudentPlace'));
   if (photoFile) fd.append('photo', photoFile);
 
-  fetch('/api/portal/student', {
-    method: 'POST',
+  const url = editingUserId ? '/api/portal/student/' + editingUserId : '/api/portal/student';
+  const method = editingUserId ? 'PUT' : 'POST';
+
+  fetch(url, {
+    method: method,
     body: fd
   }).then(r => r.json()).then(res => {
-    showToast(res.message || 'Student record added!', !res.success);
+    showToast(res.message || 'Student record saved!', !res.success);
     if (res.success) {
       document.getElementById('formAddStudentAdmin').reset();
       closeAddUserModal();
       loadPortalUsersAdmin();
     }
-  }).catch(() => showToast('Error adding student record', true));
+  }).catch(() => showToast('Error saving student record', true));
 }
 
 function deleteStudentAdmin(id) {
@@ -2414,17 +2461,20 @@ function submitAddUsthadAdmin(e) {
   fd.append('place', safeGetValue('adminUsthadPlace'));
   if (photoFile) fd.append('photo', photoFile);
 
-  fetch('/api/portal/usthad', {
-    method: 'POST',
+  const url = editingUserId ? '/api/portal/usthad/' + editingUserId : '/api/portal/usthad';
+  const method = editingUserId ? 'PUT' : 'POST';
+
+  fetch(url, {
+    method: method,
     body: fd
   }).then(r => r.json()).then(res => {
-    showToast(res.message || 'Usthad record added!', !res.success);
+    showToast(res.message || 'Usthad record saved!', !res.success);
     if (res.success) {
       document.getElementById('formAddUsthadAdmin').reset();
       closeAddUserModal();
       loadPortalUsersAdmin();
     }
-  }).catch(() => showToast('Error adding usthad record', true));
+  }).catch(() => showToast('Error saving usthad record', true));
 }
 
 function deleteUsthadAdmin(id) {
