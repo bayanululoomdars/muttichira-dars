@@ -1958,8 +1958,12 @@
                   <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Phone Number (Password) *</label>
+                  <label class="form-label">Phone Number *</label>
                   <input type="text" id="adminStudentPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Login Password *</label>
+                  <input type="text" id="adminStudentPassword" class="form-control" placeholder="Set custom password" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Admission No (Optional)</label>
@@ -2000,8 +2004,12 @@
                   <input type="text" id="adminUsthadName" class="form-control" placeholder="e.g. Sheikhuna Ibrahim Baqavi" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Phone Number (Password) *</label>
+                  <label class="form-label">Phone Number *</label>
                   <input type="text" id="adminUsthadPhone" class="form-control" placeholder="e.g. 9526919218" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Login Password *</label>
+                  <input type="text" id="adminUsthadPassword" class="form-control" placeholder="Set custom password" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Usthad ID (Optional)</label>
@@ -2009,11 +2017,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Designation</label>
-                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Subject / Kitab</label>
-                  <input type="text" id="adminUsthadSubject" class="form-control" placeholder="e.g. Tafseer & Fiqh">
+                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris / Principal">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Place</label>
@@ -2402,6 +2406,7 @@ function editUserAdmin(id, role) {
   if (role === 'student') {
     safeSetVal('adminStudentName', user.name);
     safeSetVal('adminStudentPhone', user.phone);
+    safeSetVal('adminStudentPassword', user.password || user.phone);
     safeSetVal('adminStudentAdmNo', user.admissionNo);
     safeSetVal('adminStudentStatus', user.status);
     safeSetVal('adminStudentClass', user.className);
@@ -2411,9 +2416,9 @@ function editUserAdmin(id, role) {
   } else {
     safeSetVal('adminUsthadName', user.name);
     safeSetVal('adminUsthadPhone', user.phone);
+    safeSetVal('adminUsthadPassword', user.password || user.phone);
     safeSetVal('adminUsthadId', user.usthadId);
     safeSetVal('adminUsthadDesignation', user.designation);
-    safeSetVal('adminUsthadSubject', user.subject);
     safeSetVal('adminUsthadPlace', user.place);
     document.querySelector('#formAddUsthadAdmin button[type="submit"]').innerHTML = '<i class="fa fa-save"></i> Update Usthad';
   }
@@ -2449,6 +2454,7 @@ function submitAddStudentAdmin(e) {
   let fd = new FormData();
   fd.append('name', safeGetValue('adminStudentName'));
   fd.append('phone', safeGetValue('adminStudentPhone'));
+  fd.append('password', safeGetValue('adminStudentPassword'));
   fd.append('admissionNo', safeGetValue('adminStudentAdmNo'));
   fd.append('status', safeGetValue('adminStudentStatus'));
   fd.append('className', safeGetValue('adminStudentClass'));
@@ -2490,9 +2496,9 @@ function submitAddUsthadAdmin(e) {
   let fd = new FormData();
   fd.append('name', safeGetValue('adminUsthadName'));
   fd.append('phone', safeGetValue('adminUsthadPhone'));
+  fd.append('password', safeGetValue('adminUsthadPassword'));
   fd.append('usthadId', safeGetValue('adminUsthadId'));
   fd.append('designation', safeGetValue('adminUsthadDesignation'));
-  fd.append('subject', safeGetValue('adminUsthadSubject'));
   fd.append('place', safeGetValue('adminUsthadPlace'));
   if (photoFile) fd.append('photo', photoFile);
 

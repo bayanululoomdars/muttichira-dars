@@ -402,11 +402,14 @@
           <!-- Step 1: Admission No / Identifier Lookup -->
           <div id="stepLookup">
             <div class="input-group-custom">
-              <i class="fa fa-id-card input-icon"></i>
-              <input type="text" id="inputIdentifier" class="form-control-custom" placeholder="e.g. ADM101 or 9876543210" oninput="handleLiveLookup()">
+              <i class="fa fa-search input-icon"></i>
+              <input type="text" id="inputIdentifier" class="form-control-custom" placeholder="Search by Name, Adm No, Usthad ID, Phone..." oninput="handleLiveLookup()">
             </div>
 
-            <!-- Live Preview Card (Populated when typed) -->
+            <!-- Live Selectable Search Results Dropdown List -->
+            <div id="liveSearchResultsSelect" style="display: none;" class="mb-3"></div>
+
+            <!-- Live Preview Card (Single Selected Item) -->
             <div id="livePreviewBox" style="display: none;" class="preview-card">
               <img id="previewPhoto" src="img/new_logo.png" alt="Avatar" class="preview-avatar">
               <div class="preview-info flex-grow-1">
@@ -439,14 +442,14 @@
 
             <div class="input-group-custom">
               <i class="fa fa-lock input-icon"></i>
-              <input type="password" id="inputPassword" class="form-control-custom" placeholder="Enter Password (Default is Phone No)" onkeypress="if(event.key==='Enter') submitLogin()">
+              <input type="password" id="inputPassword" class="form-control-custom" placeholder="Enter Login Password" onkeypress="if(event.key==='Enter') submitLogin()">
               <button type="button" class="btn text-muted" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);" onclick="togglePasswordVis()">
                 <i class="fa fa-eye" id="passEyeIcon"></i>
               </button>
             </div>
             
             <p class="text-muted small mb-3">
-              <i class="fa fa-info-circle text-info"></i> Note: Default password is your <strong>Phone Number</strong>. You can change it inside your dashboard.
+              <i class="fa fa-shield text-success"></i> Secure Login: Enter your personal account password.
             </p>
 
             <div class="d-flex gap-2">
@@ -873,15 +876,20 @@
       handleLiveLookup();
     }
 
-    // Live Lookup preview on typing
+    let currentMatchesList = [];
+
+    // Live Lookup preview on typing (SELECT OPTION VARANAM)
     function handleLiveLookup() {
       clearTimeout(debounceTimer);
       const val = document.getElementById('inputIdentifier').value.trim();
       const previewBox = document.getElementById('livePreviewBox');
+      const selectBox = document.getElementById('liveSearchResultsSelect');
 
-      if (!val || val.length < 3) {
-        previewBox.style.display = 'none';
+      if (!val) {
+        if (previewBox) previewBox.style.display = 'none';
+        if (selectBox) selectBox.style.display = 'none';
         selectedUserObject = null;
+        currentMatchesList = [];
         return;
       }
 
@@ -889,36 +897,86 @@
         fetch('/api/portal/lookup?q=' + encodeURIComponent(val))
           .then(r => r.json())
           .then(data => {
-            if (data.success && data.user) {
-              selectedUserObject = data.user;
-              document.getElementById('previewPhoto').src = data.user.photoUrl || 'img/new_logo.png';
-              document.getElementById('previewName').textContent = data.user.name;
-              document.getElementById('previewSub').textContent = (data.user.role === 'usthad' ? 'ID: ' : 'Adm No: ') + (data.user.admissionNo || data.user.usthadId);
-              
-              const badge = document.getElementById('previewRoleBadge');
-              if (data.user.role === 'usthad') {
-                badge.className = 'badge-role badge-usthad';
-                badge.textContent = 'Usthad • ' + (data.user.designation || 'Faculty');
-              } else if (data.user.isAlumni) {
-                badge.className = 'badge-role badge-alumni';
-                badge.textContent = 'Biruthadhari / Alumni';
+            if (data.success && data.matches && data.matches.length > 0) {
+              currentMatchesList = data.matches;
+
+              if (currentMatchesList.length > 1) {
+                // Render Selectable Options List
+                let selectHtml = '<div style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:12px; max-height:220px; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.08); margin-bottom:15px; padding:6px;">' +
+                  '<div style="font-size:0.75rem; font-weight:700; color:#64748b; padding:6px 10px; border-bottom:1px solid #f1f5f9; text-transform:uppercase;"><i class="fa fa-list"></i> Select matching profile (' + currentMatchesList.length + ' found):</div>';
+
+                currentMatchesList.forEach((item, index) => {
+                  const idText = item.role === 'usthad' ? item.usthadId : item.admissionNo;
+                  const subText = item.role === 'usthad' ? (item.designation || 'Usthad') : (item.className || 'Student');
+                  const badgeClass = item.role === 'usthad' ? 'badge-usthad' : (item.isAlumni ? 'badge-alumni' : 'badge-student');
+                  const badgeLabel = item.role === 'usthad' ? 'Usthad' : (item.isAlumni ? 'Alumni' : 'Student');
+
+                  selectHtml += '<div onclick="selectUserFromList(' + index + ')" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid #f8fafc;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\'transparent\'">' +
+                    '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:1px solid #e2e8f0;">' +
+                    '<div style="flex:1;">' +
+                      '<div style="font-weight:700; color:#1e293b; font-size:0.92rem;">' + item.name + ' <small style="color:#64748b;">(' + idText + ')</small></div>' +
+                      '<div style="font-size:0.78rem; color:#64748b;">' + subText + (item.place ? ' • ' + item.place : '') + '</div>' +
+                    '</div>' +
+                    '<span class="badge-role ' + badgeClass + '" style="font-size:0.68rem;">' + badgeLabel + '</span>' +
+                  '</div>';
+                });
+
+                selectHtml += '</div>';
+                selectBox.innerHTML = selectHtml;
+                selectBox.style.display = 'block';
+                if (previewBox) previewBox.style.display = 'none';
               } else {
-                badge.className = 'badge-role badge-student';
-                badge.textContent = 'Student • ' + (data.user.className || 'Dars');
+                // Single match
+                if (selectBox) selectBox.style.display = 'none';
+                selectUserFromList(0, false);
               }
-              previewBox.style.display = 'flex';
             } else {
-              previewBox.style.display = 'none';
+              if (selectBox) selectBox.style.display = 'none';
+              if (previewBox) previewBox.style.display = 'none';
               selectedUserObject = null;
             }
-          }).catch(e => { previewBox.style.display = 'none'; });
-      }, 300);
+          }).catch(e => {
+            if (selectBox) selectBox.style.display = 'none';
+            if (previewBox) previewBox.style.display = 'none';
+          });
+      }, 250);
+    }
+
+    function selectUserFromList(index, autoProceed = true) {
+      if (!currentMatchesList || !currentMatchesList[index]) return;
+      selectedUserObject = currentMatchesList[index];
+
+      const previewBox = document.getElementById('livePreviewBox');
+      const selectBox = document.getElementById('liveSearchResultsSelect');
+
+      if (selectBox) selectBox.style.display = 'none';
+
+      document.getElementById('previewPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
+      document.getElementById('previewName').textContent = selectedUserObject.name;
+      document.getElementById('previewSub').textContent = (selectedUserObject.role === 'usthad' ? 'Usthad ID: ' : 'Adm No: ') + (selectedUserObject.admissionNo || selectedUserObject.usthadId);
+
+      const badge = document.getElementById('previewRoleBadge');
+      if (selectedUserObject.role === 'usthad') {
+        badge.className = 'badge-role badge-usthad';
+        badge.textContent = 'Usthad • ' + (selectedUserObject.designation || 'Faculty');
+      } else if (selectedUserObject.isAlumni) {
+        badge.className = 'badge-role badge-alumni';
+        badge.textContent = 'Biruthadhari / Alumni';
+      } else {
+        badge.className = 'badge-role badge-student';
+        badge.textContent = 'Student • ' + (selectedUserObject.className || 'Dars');
+      }
+      previewBox.style.display = 'flex';
+
+      if (autoProceed) {
+        proceedToPassword();
+      }
     }
 
     function handleManualLookup() {
       const val = document.getElementById('inputIdentifier').value.trim();
       if (!val) {
-        showAlert('Please enter your Admission Number or Phone Number', 'danger');
+        showAlert('Please enter your Name, Admission Number, or Phone Number', 'danger');
         return;
       }
       if (selectedUserObject) {
@@ -928,11 +986,11 @@
         fetch('/api/portal/lookup?q=' + encodeURIComponent(val))
           .then(r => r.json())
           .then(data => {
-            if (data.success && data.user) {
-              selectedUserObject = data.user;
-              proceedToPassword();
+            if (data.success && data.matches && data.matches.length > 0) {
+              currentMatchesList = data.matches;
+              selectUserFromList(0, true);
             } else {
-              showAlert(data.message || 'No record found with this ID/Phone. Default password is your phone number.', 'danger');
+              showAlert(data.message || 'No record found matching "' + val + '"', 'danger');
             }
           });
       }

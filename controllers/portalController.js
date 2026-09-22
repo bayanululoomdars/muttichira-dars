@@ -202,39 +202,59 @@ const memoryMessages = [
 
 // Helper: Find Student (DB or Memory)
 async function findStudentByIdentifier(query) {
-  const mongoose = require('mongoose');
-  if (mongoose.connection.readyState === 1) {
-    try {
-      const student = await Student.findOne({
-        $or: [{ admissionNo: query }, { phone: query }]
-      }).maxTimeMS(2000);
-      if (student) return student;
-    } catch (e) {
-      // DB offline or timeout
-    }
+  if (!query) return null;
+  const qStr = String(query).trim();
+  const qLower = qStr.toLowerCase();
+
+  let students = [];
+  try {
+    students = await Student.find({});
+  } catch (e) {}
+
+  if (!students || students.length === 0) {
+    students = memoryStudents;
   }
-  const qUpper = String(query).trim().toUpperCase();
-  return memoryStudents.find(s => 
-    s.admissionNo.toUpperCase() === qUpper || s.phone === String(query).trim()
+
+  // Exact match by admissionNo or phone first
+  let found = students.find(s => 
+    String(s.admissionNo || '').toLowerCase() === qLower ||
+    String(s.phone || '').trim() === qStr
+  );
+  if (found) return found;
+
+  // Substring match by name or place
+  return students.find(s => 
+    (s.name || '').toLowerCase().includes(qLower) ||
+    (s.place || '').toLowerCase().includes(qLower)
   );
 }
 
 // Helper: Find Usthad (DB or Memory)
 async function findUsthadByIdentifier(query) {
-  const mongoose = require('mongoose');
-  if (mongoose.connection.readyState === 1) {
-    try {
-      const usthad = await Usthad.findOne({
-        $or: [{ usthadId: query }, { phone: query }]
-      }).maxTimeMS(2000);
-      if (usthad) return usthad;
-    } catch (e) {
-      // DB offline
-    }
+  if (!query) return null;
+  const qStr = String(query).trim();
+  const qLower = qStr.toLowerCase();
+
+  let usthads = [];
+  try {
+    usthads = await Usthad.find({});
+  } catch (e) {}
+
+  if (!usthads || usthads.length === 0) {
+    usthads = memoryUsthads;
   }
-  const qUpper = String(query).trim().toUpperCase();
-  return memoryUsthads.find(u => 
-    u.usthadId.toUpperCase() === qUpper || u.phone === String(query).trim()
+
+  // Exact match by usthadId or phone first
+  let found = usthads.find(u => 
+    String(u.usthadId || '').toLowerCase() === qLower ||
+    String(u.phone || '').trim() === qStr
+  );
+  if (found) return found;
+
+  // Substring match by name or place
+  return usthads.find(u => 
+    (u.name || '').toLowerCase().includes(qLower) ||
+    (u.place || '').toLowerCase().includes(qLower)
   );
 }
 
@@ -243,49 +263,75 @@ exports.lookup = async (req, res) => {
   try {
     const q = (req.query.q || req.query.admissionNo || '').trim();
     if (!q) {
-      return res.json({ success: false, message: 'Please enter Admission Number or Phone' });
+      return res.json({ success: false, message: 'Please enter Admission Number, Name, or Phone' });
     }
 
-    // Try Student
-    let student = await findStudentByIdentifier(q);
-    if (student) {
-      return res.json({
-        success: true,
-        type: 'student',
-        user: {
-          admissionNo: student.admissionNo,
-          name: student.name,
+    const qLower = q.toLowerCase();
+
+    let allStudents = [];
+    try { allStudents = await Student.find({}); } catch (e) {}
+    if (!allStudents || allStudents.length === 0) allStudents = memoryStudents;
+
+    let allUsthads = [];
+    try { allUsthads = await Usthad.find({}); } catch (e) {}
+    if (!allUsthads || allUsthads.length === 0) allUsthads = memoryUsthads;
+
+    let results = [];
+
+    // Filter students
+    allStudents.forEach(s => {
+      const admMatch = String(s.admissionNo || '').toLowerCase() === qLower;
+      const phoneMatch = String(s.phone || '').includes(q);
+      const nameMatch = (s.name || '').toLowerCase().includes(qLower);
+      const placeMatch = (s.place || '').toLowerCase().includes(qLower);
+
+      if (admMatch || phoneMatch || nameMatch || placeMatch) {
+        results.push({
+          type: 'student',
+          admissionNo: s.admissionNo,
+          name: s.name,
           role: 'student',
-          className: student.className,
-          status: student.status || (student.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
-          isAlumni: student.isAlumni,
-          batchYear: student.batchYear,
-          photoUrl: student.photoUrl || 'img/new_logo.png',
-          place: student.place
-        }
-      });
-    }
+          className: s.className,
+          status: s.status || (s.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
+          isAlumni: s.isAlumni,
+          batchYear: s.batchYear,
+          photoUrl: s.photoUrl || 'img/new_logo.png',
+          place: s.place
+        });
+      }
+    });
 
-    // Try Usthad
-    let usthad = await findUsthadByIdentifier(q);
-    if (usthad) {
+    // Filter usthads
+    allUsthads.forEach(u => {
+      const idMatch = String(u.usthadId || '').toLowerCase() === qLower;
+      const phoneMatch = String(u.phone || '').includes(q);
+      const nameMatch = (u.name || '').toLowerCase().includes(qLower);
+      const placeMatch = (u.place || '').toLowerCase().includes(qLower);
+
+      if (idMatch || phoneMatch || nameMatch || placeMatch) {
+        results.push({
+          type: 'usthad',
+          admissionNo: u.usthadId,
+          usthadId: u.usthadId,
+          name: u.name,
+          role: 'usthad',
+          designation: u.designation,
+          subject: u.subject || 'Dars Mudarris',
+          photoUrl: u.photoUrl || 'img/new_logo.png',
+          place: u.place
+        });
+      }
+    });
+
+    if (results.length > 0) {
       return res.json({
         success: true,
-        type: 'usthad',
-        user: {
-          admissionNo: usthad.usthadId,
-          usthadId: usthad.usthadId,
-          name: usthad.name,
-          role: 'usthad',
-          designation: usthad.designation,
-          subject: usthad.subject,
-          photoUrl: usthad.photoUrl || 'img/new_logo.png',
-          place: usthad.place
-        }
+        user: results[0],
+        matches: results.slice(0, 15) // Top 15 matching items
       });
     }
 
-    return res.json({ success: false, message: 'No Student or Usthad record found with this ID/Phone' });
+    return res.json({ success: false, message: 'No Student or Usthad record matches "' + q + '"' });
   } catch (err) {
     console.error('Lookup error:', err);
     res.status(500).json({ success: false, message: 'Server error during lookup' });
@@ -297,7 +343,7 @@ exports.login = async (req, res) => {
   try {
     const { role, identifier, password } = req.body;
     if (!identifier || !password) {
-      return res.status(400).json({ success: false, message: 'ID/Phone and Password required' });
+      return res.status(400).json({ success: false, message: 'ID/Phone/Name and Password required' });
     }
 
     const cleanId = String(identifier).trim();
@@ -308,8 +354,9 @@ exports.login = async (req, res) => {
       if (!usthad) {
         return res.status(404).json({ success: false, message: 'Usthad record not found' });
       }
-      if (usthad.password !== cleanPass) {
-        return res.status(401).json({ success: false, message: 'Incorrect Password. (Default is Phone Number)' });
+      const validPass = usthad.password || usthad.phone || usthad.usthadId;
+      if (cleanPass !== validPass) {
+        return res.status(401).json({ success: false, message: 'Incorrect Password' });
       }
       req.session.portalUser = {
         role: 'usthad',
@@ -330,8 +377,9 @@ exports.login = async (req, res) => {
       if (!student) {
         return res.status(404).json({ success: false, message: 'Student record not found' });
       }
-      if (student.password !== cleanPass) {
-        return res.status(401).json({ success: false, message: 'Incorrect Password. (Default is Phone Number)' });
+      const validPass = student.password || student.phone || student.admissionNo;
+      if (cleanPass !== validPass) {
+        return res.status(401).json({ success: false, message: 'Incorrect Password' });
       }
       req.session.portalUser = {
         role: 'student',
@@ -351,8 +399,8 @@ exports.login = async (req, res) => {
       return res.json({ success: true, message: 'Student Login successful', user: req.session.portalUser });
     }
   } catch (err) {
-    console.error('Portal Login error:', err);
-    res.status(500).json({ success: false, message: 'Login processing error' });
+    console.error('Login error:', err);
+    res.status(500).json({ success: false, message: 'Server error during login' });
   }
 };
 
