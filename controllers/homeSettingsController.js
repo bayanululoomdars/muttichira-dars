@@ -1,4 +1,6 @@
 const HomeSettings = require('../models/HomeSettings');
+const Student = require('../models/Student');
+const Usthad = require('../models/Usthad');
 const { deleteFile } = require('../config/storage');
 
 // GET /api/home-settings — Get homepage settings
@@ -9,7 +11,26 @@ exports.getHomeSettings = async (req, res) => {
       settings = new HomeSettings();
       await settings.save();
     }
-    res.json(settings);
+    
+    let settingsObj = settings.toObject ? settings.toObject() : JSON.parse(JSON.stringify(settings));
+
+    try {
+      const studentCount = await Student.countDocuments();
+      settingsObj.statsStudents = studentCount > 0 ? studentCount : (settings.statsStudents || 87);
+    } catch (e) {
+      settingsObj.statsStudents = settings.statsStudents || 87;
+    }
+
+    try {
+      const usthadCount = await Usthad.countDocuments();
+      const assistantCount = (settings.assistantMudarris && settings.assistantMudarris.length) ? settings.assistantMudarris.length : 0;
+      const totalUsthad = usthadCount > 0 ? (usthadCount + assistantCount) : (settings.statsUstads || 8);
+      settingsObj.statsUstads = totalUsthad;
+    } catch (e) {
+      settingsObj.statsUstads = settings.statsUstads || 8;
+    }
+
+    res.json(settingsObj);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

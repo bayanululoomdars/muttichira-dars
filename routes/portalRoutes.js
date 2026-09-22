@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const portalController = require('../controllers/portalController');
+const { getUploader } = require('../config/storage');
 
 // Public & Student/Usthad Login / Lookup
 router.get('/lookup', portalController.lookup);
@@ -11,11 +12,11 @@ router.get('/alumni', portalController.getAlumniList);
 
 // Admin Management for Students & Usthads
 router.get('/students', portalController.getStudentsAdmin);
-router.post('/student', portalController.addStudentAdmin);
+router.post('/student', getUploader().single('photo'), portalController.addStudentAdmin);
 router.delete('/student/:id', portalController.deleteStudentAdmin);
 
 router.get('/usthads', portalController.getUsthadsAdmin);
-router.post('/usthad', portalController.addUsthadAdmin);
+router.post('/usthad', getUploader().single('photo'), portalController.addUsthadAdmin);
 router.delete('/usthad/:id', portalController.deleteUsthadAdmin);
 
 // Student & Usthad Dashboards

@@ -281,9 +281,9 @@
           </div>
 
           <div class="icon-box wow fadeInUp">
-            <div class="icon"><i class="fa fa-graduation-cap"></i></div>
+            <div class="icon"><i class="fa fa-book"></i></div>
             <h4 class="title"><a href="">Student</a></h4>
-            <p class="description">Our Dars has more than <strong id="aboutStudentsCount">90</strong> Students and under the managment of <strong id="aboutUstadsCount">six</strong> Usthad</p>
+            <p class="description">Our Dars has more than <strong id="aboutStudentsCount">87</strong> Students and under the managment of <strong id="aboutUstadsCount">six</strong> Usthad</p>
           </div>
 
           <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
@@ -495,33 +495,33 @@
       </div>
     </section><!-- #admission -->
     <!-- Stats Counter Section -->
-    <section id="stats" style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 70px 0; position: relative; overflow: hidden;">
+    <section id="stats" style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 60px 0; position: relative; overflow: hidden;">
       <div class="container" style="position:relative;z-index:1;">
-        <div class="row text-center counter-row flex-nowrap justify-content-center">
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-graduation-cap counter-icon"></i>
-              <div id="counterStudents" class="counter-number">100+</div>
+        <div class="row text-center counter-row justify-content-center">
+          <div class="col-6 col-md-3 mb-3">
+            <div class="counter-card" style="padding:20px 10px;">
+              <i class="fa fa-book counter-icon"></i>
+              <div id="counterStudents" class="counter-number">87</div>
               <div class="counter-label">Students</div>
             </div>
           </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
+          <div class="col-6 col-md-3 mb-3">
+            <div class="counter-card" style="padding:20px 10px;">
               <i class="fa fa-users counter-icon"></i>
               <div id="counterUstads" class="counter-number">8</div>
               <div class="counter-label">Usthads</div>
             </div>
           </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-book counter-icon"></i>
-              <div id="counterYears" class="counter-number">20+</div>
+          <div class="col-6 col-md-3 mb-3">
+            <div class="counter-card" style="padding:20px 10px;">
+              <i class="fa fa-university counter-icon"></i>
+              <div id="counterYears" class="counter-number">50+</div>
               <div class="counter-label">Years of Tradition</div>
             </div>
           </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-trophy counter-icon"></i>
+          <div class="col-6 col-md-3 mb-3">
+            <div class="counter-card" style="padding:20px 10px;">
+              <i class="fa fa-graduation-cap counter-icon"></i>
               <div id="counterAlumni" class="counter-number">50+</div>
               <div class="counter-label">Distinguished Alumni</div>
             </div>
@@ -1152,10 +1152,10 @@
         .then(function(res) { return res.json(); })
         .then(function(s) {
           // Stats counters with animation
-          animateCounter('counterStudents', s.statsStudents || 90);
-          animateCounter('counterUstads', s.statsUstads || 6);
+          animateCounter('counterStudents', s.statsStudents || 87);
+          animateCounter('counterUstads', s.statsUstads || 8);
           animateCounter('counterYears', s.statsYears || 50);
-          animateCounter('counterAlumni', s.statsAlumni || 25);
+          animateCounter('counterAlumni', s.statsAlumni || 50);
 
           // Dynamic About Us counts
           if (s.statsStudents) document.getElementById('aboutStudentsCount').textContent = s.statsStudents;
