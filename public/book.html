@@ -72,23 +72,7 @@
     }
     
     .rotate-hint {
-      position: absolute;
-      top: 15px;
-      left: 0; right: 0;
-      text-align: center;
-      color: #d4af37;
-      font-size: 0.85rem;
-      z-index: 10;
-      pointer-events: none;
-      display: none;
-      background: rgba(0,0,0,0.4);
-      padding: 5px;
-      border-radius: 20px;
-      width: max-content;
-      margin: 0 auto;
-    }
-    @media (max-aspect-ratio: 1/1) {
-      .rotate-hint { display: block; }
+      display: none !important; /* Removed as we now support portrait perfectly */
     }
 
     #book {
@@ -98,7 +82,7 @@
     
     /* ── PAGE STYLING ── */
     .page {
-      background-color: #fff;
+      background-color: #fdfaf2; /* Paper color for letterboxing margins */
       overflow: hidden;
     }
     
@@ -107,29 +91,32 @@
       content: '';
       position: absolute;
       top: 0; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 8%, rgba(0,0,0,0) 92%, rgba(0,0,0,0.15) 100%);
+      background: linear-gradient(to right, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 8%, rgba(0,0,0,0) 92%, rgba(0,0,0,0.12) 100%);
       pointer-events: none;
       z-index: 5;
     }
     
     .page.--right::before {
-      background: linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 10%);
+      background: linear-gradient(to right, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 10%);
     }
     
     .page.--left::before {
-      background: linear-gradient(to left, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 10%);
+      background: linear-gradient(to left, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 10%);
     }
     
     .page-content {
       width: 100%;
       height: 100%;
-      padding: 5px;
+      padding: 0; /* Remove padding to maximize size */
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .page-content img {
       width: 100%;
       height: 100%;
-      object-fit: fill; /* Ensure full page coverage */
+      object-fit: contain; /* PERFECT RATIO: No stretching/distortion! */
     }
 
     /* ── LOADER ── */
@@ -262,7 +249,7 @@
             minHeight: 300,
             maxHeight: 900,
             showCover: true,      // First & Last page centered!
-            usePortrait: false,   // Force double-page spread on mobile
+            usePortrait: true,    // AUTOMATIC SINGLE PAGE ON MOBILE
             maxShadowOpacity: 0.5,
             drawShadow: true,
             flippingTime: 700,    // Book turning speed
