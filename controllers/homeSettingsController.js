@@ -18,11 +18,11 @@ exports.getHomeSettings = async (req, res) => {
       const activeStudents = await Student.countDocuments({ isAlumni: false });
       const alumniCount = await Student.countDocuments({ isAlumni: true });
       const totalStudents = await Student.countDocuments();
-      settingsObj.statsStudents = activeStudents > 0 ? activeStudents : (settings.statsStudents || 45);
-      settingsObj.statsAlumni = alumniCount > 0 ? alumniCount : (settings.statsAlumni || 120);
+      settingsObj.statsStudents = activeStudents > 0 ? activeStudents : (totalStudents > 0 ? totalStudents : 111);
+      settingsObj.statsAlumni = alumniCount;
     } catch (e) {
-      settingsObj.statsStudents = settings.statsStudents || 45;
-      settingsObj.statsAlumni = settings.statsAlumni || 120;
+      settingsObj.statsStudents = 111;
+      settingsObj.statsAlumni = 0;
     }
 
     try {
@@ -31,10 +31,10 @@ exports.getHomeSettings = async (req, res) => {
       const totalUsthad = (usthadCount > 0 ? usthadCount : 3) + assistantCount;
       settingsObj.statsUstads = totalUsthad;
     } catch (e) {
-      settingsObj.statsUstads = settings.statsUstads || 8;
+      settingsObj.statsUstads = 8;
     }
 
-    const calculatedYears = (new Date().getFullYear() - 2001) + '+';
+    const calculatedYears = String(new Date().getFullYear() - 2001);
     settingsObj.statsYears = calculatedYears;
 
     res.json(settingsObj);
