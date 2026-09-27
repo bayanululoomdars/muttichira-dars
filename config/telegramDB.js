@@ -185,6 +185,7 @@ async function uploadDbToTelegram() {
     const buf = Buffer.from(JSON.stringify(dbState, null, 2));
     const formData = new FormData();
     formData.append('chat_id', chatId);
+    formData.append('disable_notification', 'true');
     const blob = new Blob([buf], { type: 'application/json' });
     formData.append('document', blob, 'db.json');
 

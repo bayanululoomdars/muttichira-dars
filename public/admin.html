@@ -1320,15 +1320,16 @@
     .delete-btn:hover { background: #fee2e2; }
 
     /* Unified User Modal */
-    .unified-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center; }
+    .unified-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; }
     .unified-modal.show { display: flex; }
-    .unified-modal-content { background: #fff; width: 90%; max-width: 600px; border-radius: 12px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
-    .unified-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
-    .unified-modal-header h3 { margin: 0; color: #0a4d2e; font-family: 'Segoe UI', sans-serif; }
-    .unified-modal-close { background: none; border: none; font-size: 1.5rem; color: #64748b; cursor: pointer; }
+    .unified-modal-content { background: var(--bg-card); border: 1px solid var(--border); width: 90%; max-width: 600px; border-radius: 18px; padding: 28px; box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y: auto; color: var(--text); }
+    .unified-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-soft); padding-bottom: 15px; }
+    .unified-modal-header h3 { margin: 0; color: var(--accent); font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; }
+    .unified-modal-close { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+    .unified-modal-close:hover { color: var(--danger); }
     .unified-role-selector { display: flex; gap: 10px; margin-bottom: 20px; }
-    .unified-role-btn { flex: 1; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; background: #fff; color: #64748b; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .unified-role-btn.active { border-color: #0a4d2e; color: #0a4d2e; background: #f0fdf4; }
+    .unified-role-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border-soft); border-radius: 8px; background: var(--bg-input); color: var(--text-soft); font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .unified-role-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
   </style>
 </head>
 <body>
@@ -2027,6 +2028,10 @@
                 <div class="form-group">
                   <label class="form-label">Place</label>
                   <input type="text" id="adminUsthadPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Photo Image</label>
+                  <input type="file" id="adminUsthadPhoto" class="form-control" accept="image/*" name="photo">
                 </div>
               </div>
               <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-user-plus"></i> Add Usthad Record</button>

@@ -15,20 +15,26 @@ exports.getHomeSettings = async (req, res) => {
     let settingsObj = settings.toObject ? settings.toObject() : JSON.parse(JSON.stringify(settings));
 
     try {
-      const studentCount = await Student.countDocuments();
-      settingsObj.statsStudents = studentCount > 0 ? studentCount : (settings.statsStudents || 87);
+      const activeStudents = await Student.countDocuments({ isAlumni: false });
+      const alumniCount = await Student.countDocuments({ isAlumni: true });
+      const totalStudents = await Student.countDocuments();
+      settingsObj.statsStudents = activeStudents > 0 ? activeStudents : (settings.statsStudents || 45);
+      settingsObj.statsAlumni = alumniCount > 0 ? alumniCount : (settings.statsAlumni || 120);
     } catch (e) {
-      settingsObj.statsStudents = settings.statsStudents || 87;
+      settingsObj.statsStudents = settings.statsStudents || 45;
+      settingsObj.statsAlumni = settings.statsAlumni || 120;
     }
 
     try {
       const usthadCount = await Usthad.countDocuments();
       const assistantCount = (settings.assistantMudarris && settings.assistantMudarris.length) ? settings.assistantMudarris.length : 0;
-      const totalUsthad = usthadCount > 0 ? (usthadCount + assistantCount) : (settings.statsUstads || 8);
+      const totalUsthad = (usthadCount > 0 ? usthadCount : 3) + assistantCount;
       settingsObj.statsUstads = totalUsthad;
     } catch (e) {
       settingsObj.statsUstads = settings.statsUstads || 8;
     }
+
+    settingsObj.statsYears = settings.statsYears || 50;
 
     res.json(settingsObj);
   } catch (err) {
