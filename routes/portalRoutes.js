@@ -22,8 +22,16 @@ router.delete('/usthad/:id', portalController.deleteUsthadAdmin);
 
 // Student & Usthad Dashboards
 router.get('/student/dashboard', portalController.getStudentDashboard);
+router.get('/student/progress-card', portalController.getStudentProgressCard);
 router.post('/student/message', portalController.postStudentMessage);
 
 router.post('/usthad/post-data', portalController.postUsthadData);
+
+// Exam & Mark Management (Multi-subject, Auto-rank, Attendance %)
+router.get('/exams', portalController.getExamsAdmin);
+router.post('/exam', portalController.createExamAdmin);
+router.delete('/exam/:id', portalController.deleteExamAdmin);
+router.get('/exam/roster', portalController.getExamClassRoster);
+router.post('/exam/save-marks', portalController.saveExamClassMarks);
 
 module.exports = router;

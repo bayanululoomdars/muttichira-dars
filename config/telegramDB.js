@@ -10,6 +10,8 @@ const chatId = (process.env.TELEGRAM_CHAT_ID || '').trim();
 let dbState = {
   Admission: [],
   Contact: [],
+  Exam: [],
+  ExamResult: [],
   GalleryItem: [],
   HomeSettings: [],
   News: [],
@@ -425,6 +427,8 @@ module.exports = {
   loadDbFromTelegram,
   Admission: createMockModel('Admission'),
   Contact: createMockModel('Contact'),
+  Exam: createMockModel('Exam'),
+  ExamResult: createMockModel('ExamResult'),
   GalleryItem: createMockModel('GalleryItem'),
   HomeSettings: createMockModel('HomeSettings'),
   News: createMockModel('News'),

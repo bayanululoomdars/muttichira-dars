@@ -1424,6 +1424,11 @@
           <span class="nav-badge" id="badge-users">0</span>
         </button>
 
+        <button class="nav-item" id="nav-exams" onclick="showPage('exams')">
+          <i class="fa fa-trophy"></i> Exam & Rank Manager
+          <span class="nav-badge" id="badge-exams">0</span>
+        </button>
+
         <div class="sidebar-section-label">System</div>
 
         <button class="nav-item danger" id="nav-reset" onclick="showPage('reset')">
@@ -2059,6 +2064,170 @@
           </div>
         </div>
 
+        <!-- ════════════════════════════════
+             EXAM & RANK MANAGEMENT PANEL
+        ════════════════════════════════ -->
+        <div class="page" id="page-exams">
+          <div class="card" style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:16px; padding:24px; margin-bottom:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+              <div>
+                <h3 style="font-family:'Outfit',sans-serif; color:var(--accent); margin:0; font-size:1.4rem;">
+                  <i class="fa fa-trophy"></i> Dars Exam & Rank Manager
+                </h3>
+                <p style="color:var(--text-soft); font-size:0.88rem; margin:4px 0 0 0;">
+                  Set up exam subjects with custom Max Marks (100, 80, 50, 40), enter student scores, and auto-calculate Class Ranks!
+                </p>
+              </div>
+              <button class="btn btn-accent" onclick="openCreateExamModal()">
+                <i class="fa fa-plus-circle"></i> Create New Exam
+              </button>
+            </div>
+
+            <!-- Exam Selection & Filter Controls -->
+            <div style="display:flex; gap:16px; flex-wrap:wrap; background:var(--bg-card-2); padding:16px; border-radius:12px; border:1px solid var(--border-soft); margin-bottom:20px;">
+              <div style="flex:1; min-width:220px;">
+                <label style="font-size:0.8rem; font-weight:600; color:var(--text-soft); display:block; margin-bottom:6px;">Select Exam *</label>
+                <select id="examSelectAdmin" class="form-control" onchange="onExamOrClassChange()" style="background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
+                  <option value="">Loading Exams...</option>
+                </select>
+              </div>
+
+              <div style="flex:1; min-width:220px;">
+                <label style="font-size:0.8rem; font-weight:600; color:var(--text-soft); display:block; margin-bottom:6px;">Select Target Class *</label>
+                <select id="examClassSelectAdmin" class="form-control" onchange="onExamOrClassChange()" style="background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
+                  <option value="Dars 3rd Year">Dars 3rd Year</option>
+                  <option value="Dars 2nd Year">Dars 2nd Year</option>
+                  <option value="Dars 1st Year">Dars 1st Year</option>
+                  <option value="Dars Senior">Dars Senior</option>
+                  <option value="Dars Junior">Dars Junior</option>
+                  <option value="Dars Sub Junior">Dars Sub Junior</option>
+                </select>
+              </div>
+
+              <div style="display:flex; align-items:flex-end;">
+                <button class="btn btn-primary" onclick="loadExamClassRosterMatrix()">
+                  <i class="fa fa-refresh"></i> Load Mark Matrix
+                </button>
+              </div>
+            </div>
+
+            <!-- Subject Config Preview Banner -->
+            <div id="examSubjectConfigBanner" style="background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.2); border-radius:10px; padding:12px 16px; margin-bottom:20px; display:none;">
+              <div style="font-size:0.85rem; font-weight:700; color:var(--accent);" id="examBannerTitle">Subjects Configured:</div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;" id="examBannerBadges"></div>
+            </div>
+
+            <!-- Student Mark Entry Matrix Table -->
+            <div class="table-container" style="margin-top:0;">
+              <table class="modern-table">
+                <thead>
+                  <tr id="examMatrixHeaderRow">
+                    <th>Adm No</th>
+                    <th>Student Name</th>
+                    <th>Status</th>
+                    <th>Total Score</th>
+                    <th>%</th>
+                    <th>Grade</th>
+                    <th>Class Rank</th>
+                  </tr>
+                </thead>
+                <tbody id="examMatrixTableBody">
+                  <tr><td colspan="7" class="text-center text-muted py-4">Please select an Exam and Class to load mark entry matrix.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
+              <button class="btn btn-accent btn-lg" onclick="submitExamClassMarksMatrix()">
+                <i class="fa fa-trophy"></i> Calculate Ranks & Publish Results
+              </button>
+            </div>
+          </div>
+
+          <!-- Existing Exams List -->
+          <div class="card" style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:16px; padding:24px;">
+            <h4 style="font-family:'Outfit',sans-serif; color:var(--text); margin-bottom:16px;">
+              <i class="fa fa-list-alt"></i> Active Exam Configurations
+            </h4>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead>
+                  <tr>
+                    <th>Exam Name</th>
+                    <th>Term</th>
+                    <th>Batch</th>
+                    <th>Configured Classes</th>
+                    <th>Created</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="examListTableBody">
+                  <tr><td colspan="6" class="text-center text-muted py-3">Loading active exams...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create Exam Modal -->
+        <div class="unified-modal" id="modalCreateExam">
+          <div class="unified-modal-content" style="max-width:650px;">
+            <div class="unified-modal-header">
+              <h3>Create New Exam Configuration</h3>
+              <button class="unified-modal-close" onclick="closeCreateExamModal()">&times;</button>
+            </div>
+            
+            <form onsubmit="submitCreateExamForm(event)">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Exam Name *</label>
+                  <input type="text" id="newExamName" class="form-control" placeholder="e.g. First Semester Exam 2025" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Term / Type</label>
+                  <select id="newExamTerm" class="form-control">
+                    <option value="Semester 1">Semester 1</option>
+                    <option value="Semester 2">Semester 2</option>
+                    <option value="Half Yearly">Half Yearly</option>
+                    <option value="Annual Exam">Annual Exam</option>
+                    <option value="Monthly Evaluation">Monthly Evaluation</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Batch Year</label>
+                  <input type="text" id="newExamBatch" class="form-control" value="2025">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Target Class</label>
+                  <select id="newExamClass" class="form-control" onchange="renderSubjectInputRows()">
+                    <option value="Dars 3rd Year">Dars 3rd Year</option>
+                    <option value="Dars 2nd Year">Dars 2nd Year</option>
+                    <option value="Dars 1st Year">Dars 1st Year</option>
+                    <option value="Dars Senior">Dars Senior</option>
+                    <option value="Dars Junior">Dars Junior</option>
+                    <option value="Dars Sub Junior">Dars Sub Junior</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Dynamic Subject Input Rows -->
+              <div style="margin-top:16px; background:var(--bg-card-2); padding:16px; border-radius:12px; border:1px solid var(--border-soft);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                  <strong style="color:var(--accent); font-size:0.9rem;">Subjects & Max Marks for selected Class:</strong>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addSubjectInputRow()">+ Add Subject</button>
+                </div>
+                <div id="subjectInputRowsContainer">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-accent mt-3" style="width:100%;">
+                <i class="fa fa-save"></i> Save Exam Configuration
+              </button>
+            </form>
+          </div>
+        </div>
+
         <!-- Hidden PDF Print Template -->
 <div id="pdfPrintTemplate" style="display:none;">
 
@@ -2634,7 +2803,7 @@ function showPage(page) {
     admissions: 'Admission Panel', gallery: 'Gallery Panel',
     messages: 'Messages & Comments', 'portal-users': 'Manage Portal Users',
     students: 'Manage Students & Alumni', usthads: 'Manage Usthads & Faculty',
-    users: 'User Management', reset: 'Full Reset'
+    users: 'User Management', exams: 'Exam & Rank Manager', reset: 'Full Reset'
   };
 
   if (pageEl) pageEl.classList.add('active');
@@ -2654,6 +2823,7 @@ function showPage(page) {
     else setPortalFilter('all');
   }
   if (targetPage === 'users') loadUsersAdmin();
+  if (targetPage === 'exams') loadExamsAdmin();
 
   // Close mobile sidebar
   closeSidebar();
@@ -3977,6 +4147,315 @@ function submitEditNews(e) {
       if (btn) { btn.disabled = false; btn.innerHTML = 'Save Changes'; }
       safeSetHtml('editNewsStatus', '<span style="color:var(--danger);">Network error</span>');
     });
+}
+/* ===========================================
+   EXAM & RANK MANAGEMENT JS
+=========================================== */
+let allExamsCache = [];
+let currentExamRosterData = null;
+let currentSubjectInputList = [];
+
+function loadExamsAdmin() {
+  fetch('/api/portal/exams')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.exams) {
+        allExamsCache = data.exams;
+        renderExamSelectList();
+        renderExamTableList();
+      }
+    });
+}
+
+function renderExamSelectList() {
+  const select = document.getElementById('examSelectAdmin');
+  if (!select) return;
+  if (!allExamsCache || allExamsCache.length === 0) {
+    select.innerHTML = '<option value="">No active exams found</option>';
+    return;
+  }
+  let html = '';
+  allExamsCache.forEach(e => {
+    html += `<option value="${e._id}">${e.examName} (${e.term || 'Semester'})</option>`;
+  });
+  select.innerHTML = html;
+  onExamOrClassChange();
+}
+
+function renderExamTableList() {
+  const tbody = document.getElementById('examListTableBody');
+  if (!tbody) return;
+  if (!allExamsCache || allExamsCache.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">No active exams configured yet.</td></tr>';
+    return;
+  }
+  let html = '';
+  allExamsCache.forEach(e => {
+    const classCount = e.classSubjects ? Object.keys(e.classSubjects).length : 0;
+    html += `<tr>
+      <td><strong style="color:var(--text);">${e.examName}</strong></td>
+      <td><span class="badge badge-info">${e.term || 'Semester'}</span></td>
+      <td><code>${e.batchYear || '2025'}</code></td>
+      <td>${classCount} Classes configured</td>
+      <td><small style="color:var(--text-soft);">${new Date(e.createdAt || Date.now()).toLocaleDateString()}</small></td>
+      <td>
+        <button class="btn btn-danger btn-sm" onclick="deleteExamAdmin('${e._id}')"><i class="fa fa-trash"></i> Delete</button>
+      </td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+function openCreateExamModal() {
+  document.getElementById('newExamName').value = '';
+  document.getElementById('modalCreateExam').classList.add('show');
+  renderSubjectInputRows();
+}
+
+function closeCreateExamModal() {
+  document.getElementById('modalCreateExam').classList.remove('show');
+}
+
+function renderSubjectInputRows() {
+  const targetClass = safeGetValue('newExamClass') || 'Dars 3rd Year';
+  const container = document.getElementById('subjectInputRowsContainer');
+  if (!container) return;
+
+  if (!currentSubjectInputList || currentSubjectInputList.length === 0) {
+    if (targetClass.includes('3rd')) {
+      currentSubjectInputList = [
+        { subjectName: 'Fiqh (Fathul Mueen)', maxMarks: 100 },
+        { subjectName: 'Nahw (Alfiyya)', maxMarks: 80 },
+        { subjectName: 'Tafseer (Jalalain)', maxMarks: 50 },
+        { subjectName: 'Balagha (Mukhtasar)', maxMarks: 40 }
+      ];
+    } else {
+      currentSubjectInputList = [
+        { subjectName: 'Fiqh', maxMarks: 100 },
+        { subjectName: 'Nahw', maxMarks: 80 },
+        { subjectName: 'Hadith', maxMarks: 50 }
+      ];
+    }
+  }
+
+  let html = '';
+  currentSubjectInputList.forEach((s, idx) => {
+    html += `<div style="display:flex; gap:10px; margin-bottom:8px; align-items:center;">
+      <input type="text" class="form-control" style="flex:2; background:var(--bg-input); color:var(--text);" placeholder="Subject Name" value="${s.subjectName}" onchange="currentSubjectInputList[${idx}].subjectName = this.value">
+      <input type="number" class="form-control" style="flex:1; background:var(--bg-input); color:var(--text);" placeholder="Max Marks" value="${s.maxMarks}" onchange="currentSubjectInputList[${idx}].maxMarks = Number(this.value)">
+      <button type="button" class="btn btn-danger btn-sm" onclick="removeSubjectInputRow(${idx})">&times;</button>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function addSubjectInputRow() {
+  currentSubjectInputList.push({ subjectName: 'New Subject', maxMarks: 100 });
+  renderSubjectInputRows();
+}
+
+function removeSubjectInputRow(idx) {
+  currentSubjectInputList.splice(idx, 1);
+  renderSubjectInputRows();
+}
+
+function submitCreateExamForm(e) {
+  e.preventDefault();
+  const examName = safeGetValue('newExamName');
+  const term = safeGetValue('newExamTerm');
+  const batchYear = safeGetValue('newExamBatch');
+  const targetClass = safeGetValue('newExamClass');
+
+  if (!examName) { showToast('Exam Name required', true); return; }
+
+  const classSubjects = {};
+  classSubjects[targetClass] = currentSubjectInputList.filter(s => s.subjectName.trim() !== '');
+
+  fetch('/api/portal/exam', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      examName,
+      term,
+      batchYear,
+      classSubjects
+    })
+  }).then(r => r.json()).then(res => {
+    showToast(res.message || 'Exam Created!', !res.success);
+    if (res.success) {
+      closeCreateExamModal();
+      loadExamsAdmin();
+    }
+  });
+}
+
+function deleteExamAdmin(id) {
+  if (!confirm('Delete this exam configuration?')) return;
+  fetch('/api/portal/exam/' + id, { method: 'DELETE' })
+    .then(r => r.json())
+    .then(res => {
+      showToast(res.message || 'Exam deleted', !res.success);
+      loadExamsAdmin();
+    });
+}
+
+function onExamOrClassChange() {
+  loadExamClassRosterMatrix();
+}
+
+function loadExamClassRosterMatrix() {
+  const examId = safeGetValue('examSelectAdmin');
+  const className = safeGetValue('examClassSelectAdmin');
+  if (!examId || !className) return;
+
+  fetch(`/api/portal/exam/roster?examId=${encodeURIComponent(examId)}&className=${encodeURIComponent(className)}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        currentExamRosterData = data;
+        renderExamMatrixTable();
+      }
+    });
+}
+
+function renderExamMatrixTable() {
+  if (!currentExamRosterData) return;
+
+  const { exam, subjects, students, existingResults } = currentExamRosterData;
+  const className = safeGetValue('examClassSelectAdmin');
+
+  // Render Subject Badges Banner
+  const banner = document.getElementById('examSubjectConfigBanner');
+  const bannerTitle = document.getElementById('examBannerTitle');
+  const bannerBadges = document.getElementById('examBannerBadges');
+
+  if (subjects && subjects.length > 0) {
+    bannerTitle.textContent = `Configured Subjects for ${className}:`;
+    let bHtml = '';
+    subjects.forEach(s => {
+      bHtml += `<span class="badge badge-accent">${s.subjectName} (Max: ${s.maxMarks})</span>`;
+    });
+    bannerBadges.innerHTML = bHtml;
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // Render Matrix Header
+  const headerRow = document.getElementById('examMatrixHeaderRow');
+  let headerHtml = '<th>Adm No</th><th>Student Name</th>';
+  subjects.forEach(s => {
+    headerHtml += `<th>${s.subjectName} <small>(${s.maxMarks})</small></th>`;
+  });
+  headerHtml += '<th>Attendance (Present/Total)</th><th>Total Score</th><th>%</th><th>Grade</th><th>Class Rank</th>';
+  headerRow.innerHTML = headerHtml;
+
+  // Render Student Rows
+  const tbody = document.getElementById('examMatrixTableBody');
+  if (!students || students.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="${subjects.length + 7}" class="text-center text-muted py-4">No students enrolled in ${className}.</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  students.forEach((s, idx) => {
+    const existing = existingResults.find(r => r.admissionNo === s.admissionNo) || {};
+    const existingSubMarks = existing.subjectMarks || [];
+    
+    html += `<tr data-student-id="${s.admissionNo}">
+      <td><code style="font-weight:700; color:var(--accent);">${s.admissionNo}</code></td>
+      <td><strong style="color:var(--text);">${s.name}</strong></td>`;
+
+    // Input for each subject
+    subjects.forEach(sub => {
+      const exSub = existingSubMarks.find(m => m.subjectName === sub.subjectName) || {};
+      const score = exSub.marksObtained !== undefined ? exSub.marksObtained : '';
+      html += `<td>
+        <input type="number" class="form-control form-control-sm matrix-score-input" data-student="${s.admissionNo}" data-subject="${sub.subjectName}" data-max="${sub.maxMarks}" value="${score}" style="width:75px; background:var(--bg-input); color:var(--text); font-weight:700;" min="0" max="${sub.maxMarks}">
+      </td>`;
+    });
+
+    // Attendance inputs
+    const presDays = existing.attendancePresentDays !== undefined ? existing.attendancePresentDays : 100;
+    const totDays = existing.attendanceTotalDays !== undefined ? existing.attendanceTotalDays : 100;
+
+    html += `<td>
+      <div style="display:flex; gap:4px; align-items:center;">
+        <input type="number" class="form-control form-control-sm matrix-att-pres" data-student="${s.admissionNo}" value="${presDays}" style="width:60px; background:var(--bg-input); color:var(--text);" title="Present Days"> /
+        <input type="number" class="form-control form-control-sm matrix-att-tot" data-student="${s.admissionNo}" value="${totDays}" style="width:60px; background:var(--bg-input); color:var(--text);" title="Total Days">
+      </div>
+    </td>
+    <td><strong id="matrixTotal_${s.admissionNo}" style="color:var(--accent);">${existing.totalMarksObtained || 0} / ${existing.totalMaxMarks || 100}</strong></td>
+    <td><span id="matrixPct_${s.admissionNo}">${existing.percentage || 0}%</span></td>
+    <td><span class="badge badge-info" id="matrixGrade_${s.admissionNo}">${existing.grade || '—'}</span></td>
+    <td><span class="badge badge-accent" id="matrixRank_${s.admissionNo}">${existing.rank || '—'}</span></td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+}
+
+function submitExamClassMarksMatrix() {
+  if (!currentExamRosterData) return;
+
+  const { exam, subjects, students } = currentExamRosterData;
+  const examId = safeGetValue('examSelectAdmin');
+  const className = safeGetValue('examClassSelectAdmin');
+
+  if (!examId || !className || !students || students.length === 0) {
+    showToast('Please select a valid Exam and Class with students', true);
+    return;
+  }
+
+  const marksDataPayload = [];
+
+  students.forEach(s => {
+    const subMarksObj = {};
+    subjects.forEach(sub => {
+      const input = document.querySelector(`.matrix-score-input[data-student="${s.admissionNo}"][data-subject="${sub.subjectName}"]`);
+      subMarksObj[sub.subjectName] = input ? Number(input.value || 0) : 0;
+    });
+
+    const presInput = document.querySelector(`.matrix-att-pres[data-student="${s.admissionNo}"]`);
+    const totInput = document.querySelector(`.matrix-att-tot[data-student="${s.admissionNo}"]`);
+
+    marksDataPayload.push({
+      admissionNo: s.admissionNo,
+      studentName: s.name,
+      subjectsConfig: subjects,
+      subjectMarks: subMarksObj,
+      attendancePresentDays: presInput ? Number(presInput.value || 100) : 100,
+      attendanceTotalDays: totInput ? Number(totInput.value || 100) : 100,
+      usthadRemarks: 'Published'
+    });
+  });
+
+  fetch('/api/portal/exam/save-marks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      examId,
+      examName: exam ? exam.examName : 'Semester Exam',
+      className,
+      marksData: marksDataPayload,
+      usthadName: 'Head Usthad'
+    })
+  }).then(r => r.json()).then(res => {
+    showToast(res.message || 'Marks and Ranks published!', !res.success);
+    if (res.success && res.results) {
+      res.results.forEach(r => {
+        const totalEl = document.getElementById(`matrixTotal_${r.admissionNo}`);
+        const pctEl = document.getElementById(`matrixPct_${r.admissionNo}`);
+        const gradeEl = document.getElementById(`matrixGrade_${r.admissionNo}`);
+        const rankEl = document.getElementById(`matrixRank_${r.admissionNo}`);
+
+        if (totalEl) totalEl.textContent = `${r.totalMarksObtained} / ${r.totalMaxMarks}`;
+        if (pctEl) pctEl.textContent = `${r.percentage}%`;
+        if (gradeEl) gradeEl.textContent = r.grade;
+        if (rankEl) rankEl.textContent = r.rank;
+      });
+    }
+  }).catch(() => showToast('Error publishing exam marks', true));
 }
 </script>
 
