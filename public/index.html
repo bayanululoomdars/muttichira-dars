@@ -499,30 +499,30 @@
       <div class="container" style="position:relative;z-index:1;">
         <div class="row text-center counter-row justify-content-center">
           <div class="col-6 col-md-3 mb-3">
-            <div class="counter-card" style="padding:20px 10px;">
+            <div class="counter-card">
               <i class="fa fa-book counter-icon"></i>
-              <div id="counterStudents" class="counter-number">87</div>
+              <div id="counterStudents" class="counter-number">45</div>
               <div class="counter-label">Students</div>
             </div>
           </div>
           <div class="col-6 col-md-3 mb-3">
-            <div class="counter-card" style="padding:20px 10px;">
+            <div class="counter-card">
               <i class="fa fa-users counter-icon"></i>
               <div id="counterUstads" class="counter-number">8</div>
               <div class="counter-label">Usthads</div>
             </div>
           </div>
           <div class="col-6 col-md-3 mb-3">
-            <div class="counter-card" style="padding:20px 10px;">
+            <div class="counter-card">
               <i class="fa fa-university counter-icon"></i>
-              <div id="counterYears" class="counter-number">50+</div>
+              <div id="counterYears" class="counter-number">25+</div>
               <div class="counter-label">Years of Tradition</div>
             </div>
           </div>
           <div class="col-6 col-md-3 mb-3">
-            <div class="counter-card" style="padding:20px 10px;">
+            <div class="counter-card">
               <i class="fa fa-graduation-cap counter-icon"></i>
-              <div id="counterAlumni" class="counter-number">50+</div>
+              <div id="counterAlumni" class="counter-number">120+</div>
               <div class="counter-label">Distinguished Alumni</div>
             </div>
           </div>
@@ -1148,14 +1148,20 @@
 
     // ── Load Home Settings ──────────
     function loadHomeSettings() {
+      var calcYears = (new Date().getFullYear() - 2001) + '+';
+      animateCounter('counterStudents', 45);
+      animateCounter('counterUstads', 8);
+      animateCounter('counterYears', calcYears);
+      animateCounter('counterAlumni', 120);
+
       fetch('/api/home-settings')
         .then(function(res) { return res.json(); })
         .then(function(s) {
           // Stats counters with animation
-          animateCounter('counterStudents', s.statsStudents || 87);
+          animateCounter('counterStudents', s.statsStudents || 45);
           animateCounter('counterUstads', s.statsUstads || 8);
-          animateCounter('counterYears', s.statsYears || 50);
-          animateCounter('counterAlumni', s.statsAlumni || 50);
+          animateCounter('counterYears', s.statsYears || calcYears);
+          animateCounter('counterAlumni', s.statsAlumni || 120);
 
           // Dynamic About Us counts
           if (s.statsStudents) document.getElementById('aboutStudentsCount').textContent = s.statsStudents;
