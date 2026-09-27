@@ -651,9 +651,9 @@
         </div>
         <div class="col-md-3 col-6 mb-3">
           <div class="counter-card-box">
-            <i class="fa fa-trophy"></i>
-            <div class="num" id="cntCourses">6</div>
-            <div class="label">Dars Academic Courses</div>
+            <i class="fa fa-university"></i>
+            <div class="num" id="cntYears">25+</div>
+            <div class="label">Years of Tradition</div>
           </div>
         </div>
       </div>
@@ -1326,7 +1326,7 @@
             document.getElementById('cntAlumni').textContent = data.stats.alumniBiruthadhari + '+';
             document.getElementById('cntStudents').textContent = data.stats.currentStudents + '+';
             document.getElementById('cntUsthads').textContent = data.stats.totalUsthads;
-            document.getElementById('cntCourses').textContent = data.stats.academicCourses;
+            document.getElementById('cntYears').textContent = data.stats.yearsOfTradition || ((new Date().getFullYear() - 2001) + '+');
           }
         });
     }

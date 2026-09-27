@@ -757,7 +757,7 @@
               var imgHtml = '';
               if (item.imageUrl) {
                 imgHtml = '<div style="flex-shrink:0; width: 140px; height: 140px; padding: 15px;">' +
-                  '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                  '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.onerror=null;this.src=\'img/new_logo.png\';">' +
                   '</div>';
               } else {
                 imgHtml = '<div style="flex-shrink:0; width: 140px; height: 140px; padding: 15px;">' +
@@ -885,7 +885,7 @@
               mediaHtml = '<video src="' + imgUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" autoplay muted playsinline loop></video>';
             }
           } else {
-            mediaHtml = '<img src="' + imgUrl + '" class="img-fluid" alt="' + (item.title || '') + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" onerror="this.src=\'/img/placeholder.jpg\'">';
+            mediaHtml = '<img src="' + imgUrl + '" class="img-fluid" alt="' + (item.title || '') + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" onerror="this.onerror=null;this.src=\'img/new_logo.png\';">';
           }
           var descHtml = item.description ? '<p style="color:#666; font-size:0.8rem; margin:8px 0 0 0; line-height:1.4;">' + item.description + '</p>' : '';
           html += '<div class="col-lg-4 col-md-6 col-sm-12 mb-4">' +
@@ -1237,15 +1237,22 @@
     function animateCounter(id, target) {
       var el = document.getElementById(id);
       if (!el) return;
+      var strTarget = String(target || '');
+      var hasPlus = strTarget.includes('+');
+      var numTarget = parseInt(strTarget, 10) || 0;
+      if (numTarget <= 0) {
+        el.textContent = strTarget;
+        return;
+      }
       var current = 0;
-      var step = Math.max(1, Math.floor(target / 60));
+      var step = Math.max(1, Math.floor(numTarget / 40));
       var timer = setInterval(function() {
         current += step;
-        if (current >= target) {
-          current = target;
+        if (current >= numTarget) {
+          current = numTarget;
           clearInterval(timer);
         }
-        el.textContent = current + '+';
+        el.textContent = current + (hasPlus ? '+' : '');
       }, 30);
     }
 

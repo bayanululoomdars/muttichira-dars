@@ -507,12 +507,15 @@ exports.getCounterStats = async (req, res) => {
       }
     } catch (e) {}
 
+    const yearsOfTradition = (new Date().getFullYear() - 2001) + '+';
+
     res.json({
       success: true,
       stats: {
         currentStudents: studentCount || 45,
         alumniBiruthadhari: alumniCount || 120,
         totalUsthads: usthadCount || 12,
+        yearsOfTradition: yearsOfTradition,
         academicCourses: 6
       }
     });

@@ -34,7 +34,8 @@ exports.getHomeSettings = async (req, res) => {
       settingsObj.statsUstads = settings.statsUstads || 8;
     }
 
-    settingsObj.statsYears = settings.statsYears || 50;
+    const calculatedYears = (new Date().getFullYear() - 2001) + '+';
+    settingsObj.statsYears = calculatedYears;
 
     res.json(settingsObj);
   } catch (err) {
