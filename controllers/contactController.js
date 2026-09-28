@@ -12,7 +12,7 @@ exports.submitContact = async (req, res) => {
     await contact.save();
 
     // Send Telegram Notification
-    const tgMessage = `📩 <b>NEW CONTACT MESSAGE</b>\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`;
+    const tgMessage = `📩 <b>NEW CONTACT MESSAGE RECEIVED</b>\n\nA new message was submitted via the website contact form.\nFor privacy, details are kept secret.\n🔐 <i>Please check the admin panel to read the message.</i>`;
     sendTelegramNotification(tgMessage);
 
     res.json({ success: true, message: 'Your message has been sent. Thank you!' });

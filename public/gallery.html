@@ -832,7 +832,8 @@
             html += '<video src="' + imgUrl + '" autoplay muted playsinline loop></video>';
           }
         } else {
-          html += '  <img src="' + imgUrl + '" alt="' + (item.title || '') + '" onerror="this.onerror=null;this.src=\'img/new_logo.png\';">';
+          var finalImg = imgUrl ? imgUrl : 'img/new_logo.png';
+          html += '  <img src="' + finalImg + '" alt="' + (item.title || '') + '" onerror="this.onerror=null;this.src=\'img/new_logo.png\';">';
         }
 
         // Hover overlay
@@ -885,7 +886,8 @@
           mediaHtml = '<video id="modalVideo" src="' + imgUrl + '" controls autoplay muted playsinline loop style="max-height:80vh; max-width:100%; cursor:pointer;" onclick="this.muted=false;"></video>';
         }
       } else {
-        mediaHtml = '<img src="' + imgUrl + '" alt="' + (item.title || '') + '" style="max-height:80vh; max-width:100%; object-fit:contain;" onerror="this.onerror=null;this.src=\'img/new_logo.png\';">';
+        var finalImg = imgUrl ? imgUrl : 'img/new_logo.png';
+        mediaHtml = '<img src="' + finalImg + '" alt="' + (item.title || '') + '" style="max-height:80vh; max-width:100%; object-fit:contain;" onerror="this.onerror=null;this.src=\'img/new_logo.png\';">';
       }
       mediaContainer.innerHTML = mediaHtml;
 

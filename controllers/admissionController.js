@@ -51,41 +51,15 @@ exports.submitAdmission = async (req, res) => {
     // Telegram Notification
     const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'short' });
     const tgMessage = [
-      `🎓 <b>NEW ADMISSION APPLICATION</b>`,
+      `🎓 <b>NEW ADMISSION APPLICATION RECEIVED</b>`,
       `<b>Bayanul Uloom Dars, Muttichira</b>`,
       ``,
-      `👤 <b>Personal Details</b>`,
-      `📛 Name: <b>${name}</b>`,
-      `🎂 DOB: ${dob || '—'}`,
-      `🩸 Blood Group: ${bloodGroup || '—'}`,
+      `A new admission application has been submitted.`,
+      `For privacy and security reasons, applicant details are kept secret.`,
       ``,
-      `👨‍👩‍👦 <b>Parents</b>`,
-      `👨 Father: ${fatherName}`,
-      `👩 Mother: ${motherName}`,
+      `🕒 Submitted: ${now}`,
       ``,
-      `📞 <b>Contact</b>`,
-      `📱 Phone: <code>${phone.trim()}</code>`,
-      `🏠 Home Phone: ${homePhone || '—'}`,
-      `📧 Email: ${email && email.trim() ? email.trim() : '—'}`,
-      ``,
-      `🏡 <b>Address</b>`,
-      `🏘 House: ${houseName || '—'}`,
-      `📍 Place: ${place || '—'}`,
-      `🏣 Post Office: ${postOffice || '—'}`,
-      `🗺 District: ${district || '—'}`,
-      `📮 Pincode: ${pincode || '—'}`,
-      ``,
-      `📚 <b>Education</b>`,
-      `🕌 Religious (Madrasa): ${educationReligious || '—'}`,
-      `🏫 Secular (School): ${educationSecular || '—'}`,
-      ``,
-      `🛡 <b>Guardian</b>`,
-      `👤 Name: ${guardianName || '—'} (${relationship || '—'})`,
-      `📞 Phone: <code>${guardianPhone || '—'}</code>`,
-      ``,
-      `🕐 Submitted: ${now}`,
-      ``,
-      `✅ <i>View in admin panel: /admin</i>`
+      `🔐 <i>Please log in to the admin panel to view the full details.</i>`
     ].join('\n');
     sendTelegramNotification(tgMessage, 'HTML');
 
