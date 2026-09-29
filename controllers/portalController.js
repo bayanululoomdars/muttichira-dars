@@ -348,7 +348,8 @@ exports.lookup = async (req, res) => {
           designation: u.designation,
           subject: u.subject || 'Dars Mudarris',
           photoUrl: u.photoUrl || 'img/new_logo.png',
-          place: u.place
+          place: u.place,
+          phone: u.phone
         });
       }
     });
