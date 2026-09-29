@@ -1616,6 +1616,19 @@
         ════════════════════════════════ -->
         <div class="page" id="page-gallery">
           
+          <!-- Instagram Feed Auto-Sync -->
+          <div class="card" style="border: 1px solid #e1306c; border-left: 5px solid #e1306c;">
+            <div class="card-header">
+              <div class="card-title" style="color: #e1306c;"><i class="fa fa-instagram"></i> Instagram Auto-Sync (Embed Code)</div>
+            </div>
+            <div style="padding: 10px 0;">
+              <p style="font-size: 0.9rem; color: var(--text-soft); margin-bottom: 12px;">Paste your Instagram Feed Embed Code here (e.g. from Elfsight, Curator.io, or LightWidget) to automatically display your Instagram posts on the Home and Gallery pages.</p>
+              <div class="form-group">
+                <textarea id="igEmbedCode" class="form-control" rows="3" placeholder="Paste embed code here (<script src=...></script> or <iframe>)"></textarea>
+              </div>
+              <button class="btn" style="background:#e1306c; color:#fff;" onclick="saveIgEmbedCode()"><i class="fa fa-save"></i> Save Instagram Feed Settings</button>
+            </div>
+          </div>
 
           <!-- Add Gallery Item -->
           <div class="card">
@@ -3772,6 +3785,7 @@ function loadHomeSettings() {
     if (s.principalName)  safeSetValue('hpPrincipalName', s.principalName);
     if (s.principalTitle) safeSetValue('hpPrincipalTitle', s.principalTitle);
     if (s.principalBio)   safeSetValue('hpPrincipalBio', s.principalBio);
+    if (s.igEmbedCode)    safeSetValue('igEmbedCode', s.igEmbedCode);
     if (s.principalImageUrl) {
       var pi = document.getElementById('principalPreview');
       if (pi) { pi.src = s.principalImageUrl; pi.style.display = 'block'; }
@@ -3780,6 +3794,15 @@ function loadHomeSettings() {
     renderBranches(s.branches || []);
   }).catch(function() {});
 }
+
+window.saveIgEmbedCode = function() {
+  fetch('/api/home-settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ igEmbedCode: safeGetValue('igEmbedCode') })
+  }).then(function(r) { return r.json(); })
+    .then(function(res) { showToast(res.success ? 'Instagram settings saved!' : 'Failed to save', !res.success); });
+};
 
 window.savePrincipal = function() {
   var fileInput = document.getElementById('principalImageFile');

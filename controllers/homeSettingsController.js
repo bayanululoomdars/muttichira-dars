@@ -52,7 +52,8 @@ exports.updateHomeSettings = async (req, res) => {
     const fields = [
       'statsStudents', 'statsUstads', 'statsYears', 'statsAlumni',
       'principalName', 'principalTitle', 'principalBio',
-      'footerMudarrisName', 'footerMudarrisTitle', 'footerMudarrisDetail'
+      'footerMudarrisName', 'footerMudarrisTitle', 'footerMudarrisDetail',
+      'igEmbedCode'
     ];
 
     fields.forEach(f => {

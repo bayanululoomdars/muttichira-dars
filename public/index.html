@@ -156,8 +156,11 @@
           </button>
         </div>
 
-        <!-- Dynamic gallery cards from MongoDB (configured by admin "ethra mathi" limit & settings) -->
+        <!-- Dynamic gallery cards from MongoDB -->
         <div class="row" id="homeGalleryRow" style="justify-content:center;"></div>
+        
+        <!-- Instagram Embed Container -->
+        <div id="igEmbedContainerHome" style="width:100%; text-align:center; display:none; margin-bottom: 30px;"></div>
 
         <!-- Explore More Button -->
         <div class="text-center mt-4">
@@ -1173,6 +1176,23 @@
           if (s.principalTitle) document.getElementById('principalTitleEl').textContent = s.principalTitle;
           if (s.principalBio) document.getElementById('principalBioEl').textContent = s.principalBio;
           if (s.principalImageUrl) document.getElementById('principalImg').src = s.principalImageUrl;
+          
+          // Instagram Embed Code
+          if (s.igEmbedCode) {
+            var igCont = document.getElementById('igEmbedContainerHome');
+            if (igCont) {
+              igCont.innerHTML = ''; // clear
+              var frag = document.createRange().createContextualFragment(s.igEmbedCode);
+              igCont.appendChild(frag);
+              igCont.style.display = 'block';
+              
+              // Hide existing gallery block if IG embed takes over
+              var hgr = document.getElementById('homeGalleryRow');
+              var cBar = document.getElementById('homeGalleryCategoriesBar');
+              if (hgr) hgr.style.display = 'none';
+              if (cBar) cBar.style.display = 'none';
+            }
+          }
 
           // Assistant Mudarris
           if (s.assistantMudarris && s.assistantMudarris.length > 0) {
