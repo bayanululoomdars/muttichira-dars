@@ -150,14 +150,14 @@
         </header>
 
         <!-- Dynamic Category Filter Pills (All / എല്ലാം + custom categories) -->
-        <div id="homeGalleryCategoriesBar" style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
+        <div id="homeGalleryCategoriesBar" style="display:none; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
           <button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery('all', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:#0a4d2e; color:#fff;">
             All 
           </button>
         </div>
 
         <!-- Dynamic gallery cards from MongoDB -->
-        <div class="row" id="homeGalleryRow" style="justify-content:center;"></div>
+        <div class="row" id="homeGalleryRow" style="display:none; justify-content:center;"></div>
         
         <!-- Instagram Embed Container -->
         <div id="igEmbedContainerHome" style="width:100%; text-align:center; display:none; margin-bottom: 30px; max-height: 600px; overflow: hidden; position: relative; border-radius: 15px;">
