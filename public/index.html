@@ -695,7 +695,8 @@
     }
 
     // ── Contact Form AJAX ──────────────────────────
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
+    var cForm = document.getElementById('contactForm');
+    if (cForm) cForm.addEventListener('submit', function(e) {
       e.preventDefault();
       var btn = document.getElementById('contactSubmitBtn');
       btn.disabled = true;
@@ -728,7 +729,8 @@
     });
 
     // ── Newsletter Form AJAX ───────────────────────
-    document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+    var nlForm = document.getElementById('newsletterForm');
+    if (nlForm) nlForm.addEventListener('submit', function(e) {
       e.preventDefault();
       var email = document.getElementById('newsletterEmail').value;
 
@@ -1120,7 +1122,8 @@
     }
 
     // Admission modal form submit
-    document.getElementById('admissionModalForm').addEventListener('submit', function(e) {
+    var aForm = document.getElementById('admissionModalForm');
+    if (aForm) aForm.addEventListener('submit', function(e) {
       e.preventDefault();
       var btn = document.getElementById('modalSubmitBtn');
       btn.disabled = true;
