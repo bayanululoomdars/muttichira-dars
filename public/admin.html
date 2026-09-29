@@ -2355,7 +2355,7 @@ function openAddUserModal() {
 }
 
 function editUserAdmin(id, role) {
-  const user = allPortalUsersCache.find(u => (u._id === id || u.admissionNo === id || u.usthadId === id));
+  const user = allPortalUsersCache.find(u => (String(u._id) === String(id) || String(u.admissionNo) === String(id) || String(u.usthadId) === String(id)));
   if (!user) return;
   editingUserId = user._id || id;
   editingUserRole = role;
@@ -2369,8 +2369,7 @@ function editUserAdmin(id, role) {
     safeSetVal('adminStudentPassword', user.password);
     safeSetVal('adminStudentAdmNo', user.admissionNo);
     safeSetVal('adminStudentStatus', user.status);
-    safeSetVal('adminStudentClass', user.className);
-    safeSetVal('adminStudentBatch', user.batchYear);
+    safeSetVal('adminStudentBatchNo', user.batchNumber || user.batchYear);
     safeSetVal('adminStudentPlace', user.place);
     document.querySelector('#formAddStudentAdmin button[type="submit"]').innerHTML = '<i class="fa fa-save"></i> Update Student';
   } else {
@@ -2417,8 +2416,7 @@ function submitAddStudentAdmin(e) {
   fd.append('password', safeGetValue('adminStudentPassword'));
   fd.append('admissionNo', safeGetValue('adminStudentAdmNo'));
   fd.append('status', safeGetValue('adminStudentStatus'));
-  fd.append('className', safeGetValue('adminStudentClass'));
-  fd.append('batchYear', safeGetValue('adminStudentBatch'));
+  fd.append('batchNumber', safeGetValue('adminStudentBatchNo'));
   fd.append('place', safeGetValue('adminStudentPlace'));
   if (photoFile) fd.append('photo', photoFile);
 
