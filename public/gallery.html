@@ -1077,8 +1077,14 @@
             var igCont = document.getElementById('igEmbedContainerGallery');
             if (igCont) {
               igCont.innerHTML = '';
-              var frag = document.createRange().createContextualFragment(s.igEmbedCode);
-              igCont.appendChild(frag);
+              igCont.innerHTML = s.igEmbedCode;
+              var scripts = igCont.getElementsByTagName('script');
+              for (var i = 0; i < scripts.length; i++) {
+                var sTag = document.createElement('script');
+                if (scripts[i].src) sTag.src = scripts[i].src;
+                else sTag.innerHTML = scripts[i].innerHTML;
+                document.body.appendChild(sTag);
+              }
               igCont.style.display = 'block';
               
               var gGrid = document.getElementById('galleryGrid');
