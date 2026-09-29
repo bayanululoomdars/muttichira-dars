@@ -321,10 +321,9 @@ exports.lookup = async (req, res) => {
           admissionNo: s.admissionNo,
           name: s.name,
           role: 'student',
-          className: s.className,
-          status: s.status || (s.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
-          isAlumni: s.isAlumni,
-          batchYear: s.batchYear,
+          batchNumber: s.batchNumber,
+            status: s.status || (s.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
+            isAlumni: s.isAlumni,
           photoUrl: s.photoUrl || 'img/new_logo.png',
           place: s.place
         });
@@ -418,10 +417,9 @@ exports.login = async (req, res) => {
         admissionNo: student.admissionNo,
         name: student.name,
         phone: student.phone,
-        className: student.className,
-        status: student.status,
-        isAlumni: student.isAlumni,
-        batchYear: student.batchYear,
+        batchNumber: student.batchNumber,
+          status: student.status,
+          isAlumni: student.isAlumni,
         photoUrl: student.photoUrl,
         place: student.place,
         guardianName: student.guardianName,
@@ -581,7 +579,7 @@ exports.getStudentsAdmin = async (req, res) => {
 
 exports.addStudentAdmin = async (req, res) => {
   try {
-    const { admissionNo, name, phone, password, className, isAlumni, status, batchYear, place, photoUrl, guardianName } = req.body;
+    const { admissionNo, name, phone, password, batchNumber, isAlumni, status, place, photoUrl, guardianName } = req.body;
     if (!name || !phone) {
       return res.status(400).json({ success: false, message: 'Name and Phone Number are required' });
     }
@@ -597,8 +595,7 @@ exports.addStudentAdmin = async (req, res) => {
       role: 'student',
       isAlumni: Boolean(isAlumni === true || isAlumni === 'true' || status === 'Biruthadhari / Alumni'),
       status: status || (isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
-      batchYear: batchYear || '2025',
-      className: className || 'Dars 1st Year',
+      batchNumber: batchNumber || '1',
       photoUrl: photoUrl || '',
       place: place || '',
       guardianName: guardianName || ''

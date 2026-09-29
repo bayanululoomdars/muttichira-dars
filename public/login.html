@@ -1033,7 +1033,7 @@
 
     function submitLogin() {
       const pass = document.getElementById('inputPassword').value.trim();
-      const identifier = document.getElementById('inputIdentifier').value.trim();
+      const identifier = document.getElementById('searchIdentifier').value.trim();
       if (!pass) {
         showAlert('Please enter password (Default is Phone Number)', 'warning');
         return;
@@ -1088,7 +1088,7 @@
         document.getElementById('usthadDashContent').style.display = 'block';
         loadUsthadDashboardData();
       } else {
-        document.getElementById('dashUserRole').textContent = 'Student • ' + (user.className || 'Dars') + ' (' + (user.admissionNo) + ')';
+        document.getElementById('dashUserRole').textContent = 'Student • ' + (('Batch ' + (user.batchNumber || '1'))) + ' (' + (user.admissionNo) + ')';
         document.getElementById('dashUserStatus').textContent = user.status || (user.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student');
         document.getElementById('studentDashContent').style.display = 'block';
         document.getElementById('usthadDashContent').style.display = 'none';

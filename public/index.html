@@ -1170,13 +1170,24 @@
         .then(function(res) { return res.json(); })
         .then(function(s) {
           // Stats counters with animation
-          animateCounter('counterStudents', s.statsStudents !== undefined ? s.statsStudents : 111);
+          /* overriden */
           animateCounter('counterUstads', s.statsUstads !== undefined ? s.statsUstads : 8);
           animateCounter('counterYears', s.statsYears !== undefined ? s.statsYears : calcYears);
-          animateCounter('counterAlumni', s.statsAlumni !== undefined ? s.statsAlumni : 0);
+          /* overriden */
 
           // Dynamic About Us counts
-          if (s.statsStudents) document.getElementById('aboutStudentsCount').textContent = s.statsStudents;
+          
+          fetch('/api/portal/counter')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              if (data && data.success && data.stats) {
+                animateCounter('counterStudents', data.stats.currentStudents || 0);
+                animateCounter('counterAlumni', data.stats.alumniBiruthadhari || 0);
+                document.getElementById('aboutStudentsCount').textContent = data.stats.currentStudents || 0;
+                document.getElementById('aboutUstadsCount').textContent = data.stats.totalUsthads || 0;
+              }
+            }).catch(function() {});
+
           if (s.statsUstads) document.getElementById('aboutUstadsCount').textContent = s.statsUstads;
 
           // Leadership
