@@ -1173,29 +1173,6 @@
           if (s.principalBio) document.getElementById('principalBioEl').textContent = s.principalBio;
           if (s.principalImageUrl) document.getElementById('principalImg').src = s.principalImageUrl;
           
-          // Instagram Embed Code
-          if (s.igEmbedCode) {
-            var igCont = document.getElementById('igEmbedContainerHome');
-            if (igCont) {
-              igCont.innerHTML = ''; // clear
-              igCont.innerHTML = s.igEmbedCode;
-              var scripts = igCont.getElementsByTagName('script');
-              for (var i = 0; i < scripts.length; i++) {
-                var sTag = document.createElement('script');
-                if (scripts[i].src) sTag.src = scripts[i].src;
-                else sTag.innerHTML = scripts[i].innerHTML;
-                document.body.appendChild(sTag);
-              }
-              igCont.style.display = 'block';
-              
-              // Hide existing gallery block if IG embed takes over
-              var hgr = document.getElementById('homeGalleryRow');
-              var cBar = document.getElementById('homeGalleryCategoriesBar');
-              if (hgr) hgr.style.display = 'none';
-              if (cBar) cBar.style.display = 'none';
-            }
-          }
-
           // Assistant Mudarris
           if (s.assistantMudarris && s.assistantMudarris.length > 0) {
             var html = '';
