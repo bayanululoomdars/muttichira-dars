@@ -1775,138 +1775,6 @@
           </div>
         </div>
 
-      </div><!-- end page-area -->
-    </div><!-- end main-content -->
-  </div><!-- end app-layout -->
-</div><!-- end dashboard -->
-
-<!-- ══════════════════════════════════
-     ADMISSION DETAIL MODAL
-══════════════════════════════════ -->
-<div class="modal-overlay" id="admissionModal">
-  <div class="modal-box">
-    <button class="modal-close-btn" onclick="closeModal('admissionModal')">&times;</button>
-    <div class="modal-title"><i class="fa fa-graduation-cap"></i> Application Details</div>
-    <div id="modalBody"></div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════
-     EDIT GALLERY MODAL
-══════════════════════════════════ -->
-<div class="modal-overlay" id="editGalleryModal">
-  <div class="modal-box">
-    <button class="modal-close-btn" onclick="closeModal('editGalleryModal')">&times;</button>
-    <div class="modal-title"><i class="fa fa-edit"></i> Edit Gallery Item</div>
-    <form id="editGalleryForm">
-      <input type="hidden" id="editGalleryId">
-      <div class="form-group">
-        <label>Title *</label>
-        <input class="form-control" type="text" id="editGalleryTitle" required>
-      </div>
-      <div class="form-group">
-        <label>Category *</label>
-        <select class="form-control" id="editGalleryCategory" required></select>
-      </div>
-      <div class="form-group">
-        <label>Media Type *</label>
-        <select class="form-control" id="editGalleryMediaType" required onchange="setEditGallerySource(this.value)">
-          <option value="image">Image File</option>
-          <option value="video">Video URL (YouTube)</option>
-        </select>
-      </div>
-      <div class="form-group" id="editGalleryImageGroup">
-        <label>Change Image (Leave empty to keep current)</label>
-        <input class="form-control" type="file" id="editGalleryImage" accept="image/*">
-        <div style="margin-top:8px;">
-          <img id="editGalleryCurrentImg" src="#" style="max-height:80px;border-radius:4px;display:none;">
-        </div>
-      </div>
-      <div class="form-group" id="editGalleryVideoGroup" style="display:none;">
-        <label>Video URL *</label>
-        <input class="form-control" type="url" id="editGalleryVideoUrl" placeholder="https://youtube.com/watch?...">
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea class="form-control" id="editGalleryDesc" rows="3"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Hashtags</label>
-        <input class="form-control" type="text" id="editGalleryHashtags" placeholder="e.g. event, campus (comma separated)">
-      </div>
-      <button class="btn btn-primary" type="submit" style="width:100%;">
-        <i class="fa fa-save"></i> Save Changes
-      </button>
-    </form>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- ══════════════════════════════════
-     RESET CONFIRMATION MODAL (PARAGRAPH TYPING REQUIRED, PASTE DISABLED)
-══════════════════════════════════ -->
-<div class="modal-overlay" id="resetModal">
-  <div class="modal-box" style="max-width:500px;text-align:center;">
-    <button class="modal-close-btn" onclick="closeModal('resetModal')">&times;</button>
-    <div style="font-size:2.5rem;margin-bottom:16px;">🔐</div>
-    <div class="modal-title" style="justify-content:center;color:#f87171;">Confirm Full Reset</div>
-    <p style="color:var(--text-muted);margin-bottom:14px;font-size:0.88rem;">
-      To prevent accidental deletion, you must <strong>manually type</strong> the confirmation sentence below:
-    </p>
-    <div style="background:var(--bg-input);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);color:#f87171;font-weight:700;font-size:0.82rem;margin-bottom:14px;user-select:none;" id="resetConfirmationTarget">
-      I CONFIRM PERMANENT RESET OF ALL BAYANUL ULOOM DARS DATA
-    </div>
-    <div class="form-group" style="margin-bottom:14px;">
-      <input class="form-control" type="text" id="resetConfirmTextInput"
-        placeholder="Type the exact sentence above..."
-        onpaste="return false;" oncopy="return false;" oncut="return false;" autocomplete="off"
-        style="text-align:center;border-color:rgba(239,68,68,0.4);" onkeyup="validateResetTyping()">
-      <small style="color:var(--danger);display:block;margin-top:5px;font-size:0.75rem;">
-        <i class="fa fa-ban"></i> Pasting is disabled! You must physically type out each letter.
-      </small>
-    </div>
-    <div class="form-group" style="margin-bottom:16px;">
-      <input class="form-control" type="password" id="resetPasswordInput"
-        placeholder="Enter Super Admin Password" style="text-align:center;">
-    </div>
-    <div style="display:flex;gap:10px;justify-content:center;">
-      <button class="btn btn-ghost" onclick="closeModal('resetModal')">Cancel</button>
-      <button class="btn btn-danger" id="executeResetBtn" disabled style="opacity:0.5;cursor:not-allowed;" onclick="executeReset()">
-        <i class="fa fa-trash"></i> Confirm Reset
-      </button>
-    </div>
-    <div id="resetStatus" style="margin-top:14px;font-weight:600;font-size:0.9rem;"></div>
-  </div>
-</div>
-        
         <!-- ════════════════════════════════
              UNIFIED PORTAL USERS PANEL
         ════════════════════════════════ -->
@@ -1948,102 +1816,6 @@
                     </tbody>
                 </table>
             </div>
-          </div>
-        </div>
-
-        <!-- Unified Add User Modal -->
-        <div class="unified-modal" id="unifiedAddUserModal">
-          <div class="unified-modal-content">
-            <div class="unified-modal-header">
-              <h3>Add New User</h3>
-              <button class="unified-modal-close" onclick="closeAddUserModal()">&times;</button>
-            </div>
-            
-            <div class="unified-role-selector">
-              <button class="unified-role-btn active" id="btnUnifiedStudent" onclick="switchUnifiedRole('student')">Student</button>
-              <button class="unified-role-btn" id="btnUnifiedUsthad" onclick="switchUnifiedRole('usthad')">Usthad</button>
-            </div>
-
-            <!-- Form for Student -->
-            <form id="formAddStudentAdmin" class="unified-form" onsubmit="submitAddStudentAdmin(event)">
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Student Name *</label>
-                  <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Phone Number *</label>
-                  <input type="text" id="adminStudentPhone" class="form-control" placeholder="e.g. 9876543210" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Login Password *</label>
-                  <input type="text" id="adminStudentPassword" class="form-control" placeholder="Set custom password" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Admission No (Optional)</label>
-                  <input type="text" id="adminStudentAdmNo" class="form-control" placeholder="Auto-generated if empty">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Status</label>
-                  <select id="adminStudentStatus" class="form-control">
-                    <option value="Current Student">Current Student</option>
-                    <option value="Biruthadhari / Alumni">Biruthadhari / Alumni</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Class / Course</label>
-                  <input type="text" id="adminStudentClass" class="form-control" placeholder="e.g. Dars 3rd Year">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Batch Year</label>
-                  <input type="text" id="adminStudentBatch" class="form-control" placeholder="e.g. 2025">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Native Place</label>
-                  <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Photo URL</label>
-                  <input type="file" id="adminStudentPhoto" class="form-control" accept="image/*" name="photo">
-                </div>
-              </div>
-              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-plus-circle"></i> Add Student Record</button>
-            </form>
-
-            <!-- Form for Usthad -->
-            <form id="formAddUsthadAdmin" class="unified-form" style="display: none;" onsubmit="submitAddUsthadAdmin(event)">
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Usthad Name *</label>
-                  <input type="text" id="adminUsthadName" class="form-control" placeholder="e.g. Sheikhuna Ibrahim Baqavi" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Phone Number *</label>
-                  <input type="text" id="adminUsthadPhone" class="form-control" placeholder="e.g. 9526919218" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Login Password *</label>
-                  <input type="text" id="adminUsthadPassword" class="form-control" placeholder="Set custom password" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Usthad ID (Optional)</label>
-                  <input type="text" id="adminUsthadId" class="form-control" placeholder="Auto-generated if empty">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Designation</label>
-                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris / Principal">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Place</label>
-                  <input type="text" id="adminUsthadPlace" class="form-control" placeholder="e.g. Muttichira">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Photo Image</label>
-                  <input type="file" id="adminUsthadPhoto" class="form-control" accept="image/*" name="photo">
-                </div>
-              </div>
-              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
-            </form>
           </div>
         </div>
 
@@ -2181,6 +1953,236 @@
             </div>
           </div>
         </div>
+      </div><!-- end page-area -->
+    </div><!-- end main-content -->
+  </div><!-- end app-layout -->
+</div><!-- end dashboard -->
+
+<!-- ══════════════════════════════════
+     ADMISSION DETAIL MODAL
+══════════════════════════════════ -->
+<div class="modal-overlay" id="admissionModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('admissionModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-graduation-cap"></i> Application Details</div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     EDIT GALLERY MODAL
+══════════════════════════════════ -->
+<div class="modal-overlay" id="editGalleryModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('editGalleryModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-edit"></i> Edit Gallery Item</div>
+    <form id="editGalleryForm">
+      <input type="hidden" id="editGalleryId">
+      <div class="form-group">
+        <label>Title *</label>
+        <input class="form-control" type="text" id="editGalleryTitle" required>
+      </div>
+      <div class="form-group">
+        <label>Category *</label>
+        <select class="form-control" id="editGalleryCategory" required></select>
+      </div>
+      <div class="form-group">
+        <label>Media Type *</label>
+        <select class="form-control" id="editGalleryMediaType" required onchange="setEditGallerySource(this.value)">
+          <option value="image">Image File</option>
+          <option value="video">Video URL (YouTube)</option>
+        </select>
+      </div>
+      <div class="form-group" id="editGalleryImageGroup">
+        <label>Change Image (Leave empty to keep current)</label>
+        <input class="form-control" type="file" id="editGalleryImage" accept="image/*">
+        <div style="margin-top:8px;">
+          <img id="editGalleryCurrentImg" src="#" style="max-height:80px;border-radius:4px;display:none;">
+        </div>
+      </div>
+      <div class="form-group" id="editGalleryVideoGroup" style="display:none;">
+        <label>Video URL *</label>
+        <input class="form-control" type="url" id="editGalleryVideoUrl" placeholder="https://youtube.com/watch?...">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control" id="editGalleryDesc" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Hashtags</label>
+        <input class="form-control" type="text" id="editGalleryHashtags" placeholder="e.g. event, campus (comma separated)">
+      </div>
+      <button class="btn btn-primary" type="submit" style="width:100%;">
+        <i class="fa fa-save"></i> Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ══════════════════════════════════
+     RESET CONFIRMATION MODAL (PARAGRAPH TYPING REQUIRED, PASTE DISABLED)
+══════════════════════════════════ -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-box" style="max-width:500px;text-align:center;">
+    <button class="modal-close-btn" onclick="closeModal('resetModal')">&times;</button>
+    <div style="font-size:2.5rem;margin-bottom:16px;">🔐</div>
+    <div class="modal-title" style="justify-content:center;color:#f87171;">Confirm Full Reset</div>
+    <p style="color:var(--text-muted);margin-bottom:14px;font-size:0.88rem;">
+      To prevent accidental deletion, you must <strong>manually type</strong> the confirmation sentence below:
+    </p>
+    <div style="background:var(--bg-input);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);color:#f87171;font-weight:700;font-size:0.82rem;margin-bottom:14px;user-select:none;" id="resetConfirmationTarget">
+      I CONFIRM PERMANENT RESET OF ALL BAYANUL ULOOM DARS DATA
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <input class="form-control" type="text" id="resetConfirmTextInput"
+        placeholder="Type the exact sentence above..."
+        onpaste="return false;" oncopy="return false;" oncut="return false;" autocomplete="off"
+        style="text-align:center;border-color:rgba(239,68,68,0.4);" onkeyup="validateResetTyping()">
+      <small style="color:var(--danger);display:block;margin-top:5px;font-size:0.75rem;">
+        <i class="fa fa-ban"></i> Pasting is disabled! You must physically type out each letter.
+      </small>
+    </div>
+    <div class="form-group" style="margin-bottom:16px;">
+      <input class="form-control" type="password" id="resetPasswordInput"
+        placeholder="Enter Super Admin Password" style="text-align:center;">
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-ghost" onclick="closeModal('resetModal')">Cancel</button>
+      <button class="btn btn-danger" id="executeResetBtn" disabled style="opacity:0.5;cursor:not-allowed;" onclick="executeReset()">
+        <i class="fa fa-trash"></i> Confirm Reset
+      </button>
+    </div>
+    <div id="resetStatus" style="margin-top:14px;font-weight:600;font-size:0.9rem;"></div>
+  </div>
+</div>
+        
+
+        <!-- Unified Add User Modal -->
+        <div class="unified-modal" id="unifiedAddUserModal">
+          <div class="unified-modal-content">
+            <div class="unified-modal-header">
+              <h3>Add New User</h3>
+              <button class="unified-modal-close" onclick="closeAddUserModal()">&times;</button>
+            </div>
+            
+            <div class="unified-role-selector">
+              <button class="unified-role-btn active" id="btnUnifiedStudent" onclick="switchUnifiedRole('student')">Student</button>
+              <button class="unified-role-btn" id="btnUnifiedUsthad" onclick="switchUnifiedRole('usthad')">Usthad</button>
+            </div>
+
+            <!-- Form for Student -->
+            <form id="formAddStudentAdmin" class="unified-form" onsubmit="submitAddStudentAdmin(event)">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Student Name *</label>
+                  <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number *</label>
+                  <input type="text" id="adminStudentPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Login Password *</label>
+                  <input type="text" id="adminStudentPassword" class="form-control" placeholder="Set custom password" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Admission No (Optional)</label>
+                  <input type="text" id="adminStudentAdmNo" class="form-control" placeholder="Auto-generated if empty">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Status</label>
+                  <select id="adminStudentStatus" class="form-control">
+                    <option value="Current Student">Current Student</option>
+                    <option value="Biruthadhari / Alumni">Biruthadhari / Alumni</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Class / Course</label>
+                  <input type="text" id="adminStudentClass" class="form-control" placeholder="e.g. Dars 3rd Year">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Batch Year</label>
+                  <input type="text" id="adminStudentBatch" class="form-control" placeholder="e.g. 2025">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Native Place</label>
+                  <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Photo URL</label>
+                  <input type="file" id="adminStudentPhoto" class="form-control" accept="image/*" name="photo">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-plus-circle"></i> Add Student Record</button>
+            </form>
+
+            <!-- Form for Usthad -->
+            <form id="formAddUsthadAdmin" class="unified-form" style="display: none;" onsubmit="submitAddUsthadAdmin(event)">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Usthad Name *</label>
+                  <input type="text" id="adminUsthadName" class="form-control" placeholder="e.g. Sheikhuna Ibrahim Baqavi" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number *</label>
+                  <input type="text" id="adminUsthadPhone" class="form-control" placeholder="e.g. 9526919218" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Login Password *</label>
+                  <input type="text" id="adminUsthadPassword" class="form-control" placeholder="Set custom password" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Usthad ID (Optional)</label>
+                  <input type="text" id="adminUsthadId" class="form-control" placeholder="Auto-generated if empty">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Designation</label>
+                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris / Principal">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Place</label>
+                  <input type="text" id="adminUsthadPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Photo Image</label>
+                  <input type="file" id="adminUsthadPhoto" class="form-control" accept="image/*" name="photo">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
+            </form>
+          </div>
+        </div>
+
+
 
         <!-- Create Exam Modal -->
         <div class="unified-modal" id="modalCreateExam">
