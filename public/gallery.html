@@ -1072,6 +1072,21 @@
           if (fName && s.footerMudarrisName) fName.textContent = s.footerMudarrisName;
           if (fTitle && s.footerMudarrisTitle) fTitle.textContent = s.footerMudarrisTitle;
           if (fDetail && s.footerMudarrisDetail) fDetail.textContent = s.footerMudarrisDetail;
+          
+          if (s.igEmbedCode) {
+            var igCont = document.getElementById('igEmbedContainerGallery');
+            if (igCont) {
+              igCont.innerHTML = '';
+              var frag = document.createRange().createContextualFragment(s.igEmbedCode);
+              igCont.appendChild(frag);
+              igCont.style.display = 'block';
+              
+              var gGrid = document.getElementById('galleryGrid');
+              var cBar = document.querySelector('.ig-filters');
+              if (gGrid) gGrid.style.display = 'none';
+              if (cBar) cBar.style.display = 'none';
+            }
+          }
         });
     }
 
@@ -1091,4 +1106,5 @@
 
 </body>
 </html>
+
 
