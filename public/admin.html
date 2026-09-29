@@ -1532,25 +1532,7 @@
             <div class="card-header">
               <div class="card-title"><i class="fa fa-newspaper-o"></i> Latest News Settings & Add News</div>
             </div>
-            <form id="newsForm" enctype="multipart/form-data">
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Title *</label>
-                  <input class="form-control" type="text" id="newsTitle" placeholder="News / Achievement Title" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Image (optional)</label>
-                  <input class="form-control" type="file" id="newsImage" accept="image/*">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Description *</label>
-                <textarea class="form-control" id="newsDesc" rows="3" placeholder="News details or achievement summary..." required></textarea>
-              </div>
-              <button type="submit" class="btn btn-accent">
-                <i class="fa fa-plus"></i> Add News / Achievement
-              </button>
-            </form>
+            <div style="padding: 15px;"><button class="btn btn-accent" onclick="openModal('addNewsModal')"><i class="fa fa-plus"></i> Add News / Achievement</button></div>
 
             <hr style="border:none;border-top:1px solid var(--border-soft);margin:24px 0;">
 
@@ -1973,6 +1955,34 @@
      EDIT GALLERY MODAL
 -->
 
+
+<!-- Add News Modal -->
+<div class="modal-overlay" id="addNewsModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('addNewsModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-newspaper-o"></i> Add News</div>
+    <form id="newsForm" enctype="multipart/form-data">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Title *</label>
+                  <input class="form-control" type="text" id="newsTitle" placeholder="News / Achievement Title" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Image (optional)</label>
+                  <input class="form-control" type="file" id="newsImage" accept="image/*">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description *</label>
+                <textarea class="form-control" id="newsDesc" rows="3" placeholder="News details or achievement summary..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-accent">
+                <i class="fa fa-plus"></i> Add News / Achievement
+              </button>
+            </form>
+  </div>
+</div>
+
 <!-- Edit News Modal -->
 <div class="modal-overlay" id="editNewsModal">
   <div class="modal-box">
@@ -2189,10 +2199,7 @@
                   <label class="form-label">Login Password *</label>
                   <input type="text" id="adminUsthadPassword" class="form-control" placeholder="Set custom password" required>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Usthad ID (Optional)</label>
-                  <input type="text" id="adminUsthadId" class="form-control" placeholder="Auto-generated if empty">
-                </div>
+                
                 <div class="form-group">
                   <label class="form-label">Designation</label>
                   <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris / Principal">
@@ -2619,7 +2626,7 @@ function editUserAdmin(id, role) {
   if (role === 'student') {
     safeSetVal('adminStudentName', user.name);
     safeSetVal('adminStudentPhone', user.phone);
-    safeSetVal('adminStudentPassword', user.password || user.phone);
+    safeSetVal('adminStudentPassword', user.password);
     safeSetVal('adminStudentAdmNo', user.admissionNo);
     safeSetVal('adminStudentStatus', user.status);
     safeSetVal('adminStudentClass', user.className);
@@ -2629,8 +2636,8 @@ function editUserAdmin(id, role) {
   } else {
     safeSetVal('adminUsthadName', user.name);
     safeSetVal('adminUsthadPhone', user.phone);
-    safeSetVal('adminUsthadPassword', user.password || user.phone);
-    safeSetVal('adminUsthadId', user.usthadId);
+    safeSetVal('adminUsthadPassword', user.password);
+    
     safeSetVal('adminUsthadDesignation', user.designation);
     safeSetVal('adminUsthadPlace', user.place);
     document.querySelector('#formAddUsthadAdmin button[type="submit"]').innerHTML = '<i class="fa fa-save"></i> Update Usthad';
@@ -2710,7 +2717,7 @@ function submitAddUsthadAdmin(e) {
   fd.append('name', safeGetValue('adminUsthadName'));
   fd.append('phone', safeGetValue('adminUsthadPhone'));
   fd.append('password', safeGetValue('adminUsthadPassword'));
-  fd.append('usthadId', safeGetValue('adminUsthadId'));
+  
   fd.append('designation', safeGetValue('adminUsthadDesignation'));
   fd.append('place', safeGetValue('adminUsthadPlace'));
   if (photoFile) fd.append('photo', photoFile);

@@ -418,12 +418,12 @@
                 <span id="previewRoleBadge" class="badge-role badge-student">Student</span>
               </div>
               <button class="btn btn-sm btn-success rounded-pill font-weight-bold" onclick="proceedToPassword()">
-                Next <i class="fa fa-arrow-right"></i>
+                Open <i class="fa fa-lock"></i>
               </button>
             </div>
 
             <button class="btn btn-block btn-success py-3 rounded-pill font-weight-bold" id="btnCheckProfile" onclick="handleManualLookup()">
-              <i class="fa fa-search"></i> Check & Proceed
+              <i class="fa fa-search"></i> Search
             </button>
           </div>
 
@@ -863,8 +863,8 @@
 
       if (role === 'usthad') {
         title.textContent = 'Usthad Portal Access';
-        sub.textContent = 'Enter your Usthad ID (e.g. UST101) or Phone Number';
-        input.placeholder = 'e.g. UST101 or 9526919218';
+        sub.textContent = 'Enter your Name to look up your profile';
+        input.placeholder = 'Enter your Name...';
       } else {
         title.textContent = 'Student Portal Access';
         sub.textContent = 'Enter your Admission Number (e.g. ADM101) or Phone Number';
@@ -914,8 +914,8 @@
                   selectHtml += '<div onclick="selectUserFromList(' + index + ')" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid #f8fafc;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\'transparent\'">' +
                     '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:1px solid #e2e8f0;">' +
                     '<div style="flex:1;">' +
-                      '<div style="font-weight:700; color:#1e293b; font-size:0.92rem;">' + item.name + ' <small style="color:#64748b;">(' + idText + ')</small></div>' +
-                      '<div style="font-size:0.78rem; color:#64748b;">' + subText + (item.place ? ' • ' + item.place : '') + '</div>' +
+                      '<div style="font-weight:700; color:#1e293b; font-size:0.92rem;">' + item.name + '</div>' +
+                      '<div style="font-size:0.78rem; color:#64748b;">' + (item.place ? item.place : '') + (item.role === 'usthad' && item.phone ? ' • ' + item.phone : '') + '</div>' +
                     '</div>' +
                     '<span class="badge-role ' + badgeClass + '" style="font-size:0.68rem;">' + badgeLabel + '</span>' +
                   '</div>';
@@ -953,7 +953,10 @@
 
       document.getElementById('previewPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
       document.getElementById('previewName').textContent = selectedUserObject.name;
-      document.getElementById('previewSub').textContent = (selectedUserObject.role === 'usthad' ? 'Usthad ID: ' : 'Adm No: ') + (selectedUserObject.admissionNo || selectedUserObject.usthadId);
+      document.getElementById('previewSub').textContent = selectedUserObject.place ? 'Place: ' + selectedUserObject.place : '';
+      if (selectedUserObject.role === 'usthad' && selectedUserObject.phone) {
+        document.getElementById('previewSub').textContent += ' | Phone: ' + selectedUserObject.phone;
+      }
 
       const badge = document.getElementById('previewRoleBadge');
       if (selectedUserObject.role === 'usthad') {
@@ -1003,7 +1006,10 @@
 
       document.getElementById('selectedPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
       document.getElementById('selectedName').textContent = selectedUserObject.name;
-      document.getElementById('selectedSub').textContent = (selectedUserObject.role === 'usthad' ? 'ID: ' : 'Adm No: ') + (selectedUserObject.admissionNo || selectedUserObject.usthadId);
+      document.getElementById('selectedSub').textContent = selectedUserObject.place ? 'Place: ' + selectedUserObject.place : '';
+      if (selectedUserObject.role === 'usthad' && selectedUserObject.phone) {
+        document.getElementById('selectedSub').textContent += ' | Phone: ' + selectedUserObject.phone;
+      }
       document.getElementById('inputPassword').focus();
     }
 
