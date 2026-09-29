@@ -581,9 +581,7 @@
           <div id="usthadDashContent" style="display: none;">
             
             <div class="d-flex flex-wrap gap-2 mb-4">
-              <button class="btn btn-action-primary" onclick="openPostMarkModal()">
-                <i class="fa fa-plus-circle"></i> Post Exam Mark / Result
-              </button>
+              
               <button class="btn btn-info font-weight-bold rounded-pill text-white" onclick="openPostNotificationModal()">
                 <i class="fa fa-bullhorn"></i> Post Announcement
               </button>
@@ -592,6 +590,376 @@
               </button>
             </div>
 
+            
+            <div style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:12px; padding:16px; margin-bottom:24px;">
+              <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-trophy"></i> Exam Mark Entry Panel</h5>
+              <!-- Exam Selection & Filter Controls -->
+            <div style="display:flex; gap:16px; flex-wrap:wrap; background:var(--bg-card-2); padding:16px; border-radius:12px; border:1px solid var(--border-soft); margin-bottom:20px;">
+              <div style="flex:1; min-width:220px;">
+                <label style="font-size:0.8rem; font-weight:600; color:var(--text-soft); display:block; margin-bottom:6px;">Select Exam *</label>
+                <select id="examSelectUsthad" class="form-control" onchange="onUsthadExamChange()" style="background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
+                  <option value="">Loading Exams...</option>
+                </select>
+              </div>
+
+              <div style="flex:1; min-width:220px;">
+                <label style="font-size:0.8rem; font-weight:600; color:var(--text-soft); display:block; margin-bottom:6px;">Select Target Batch Number *</label>
+                <select id="examBatchSelectUsthad" class="form-control" onchange="onUsthadExamChange()" style="background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
+                  <option value="1">Batch 1</option><option value="2">Batch 2</option><option value="3">Batch 3</option><option value="4">Batch 4</option><option value="5">Batch 5</option><option value="6">Batch 6</option>
+                </select>
+              </div>
+
+              <div style="display:flex; align-items:flex-end;">
+                <button class="btn btn-primary" onclick="loadUsthadExamMatrix()">
+                  <i class="fa fa-refresh"></i> Load Mark Matrix
+                </button>
+              </div>
+            </div>
+
+            <!-- Subject Config Preview Banner -->
+            <div id="examSubjectConfigBanner" style="background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.2); border-radius:10px; padding:12px 16px; margin-bottom:20px; display:none;">
+              <div style="font-size:0.85rem; font-weight:700; color:var(--accent);" id="examBannerTitle">Subjects Configured:</div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;" id="examBannerBadges"></div>
+            </div>
+
+            <!-- Student Mark Entry Matrix Table -->
+            <div class="table-container" style="margin-top:0;">
+              <table class="modern-table">
+                <thead>
+                  <tr id="examMatrixHeaderRow">
+                    <th>Adm No</th>
+                    <th>Student Name</th>
+                    <th>Status</th>
+                    <th>Total Score</th>
+                    <th>%</th>
+                    <th>Grade</th>
+                    <th>Class Rank</th>
+                  </tr>
+                </thead>
+                <tbody id="examMatrixTableBody">
+                  <tr><td colspan="7" class="text-center text-muted py-4">Please select an Exam and Class to load mark entry matrix.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
+              <button class="btn btn-accent btn-lg" onclick="submitExamMarksUsthad()">
+                <i class="fa fa-trophy"></i> Calculate Ranks & Publish Results
+              </button>
+            </div>
+          </div>
+
+          <!-- Existing Exams List -->
+          <div class="card" style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:16px; padding:24px;">
+            <h4 style="font-family:'Outfit',sans-serif; color:var(--text); margin-bottom:16px;">
+              <i class="fa fa-list-alt"></i> Active Exam Configurations
+            </h4>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead>
+                  <tr>
+                    <th>Exam Name</th>
+                    <th>Term</th>
+                    <th>Batch</th>
+                    <th>Configured Classes</th>
+                    <th>Created</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="examListTableBody">
+                  <tr><td colspan="6" class="text-center text-muted py-3">Loading active exams...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div><!-- end page-area -->
+    </div><!-- end main-content -->
+  </div><!-- end app-layout -->
+</div><!-- end dashboard -->
+
+<!-- ══════════════════════════════════
+     ADMISSION DETAIL MODAL
+══════════════════════════════════ -->
+<div class="modal-overlay" id="admissionModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('admissionModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-graduation-cap"></i> Application Details</div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     EDIT GALLERY MODAL
+-->
+
+
+<!-- Add News Modal -->
+<div class="modal-overlay" id="addNewsModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('addNewsModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-newspaper-o"></i> Add News</div>
+    <form id="newsForm" enctype="multipart/form-data">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Title *</label>
+                  <input class="form-control" type="text" id="newsTitle" placeholder="News / Achievement Title" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Image (optional)</label>
+                  <input class="form-control" type="file" id="newsImage" accept="image/*">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description *</label>
+                <textarea class="form-control" id="newsDesc" rows="3" placeholder="News details or achievement summary..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-accent">
+                <i class="fa fa-plus"></i> Add News / Achievement
+              </button>
+            </form>
+  </div>
+</div>
+
+<!-- Edit News Modal -->
+<div class="modal-overlay" id="editNewsModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('editNewsModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-edit"></i> Edit News</div>
+    <form onsubmit="submitEditNews(event)">
+      <input type="hidden" id="editNewsId">
+      <div class="form-group">
+        <label class="form-label">Title *</label>
+        <input class="form-control" type="text" id="editNewsTitle" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description *</label>
+        <textarea class="form-control" id="editNewsDesc" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Update Image (optional)</label>
+        <input class="form-control" type="file" id="editNewsImage" accept="image/*">
+        <small class="text-muted">Leave empty to keep existing image</small>
+      </div>
+      <div id="editNewsStatus" style="color:var(--accent); margin-bottom:15px;"></div>
+      <button type="submit" class="btn btn-accent"><i class="fa fa-save"></i> Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<!--
+══════════════════════════════════ -->
+<div class="modal-overlay" id="editGalleryModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('editGalleryModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-edit"></i> Edit Gallery Item</div>
+    <form id="editGalleryForm">
+      <input type="hidden" id="editGalleryId">
+      <div class="form-group">
+        <label>Title *</label>
+        <input class="form-control" type="text" id="editGalleryTitle" required>
+      </div>
+      <div class="form-group">
+        <label>Category *</label>
+        <select class="form-control" id="editGalleryCategory" required></select>
+      </div>
+      <div class="form-group">
+        <label>Media Type *</label>
+        <select class="form-control" id="editGalleryMediaType" required onchange="setEditGallerySource(this.value)">
+          <option value="image">Image File</option>
+          <option value="video">Video URL (YouTube)</option>
+        </select>
+      </div>
+      <div class="form-group" id="editGalleryImageGroup">
+        <label>Change Image (Leave empty to keep current)</label>
+        <input class="form-control" type="file" id="editGalleryImage" accept="image/*">
+        <div style="margin-top:8px;">
+          <img id="editGalleryCurrentImg" src="#" style="max-height:80px;border-radius:4px;display:none;">
+        </div>
+      </div>
+      <div class="form-group" id="editGalleryVideoGroup" style="display:none;">
+        <label>Video URL *</label>
+        <input class="form-control" type="url" id="editGalleryVideoUrl" placeholder="https://youtube.com/watch?...">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control" id="editGalleryDesc" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Hashtags</label>
+        <input class="form-control" type="text" id="editGalleryHashtags" placeholder="e.g. event, campus (comma separated)">
+      </div>
+      <button class="btn btn-primary" type="submit" style="width:100%;">
+        <i class="fa fa-save"></i> Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ══════════════════════════════════
+     RESET CONFIRMATION MODAL (PARAGRAPH TYPING REQUIRED, PASTE DISABLED)
+══════════════════════════════════ -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-box" style="max-width:500px;text-align:center;">
+    <button class="modal-close-btn" onclick="closeModal('resetModal')">&times;</button>
+    <div style="font-size:2.5rem;margin-bottom:16px;">🔐</div>
+    <div class="modal-title" style="justify-content:center;color:#f87171;">Confirm Full Reset</div>
+    <p style="color:var(--text-muted);margin-bottom:14px;font-size:0.88rem;">
+      To prevent accidental deletion, you must <strong>manually type</strong> the confirmation sentence below:
+    </p>
+    <div style="background:var(--bg-input);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);color:#f87171;font-weight:700;font-size:0.82rem;margin-bottom:14px;user-select:none;" id="resetConfirmationTarget">
+      I CONFIRM PERMANENT RESET OF ALL BAYANUL ULOOM DARS DATA
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <input class="form-control" type="text" id="resetConfirmTextInput"
+        placeholder="Type the exact sentence above..."
+        onpaste="return false;" oncopy="return false;" oncut="return false;" autocomplete="off"
+        style="text-align:center;border-color:rgba(239,68,68,0.4);" onkeyup="validateResetTyping()">
+      <small style="color:var(--danger);display:block;margin-top:5px;font-size:0.75rem;">
+        <i class="fa fa-ban"></i> Pasting is disabled! You must physically type out each letter.
+      </small>
+    </div>
+    <div class="form-group" style="margin-bottom:16px;">
+      <input class="form-control" type="password" id="resetPasswordInput"
+        placeholder="Enter Super Admin Password" style="text-align:center;">
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-ghost" onclick="closeModal('resetModal')">Cancel</button>
+      <button class="btn btn-danger" id="executeResetBtn" disabled style="opacity:0.5;cursor:not-allowed;" onclick="executeReset()">
+        <i class="fa fa-trash"></i> Confirm Reset
+      </button>
+    </div>
+    <div id="resetStatus" style="margin-top:14px;font-weight:600;font-size:0.9rem;"></div>
+  </div>
+</div>
+        
+
+        <!-- Unified Add User Modal -->
+        <div class="unified-modal" id="unifiedAddUserModal">
+          <div class="unified-modal-content">
+            <div class="unified-modal-header">
+              <h3>Add New User</h3>
+              <button class="unified-modal-close" onclick="closeAddUserModal()">&times;</button>
+            </div>
+            
+            <div class="unified-role-selector">
+              <button class="unified-role-btn active" id="btnUnifiedStudent" onclick="switchUnifiedRole('student')">Student</button>
+              <button class="unified-role-btn" id="btnUnifiedUsthad" onclick="switchUnifiedRole('usthad')">Usthad</button>
+            </div>
+
+            <!-- Form for Student -->
+            <form id="formAddStudentAdmin" class="unified-form" onsubmit="submitAddStudentAdmin(event)">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Student Name *</label>
+                  <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number *</label>
+                  <input type="text" id="adminStudentPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Login Password *</label>
+                  <input type="text" id="adminStudentPassword" class="form-control" placeholder="Set custom password" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Admission No (Optional)</label>
+                  <input type="text" id="adminStudentAdmNo" class="form-control" placeholder="Auto-generated if empty">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Status</label>
+                  <select id="adminStudentStatus" class="form-control">
+                    <option value="Current Student">Current Student</option>
+                    <option value="Biruthadhari / Alumni">Biruthadhari / Alumni</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Class / Course</label>
+                  <input type="text" id="adminStudentClass" class="form-control" placeholder="e.g. Dars 3rd Year">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Batch Year</label>
+                  <input type="text" id="adminStudentBatch" class="form-control" placeholder="e.g. 2025">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Native Place</label>
+                  <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Photo URL</label>
+                  <input type="file" id="adminStudentPhoto" class="form-control" accept="image/*" name="photo">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-plus-circle"></i> Add Student Record</button>
+            </form>
+
+            <!-- Form for Usthad -->
+            <form id="formAddUsthadAdmin" class="unified-form" style="display: none;" onsubmit="submitAddUsthadAdmin(event)">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Usthad Name *</label>
+                  <input type="text" id="adminUsthadName" class="form-control" placeholder="e.g. Sheikhuna Ibrahim Baqavi" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number *</label>
+                  <input type="text" id="adminUsthadPhone" class="form-control" placeholder="e.g. 9526919218" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Login Password *</label>
+                  <input type="text" id="adminUsthadPassword" class="form-control" placeholder="Set custom password" required>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Designation</label>
+                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris / Principal">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Place</label>
+                  <input type="text" id="adminUsthadPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Photo Image</label>
+                  <input type="file" id="adminUsthadPhoto" class="form-control" accept="image/*" name="photo">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
+            </form>
+          </div>
+        </div>
+
+
+
+        
+            </div>
             <!-- Student Roster Overview -->
             <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-users"></i> Student Roster & Academic Status</h5>
             <div class="table-responsive">
@@ -1087,6 +1455,7 @@
         document.getElementById('studentDashContent').style.display = 'none';
         document.getElementById('usthadDashContent').style.display = 'block';
         loadUsthadDashboardData();
+        loadExamsUsthad();
       } else {
         document.getElementById('dashUserRole').textContent = 'Student • ' + (('Batch ' + (user.batchNumber || '1'))) + ' (' + (user.admissionNo) + ')';
         document.getElementById('dashUserStatus').textContent = user.status || (user.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student');
@@ -1323,6 +1692,181 @@
       $('#modalPostMark').modal('show');
     }
 
+
+// ---------------- USTHAD MATRIX LOGIC ----------------
+let currentExamRosterData = null;
+
+function loadExamsUsthad() {
+  fetch('/api/portal/exams').then(r=>r.json()).then(data => {
+    if(data.success && data.exams) {
+      const select = document.getElementById('examSelectUsthad');
+      if(!select) return;
+      let html = '<option value="">Select Exam...</option>';
+      data.exams.forEach(e => { html += `<option value="${e._id}">${e.examName} (${e.term} ${e.batchYear})</option>`; });
+      select.innerHTML = html;
+    }
+  });
+}
+
+function onUsthadExamChange() {
+  loadUsthadExamMatrix();
+}
+
+function loadUsthadExamMatrix() {
+  const examId = safeGetValue('examSelectUsthad');
+  const className = safeGetValue('examBatchSelectUsthad');
+  if (!examId || !className) return;
+
+  fetch(`/api/portal/exam/roster?examId=${encodeURIComponent(examId)}&className=${encodeURIComponent(className)}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        currentExamRosterData = data;
+        renderExamMatrixTable();
+      }
+    });
+}
+
+function renderExamMatrixTable() {
+  if (!currentExamRosterData) return;
+
+  const { exam, subjects, students, existingResults } = currentExamRosterData;
+  const className = safeGetValue('examBatchSelectUsthad');
+
+  // Render Subject Badges Banner
+  const banner = document.getElementById('examSubjectConfigBanner');
+  const bannerTitle = document.getElementById('examBannerTitle');
+  const bannerBadges = document.getElementById('examBannerBadges');
+
+  if (subjects && subjects.length > 0) {
+    bannerTitle.textContent = `Configured Subjects for ${className}:`;
+    let bHtml = '';
+    subjects.forEach(s => {
+      bHtml += `<span class="badge badge-accent">${s.subjectName} (Max: ${s.maxMarks})</span>`;
+    });
+    bannerBadges.innerHTML = bHtml;
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // Render Matrix Header
+  const headerRow = document.getElementById('examMatrixHeaderRow');
+  let headerHtml = '<th>Adm No</th><th>Student Name</th>';
+  subjects.forEach(s => {
+    headerHtml += `<th>${s.subjectName} <small>(${s.maxMarks})</small></th>`;
+  });
+  headerHtml += '<th>Attendance (Present/Total)</th><th>Total Score</th><th>%</th><th>Grade</th><th>Class Rank</th>';
+  headerRow.innerHTML = headerHtml;
+
+  // Render Student Rows
+  const tbody = document.getElementById('examMatrixTableBody');
+  if (!students || students.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="${subjects.length + 7}" class="text-center text-muted py-4">No students enrolled in ${className}.</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  students.forEach((s, idx) => {
+    const existing = existingResults.find(r => r.admissionNo === s.admissionNo) || {};
+    const existingSubMarks = existing.subjectMarks || [];
+    
+    html += `<tr data-student-id="${s.admissionNo}">
+      <td><code style="font-weight:700; color:var(--accent);">${s.admissionNo}</code></td>
+      <td><strong style="color:var(--text);">${s.name}</strong></td>`;
+
+    // Input for each subject
+    subjects.forEach(sub => {
+      const exSub = existingSubMarks.find(m => m.subjectName === sub.subjectName) || {};
+      const score = exSub.marksObtained !== undefined ? exSub.marksObtained : '';
+      html += `<td>
+        <input type="number" class="form-control form-control-sm matrix-score-input" data-student="${s.admissionNo}" data-subject="${sub.subjectName}" data-max="${sub.maxMarks}" value="${score}" style="width:75px; background:var(--bg-input); color:var(--text); font-weight:700;" min="0" max="${sub.maxMarks}">
+      </td>`;
+    });
+
+    // Attendance inputs
+    const presDays = existing.attendancePresentDays !== undefined ? existing.attendancePresentDays : 100;
+    const totDays = existing.attendanceTotalDays !== undefined ? existing.attendanceTotalDays : 100;
+
+    html += `<td>
+      <div style="display:flex; gap:4px; align-items:center;">
+        <input type="number" class="form-control form-control-sm matrix-att-pres" data-student="${s.admissionNo}" value="${presDays}" style="width:60px; background:var(--bg-input); color:var(--text);" title="Present Days"> /
+        <input type="number" class="form-control form-control-sm matrix-att-tot" data-student="${s.admissionNo}" value="${totDays}" style="width:60px; background:var(--bg-input); color:var(--text);" title="Total Days">
+      </div>
+    </td>
+    <td><strong id="matrixTotal_${s.admissionNo}" style="color:var(--accent);">${existing.totalMarksObtained || 0} / ${existing.totalMaxMarks || 100}</strong></td>
+    <td><span id="matrixPct_${s.admissionNo}">${existing.percentage || 0}%</span></td>
+    <td><span class="badge badge-info" id="matrixGrade_${s.admissionNo}">${existing.grade || '—'}</span></td>
+    <td><span class="badge badge-accent" id="matrixRank_${s.admissionNo}">${existing.rank || '—'}</span></td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+}
+
+function submitExamMarksUsthad() {
+  if (!currentExamRosterData) return;
+
+  const { exam, subjects, students } = currentExamRosterData;
+  const examId = safeGetValue('examSelectUsthad');
+  const className = safeGetValue('examBatchSelectUsthad');
+
+  if (!examId || !className || !students || students.length === 0) {
+    alert('Please select a valid Exam and Class with students');
+    return;
+  }
+
+  const marksDataPayload = [];
+
+  students.forEach(s => {
+    const subMarksObj = {};
+    subjects.forEach(sub => {
+      const input = document.querySelector(`.matrix-score-input[data-student="${s.admissionNo}"][data-subject="${sub.subjectName}"]`);
+      subMarksObj[sub.subjectName] = input ? Number(input.value || 0) : 0;
+    });
+
+    const presInput = document.querySelector(`.matrix-att-pres[data-student="${s.admissionNo}"]`);
+    const totInput = document.querySelector(`.matrix-att-tot[data-student="${s.admissionNo}"]`);
+
+    marksDataPayload.push({
+      admissionNo: s.admissionNo,
+      studentName: s.name,
+      subjectsConfig: subjects,
+      subjectMarks: subMarksObj,
+      attendancePresentDays: presInput ? Number(presInput.value || 100) : 100,
+      attendanceTotalDays: totInput ? Number(totInput.value || 100) : 100,
+      usthadRemarks: 'Published'
+    });
+  });
+
+  fetch('/api/portal/exam/save-marks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      examId,
+      examName: exam ? exam.examName : 'Semester Exam',
+      className,
+      marksData: marksDataPayload,
+      usthadName: 'Head Usthad'
+    })
+  }).then(r => r.json()).then(res => {
+    alert(res.message || 'Marks and Ranks published!');
+    if (res.success && res.results) {
+      res.results.forEach(r => {
+        const totalEl = document.getElementById(`matrixTotal_${r.admissionNo}`);
+        const pctEl = document.getElementById(`matrixPct_${r.admissionNo}`);
+        const gradeEl = document.getElementById(`matrixGrade_${r.admissionNo}`);
+        const rankEl = document.getElementById(`matrixRank_${r.admissionNo}`);
+
+        if (totalEl) totalEl.textContent = `${r.totalMarksObtained} / ${r.totalMaxMarks}`;
+        if (pctEl) pctEl.textContent = `${r.percentage}%`;
+        if (gradeEl) gradeEl.textContent = r.grade;
+        if (rankEl) rankEl.textContent = r.rank;
+      });
+    }
+  }).catch(() => showAlert('Error publishing exam marks', "warning"));
+}
+
     // Counter Stats Loader
     function loadCounterStats() {
       fetch('/api/portal/counter')
@@ -1365,6 +1909,12 @@
             container.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fa fa-info-circle"></i> No Biruthadhari / Alumni record matches your search.</div>';
           }
         });
+    }
+
+    
+    function safeGetValue(id) {
+      var el = document.getElementById(id);
+      return el ? el.value.trim() : '';
     }
 
     // Handlers for Modals & Forms

@@ -920,7 +920,7 @@ exports.getExamClassRoster = async (req, res) => {
     if (!allStudents || allStudents.length === 0) allStudents = memoryStudents;
 
     let classStudents = allStudents.filter(s => 
-      !s.isAlumni && (className === 'ALL' || (s.className || '').toLowerCase() === className.toLowerCase() || (s.status || '').toLowerCase() === className.toLowerCase())
+      !s.isAlumni && (className === 'ALL' || (s.batchNumber || s.className || '').toString().toLowerCase() === className.toLowerCase())
     );
 
     // Find Existing Results for Exam & Class
