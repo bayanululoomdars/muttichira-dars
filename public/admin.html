@@ -2010,13 +2010,38 @@
                 <div class="form-group">
                   <label class="form-label">Target Batch Number</label>
                   <select id="newExamBatchNo" class="form-control" onchange="renderSubjectInputRows()">
-                    <option value="Dars 3rd Year">Dars 3rd Year</option>
-                    <option value="Dars 2nd Year">Dars 2nd Year</option>
-                    <option value="Dars 1st Year">Dars 1st Year</option>
-                    <option value="Dars Senior">Dars Senior</option>
-                    <option value="Dars Junior">Dars Junior</option>
-                    <option value="Dars Sub Junior">Dars Sub Junior</option>
-                  </select>
+<option value="">Select Batch</option>
+<option value="1">Batch 1</option>
+<option value="2">Batch 2</option>
+<option value="3">Batch 3</option>
+<option value="4">Batch 4</option>
+<option value="5">Batch 5</option>
+<option value="6">Batch 6</option>
+<option value="7">Batch 7</option>
+<option value="8">Batch 8</option>
+<option value="9">Batch 9</option>
+<option value="10">Batch 10</option>
+<option value="11">Batch 11</option>
+<option value="12">Batch 12</option>
+<option value="13">Batch 13</option>
+<option value="14">Batch 14</option>
+<option value="15">Batch 15</option>
+<option value="16">Batch 16</option>
+<option value="17">Batch 17</option>
+<option value="18">Batch 18</option>
+<option value="19">Batch 19</option>
+<option value="20">Batch 20</option>
+<option value="21">Batch 21</option>
+<option value="22">Batch 22</option>
+<option value="23">Batch 23</option>
+<option value="24">Batch 24</option>
+<option value="25">Batch 25</option>
+<option value="26">Batch 26</option>
+<option value="27">Batch 27</option>
+<option value="28">Batch 28</option>
+<option value="29">Batch 29</option>
+<option value="30">Batch 30</option>
+</select>
                 </div>
               </div>
 
@@ -2381,6 +2406,8 @@ let editingUserId = null;
 let editingUserRole = null;
 
 function openAddUserModal() {
+  try {
+    console.log('Opening Add User Modal...');
   editingUserId = null;
   editingUserRole = null;
   document.getElementById('formAddStudentAdmin').reset();
@@ -2388,9 +2415,13 @@ function openAddUserModal() {
   document.querySelector('#formAddStudentAdmin button[type="submit"]').innerHTML = 'Save Student Record';
   document.querySelector('#formAddUsthadAdmin button[type="submit"]').innerHTML = 'Save Usthad Record';
   document.getElementById('unifiedAddUserModal').classList.add('show');
+  } catch(e) {
+    alert('Error opening modal: ' + e.message);
+  }
 }
 
 function editUserAdmin(id, role) {
+  try {
   const cleanId = String(id).trim();
   const user = allPortalUsersCache.find(u => {
     return (u._id && String(u._id).trim() === cleanId) || 
@@ -2480,6 +2511,7 @@ function submitAddStudentAdmin(e) {
 }
 
 function deleteStudentAdmin(id) {
+  try {
   if (!confirm('Delete this student record?')) return;
   fetch('/api/portal/student/' + id, { method: 'DELETE' })
     .then(r => r.json())
@@ -2488,6 +2520,7 @@ function deleteStudentAdmin(id) {
       loadPortalUsersAdmin();
     });
 }
+  } catch(e) { alert('Error deleting student: ' + e.message); }
 
 function submitAddUsthadAdmin(e) {
   e.preventDefault();
