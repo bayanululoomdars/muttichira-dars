@@ -442,6 +442,7 @@ function createMockModel(modelName) {
 }
 
 module.exports = {
+  uploadDbToTelegram,
   loadDbFromTelegram,
   Admission: createMockModel('Admission'),
   Contact: createMockModel('Contact'),

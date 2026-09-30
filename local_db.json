@@ -1,4 +1,25 @@
 {
+  "Admission": [],
+  "Contact": [],
+  "Exam": [],
+  "ExamResult": [],
+  "GalleryItem": [],
+  "HomeSettings": [
+    {
+      "_id": "default_home",
+      "principalName": "Sheikhuna Ibrahim Baqavi Al Haithami",
+      "statsStudents": 87,
+      "statsUstads": 8,
+      "statsYears": 50,
+      "statsAlumni": 50
+    }
+  ],
+  "News": [],
+  "PortalMessage": [],
+  "SectionContent": [],
+  "Settings": [],
+  "Slider": [],
+  "Story": [],
   "Student": [
     {
       "_id": "std_101",
@@ -2269,6 +2290,8 @@
       "fatherName": ""
     }
   ],
+  "Subscriber": [],
+  "User": [],
   "Usthad": [
     {
       "_id": "ust_1",
@@ -2379,9 +2402,6 @@
       "subject": "All Subjects"
     }
   ],
-  "Exam": [],
   "Score": [],
-  "News": [],
-  "Gallery": [],
-  "Admission": []
+  "Gallery": []
 }

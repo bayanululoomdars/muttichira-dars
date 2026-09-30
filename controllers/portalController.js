@@ -414,6 +414,8 @@ exports.login = async (req, res) => {
         return res.status(404).json({ success: false, message: 'Student record not found' });
       }
       const validPass = student.password || student.phone || student.admissionNo;
+      console.log('Login student:', student);
+      console.log('Login validPass:', validPass, 'cleanPass:', cleanPass);
       if (cleanPass !== validPass) {
         return res.status(401).json({ success: false, message: 'Incorrect Password' });
       }
