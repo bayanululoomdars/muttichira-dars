@@ -585,7 +585,7 @@ exports.getStudentsAdmin = async (req, res) => {
 
 exports.addStudentAdmin = async (req, res) => {
   try {
-    const { admissionNo, name, phone, password, batchNumber, isAlumni, status, place, photoUrl, guardianName } = req.body;
+    const { admissionNo, name, phone, password, batchNumber, isAlumni, status, place, photoUrl, fatherName } = req.body;
     if (!name || !phone) {
       return res.status(400).json({ success: false, message: 'Name and Phone Number are required' });
     }

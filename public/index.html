@@ -1276,9 +1276,17 @@
       }
     }
 
+    // Store active timers
+    const activeTimers = {};
+
     function animateCounter(id, target) {
       var el = document.getElementById(id);
       if (!el) return;
+
+      if (activeTimers[id]) {
+        clearInterval(activeTimers[id]);
+      }
+
       var strTarget = String(target || '');
       var hasPlus = strTarget.includes('+');
       var numTarget = parseInt(strTarget, 10) || 0;
@@ -1288,13 +1296,13 @@
       }
       var current = 0;
       var step = Math.max(1, Math.floor(numTarget / 40));
-      var timer = setInterval(function() {
+      activeTimers[id] = setInterval(function() {
         current += step;
         if (current >= numTarget) {
           current = numTarget;
-          clearInterval(timer);
+          clearInterval(activeTimers[id]);
         }
-        el.textContent = current;
+        el.textContent = current + (hasPlus ? '+' : '');
       }, 30);
     }
 

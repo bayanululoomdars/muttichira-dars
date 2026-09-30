@@ -1,15 +1,20 @@
 const fs = require('fs');
 let html = fs.readFileSync('public/admin.html', 'utf8');
 
-html = html.replace(
-  '<button class="btn btn-outline-secondary btn-sm portal-filter-btn active" id="pfilter-student" onclick="setPortalFilter(\'student\')" style="font-weight:bold; padding:8px 16px;">Manage Students & Alumni</button>',
-  '<button class="btn btn-outline-secondary btn-sm portal-filter-btn active" id="pfilter-student" onclick="setPortalFilter(\'student\')" style="font-weight:bold; padding:8px 16px;">Manage Students & Alumni <span id="badge-students" style="background:#0a4d2e;color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>'
-);
+const endLogic = `  safeSetHtml('userTableBody', html || '<tr><td colspan="6" class="text-center text-muted py-4">No matching records found.</td></tr>');
+}`;
 
-html = html.replace(
-  '<button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter(\'usthad\')" style="font-weight:bold; padding:8px 16px;">Manage Usthads</button>',
-  '<button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter(\'usthad\')" style="font-weight:bold; padding:8px 16px;">Manage Usthads <span id="badge-usthads" style="background:#0a4d2e;color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>'
-);
+const newEndLogic = `  safeSetHtml('userTableBody', html || '<tr><td colspan="6" class="text-center text-muted py-4">No matching records found.</td></tr>');
+  
+  // Update badges
+  var visibleStudents = filtered.filter(u => u.role === 'student' && (!u.isAlumni && !(u.status || '').toLowerCase().includes('alumni') && !(u.status || '').toLowerCase().includes('biruthadhari'))).length;
+  var visibleAlumni = filtered.filter(u => u.role === 'student' && (u.isAlumni || (u.status || '').toLowerCase().includes('alumni') || (u.status || '').toLowerCase().includes('biruthadhari'))).length;
+  var visibleUsthads = filtered.filter(u => u.role === 'usthad').length;
+  
+  safeSetText('badge-students', visibleStudents + visibleAlumni);
+  safeSetText('badge-usthads', visibleUsthads);
+}`;
 
+html = html.replace(endLogic, newEndLogic);
 fs.writeFileSync('public/admin.html', html);
-console.log('Added badges to filter buttons');
+console.log('Fixed renderPortalUsersAdmin badges');
