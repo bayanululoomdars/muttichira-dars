@@ -1773,7 +1773,10 @@
 
             <!-- Search & Filter Bar -->
             <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center; background:var(--bg-card); padding:14px; border-radius:12px; border:1px solid var(--border-soft);">
-              <input type="text" id="portalSearchInput" oninput="filterPortalUsersAdmin()" placeholder="🔍 Search student/usthad name, ID, place..." class="form-control" style="flex:1; min-width:220px; background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
+              <input type="text" id="portalSearchInput" oninput="filterPortalUsersAdmin()" placeholder="🔍 Search by Name, ID, Place..." class="form-control" style="flex:1; min-width:220px; background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
+              <select id="portalBatchFilter" onchange="filterPortalUsersAdmin()" class="form-control" style="width: 150px; background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
+                <option value="all">All Batches</option>
+              </select>
               <div style="display:flex; gap:6px; flex-wrap:wrap; width:100%;">
                   <button class="btn btn-outline-secondary btn-sm portal-filter-btn active" id="pfilter-student" onclick="setPortalFilter('student')" style="font-weight:bold; padding:8px 16px;">Manage Students & Alumni <span id="badge-students" style="background:#0a4d2e;color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>
                   <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter('usthad')" style="font-weight:bold; padding:8px 16px;">Manage Usthads <span id="badge-usthads" style="background:#0a4d2e;color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>
@@ -2262,6 +2265,22 @@ function loadPortalUsersAdmin() {
     ];
     
     allPortalUsersCache = users;
+    
+    const batchSet = new Set();
+    stList.forEach(s => {
+      if (s.batchNumber) batchSet.add(String(s.batchNumber));
+    });
+    const batchSelect = document.getElementById('portalBatchFilter');
+    if (batchSelect) {
+      const currentVal = batchSelect.value;
+      let opts = '<option value="all">All Batches</option>';
+      [...batchSet].sort((a,b)=>Number(a)-Number(b)).forEach(b => {
+        opts += '<option value="' + b + '">Batch ' + b + '</option>';
+      });
+      batchSelect.innerHTML = opts;
+      if (batchSet.has(currentVal)) batchSelect.value = currentVal;
+    }
+
     safeSetText('badge-portal-users', users.length);
     safeSetText('badge-students', stList.length);
     safeSetText('badge-usthads', ustList.length);
