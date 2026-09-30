@@ -2403,6 +2403,7 @@ function editUserAdmin(id, role) {
   
   if (role === 'student') {
     safeSetVal('adminStudentName', user.name);
+    safeSetVal('adminStudentFather', user.fatherName || '');
     safeSetVal('adminStudentPhone', user.phone);
     safeSetVal('adminStudentPassword', user.password);
     safeSetVal('adminStudentAdmNo', user.admissionNo);
@@ -2450,6 +2451,7 @@ function submitAddStudentAdmin(e) {
 
   let fd = new FormData();
   fd.append('name', safeGetValue('adminStudentName'));
+  fd.append('fatherName', safeGetValue('adminStudentFather'));
   fd.append('phone', safeGetValue('adminStudentPhone'));
   fd.append('password', safeGetValue('adminStudentPassword'));
   fd.append('admissionNo', safeGetValue('adminStudentAdmNo'));

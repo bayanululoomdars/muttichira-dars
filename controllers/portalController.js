@@ -604,7 +604,7 @@ exports.addStudentAdmin = async (req, res) => {
       batchNumber: batchNumber || '1',
       photoUrl: photoUrl || '',
       place: place || '',
-      guardianName: guardianName || ''
+      fatherName: fatherName || ''
     };
 
     try {
