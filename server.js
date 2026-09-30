@@ -8,6 +8,21 @@ const errorHandler = require('./middleware/errorHandler');
 const apiRoutes = require('./routes/api');
 
 const app = express();
+
+// Cache buster middleware
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    if (req.path === '/admin.html' || req.path === '/login.html' || req.path === '/index.html' || req.path === '/') {
+      const v = '5';
+      if (req.query.v !== v) {
+        let newUrl = req.path === '/' ? '/index.html' : req.path;
+        return res.redirect(302, newUrl + '?v=' + v);
+      }
+    }
+  }
+  next();
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
