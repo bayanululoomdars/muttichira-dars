@@ -34,4 +34,8 @@ router.delete('/exam/:id', portalController.deleteExamAdmin);
 router.get('/exam/roster', portalController.getExamClassRoster);
 router.post('/exam/save-marks', portalController.saveExamClassMarks);
 
+
+router.post('/upload-photo', portalController.uploadProfilePhoto);
+router.get('/usthad/messages', portalController.getStudentMessages); // Usthad messages use the same DB method
 module.exports = router;
+

@@ -1334,7 +1334,80 @@
     .unified-role-selector { display: flex; gap: 10px; margin-bottom: 20px; }
     .unified-role-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border-soft); border-radius: 8px; background: var(--bg-input); color: var(--text-soft); font-weight: 600; cursor: pointer; transition: 0.2s; }
     .unified-role-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  
+    /* MODERN THEME UPGRADE */
+    :root {
+      --primary: #043d21;
+      --primary-light: #0a5c34;
+      --primary-dark: #022413;
+      --accent: #d4af37;
+      --accent-light: #f5d66c;
+      --bg: #09101a;
+      --bg-card: rgba(20, 31, 46, 0.7);
+      --bg-card-2: rgba(30, 45, 65, 0.6);
+      --text: #f0f4f8;
+      --text-soft: #a0aec0;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-soft: rgba(255, 255, 255, 0.04);
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.15);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+      --radius: 16px;
+    }
+    body {
+      background: linear-gradient(135deg, var(--bg), #061517);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+    .card, .portal-card, .login-container {
+      background: var(--bg-card) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius) !important;
+      box-shadow: var(--shadow-lg) !important;
+    }
+    .btn-accent {
+      background: linear-gradient(135deg, var(--accent), #c29b2b) !important;
+      color: #000 !important;
+      border: none !important;
+      border-radius: 50px !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3) !important;
+      transition: all 0.3s ease !important;
+    }
+    .btn-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4) !important;
+    }
+    input.form-control, select.form-control, textarea.form-control {
+      background: rgba(0, 0, 0, 0.2) !important;
+      border: 1px solid var(--border) !important;
+      color: var(--text) !important;
+      border-radius: 8px !important;
+    }
+    input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+    }
+    .nav-pills .nav-link.active {
+      background: rgba(212, 175, 55, 0.15) !important;
+      border: 1px solid var(--accent) !important;
+      color: var(--accent) !important;
+      border-radius: 50px !important;
+    }
+    .nav-pills .nav-link {
+      color: var(--text-soft) !important;
+      border-radius: 50px !important;
+      transition: all 0.3s ease;
+    }
+    .nav-pills .nav-link:hover {
+      background: rgba(255,255,255,0.05) !important;
+    }
+
   </style>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
 <body>
 
@@ -1938,9 +2011,14 @@
                   <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Photo URL</label>
-                  <input type="url" id="adminStudentPhoto" class="form-control" placeholder="https://...">
-                </div>
+  <label class="form-label">Profile Photo</label>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <img id="previewStudentPhoto" src="img/new_logo.png" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); background:white;">
+    <input type="hidden" id="adminStudentPhoto">
+    <input type="file" id="fileStudentPhoto" accept="image/*" style="display:none;" onchange="initAdminCropper(event)">
+    <button type="button" class="btn btn-sm btn-outline-warning" onclick="document.getElementById('TARGET_FILE_ID').click()">Upload Photo</button>
+  </div>
+</div>
               </div>
               <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-plus-circle"></i> Add Student Record</button>
             </form>
@@ -2411,7 +2489,9 @@ function openAddUserModal() {
   editingUserId = null;
   editingUserRole = null;
   document.getElementById('formAddStudentAdmin').reset();
+  document.getElementById('previewStudentPhoto').src = 'img/new_logo.png';
   document.getElementById('formAddUsthadAdmin').reset();
+  document.getElementById('previewUsthadPhoto').src = 'img/new_logo.png';
   document.querySelector('#formAddStudentAdmin button[type="submit"]').innerHTML = 'Save Student Record';
   document.querySelector('#formAddUsthadAdmin button[type="submit"]').innerHTML = 'Save Usthad Record';
   document.getElementById('unifiedAddUserModal').classList.add('show');
@@ -2443,6 +2523,7 @@ function editUserAdmin(id, role) {
     safeSetVal('adminStudentAdmNo', user.admissionNo);
     safeSetVal('adminStudentStatus', user.status);
     safeSetVal('adminStudentBatchNo', user.batchNumber || user.batchYear);
+    if(user.photoUrl) document.getElementById('previewStudentPhoto').src = user.photoUrl;
     safeSetVal('adminStudentPlace', user.place);
     document.querySelector('#formAddStudentAdmin button[type="submit"]').innerHTML = '<i class="fa fa-save"></i> Update Student';
   } else {
@@ -3176,6 +3257,24 @@ function printAdmission(id) {
   <div style="position:fixed; bottom:10px; right:10px; font-size:12px; color:rgba(255,255,255,0.3); z-index:9999; pointer-events:none;">
     Version 2.1
   </div>
+
+<!-- Global Cropper Modal -->
+<div class="unified-modal" id="cropperModal" style="z-index: 10005;">
+  <div class="unified-modal-content" style="max-width: 500px; text-align:center;">
+    <div class="unified-modal-header">
+      <h3 style="color:var(--accent);"><i class="fa fa-crop"></i> Crop Profile Photo</h3>
+      <button class="unified-modal-close" onclick="closeCropperModal()">&times;</button>
+    </div>
+    <div style="max-height: 400px; width: 100%; overflow: hidden; border-radius:8px; margin-bottom: 20px;">
+      <img id="cropperImage" style="max-width: 100%; display: block;">
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button class="btn btn-secondary" onclick="closeCropperModal()">Cancel</button>
+      <button class="btn btn-accent" id="btnCropSaveAdmin"><i class="fa fa-upload"></i> Upload & Save</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>`);
     pw.document.close();

@@ -447,7 +447,80 @@
     .unified-role-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border-soft); border-radius: 8px; background: var(--bg-input); color: var(--text-soft); font-weight: 600; cursor: pointer; transition: 0.2s; }
     .unified-role-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
   
-</style>
+
+    /* MODERN THEME UPGRADE */
+    :root {
+      --primary: #043d21;
+      --primary-light: #0a5c34;
+      --primary-dark: #022413;
+      --accent: #d4af37;
+      --accent-light: #f5d66c;
+      --bg: #09101a;
+      --bg-card: rgba(20, 31, 46, 0.7);
+      --bg-card-2: rgba(30, 45, 65, 0.6);
+      --text: #f0f4f8;
+      --text-soft: #a0aec0;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-soft: rgba(255, 255, 255, 0.04);
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.15);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+      --radius: 16px;
+    }
+    body {
+      background: linear-gradient(135deg, var(--bg), #061517);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+    .card, .portal-card, .login-container {
+      background: var(--bg-card) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius) !important;
+      box-shadow: var(--shadow-lg) !important;
+    }
+    .btn-accent {
+      background: linear-gradient(135deg, var(--accent), #c29b2b) !important;
+      color: #000 !important;
+      border: none !important;
+      border-radius: 50px !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3) !important;
+      transition: all 0.3s ease !important;
+    }
+    .btn-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4) !important;
+    }
+    input.form-control, select.form-control, textarea.form-control {
+      background: rgba(0, 0, 0, 0.2) !important;
+      border: 1px solid var(--border) !important;
+      color: var(--text) !important;
+      border-radius: 8px !important;
+    }
+    input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+    }
+    .nav-pills .nav-link.active {
+      background: rgba(212, 175, 55, 0.15) !important;
+      border: 1px solid var(--accent) !important;
+      color: var(--accent) !important;
+      border-radius: 50px !important;
+    }
+    .nav-pills .nav-link {
+      color: var(--text-soft) !important;
+      border-radius: 50px !important;
+      transition: all 0.3s ease;
+    }
+    .nav-pills .nav-link:hover {
+      background: rgba(255,255,255,0.05) !important;
+    }
+
+  </style>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
 <body>
 
@@ -692,6 +765,23 @@
 
           <!-- USTHAD DASHBOARD CONTENT -->
           <div id="usthadDashContent" style="display: none;">
+  <!-- Usthad Tabs -->
+  <ul class="nav nav-pills nav-fill mb-4 custom-nav-pills">
+    <li class="nav-item">
+      <a class="nav-link active font-weight-bold" data-toggle="tab" href="#tabUsthadHome">
+        <i class="fa fa-home text-warning"></i> Dashboard
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link font-weight-bold" data-toggle="tab" href="#tabUsthadProfile">
+        <i class="fa fa-user text-primary"></i> Edit Profile
+      </a>
+    </li>
+  </ul>
+  
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="tabUsthadHome">
+
             
             <div class="d-flex flex-wrap gap-2 mb-4">
               
@@ -1964,5 +2054,27 @@ window.addEventListener('DOMContentLoaded', () => {
   <div style="position:fixed; bottom:10px; right:10px; font-size:12px; color:rgba(255,255,255,0.3); z-index:9999; pointer-events:none;">
     Version 2.1
   </div>
+
+<!-- Global Cropper Modal -->
+<div class="modal fade" id="cropperModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:var(--bg-card); color:var(--text); border-radius:12px; border:1px solid var(--border-soft);">
+      <div class="modal-header border-0">
+        <h5 class="modal-title font-weight-bold text-accent"><i class="fa fa-crop"></i> Crop Profile Photo</h5>
+        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div style="max-height: 400px; width: 100%; overflow: hidden; border-radius:8px;">
+          <img id="cropperImage" style="max-width: 100%; display: block;">
+        </div>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-accent rounded-pill" id="btnCropSave">Upload & Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

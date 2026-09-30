@@ -433,6 +433,28 @@ exports.getStudentsAdmin = async (req, res) => {
   }
 };
 
+
+function processBase64ImageSync(base64Str, userId) {
+  if (!base64Str || !base64Str.startsWith('data:image')) return base64Str;
+  try {
+    const matches = base64Str.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) return base64Str;
+    const ext = matches[1].split('/')[1] || 'jpg';
+    const buffer = Buffer.from(matches[2], 'base64');
+    const fileName = userId + '_' + Date.now() + '.' + ext;
+    const uploadDir = require('path').join(__dirname, '../public/uploads');
+    if (!require('fs').existsSync(uploadDir)) {
+      require('fs').mkdirSync(uploadDir, { recursive: true });
+    }
+    const filePath = require('path').join(uploadDir, fileName);
+    require('fs').writeFileSync(filePath, buffer);
+    return 'uploads/' + fileName;
+  } catch(e) {
+    console.error('Base64 processing error:', e);
+    return '';
+  }
+}
+
 exports.addStudentAdmin = async (req, res) => {
   try {
     const { admissionNo, name, phone, password, batchNumber, isAlumni, status, place, photoUrl, fatherName } = req.body;
@@ -966,5 +988,61 @@ exports.getStudentProgressCard = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+
+exports.uploadProfilePhoto = async (req, res) => {
+  try {
+    const { userId, role, base64Image } = req.body;
+    if (!userId || !base64Image) {
+      return res.status(400).json({ success: false, message: 'Missing user ID or image data' });
+    }
+
+    const matches = base64Image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ success: false, message: 'Invalid base64 string' });
+    }
+
+    const ext = matches[1].split('/')[1];
+    const buffer = Buffer.from(matches[2], 'base64');
+    const fileName = userId + '_' + Date.now() + '.' + ext;
+    const uploadDir = path.join(__dirname, '../public/uploads');
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const filePath = path.join(uploadDir, fileName);
+    fs.writeFileSync(filePath, buffer);
+    const photoUrl = 'uploads/' + fileName;
+
+    // Delete old photo and update user
+    let user;
+    if (role === 'student' || role === 'alumni') {
+      user = await Student.findOne({ _id: userId });
+    } else {
+      user = await Usthad.findOne({ _id: userId });
+    }
+
+    if (user) {
+      if (user.photoUrl && user.photoUrl.startsWith('uploads/')) {
+        const oldPath = path.join(__dirname, '../public', user.photoUrl);
+        if (fs.existsSync(oldPath)) {
+          try { fs.unlinkSync(oldPath); } catch (e) { console.error('Failed to delete old photo:', e); }
+        }
+      }
+      user.photoUrl = photoUrl;
+      
+      const tdb = require('../config/telegramDB');
+      if (tdb.uploadDbToTelegram) {
+        tdb.uploadDbToTelegram(); // Background sync
+      }
+    }
+
+    res.json({ success: true, photoUrl });
+  } catch (err) {
+    console.error('Upload Error:', err);
+    res.status(500).json({ success: false, message: 'Photo upload failed' });
   }
 };

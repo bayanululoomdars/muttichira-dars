@@ -1481,8 +1481,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_1",
-      "admissionNo": "ALU1",
+      "_id": "alumni_1",
+      "admissionNo": "A1",
       "name": "ABOOBAKKAR BAQAVI",
       "role": "student",
       "batchNumber": "1",
@@ -1495,8 +1495,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_2",
-      "admissionNo": "ALU2",
+      "_id": "alumni_2",
+      "admissionNo": "A2",
       "name": "ABDURASHEED BAQAVI",
       "role": "student",
       "batchNumber": "1",
@@ -1509,8 +1509,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_3",
-      "admissionNo": "ALU3",
+      "_id": "alumni_3",
+      "admissionNo": "A3",
       "name": "ABDUNASAR BADRI",
       "role": "student",
       "batchNumber": "1",
@@ -1523,8 +1523,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_4",
-      "admissionNo": "ALU4",
+      "_id": "alumni_4",
+      "admissionNo": "A4",
       "name": "SULAIMAN BAQAVI",
       "role": "student",
       "batchNumber": "1",
@@ -1537,8 +1537,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_5",
-      "admissionNo": "ALU5",
+      "_id": "alumni_5",
+      "admissionNo": "A5",
       "name": "HABEEB BAQAVI",
       "role": "student",
       "batchNumber": "1",
@@ -1551,8 +1551,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_6",
-      "admissionNo": "ALU6",
+      "_id": "alumni_6",
+      "admissionNo": "A6",
       "name": "SAEED DARIMI",
       "role": "student",
       "batchNumber": "1",
@@ -1565,8 +1565,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_7",
-      "admissionNo": "ALU7",
+      "_id": "alumni_7",
+      "admissionNo": "A7",
       "name": "ABDURAHMAN BAQAVI",
       "role": "student",
       "batchNumber": "1",
@@ -1579,8 +1579,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_8",
-      "admissionNo": "ALU8",
+      "_id": "alumni_8",
+      "admissionNo": "A8",
       "name": "SHAREEF BAQAVI",
       "role": "student",
       "batchNumber": "1",
@@ -1593,8 +1593,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_9",
-      "admissionNo": "ALU9",
+      "_id": "alumni_9",
+      "admissionNo": "A9",
       "name": "BUJAIR HAITHAMI",
       "role": "student",
       "batchNumber": "1",
@@ -1607,8 +1607,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_10",
-      "admissionNo": "ALU10",
+      "_id": "alumni_10",
+      "admissionNo": "A10",
       "name": "MANSOOR FAIZY",
       "role": "student",
       "batchNumber": "2",
@@ -1621,8 +1621,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_11",
-      "admissionNo": "ALU11",
+      "_id": "alumni_11",
+      "admissionNo": "A11",
       "name": "SHAMSUDHEEN FAIZY",
       "role": "student",
       "batchNumber": "2",
@@ -1635,8 +1635,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_12",
-      "admissionNo": "ALU12",
+      "_id": "alumni_12",
+      "admissionNo": "A12",
       "name": "MUSTHAFA BAQAVI",
       "role": "student",
       "batchNumber": "2",
@@ -1649,8 +1649,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_13",
-      "admissionNo": "ALU13",
+      "_id": "alumni_13",
+      "admissionNo": "A13",
       "name": "SAITHALAVI BAQAVI",
       "role": "student",
       "batchNumber": "2",
@@ -1663,8 +1663,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_14",
-      "admissionNo": "ALU14",
+      "_id": "alumni_14",
+      "admissionNo": "A14",
       "name": "RAFI BAQAVI",
       "role": "student",
       "batchNumber": "2",
@@ -1677,8 +1677,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_15",
-      "admissionNo": "ALU15",
+      "_id": "alumni_15",
+      "admissionNo": "A15",
       "name": "SALAM MUSLIYAR",
       "role": "student",
       "batchNumber": "2",
@@ -1691,8 +1691,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_16",
-      "admissionNo": "ALU16",
+      "_id": "alumni_16",
+      "admissionNo": "A16",
       "name": "SAYYID FARIS",
       "role": "student",
       "batchNumber": "3",
@@ -1705,8 +1705,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_17",
-      "admissionNo": "ALU17",
+      "_id": "alumni_17",
+      "admissionNo": "A17",
       "name": "SAYYID FALIL FAIZY",
       "role": "student",
       "batchNumber": "3",
@@ -1719,8 +1719,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_18",
-      "admissionNo": "ALU18",
+      "_id": "alumni_18",
+      "admissionNo": "A18",
       "name": "MUBASHIR FAIZY",
       "role": "student",
       "batchNumber": "3",
@@ -1733,8 +1733,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_19",
-      "admissionNo": "ALU19",
+      "_id": "alumni_19",
+      "admissionNo": "A19",
       "name": "ABDUL BASITH BAQAVI",
       "role": "student",
       "batchNumber": "3",
@@ -1747,8 +1747,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_20",
-      "admissionNo": "ALU20",
+      "_id": "alumni_20",
+      "admissionNo": "A20",
       "name": "JABIR MUSLIYAR",
       "role": "student",
       "batchNumber": "3",
@@ -1761,8 +1761,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_21",
-      "admissionNo": "ALU21",
+      "_id": "alumni_21",
+      "admissionNo": "A21",
       "name": "NAJMUDHEEN BAQAVI",
       "role": "student",
       "batchNumber": "4",
@@ -1775,8 +1775,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_22",
-      "admissionNo": "ALU22",
+      "_id": "alumni_22",
+      "admissionNo": "A22",
       "name": "JAHFAR JALALY",
       "role": "student",
       "batchNumber": "5",
@@ -1789,8 +1789,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_23",
-      "admissionNo": "ALU23",
+      "_id": "alumni_23",
+      "admissionNo": "A23",
       "name": "FAYIS ALAVI BAQAVI",
       "role": "student",
       "batchNumber": "5",
@@ -1803,8 +1803,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_24",
-      "admissionNo": "ALU24",
+      "_id": "alumni_24",
+      "admissionNo": "A24",
       "name": "NOORUDHEEN JALALY",
       "role": "student",
       "batchNumber": "5",
@@ -1817,8 +1817,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_25",
-      "admissionNo": "ALU25",
+      "_id": "alumni_25",
+      "admissionNo": "A25",
       "name": "SABIQ JALALY",
       "role": "student",
       "batchNumber": "5",
@@ -1831,8 +1831,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_26",
-      "admissionNo": "ALU26",
+      "_id": "alumni_26",
+      "admissionNo": "A26",
       "name": "SAEED BAQAVI",
       "role": "student",
       "batchNumber": "5",
@@ -1845,8 +1845,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_27",
-      "admissionNo": "ALU27",
+      "_id": "alumni_27",
+      "admissionNo": "A27",
       "name": "MUHSIN MAHIRI",
       "role": "student",
       "batchNumber": "6",
@@ -1859,8 +1859,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_28",
-      "admissionNo": "ALU28",
+      "_id": "alumni_28",
+      "admissionNo": "A28",
       "name": "AMEEN JALALY",
       "role": "student",
       "batchNumber": "6",
@@ -1873,8 +1873,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_29",
-      "admissionNo": "ALU29",
+      "_id": "alumni_29",
+      "admissionNo": "A29",
       "name": "SHAMEEM JALALY",
       "role": "student",
       "batchNumber": "6",
@@ -1887,8 +1887,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_30",
-      "admissionNo": "ALU30",
+      "_id": "alumni_30",
+      "admissionNo": "A30",
       "name": "SHAFEEQ JALALY",
       "role": "student",
       "batchNumber": "6",
@@ -1901,8 +1901,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_31",
-      "admissionNo": "ALU31",
+      "_id": "alumni_31",
+      "admissionNo": "A31",
       "name": "SAYYID SWALAHUDHEEN",
       "role": "student",
       "batchNumber": "7",
@@ -1915,8 +1915,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_32",
-      "admissionNo": "ALU32",
+      "_id": "alumni_32",
+      "admissionNo": "A32",
       "name": "SAYYID SWABEEH",
       "role": "student",
       "batchNumber": "7",
@@ -1929,8 +1929,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_33",
-      "admissionNo": "ALU33",
+      "_id": "alumni_33",
+      "admissionNo": "A33",
       "name": "RAFI JALALY",
       "role": "student",
       "batchNumber": "7",
@@ -1943,8 +1943,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_34",
-      "admissionNo": "ALU34",
+      "_id": "alumni_34",
+      "admissionNo": "A34",
       "name": "ANAS JALALY",
       "role": "student",
       "batchNumber": "7",
@@ -1957,8 +1957,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_35",
-      "admissionNo": "ALU35",
+      "_id": "alumni_35",
+      "admissionNo": "A35",
       "name": "UVAIS JALALY",
       "role": "student",
       "batchNumber": "8",
@@ -1971,8 +1971,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_36",
-      "admissionNo": "ALU36",
+      "_id": "alumni_36",
+      "admissionNo": "A36",
       "name": "SWAFUVAN JALALY",
       "role": "student",
       "batchNumber": "8",
@@ -1985,8 +1985,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_37",
-      "admissionNo": "ALU37",
+      "_id": "alumni_37",
+      "admissionNo": "A37",
       "name": "SALMAN JALALY",
       "role": "student",
       "batchNumber": "8",
@@ -1999,8 +1999,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_38",
-      "admissionNo": "ALU38",
+      "_id": "alumni_38",
+      "admissionNo": "A38",
       "name": "SAJID MAHIRI",
       "role": "student",
       "batchNumber": "9",
@@ -2013,8 +2013,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_39",
-      "admissionNo": "ALU39",
+      "_id": "alumni_39",
+      "admissionNo": "A39",
       "name": "RAMEES BAQAVI",
       "role": "student",
       "batchNumber": "9",
@@ -2027,8 +2027,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_40",
-      "admissionNo": "ALU40",
+      "_id": "alumni_40",
+      "admissionNo": "A40",
       "name": "RASHID BAQAVI",
       "role": "student",
       "batchNumber": "10",
@@ -2041,8 +2041,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_41",
-      "admissionNo": "ALU41",
+      "_id": "alumni_41",
+      "admissionNo": "A41",
       "name": "MUAHAMMED SHAN BAQAVI",
       "role": "student",
       "batchNumber": "11",
@@ -2055,8 +2055,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_42",
-      "admissionNo": "ALU42",
+      "_id": "alumni_42",
+      "admissionNo": "A42",
       "name": "RASHID BAQAVI",
       "role": "student",
       "batchNumber": "12",
@@ -2069,8 +2069,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_43",
-      "admissionNo": "ALU43",
+      "_id": "alumni_43",
+      "admissionNo": "A43",
       "name": "RILVAN BAQAVI",
       "role": "student",
       "batchNumber": "12",
@@ -2083,8 +2083,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_44",
-      "admissionNo": "ALU44",
+      "_id": "alumni_44",
+      "admissionNo": "A44",
       "name": "ABID BAQAVI",
       "role": "student",
       "batchNumber": "12",
@@ -2097,8 +2097,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_45",
-      "admissionNo": "ALU45",
+      "_id": "alumni_45",
+      "admissionNo": "A45",
       "name": "JABIR BAQAVI",
       "role": "student",
       "batchNumber": "12",
@@ -2111,8 +2111,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_46",
-      "admissionNo": "ALU46",
+      "_id": "alumni_46",
+      "admissionNo": "A46",
       "name": "HASHIM SHAN BAQAVI",
       "role": "student",
       "batchNumber": "12",
@@ -2125,8 +2125,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_47",
-      "admissionNo": "ALU47",
+      "_id": "alumni_47",
+      "admissionNo": "A47",
       "name": "AJMAL MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2139,8 +2139,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_48",
-      "admissionNo": "ALU48",
+      "_id": "alumni_48",
+      "admissionNo": "A48",
       "name": "SHANAVAS MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2153,8 +2153,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_49",
-      "admissionNo": "ALU49",
+      "_id": "alumni_49",
+      "admissionNo": "A49",
       "name": "ANSHIB SHAN MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2167,8 +2167,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_50",
-      "admissionNo": "ALU50",
+      "_id": "alumni_50",
+      "admissionNo": "A50",
       "name": "SAYYID SINAN MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2181,8 +2181,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_51",
-      "admissionNo": "ALU51",
+      "_id": "alumni_51",
+      "admissionNo": "A51",
       "name": "SAYYID SWAFUVAN MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2195,8 +2195,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_52",
-      "admissionNo": "ALU52",
+      "_id": "alumni_52",
+      "admissionNo": "A52",
       "name": "SAYYID SABITH MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2209,8 +2209,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_53",
-      "admissionNo": "ALU53",
+      "_id": "alumni_53",
+      "admissionNo": "A53",
       "name": "NISHAD MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2223,8 +2223,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_54",
-      "admissionNo": "ALU54",
+      "_id": "alumni_54",
+      "admissionNo": "A54",
       "name": "UVAIS MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2237,8 +2237,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_55",
-      "admissionNo": "ALU55",
+      "_id": "alumni_55",
+      "admissionNo": "A55",
       "name": "NABEEL MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2251,8 +2251,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_56",
-      "admissionNo": "ALU56",
+      "_id": "alumni_56",
+      "admissionNo": "A56",
       "name": "SHIBLI MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2265,8 +2265,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_57",
-      "admissionNo": "ALU57",
+      "_id": "alumni_57",
+      "admissionNo": "A57",
       "name": "KHALID MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2279,8 +2279,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_58",
-      "admissionNo": "ALU58",
+      "_id": "alumni_58",
+      "admissionNo": "A58",
       "name": "SAYYID SWALIH MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
@@ -2293,8 +2293,8 @@
       "fatherName": ""
     },
     {
-      "_id": "alu_59",
-      "admissionNo": "ALU59",
+      "_id": "alumni_59",
+      "admissionNo": "A59",
       "name": "ABDUL MAJID MUSLIYAR",
       "role": "student",
       "batchNumber": "13",
