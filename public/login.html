@@ -1056,7 +1056,7 @@
       }
 
       debounceTimer = setTimeout(() => {
-        fetch('/api/portal/lookup?q=' + encodeURIComponent(val))
+        fetch('/api/portal/lookup?q=' + encodeURIComponent(val) + '&role=' + currentRole)
           .then(r => r.json())
           .then(data => {
             if (data.success && data.matches && data.matches.length > 0) {
