@@ -1,0 +1,87 @@
+        <!-- Unified Add User Modal -->
+        <div class="unified-modal" id="unifiedAddUserModal">
+          <div class="unified-modal-content">
+            <div class="unified-modal-header">
+              <h3>Add New User</h3>
+              <button class="unified-modal-close" onclick="closeAddUserModal()">&times;</button>
+            </div>
+            
+            <div class="unified-role-selector">
+              <button class="unified-role-btn active" id="btnUnifiedStudent" onclick="switchUnifiedRole('student')">Student</button>
+              <button class="unified-role-btn" id="btnUnifiedUsthad" onclick="switchUnifiedRole('usthad')">Usthad</button>
+            </div>
+
+            <!-- Form for Student -->
+            <form id="formAddStudentAdmin" class="unified-form" onsubmit="submitAddStudentAdmin(event)">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Student Name *</label>
+                  <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number (Password) *</label>
+                  <input type="text" id="adminStudentPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Admission No (Optional)</label>
+                  <input type="text" id="adminStudentAdmNo" class="form-control" placeholder="Auto-generated if empty">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Status</label>
+                  <select id="adminStudentStatus" class="form-control">
+                    <option value="Current Student">Current Student</option>
+                    <option value="Biruthadhari / Alumni">Biruthadhari / Alumni</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Class / Course</label>
+                  <input type="text" id="adminStudentClass" class="form-control" placeholder="e.g. Dars 3rd Year">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Batch Year</label>
+                  <input type="text" id="adminStudentBatch" class="form-control" placeholder="e.g. 2025">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Native Place</label>
+                  <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Photo URL</label>
+                  <input type="url" id="adminStudentPhoto" class="form-control" placeholder="https://...">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-plus-circle"></i> Add Student Record</button>
+            </form>
+
+            <!-- Form for Usthad -->
+            <form id="formAddUsthadAdmin" class="unified-form" style="display: none;" onsubmit="submitAddUsthadAdmin(event)">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Usthad Name *</label>
+                  <input type="text" id="adminUsthadName" class="form-control" placeholder="e.g. Sheikhuna Ibrahim Baqavi" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone Number (Password) *</label>
+                  <input type="text" id="adminUsthadPhone" class="form-control" placeholder="e.g. 9526919218" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Usthad ID (Optional)</label>
+                  <input type="text" id="adminUsthadId" class="form-control" placeholder="Auto-generated if empty">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Designation</label>
+                  <input type="text" id="adminUsthadDesignation" class="form-control" placeholder="e.g. Head Mudarris">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Subject / Kitab</label>
+                  <input type="text" id="adminUsthadSubject" class="form-control" placeholder="e.g. Tafseer & Fiqh">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Place</label>
+                  <input type="text" id="adminUsthadPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
+            </form>
+          </div>
+        </div>

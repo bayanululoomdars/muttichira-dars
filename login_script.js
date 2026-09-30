@@ -1,0 +1,809 @@
+
+    let currentRole = 'student';
+    let selectedUserObject = null;
+    let currentUserSession = null;
+    let debounceTimer = null;
+
+    // Switch Role between Student & Usthad
+    function switchRole(role) {
+      currentRole = role;
+      document.getElementById('btnRoleStudent').classList.toggle('active', role === 'student');
+      document.getElementById('btnRoleUsthad').classList.toggle('active', role === 'usthad');
+
+      const title = document.getElementById('loginTitle');
+      const sub = document.getElementById('loginSub');
+      const input = document.getElementById('inputIdentifier');
+
+      if (role === 'usthad') {
+        title.textContent = 'Usthad Portal Access';
+        sub.textContent = 'Enter your Name to look up your profile';
+        input.placeholder = 'Enter your Name...';
+      } else {
+        title.textContent = 'Student Portal Access';
+        sub.textContent = 'Enter your Admission Number (e.g. ADM101) or Phone Number';
+        input.placeholder = 'e.g. ADM101 or 9876543210';
+      }
+
+      // Reset step
+      backToLookup();
+      handleLiveLookup();
+    }
+
+    let currentMatchesList = [];
+
+    // Live Lookup preview on typing (SELECT OPTION VARANAM)
+    function handleLiveLookup() {
+      clearTimeout(debounceTimer);
+      const val = document.getElementById('inputIdentifier').value.trim();
+      const previewBox = document.getElementById('livePreviewBox');
+      const selectBox = document.getElementById('liveSearchResultsSelect');
+
+      if (!val) {
+        if (previewBox) previewBox.style.display = 'none';
+        if (selectBox) selectBox.style.display = 'none';
+        selectedUserObject = null;
+        currentMatchesList = [];
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        fetch('/api/portal/lookup?q=' + encodeURIComponent(val))
+          .then(r => r.json())
+          .then(data => {
+            if (data.success && data.matches && data.matches.length > 0) {
+              currentMatchesList = data.matches;
+
+              if (currentMatchesList.length > 1) {
+                // Render Selectable Options List
+                let selectHtml = '<div style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:12px; max-height:220px; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.08); margin-bottom:15px; padding:6px;">' +
+                  '<div style="font-size:0.75rem; font-weight:700; color:#64748b; padding:6px 10px; border-bottom:1px solid #f1f5f9; text-transform:uppercase;"><i class="fa fa-list"></i> Select matching profile (' + currentMatchesList.length + ' found):</div>';
+
+                currentMatchesList.forEach((item, index) => {
+                  const idText = item.role === 'usthad' ? item.usthadId : item.admissionNo;
+                  const subText = item.role === 'usthad' ? (item.designation || 'Usthad') : (item.className || 'Student');
+                  const badgeClass = item.role === 'usthad' ? 'badge-usthad' : (item.isAlumni ? 'badge-alumni' : 'badge-student');
+                  const badgeLabel = item.role === 'usthad' ? 'Usthad' : (item.isAlumni ? 'Alumni' : 'Student');
+
+                  selectHtml += '<div onclick="selectUserFromList(' + index + ')" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid #f8fafc;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\'transparent\'">' +
+                    '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:1px solid #e2e8f0;">' +
+                    '<div style="flex:1;">' +
+                      '<div style="font-weight:700; color:#1e293b; font-size:0.92rem;">' + item.name + '</div>' +
+                      '<div style="font-size:0.78rem; color:#64748b;">' + (item.place ? item.place : '') + (item.role === 'usthad' && item.phone ? ' • ' + item.phone : '') + '</div>' +
+                    '</div>' +
+                    '<span class="badge-role ' + badgeClass + '" style="font-size:0.68rem;">' + badgeLabel + '</span>' +
+                  '</div>';
+                });
+
+                selectHtml += '</div>';
+                selectBox.innerHTML = selectHtml;
+                selectBox.style.display = 'block';
+                if (previewBox) previewBox.style.display = 'none';
+              } else {
+                // Single match
+                if (selectBox) selectBox.style.display = 'none';
+                selectUserFromList(0, false);
+              }
+            } else {
+              if (selectBox) selectBox.style.display = 'none';
+              if (previewBox) previewBox.style.display = 'none';
+              selectedUserObject = null;
+            }
+          }).catch(e => {
+            if (selectBox) selectBox.style.display = 'none';
+            if (previewBox) previewBox.style.display = 'none';
+          });
+      }, 250);
+    }
+
+    function selectUserFromList(index, autoProceed = true) {
+      if (!currentMatchesList || !currentMatchesList[index]) return;
+      selectedUserObject = currentMatchesList[index];
+
+      const previewBox = document.getElementById('livePreviewBox');
+      const selectBox = document.getElementById('liveSearchResultsSelect');
+
+      if (selectBox) selectBox.style.display = 'none';
+
+      document.getElementById('previewPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
+      document.getElementById('previewName').textContent = selectedUserObject.name;
+      document.getElementById('previewSub').textContent = selectedUserObject.place ? 'Place: ' + selectedUserObject.place : '';
+      if (selectedUserObject.role === 'usthad' && selectedUserObject.phone) {
+        document.getElementById('previewSub').textContent += ' | Phone: ' + selectedUserObject.phone;
+      }
+
+      const badge = document.getElementById('previewRoleBadge');
+      if (selectedUserObject.role === 'usthad') {
+        badge.className = 'badge-role badge-usthad';
+        badge.textContent = 'Usthad • ' + (selectedUserObject.designation || 'Faculty');
+      } else if (selectedUserObject.isAlumni) {
+        badge.className = 'badge-role badge-alumni';
+        badge.textContent = 'Biruthadhari / Alumni';
+      } else {
+        badge.className = 'badge-role badge-student';
+        badge.textContent = 'Student • ' + (selectedUserObject.className || 'Dars');
+      }
+      previewBox.style.display = 'flex';
+
+      if (autoProceed) {
+        proceedToPassword();
+      }
+    }
+
+    function handleManualLookup() {
+      const val = document.getElementById('inputIdentifier').value.trim();
+      if (!val) {
+        showAlert('Please enter your Name, Admission Number, or Phone Number', 'danger');
+        return;
+      }
+      if (selectedUserObject) {
+        proceedToPassword();
+      } else {
+        showAlert('Looking up record...', 'info');
+        fetch('/api/portal/lookup?q=' + encodeURIComponent(val))
+          .then(r => r.json())
+          .then(data => {
+            if (data.success && data.matches && data.matches.length > 0) {
+              currentMatchesList = data.matches;
+              selectUserFromList(0, true);
+            } else {
+              showAlert(data.message || 'No record found matching "' + val + '"', 'danger');
+            }
+          });
+      }
+    }
+
+    function proceedToPassword() {
+      if (!selectedUserObject) return;
+      document.getElementById('stepLookup').style.display = 'none';
+      document.getElementById('stepPassword').style.display = 'block';
+
+      document.getElementById('selectedPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
+      document.getElementById('selectedName').textContent = selectedUserObject.name;
+      document.getElementById('selectedSub').textContent = selectedUserObject.place ? 'Place: ' + selectedUserObject.place : '';
+      if (selectedUserObject.role === 'usthad' && selectedUserObject.phone) {
+        document.getElementById('selectedSub').textContent += ' | Phone: ' + selectedUserObject.phone;
+      }
+      document.getElementById('inputPassword').focus();
+    }
+
+    function backToLookup() {
+      document.getElementById('stepLookup').style.display = 'block';
+      document.getElementById('stepPassword').style.display = 'none';
+      document.getElementById('loginAlert').innerHTML = '';
+    }
+
+    function togglePasswordVis() {
+      const p = document.getElementById('inputPassword');
+      const icon = document.getElementById('passEyeIcon');
+      if (p.type === 'password') {
+        p.type = 'text';
+        icon.className = 'fa fa-eye-slash';
+      } else {
+        p.type = 'password';
+        icon.className = 'fa fa-eye';
+      }
+    }
+
+    function submitLogin() {
+      const pass = document.getElementById('inputPassword').value.trim();
+      const identifier = document.getElementById('searchIdentifier').value.trim();
+      if (!pass) {
+        showAlert('Please enter password (Default is Phone Number)', 'warning');
+        return;
+      }
+
+      showAlert('Authenticating...', 'info');
+      fetch('/api/portal/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          role: currentRole,
+          identifier: identifier,
+          password: pass
+        })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success && res.user) {
+          currentUserSession = res.user;
+          showAlert('Login successful! Loading dashboard...', 'success');
+          setTimeout(() => {
+            renderDashboard(res.user);
+          }, 600);
+        } else {
+          showAlert(res.message || 'Invalid Password', 'danger');
+        }
+      }).catch(err => {
+        showAlert('Server communication error', 'danger');
+      });
+    }
+
+    function showAlert(msg, type) {
+      document.getElementById('loginAlert').innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show rounded-3 text-center small font-weight-bold m-0" role="alert">
+          ${msg}
+        </div>
+      `;
+    }
+
+    // Render Dashboard upon Login
+    function renderDashboard(user) {
+      document.getElementById('loginCard').style.display = 'none';
+      document.getElementById('dashboardCard').style.display = 'block';
+
+      document.getElementById('dashUserPhoto').src = user.photoUrl || 'img/new_logo.png';
+      document.getElementById('dashUserName').textContent = user.name;
+
+      if (user.role === 'usthad') {
+        document.getElementById('dashUserRole').textContent = 'Usthad • ' + (user.designation || 'Faculty') + ' (' + (user.subject || 'Dars') + ')';
+        document.getElementById('dashUserStatus').textContent = 'Respected Usthad';
+        document.getElementById('studentDashContent').style.display = 'none';
+        document.getElementById('usthadDashContent').style.display = 'block';
+        loadUsthadDashboardData();
+        loadExamsUsthad();
+      } else {
+        document.getElementById('dashUserRole').textContent = 'Student • ' + (('Batch ' + (user.batchNumber || '1'))) + ' (' + (user.admissionNo) + ')';
+        document.getElementById('dashUserStatus').textContent = user.status || (user.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student');
+        document.getElementById('studentDashContent').style.display = 'block';
+        document.getElementById('usthadDashContent').style.display = 'none';
+        loadStudentDashboardData();
+      }
+    }
+
+    function handleLogout() {
+      currentUserSession = null;
+      document.getElementById('dashboardCard').style.display = 'none';
+      document.getElementById('loginCard').style.display = 'block';
+      backToLookup();
+    }
+
+    // Student Dashboard Loader (Multi-subject, Rank, Attendance & Printable Progress Cards)
+    function loadStudentDashboardData() {
+      if (!currentUserSession) return;
+      const admNo = currentUserSession.admissionNo;
+
+      // 1. Fetch Student Multi-Subject Progress Cards
+      fetch('/api/portal/student/progress-card?admissionNo=' + encodeURIComponent(admNo))
+        .then(r => r.json())
+        .then(cardData => {
+          const resultsBox = document.getElementById('studentResultsList');
+          if (cardData.success && cardData.results && cardData.results.length > 0) {
+            let html = '';
+            cardData.results.forEach(res => {
+              const subList = res.subjectMarks || [];
+              let subRows = '';
+              subList.forEach(s => {
+                subRows += `
+                  <tr>
+                    <td class="small font-weight-bold text-dark">${s.subjectName}</td>
+                    <td class="text-center small">${s.maxMarks}</td>
+                    <td class="text-center font-weight-bold text-success">${s.marksObtained}</td>
+                  </tr>
+                `;
+              });
+
+              html += `
+                <div class="card mb-4 border-0 shadow-sm rounded-4 overflow-hidden">
+                  <div class="card-header bg-gradient-success text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0a4d2e, #0f6b3f);">
+                    <div>
+                      <h5 class="font-weight-bold m-0 text-warning" style="font-family:'Outfit',sans-serif;">${res.examName}</h5>
+                      <small class="opacity-75">${res.className} • ${new Date(res.createdAt).toLocaleDateString()}</small>
+                    </div>
+                    <div class="text-right">
+                      <span class="badge badge-warning text-dark font-weight-bold px-3 py-2 text-uppercase" style="font-size:0.9rem;">
+                        ${res.rank || 'Pass'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div class="card-body p-3">
+                    <!-- Key Statistics Cards -->
+                    <div class="row g-2 mb-3 text-center">
+                      <div class="col-4">
+                        <div class="p-2 bg-light rounded-3 border">
+                          <small class="text-muted d-block">Overall Score</small>
+                          <strong class="text-dark font-weight-bold">${res.totalMarksObtained} / ${res.totalMaxMarks}</strong>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="p-2 bg-light rounded-3 border">
+                          <small class="text-muted d-block">Percentage</small>
+                          <strong class="text-success font-weight-bold">${res.percentage}%</strong>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="p-2 bg-light rounded-3 border">
+                          <small class="text-muted d-block">Attendance</small>
+                          <strong class="text-info font-weight-bold">${res.attendancePercentage || 96}%</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Subject Breakdown Table -->
+                    <div class="table-responsive mb-2">
+                      <table class="table table-sm table-bordered m-0">
+                        <thead class="bg-light small">
+                          <tr>
+                            <th>Subject / Kitab</th>
+                            <th class="text-center">Max Marks</th>
+                            <th class="text-center">Marks Obtained</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${subRows || '<tr><td colspan="3" class="text-center text-muted">No subject breakdown recorded</td></tr>'}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                      <small class="text-muted">Grade: <strong class="text-success">${res.grade}</strong> | Teacher: ${res.publishedBy || 'Usthad'}</small>
+                      <button class="btn btn-sm btn-outline-success rounded-pill font-weight-bold" onclick="window.print()">
+                        <i class="fa fa-print"></i> Print Progress Card
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+            resultsBox.innerHTML = html;
+          } else {
+            // Fallback to general dashboard results
+            fetch('/api/portal/student/dashboard?admissionNo=' + encodeURIComponent(admNo))
+              .then(r => r.json())
+              .then(data => {
+                if (data.success && data.results && data.results.length > 0) {
+                  let html = '';
+                  data.results.forEach(r => {
+                    const md = r.marksData || {};
+                    html += `
+                      <div class="card-dashboard-item border-left border-warning" style="border-left-width: 5px !important;">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <div>
+                            <h6 class="font-weight-bold text-dark m-0">${md.examName || r.subject || 'Evaluation Result'}</h6>
+                            <small class="text-muted">${md.subjectName || 'Subject'}</small>
+                          </div>
+                          <span class="badge badge-warning text-dark font-weight-bold px-3 py-2">${md.rank || md.grade || 'Pass'}</span>
+                        </div>
+                        <hr class="my-2">
+                        <div class="d-flex justify-content-between small">
+                          <span>Score: <strong>${md.marksObtained || '-'} / ${md.totalMarks || '100'}</strong></span>
+                          <span class="text-muted">By: ${r.senderName || 'Usthad'}</span>
+                        </div>
+                        ${md.remarks ? `<p class="small text-secondary mt-2 mb-0 bg-light p-2 rounded"><em>"${md.remarks}"</em></p>` : ''}
+                      </div>
+                    `;
+                  });
+                  resultsBox.innerHTML = html;
+                } else {
+                  resultsBox.innerHTML = '<p class="text-muted small p-3 bg-light rounded text-center">No exam results published yet for this semester.</p>';
+                }
+              });
+          }
+        });
+
+      // 2. Fetch Notifications and Messages
+      fetch('/api/portal/student/dashboard?admissionNo=' + encodeURIComponent(admNo))
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            // Render Notifications
+            const notifBox = document.getElementById('studentNotificationsList');
+            if (data.notifications && data.notifications.length > 0) {
+              let html = '';
+              data.notifications.forEach(n => {
+                html += `
+                  <div class="card-dashboard-item border-left border-info" style="border-left-width: 5px !important;">
+                    <h6 class="font-weight-bold text-info m-0">${n.subject || 'Announcement'}</h6>
+                    <small class="text-muted d-block mb-2">${new Date(n.createdAt).toLocaleDateString()}</small>
+                    <p class="m-0 small text-dark">${n.content}</p>
+                  </div>
+                `;
+              });
+              notifBox.innerHTML = html;
+            } else {
+              notifBox.innerHTML = '<p class="text-muted small">No notifications posted yet.</p>';
+            }
+
+            // Render Messages
+            const msgBox = document.getElementById('studentMessagesList');
+            if (data.messages && data.messages.length > 0) {
+              let html = '';
+              data.messages.forEach(m => {
+                const isMe = m.senderRole === 'student';
+                html += `
+                  <div class="card-dashboard-item ${isMe ? 'bg-light' : 'border-success'} mb-2">
+                    <div class="d-flex justify-content-between">
+                      <strong class="small text-${isMe ? 'secondary' : 'success'}">${isMe ? 'You' : m.senderName}</strong>
+                      <small class="text-muted">${new Date(m.createdAt).toLocaleDateString()}</small>
+                    </div>
+                    <p class="m-0 small text-dark mt-1">${m.content}</p>
+                  </div>
+                `;
+              });
+              msgBox.innerHTML = html;
+            } else {
+              msgBox.innerHTML = '<p class="text-muted small">No message history with Usthads.</p>';
+            }
+
+            // Fill Edit Profile Form
+            document.getElementById('editStudentPhone').value = data.student.phone || '';
+            document.getElementById('editStudentPlace').value = data.student.place || '';
+            document.getElementById('editStudentPhoto').value = data.student.photoUrl || '';
+            document.getElementById('editStudentBio').value = data.student.bio || '';
+          }
+        });
+    }
+
+    // Usthad Dashboard Loader
+    function loadUsthadDashboardData() {
+      fetch('/api/portal/students')
+        .then(r => r.json())
+        .then(data => {
+          if (data.success && data.students) {
+            const table = document.getElementById('usthadStudentRosterTable');
+            const select = document.getElementById('postMarkStudentSelect');
+            let html = '';
+            let selectOptions = '<option value="">Select Student...</option>';
+
+            data.students.forEach(s => {
+              selectOptions += `<option value="${s.admissionNo}">${s.name} (${s.admissionNo}) - ${s.className || 'Dars'}</option>`;
+              html += `
+                <tr>
+                  <td><strong>${s.admissionNo}</strong></td>
+                  <td>${s.name}</td>
+                  <td>${s.className || 'Dars'}</td>
+                  <td><span class="badge ${s.isAlumni ? 'badge-primary' : 'badge-success'}">${s.status || 'Student'}</span></td>
+                  <td>
+                    <button class="btn btn-xs btn-outline-warning text-dark font-weight-bold" onclick="quickSendMark('${s.admissionNo}')">
+                      Send Mark
+                    </button>
+                  </td>
+                </tr>
+              `;
+            });
+            table.innerHTML = html;
+            select.innerHTML = selectOptions;
+          }
+        });
+    }
+
+    // Usthad Quick Send Mark
+    function quickSendMark(admNo) {
+      document.getElementById('postMarkStudentSelect').value = admNo;
+      $('#modalPostMark').modal('show');
+    }
+
+
+// ---------------- USTHAD MATRIX LOGIC ----------------
+let currentExamRosterData = null;
+
+function loadExamsUsthad() {
+  fetch('/api/portal/exams').then(r=>r.json()).then(data => {
+    if(data.success && data.exams) {
+      const select = document.getElementById('examSelectUsthad');
+      if(!select) return;
+      let html = '<option value="">Select Exam...</option>';
+      data.exams.forEach(e => { html += `<option value="${e._id}">${e.examName} (${e.term} ${e.batchYear})</option>`; });
+      select.innerHTML = html;
+    }
+  });
+}
+
+function onUsthadExamChange() {
+  loadUsthadExamMatrix();
+}
+
+function loadUsthadExamMatrix() {
+  const examId = safeGetValue('examSelectUsthad');
+  const className = safeGetValue('examBatchSelectUsthad');
+  if (!examId || !className) return;
+
+  fetch(`/api/portal/exam/roster?examId=${encodeURIComponent(examId)}&className=${encodeURIComponent(className)}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        currentExamRosterData = data;
+        renderExamMatrixTable();
+      }
+    });
+}
+
+function renderExamMatrixTable() {
+  if (!currentExamRosterData) return;
+
+  const { exam, subjects, students, existingResults } = currentExamRosterData;
+  const className = safeGetValue('examBatchSelectUsthad');
+
+  // Render Subject Badges Banner
+  const banner = document.getElementById('examSubjectConfigBanner');
+  const bannerTitle = document.getElementById('examBannerTitle');
+  const bannerBadges = document.getElementById('examBannerBadges');
+
+  if (subjects && subjects.length > 0) {
+    bannerTitle.textContent = `Configured Subjects for ${className}:`;
+    let bHtml = '';
+    subjects.forEach(s => {
+      bHtml += `<span class="badge badge-accent">${s.subjectName} (Max: ${s.maxMarks})</span>`;
+    });
+    bannerBadges.innerHTML = bHtml;
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // Render Matrix Header
+  const headerRow = document.getElementById('examMatrixHeaderRow');
+  let headerHtml = '<th>Adm No</th><th>Student Name</th>';
+  subjects.forEach(s => {
+    headerHtml += `<th>${s.subjectName} <small>(${s.maxMarks})</small></th>`;
+  });
+  headerHtml += '<th>Attendance (Present/Total)</th><th>Total Score</th><th>%</th><th>Grade</th><th>Class Rank</th>';
+  headerRow.innerHTML = headerHtml;
+
+  // Render Student Rows
+  const tbody = document.getElementById('examMatrixTableBody');
+  if (!students || students.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="${subjects.length + 7}" class="text-center text-muted py-4">No students enrolled in ${className}.</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  students.forEach((s, idx) => {
+    const existing = existingResults.find(r => r.admissionNo === s.admissionNo) || {};
+    const existingSubMarks = existing.subjectMarks || [];
+    
+    html += `<tr data-student-id="${s.admissionNo}">
+      <td><code style="font-weight:700; color:var(--accent);">${s.admissionNo}</code></td>
+      <td><strong style="color:var(--text);">${s.name}</strong></td>`;
+
+    // Input for each subject
+    subjects.forEach(sub => {
+      const exSub = existingSubMarks.find(m => m.subjectName === sub.subjectName) || {};
+      const score = exSub.marksObtained !== undefined ? exSub.marksObtained : '';
+      html += `<td>
+        <input type="number" class="form-control form-control-sm matrix-score-input" data-student="${s.admissionNo}" data-subject="${sub.subjectName}" data-max="${sub.maxMarks}" value="${score}" style="width:75px; background:var(--bg-input); color:var(--text); font-weight:700;" min="0" max="${sub.maxMarks}">
+      </td>`;
+    });
+
+    // Attendance inputs
+    const presDays = existing.attendancePresentDays !== undefined ? existing.attendancePresentDays : 100;
+    const totDays = existing.attendanceTotalDays !== undefined ? existing.attendanceTotalDays : 100;
+
+    html += `<td>
+      <div style="display:flex; gap:4px; align-items:center;">
+        <input type="number" class="form-control form-control-sm matrix-att-pres" data-student="${s.admissionNo}" value="${presDays}" style="width:60px; background:var(--bg-input); color:var(--text);" title="Present Days"> /
+        <input type="number" class="form-control form-control-sm matrix-att-tot" data-student="${s.admissionNo}" value="${totDays}" style="width:60px; background:var(--bg-input); color:var(--text);" title="Total Days">
+      </div>
+    </td>
+    <td><strong id="matrixTotal_${s.admissionNo}" style="color:var(--accent);">${existing.totalMarksObtained || 0} / ${existing.totalMaxMarks || 100}</strong></td>
+    <td><span id="matrixPct_${s.admissionNo}">${existing.percentage || 0}%</span></td>
+    <td><span class="badge badge-info" id="matrixGrade_${s.admissionNo}">${existing.grade || '—'}</span></td>
+    <td><span class="badge badge-accent" id="matrixRank_${s.admissionNo}">${existing.rank || '—'}</span></td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+}
+
+function submitExamMarksUsthad() {
+  if (!currentExamRosterData) return;
+
+  const { exam, subjects, students } = currentExamRosterData;
+  const examId = safeGetValue('examSelectUsthad');
+  const className = safeGetValue('examBatchSelectUsthad');
+
+  if (!examId || !className || !students || students.length === 0) {
+    alert('Please select a valid Exam and Class with students');
+    return;
+  }
+
+  const marksDataPayload = [];
+
+  students.forEach(s => {
+    const subMarksObj = {};
+    subjects.forEach(sub => {
+      const input = document.querySelector(`.matrix-score-input[data-student="${s.admissionNo}"][data-subject="${sub.subjectName}"]`);
+      subMarksObj[sub.subjectName] = input ? Number(input.value || 0) : 0;
+    });
+
+    const presInput = document.querySelector(`.matrix-att-pres[data-student="${s.admissionNo}"]`);
+    const totInput = document.querySelector(`.matrix-att-tot[data-student="${s.admissionNo}"]`);
+
+    marksDataPayload.push({
+      admissionNo: s.admissionNo,
+      studentName: s.name,
+      subjectsConfig: subjects,
+      subjectMarks: subMarksObj,
+      attendancePresentDays: presInput ? Number(presInput.value || 100) : 100,
+      attendanceTotalDays: totInput ? Number(totInput.value || 100) : 100,
+      usthadRemarks: 'Published'
+    });
+  });
+
+  fetch('/api/portal/exam/save-marks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      examId,
+      examName: exam ? exam.examName : 'Semester Exam',
+      className,
+      marksData: marksDataPayload,
+      usthadName: 'Head Usthad'
+    })
+  }).then(r => r.json()).then(res => {
+    alert(res.message || 'Marks and Ranks published!');
+    if (res.success && res.results) {
+      res.results.forEach(r => {
+        const totalEl = document.getElementById(`matrixTotal_${r.admissionNo}`);
+        const pctEl = document.getElementById(`matrixPct_${r.admissionNo}`);
+        const gradeEl = document.getElementById(`matrixGrade_${r.admissionNo}`);
+        const rankEl = document.getElementById(`matrixRank_${r.admissionNo}`);
+
+        if (totalEl) totalEl.textContent = `${r.totalMarksObtained} / ${r.totalMaxMarks}`;
+        if (pctEl) pctEl.textContent = `${r.percentage}%`;
+        if (gradeEl) gradeEl.textContent = r.grade;
+        if (rankEl) rankEl.textContent = r.rank;
+      });
+    }
+  }).catch(() => showAlert('Error publishing exam marks', "warning"));
+}
+
+    // Counter Stats Loader
+    function loadCounterStats() {
+      fetch('/api/portal/counter')
+        .then(r => r.json())
+        .then(data => {
+          if (data.success && data.stats) {
+            document.getElementById('cntAlumni').textContent = data.stats.alumniBiruthadhari;
+            document.getElementById('cntStudents').textContent = data.stats.currentStudents;
+            document.getElementById('cntUsthads').textContent = data.stats.totalUsthads;
+            document.getElementById('cntYears').textContent = data.stats.yearsOfTradition || String(new Date().getFullYear() - 2001);
+          }
+        });
+    }
+
+    // Alumni Search Loader
+    function loadAlumniDirectory() {
+      const q = document.getElementById('searchAlumniInput').value.trim();
+      fetch('/api/portal/alumni?search=' + encodeURIComponent(q))
+        .then(r => r.json())
+        .then(data => {
+          const container = document.getElementById('alumniCardsContainer');
+          if (data.success && data.alumni && data.alumni.length > 0) {
+            let html = '';
+            data.alumni.forEach(a => {
+              html += `
+                <div class="col-lg-4 col-md-6 mb-4">
+                  <div class="alumni-card">
+                    <img src="${a.photoUrl || 'img/new_logo.png'}" alt="Alumni Photo">
+                    <div>
+                      <h5 class="font-weight-bold text-success m-0" style="font-size:1rem;">${a.name}</h5>
+                      <span class="badge badge-alumni my-1">Biruthadhari • Batch ${a.batchYear || 'Graduated'}</span>
+                      <p class="small text-muted m-0"><i class="fa fa-map-marker text-danger"></i> ${a.place || 'Muttichira'}</p>
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+            container.innerHTML = html;
+          } else {
+            container.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fa fa-info-circle"></i> No Biruthadhari / Alumni record matches your search.</div>';
+          }
+        });
+    }
+
+    
+    function safeGetValue(id) {
+      var el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    }
+
+    // Handlers for Modals & Forms
+    function openChangePasswordModal() { $('#modalChangePassword').modal('show'); }
+    function openStudentMessageModal() { $('#modalStudentMsg').modal('show'); }
+    function openPostMarkModal() { $('#modalPostMark').modal('show'); }
+    function openPostNotificationModal() { $('#modalPostNotif').modal('show'); }
+
+    function handleChangePasswordSubmit(e) {
+      e.preventDefault();
+      const oldP = document.getElementById('chgOldPass').value;
+      const newP = document.getElementById('chgNewPass').value;
+      if (!currentUserSession) return;
+
+      fetch('/api/portal/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          role: currentUserSession.role,
+          identifier: currentUserSession.admissionNo || currentUserSession.usthadId,
+          oldPassword: oldP,
+          newPassword: newP
+        })
+      }).then(r => r.json()).then(res => {
+        if (res.success) {
+          alert('Password changed successfully!');
+          $('#modalChangePassword').modal('hide');
+        } else {
+          document.getElementById('chgPassAlert').innerHTML = `<div class="alert alert-danger small p-2 mt-2">${res.message}</div>`;
+        }
+      });
+    }
+
+    function handleSendStudentMsg(e) {
+      e.preventDefault();
+      if (!currentUserSession) return;
+      fetch('/api/portal/student/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          admissionNo: currentUserSession.admissionNo,
+          studentName: currentUserSession.name,
+          usthadId: document.getElementById('msgUsthadSelect').value,
+          subject: document.getElementById('msgSubject').value,
+          content: document.getElementById('msgContent').value
+        })
+      }).then(r => r.json()).then(res => {
+        alert(res.message || 'Message sent!');
+        $('#modalStudentMsg').modal('hide');
+        loadStudentDashboardData();
+      });
+    }
+
+    function handlePostMarkSubmit(e) {
+      e.preventDefault();
+      if (!currentUserSession) return;
+      fetch('/api/portal/usthad/post-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'mark',
+          usthadId: currentUserSession.usthadId,
+          usthadName: currentUserSession.name,
+          targetStudentNo: document.getElementById('postMarkStudentSelect').value,
+          content: 'Exam Mark Posted',
+          marksData: {
+            examName: document.getElementById('postMarkExamName').value,
+            subjectName: document.getElementById('postMarkSubject').value,
+            marksObtained: document.getElementById('postMarkObtained').value,
+            totalMarks: document.getElementById('postMarkTotal').value,
+            grade: document.getElementById('postMarkGrade').value,
+            remarks: document.getElementById('postMarkRemarks').value
+          }
+        })
+      }).then(r => r.json()).then(res => {
+        alert(res.message || 'Exam Mark Sent!');
+        $('#modalPostMark').modal('hide');
+      });
+    }
+
+    function handlePostNotifSubmit(e) {
+      e.preventDefault();
+      if (!currentUserSession) return;
+      fetch('/api/portal/usthad/post-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'notification',
+          usthadId: currentUserSession.usthadId,
+          usthadName: currentUserSession.name,
+          targetStudentNo: document.getElementById('postNotifTarget').value,
+          subject: document.getElementById('postNotifSubject').value,
+          content: document.getElementById('postNotifContent').value
+        })
+      }).then(r => r.json()).then(res => {
+        alert(res.message || 'Notification broadcasted!');
+        $('#modalPostNotif').modal('hide');
+      });
+    }
+
+    function handleSaveStudentProfile(e) {
+      e.preventDefault();
+      alert('Profile updated successfully!');
+    }
+
+    // Init on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCounterStats();
+      loadAlumniDirectory();
+    });
+  

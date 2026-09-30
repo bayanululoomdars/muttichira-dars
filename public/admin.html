@@ -1775,8 +1775,8 @@
             <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center; background:var(--bg-card); padding:14px; border-radius:12px; border:1px solid var(--border-soft);">
               <input type="text" id="portalSearchInput" oninput="filterPortalUsersAdmin()" placeholder="🔍 Search student/usthad name, ID, place..." class="form-control" style="flex:1; min-width:220px; background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
               <div style="display:flex; gap:6px; flex-wrap:wrap; width:100%;">
-                  <button class="btn btn-outline-secondary btn-sm portal-filter-btn active" id="pfilter-student" onclick="setPortalFilter('student')" style="font-weight:bold; padding:8px 16px;">Manage Students & Alumni</button>
-                  <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter('usthad')" style="font-weight:bold; padding:8px 16px;">Manage Usthads</button>
+                  <button class="btn btn-outline-secondary btn-sm portal-filter-btn active" id="pfilter-student" onclick="setPortalFilter('student')" style="font-weight:bold; padding:8px 16px;">Manage Students & Alumni <span id="badge-students" style="background:#0a4d2e;color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>
+                  <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter('usthad')" style="font-weight:bold; padding:8px 16px;">Manage Usthads <span id="badge-usthads" style="background:#0a4d2e;color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>
                   <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-all" onclick="setPortalFilter('all')" style="display:none;">All</button>
                 </div>
               </div>
@@ -1790,7 +1790,8 @@
                             <th>Role / Status</th>
                             <th>ID / Adm No</th>
                             <th>Class / Details</th>
-                            <th>Phone / Login Password</th>
+                            <th>Phone</th>
+                            <th>Password</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -1900,8 +1901,12 @@
                   <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Phone Number (Password) *</label>
+                  <label class="form-label">Phone Number *</label>
                   <input type="text" id="adminStudentPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Login Password</label>
+                  <input type="text" id="adminStudentPassword" class="form-control" placeholder="Auto-generated if empty">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Admission No (Optional)</label>
@@ -1938,8 +1943,12 @@
                   <input type="text" id="adminUsthadName" class="form-control" placeholder="e.g. Sheikhuna Ibrahim Baqavi" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Phone Number (Password) *</label>
+                  <label class="form-label">Phone Number *</label>
                   <input type="text" id="adminUsthadPhone" class="form-control" placeholder="e.g. 9526919218" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Login Password</label>
+                  <input type="text" id="adminUsthadPassword" class="form-control" placeholder="Auto-generated if empty">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Usthad ID (Optional)</label>
