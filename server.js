@@ -9,15 +9,16 @@ const apiRoutes = require('./routes/api');
 
 const app = express();
 
-// Cache buster middleware
+
+// Robust Cache Prevention for HTML pages
 app.use((req, res, next) => {
   if (req.method === 'GET') {
-    if (req.path === '/admin.html' || req.path === '/login.html' || req.path === '/index.html' || req.path === '/') {
-      const v = '5';
-      if (req.query.v !== v) {
-        let newUrl = req.path === '/' ? '/index.html' : req.path;
-        return res.redirect(302, newUrl + '?v=' + v);
-      }
+    const isHtml = req.path.endsWith('.html') || ['/', '/admin', '/login', '/home', '/gallery', '/admission', '/about', '/contact'].includes(req.path.toLowerCase());
+    if (isHtml) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+      res.setHeader('Surrogate-Control', 'no-store');
     }
   }
   next();
