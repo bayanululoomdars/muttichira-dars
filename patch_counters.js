@@ -1,20 +1,39 @@
 const fs = require('fs');
-let html = fs.readFileSync('public/index.html', 'utf8');
+let js = fs.readFileSync('controllers/portalController.js', 'utf8');
 
-// The original logic gets home-settings and animates. Let's find it.
-html = html.replace(/fetch\('\/api\/home-settings'\)[\s\S]*?animateCounter\('counterYears', s\.statsYears !== undefined \? s\.statsYears : 25\);\s*}\s*\)\.catch\(\(\) => \{\}\);/, (match) => {
-    return match + `\n
-    // Fetch live portal counters to override manual settings
-    fetch('/api/portal/counter').then(r=>r.json()).then(data=>{
-      if(data.success && data.stats) {
-        animateCounter('counterStudents', data.stats.currentStudents || 0);
-        animateCounter('counterAlumni', data.stats.alumniBiruthadhari || 0);
-        // animateCounter('counterUsthads', data.stats.totalUsthads || 0);
-        document.getElementById('aboutStudentsCount').textContent = data.stats.currentStudents || 0;
-        document.getElementById('aboutUstadsCount').textContent = data.stats.totalUsthads || 0;
-      }
-    }).catch(()=>{});`;
-});
+const regexCounter = /exports\.getCounterStats = async \(req, res\) => \{[\s\S]*?res\.json\(\{ success: true, stats: \{ currentStudents: studentCount, alumniBiruthadhari: alumniCount, usthads: usthadCount \} \}\);\s*\}/;
 
-fs.writeFileSync('public/index.html', html);
-console.log('Patched index.html for live counters');
+const newCounter = `exports.getCounterStats = async (req, res) => {
+  try {
+    let sCount = 0;
+    let aCount = 0;
+    let uCount = 0;
+
+    try {
+      const allS = await Student.find();
+      const allU = await Usthad.find();
+      sCount = allS.filter(x => !x.isAlumni).length;
+      aCount = allS.filter(x => x.isAlumni).length;
+      uCount = allU.length;
+    } catch(e) {}
+
+    // Fallback if DB empty
+    if (sCount === 0 && aCount === 0 && uCount === 0) {
+      sCount = memoryStudents.filter(s => !s.isAlumni).length;
+      aCount = memoryStudents.filter(s => s.isAlumni).length;
+      uCount = memoryUsthads.length;
+    }
+
+    res.json({ success: true, stats: { currentStudents: sCount, alumniBiruthadhari: aCount, usthads: uCount } });
+  } catch (err) {
+    res.json({ success: true, stats: { currentStudents: memoryStudents.filter(s => !s.isAlumni).length, alumniBiruthadhari: memoryStudents.filter(s => s.isAlumni).length, usthads: memoryUsthads.length } });
+  }
+}`;
+
+if(regexCounter.test(js)) {
+  js = js.replace(regexCounter, newCounter);
+  fs.writeFileSync('controllers/portalController.js', js);
+  console.log('Fixed getCounterStats');
+} else {
+  console.log('Could not match getCounterStats');
+}

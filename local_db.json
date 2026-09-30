@@ -17,7 +17,24 @@
   "News": [],
   "PortalMessage": [],
   "SectionContent": [],
-  "Settings": [],
+  "Settings": [
+    {
+      "key": "isAdmissionOpen",
+      "value": true,
+      "_id": "30f5cc7e500c4854ea98bf23",
+      "createdAt": "2026-09-30T15:25:42.840Z"
+    },
+    {
+      "key": "galleryCategories",
+      "value": [
+        "Programme",
+        "Collections",
+        "Design"
+      ],
+      "_id": "006444046a4a24f9d375f39f",
+      "createdAt": "2026-09-30T15:25:42.958Z"
+    }
+  ],
   "Slider": [],
   "Story": [],
   "Student": [

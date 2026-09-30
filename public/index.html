@@ -525,21 +525,21 @@
           <div class="col-6 col-md-3 mb-3">
             <div class="counter-card">
               <i class="fa fa-book counter-icon"></i>
-              <div id="counterStudents" class="counter-number">111</div>
+              <div id="counterStudents" class="counter-number">0</div>
               <div class="counter-label">Students</div>
             </div>
           </div>
           <div class="col-6 col-md-3 mb-3">
             <div class="counter-card">
               <i class="fa fa-users counter-icon"></i>
-              <div id="counterUstads" class="counter-number">8</div>
+              <div id="counterUstads" class="counter-number">0</div>
               <div class="counter-label">Usthads</div>
             </div>
           </div>
           <div class="col-6 col-md-3 mb-3">
             <div class="counter-card">
               <i class="fa fa-university counter-icon"></i>
-              <div id="counterYears" class="counter-number">25</div>
+              <div id="counterYears" class="counter-number">0</div>
               <div class="counter-label">Years of Tradition</div>
             </div>
           </div>
@@ -1177,18 +1177,14 @@
     // ── Load Home Settings ──────────
     function loadHomeSettings() {
       var calcYears = String(new Date().getFullYear() - 2001);
-      animateCounter('counterStudents', 111);
-      animateCounter('counterUstads', 8);
-      animateCounter('counterYears', calcYears);
-      animateCounter('counterAlumni', 0);
+      // Initial animation deferred to fetch
 
       fetch('/api/home-settings')
         .then(function(res) { return res.json(); })
         .then(function(s) {
           // Stats counters with animation
           /* overriden */
-          animateCounter('counterUstads', s.statsUstads !== undefined ? s.statsUstads : 8);
-          animateCounter('counterYears', s.statsYears !== undefined ? s.statsYears : calcYears);
+          // Handled by api/portal/counter
           /* overriden */
 
           // Dynamic About Us counts
@@ -1199,6 +1195,8 @@
               if (data && data.success && data.stats) {
                 animateCounter('counterStudents', data.stats.currentStudents || 0);
                 animateCounter('counterAlumni', data.stats.alumniBiruthadhari || 0);
+                animateCounter('counterUstads', data.stats.totalUsthads || 0);
+                animateCounter('counterYears', data.stats.yearsOfTradition || calcYears);
                 document.getElementById('aboutStudentsCount').textContent = data.stats.currentStudents || 0;
                 document.getElementById('aboutUstadsCount').textContent = data.stats.totalUsthads || 0;
               }
