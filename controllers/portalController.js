@@ -308,7 +308,9 @@ exports.lookup = async (req, res) => {
 
     let results = [];
 
+    const requestedRole = req.query.role;
     // Filter students
+    if (!requestedRole || requestedRole === 'student') {
     allStudents.forEach(s => {
       const admMatch = String(s.admissionNo || '').toLowerCase() === qLower;
       const phoneMatch = String(s.phone || '').includes(q);
@@ -330,7 +332,9 @@ exports.lookup = async (req, res) => {
       }
     });
 
+    }
     // Filter usthads
+    if (!requestedRole || requestedRole === 'usthad') {
     allUsthads.forEach(u => {
       const idMatch = String(u.usthadId || '').toLowerCase() === qLower;
       const phoneMatch = String(u.phone || '').includes(q);
@@ -352,6 +356,8 @@ exports.lookup = async (req, res) => {
         });
       }
     });
+
+    }
 
     if (results.length > 0) {
       return res.json({
