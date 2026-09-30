@@ -36,6 +36,6 @@ router.post('/exam/save-marks', portalController.saveExamClassMarks);
 
 
 router.post('/upload-photo', portalController.uploadProfilePhoto);
-router.get('/usthad/messages', portalController.getStudentMessages); // Usthad messages use the same DB method
+router.get('/usthad/messages', portalController.getUsthadMessages); // Usthad messages use the same DB method
 module.exports = router;
 
