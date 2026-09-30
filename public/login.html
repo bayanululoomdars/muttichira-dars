@@ -738,7 +738,7 @@
                     <th>Total Score</th>
                     <th>%</th>
                     <th>Grade</th>
-                    <th>Class Rank</th>
+                    <th>Batch Rank</th>
                   </tr>
                 </thead>
                 <tbody id="examMatrixTableBody">
@@ -1069,7 +1069,7 @@
 
                 currentMatchesList.forEach((item, index) => {
                   const idText = item.role === 'usthad' ? item.usthadId : item.admissionNo;
-                  const subText = item.role === 'usthad' ? (item.designation || 'Usthad') : (item.className || 'Student');
+                  const subText = item.role === 'usthad' ? (item.designation || 'Usthad') : ('Batch ' + (item.batchNumber || 'Student'));
                   const badgeClass = item.role === 'usthad' ? 'badge-usthad' : (item.isAlumni ? 'badge-alumni' : 'badge-student');
                   const badgeLabel = item.role === 'usthad' ? 'Usthad' : (item.isAlumni ? 'Alumni' : 'Student');
 
@@ -1455,12 +1455,12 @@
             let selectOptions = '<option value="">Select Student...</option>';
 
             data.students.forEach(s => {
-              selectOptions += `<option value="${s.admissionNo}">${s.name} (${s.admissionNo}) - ${s.className || 'Dars'}</option>`;
+              selectOptions += `<option value="${s.admissionNo}">${s.name} (${s.admissionNo}) - Batch ${s.batchNumber || '1'}</option>`;
               html += `
                 <tr>
                   <td><strong>${s.admissionNo}</strong></td>
                   <td>${s.name}</td>
-                  <td>${s.className || 'Dars'}</td>
+                  <td>Batch ${s.batchNumber || '1'}</td>
                   <td><span class="badge ${s.isAlumni ? 'badge-primary' : 'badge-success'}">${s.status || 'Student'}</span></td>
                   <td>
                     <button class="btn btn-xs btn-outline-warning text-dark font-weight-bold" onclick="quickSendMark('${s.admissionNo}')">
@@ -1492,7 +1492,7 @@ function loadExamsUsthad() {
       const select = document.getElementById('examSelectUsthad');
       if(!select) return;
       let html = '<option value="">Select Exam...</option>';
-      data.exams.forEach(e => { html += `<option value="${e._id}">${e.examName} (${e.term} ${e.batchYear})</option>`; });
+      data.exams.forEach(e => { html += `<option value="${e._id}">${e.examName} (${e.term})</option>`; });
       select.innerHTML = html;
     }
   });
@@ -1529,7 +1529,7 @@ function renderExamMatrixTable() {
   const bannerBadges = document.getElementById('examBannerBadges');
 
   if (subjects && subjects.length > 0) {
-    bannerTitle.textContent = `Configured Subjects for ${className}:`;
+    bannerTitle.textContent = `Configured Subjects for Batch ${className}:`;
     let bHtml = '';
     subjects.forEach(s => {
       bHtml += `<span class="badge badge-accent">${s.subjectName} (Max: ${s.maxMarks})</span>`;
@@ -1546,13 +1546,13 @@ function renderExamMatrixTable() {
   subjects.forEach(s => {
     headerHtml += `<th>${s.subjectName} <small>(${s.maxMarks})</small></th>`;
   });
-  headerHtml += '<th>Attendance (Present/Total)</th><th>Total Score</th><th>%</th><th>Grade</th><th>Class Rank</th>';
+  headerHtml += '<th>Attendance (Present/Total)</th><th>Total Score</th><th>%</th><th>Grade</th><th>Batch Rank</th>';
   headerRow.innerHTML = headerHtml;
 
   // Render Student Rows
   const tbody = document.getElementById('examMatrixTableBody');
   if (!students || students.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="${subjects.length + 7}" class="text-center text-muted py-4">No students enrolled in ${className}.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="${subjects.length + 7}" class="text-center text-muted py-4">No students enrolled in Batch ${className}.</td></tr>`;
     return;
   }
 
@@ -1602,7 +1602,7 @@ function submitExamMarksUsthad() {
   const className = safeGetValue('examBatchSelectUsthad');
 
   if (!examId || !className || !students || students.length === 0) {
-    alert('Please select a valid Exam and Class with students');
+    alert('Please select a valid Exam and Batch with students');
     return;
   }
 
@@ -1687,7 +1687,7 @@ function submitExamMarksUsthad() {
                     <img src="${a.photoUrl || 'img/new_logo.png'}" alt="Alumni Photo">
                     <div>
                       <h5 class="font-weight-bold text-success m-0" style="font-size:1rem;">${a.name}</h5>
-                      <span class="badge badge-alumni my-1">Biruthadhari • Batch ${a.batchYear || 'Graduated'}</span>
+                      <span class="badge badge-alumni my-1">Biruthadhari • Batch ${a.batchNumber || 'Alumni'}</span>
                       <p class="small text-muted m-0"><i class="fa fa-map-marker text-danger"></i> ${a.place || 'Muttichira'}</p>
                     </div>
                   </div>

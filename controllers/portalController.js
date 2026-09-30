@@ -515,7 +515,7 @@ exports.getCounterStats = async (req, res) => {
         alumniBiruthadhari: alumniCount,
         totalUsthads: usthadCount,
         yearsOfTradition: yearsOfTradition,
-        academicCourses: 6
+        academicBatches: 6
       }
     });
   } catch (err) {
@@ -1072,7 +1072,7 @@ exports.saveExamClassMarks = async (req, res) => {
 
     res.json({
       success: true,
-      message: `Exam results & Class Ranks for ${className} published successfully!`,
+      message: `Exam results & Batch Ranks for ${className} published successfully!`,
       results: processedEntries
     });
   } catch (err) {

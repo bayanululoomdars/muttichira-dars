@@ -1789,7 +1789,7 @@
                             <th>Name</th>
                             <th>Role / Status</th>
                             <th>ID / Adm No</th>
-                            <th>Class / Details</th>
+                            <th>Batch / Details</th>
                             <th>Phone</th>
                             <th>Password</th>
                             <th>Actions</th>
@@ -2319,7 +2319,7 @@ function renderPortalUsersAdmin() {
       var nameMatch = (u.name || '').toLowerCase().includes(query);
       var idMatch = String(u.admissionNo || u.usthadId || '').toLowerCase().includes(query);
       var placeMatch = (u.place || '').toLowerCase().includes(query);
-      var statusMatch = (u.status || u.className || u.designation || '').toLowerCase().includes(query);
+      var statusMatch = (u.status || ('Batch ' + u.batchNumber) || u.designation || '').toLowerCase().includes(query);
       return nameMatch || idMatch || placeMatch || statusMatch;
     }
     return true;
@@ -2331,7 +2331,7 @@ function renderPortalUsersAdmin() {
     var statusText = u.role === 'usthad' ? (u.designation || 'Usthad') : (u.status || 'Student');
     var isAlumniUser = u.isAlumni || (u.status || '').toLowerCase().includes('alumni') || (u.status || '').toLowerCase().includes('biruthadhari');
     var badgeClass = u.role === 'usthad' ? 'badge-accent' : (isAlumniUser ? 'badge-info' : 'badge-success');
-    var details = u.role === 'usthad' ? (u.subject || '—') : (u.className || '—');
+    var details = u.role === 'usthad' ? (u.subject || '—') : ('Batch ' + (u.batchNumber || '—'));
     var phoneVal = u.phone || '—';
 
     html += '<tr>' +
@@ -4010,7 +4010,7 @@ function renderExamTableList() {
       <td><strong style="color:var(--text);">${e.examName}</strong></td>
       <td><span class="badge badge-info">${e.term || 'Semester'}</span></td>
       <td><code>${e.batchYear || '2025'}</code></td>
-      <td>${classCount} Classes configured</td>
+      <td>${classCount} Batches configured</td>
       <td><small style="color:var(--text-soft);">${new Date(e.createdAt || Date.now()).toLocaleDateString()}</small></td>
       <td>
         <button class="btn btn-danger btn-sm" onclick="deleteExamAdmin('${e._id}')"><i class="fa fa-trash"></i> Delete</button>
@@ -4031,12 +4031,12 @@ function closeCreateExamModal() {
 }
 
 function renderSubjectInputRows() {
-  const targetClass = safeGetValue('newExamBatchNo') || 'Dars 3rd Year';
+  const targetClass = safeGetValue('newExamBatchNo') || '1';
   const container = document.getElementById('subjectInputRowsContainer');
   if (!container) return;
 
   if (!currentSubjectInputList || currentSubjectInputList.length === 0) {
-    if (targetClass.includes('3rd')) {
+    if (targetClass === '3') {
       currentSubjectInputList = [
         { subjectName: 'Fiqh (Fathul Mueen)', maxMarks: 100 },
         { subjectName: 'Nahw (Alfiyya)', maxMarks: 80 },
