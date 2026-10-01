@@ -11,11 +11,25 @@
       "statsStudents": 87,
       "statsUstads": 8,
       "statsYears": 50,
-      "statsAlumni": 50
+      "statsAlumni": 50,
+      "igEmbedCode": "<script src=\"https://static.elfsight.com/platform/platform.js\" data-use-service-core defer></script><div class=\"elfsight-app-79b0e8f2-3c43-4f68-bffe-80effbf72d9c\" data-elfsight-app-lazy></div>",
+      "updatedAt": 1790788715938
     }
   ],
   "News": [],
-  "PortalMessage": [],
+  "PortalMessage": [
+    {
+      "type": "message",
+      "senderRole": "student",
+      "senderId": "127",
+      "senderName": "MUEENUDHEEN MP",
+      "targetStudentNo": "UST101",
+      "subject": "hello sukalle",
+      "content": "m\n",
+      "createdAt": "2026-09-30T16:36:55.237Z",
+      "_id": "c766fd256aabd23d7e3ca8dd"
+    }
+  ],
   "SectionContent": [],
   "Settings": [
     {
