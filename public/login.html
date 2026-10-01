@@ -467,7 +467,7 @@
       --radius: 16px;
     }
     body {
-      background: linear-gradient(135deg, var(--bg), #061517);
+      background: var(--bg);
       color: var(--text);
       font-family: 'Inter', sans-serif;
     }
@@ -561,7 +561,7 @@
   <!-- Main Container Card (LOGIN / LOOKUP VIEW) -->
   <div class="container portal-card-container">
     <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-8">
+      <div class="col-lg-6 col-md-8 transition-all duration-300" id="mainLayoutCol">
         
         <!-- LOGIN CARD -->
         <div class="portal-box" id="loginCard">
@@ -677,431 +677,212 @@
           </div>
 
           <!-- STUDENT DASHBOARD CONTENT -->
-          <div id="studentDashContent" style="display: none;">
-            
-            <!-- Navigation Tabs for Student -->
-            <ul class="nav nav-pills mb-4 border-bottom pb-2">
-              <li class="nav-item">
-                <a class="nav-link active font-weight-bold" data-toggle="tab" href="#tabStudentResults">
-                  <i class="fa fa-trophy text-warning"></i> Exam Results & Marks
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link font-weight-bold" data-toggle="tab" href="#tabStudentNotifications">
-                  <i class="fa fa-bell text-info"></i> Notifications
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link font-weight-bold" data-toggle="tab" href="#tabStudentMessages">
-                  <i class="fa fa-envelope text-success"></i> Message Usthad
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link font-weight-bold" data-toggle="tab" href="#tabStudentProfile">
-                  <i class="fa fa-user text-primary"></i> Edit Profile
-                </a>
-              </li>
-            </ul>
-
-            <div class="tab-content">
-              
-              <!-- Tab 1: Marks / Results -->
-              <div class="tab-pane fade show active" id="tabStudentResults">
-                <h5 class="font-weight-bold text-success mb-3"><i class="fa fa-certificate"></i> Academic Evaluation & Marks</h5>
-                <div id="studentResultsList">
-                  <p class="text-muted">Loading results...</p>
-                </div>
-              </div>
-
-              <!-- Tab 2: Notifications -->
-              <div class="tab-pane fade" id="tabStudentNotifications">
-                <h5 class="font-weight-bold text-info mb-3"><i class="fa fa-bullhorn"></i> Dars Announcements</h5>
-                <div id="studentNotificationsList">
-                  <p class="text-muted">Loading notifications...</p>
-                </div>
-              </div>
-
-              <!-- Tab 3: Messages to Usthad -->
-              <div class="tab-pane fade" id="tabStudentMessages">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h5 class="font-weight-bold text-success m-0"><i class="fa fa-comments"></i> Communication with Usthads</h5>
-                  <button class="btn btn-sm btn-success rounded-pill" onclick="openStudentMessageModal()">
-                    <i class="fa fa-paper-plane"></i> Send Message to Usthad
-                  </button>
-                </div>
-                <div id="studentMessagesList">
-                  <p class="text-muted">Loading messages...</p>
-                </div>
-              </div>
-
-              <!-- Tab 4: Edit Profile -->
-              <div class="tab-pane fade" id="tabStudentProfile">
-                <h5 class="font-weight-bold mb-3"><i class="fa fa-edit"></i> Edit Profile Information</h5>
-                <form id="formEditStudentProfile" onsubmit="handleSaveStudentProfile(event)">
-                  <div class="form-group">
-                    <label class="small font-weight-bold">Phone Number</label>
-                    <input type="text" id="editStudentPhone" class="form-control" required>
-                  </div>
-                  <div class="form-group">
-                    <label class="small font-weight-bold">Native Place / Address</label>
-                    <input type="text" id="editStudentPlace" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label class="small font-weight-bold">Photo URL / Image Link</label>
-                    <input type="url" id="editStudentPhoto" class="form-control" placeholder="https://...">
-                  </div>
-                  <div class="form-group">
-                    <label class="small font-weight-bold">About / Bio</label>
-                    <textarea id="editStudentBio" class="form-control" rows="2"></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-success font-weight-bold rounded-pill">
-                    <i class="fa fa-save"></i> Save Profile Changes
-                  </button>
-                </form>
-              </div>
-
+          
+<div id="studentDashContent" style="display: none; width:100%;">
+  <div class="row">
+    <!-- LEFT PANEL: ID CARD -->
+    <div class="col-lg-3 mb-4">
+      <div class="card shadow-sm border-0 rounded-4" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-body text-center p-3">
+          <div id="studentIdCard" style="border:2px solid var(--accent); border-radius:10px; padding:15px; background: #fff; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+            <img src="img/new_logo.png" style="width:40px; margin-bottom:5px;">
+            <h6 style="color:var(--accent); font-weight:800; font-size:11px; margin-bottom:10px;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
+            <img id="sIdPhoto" src="img/new_logo.png" style="width:75px; height:75px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft); margin-bottom:5px;">
+            <h5 id="sIdName" style="font-weight:700; margin-bottom:3px; color:#1e293b; font-size:15px; line-height:1.2;">Name</h5>
+            <p id="sIdFather" style="font-size:11px; color:#64748b; margin-bottom:5px; font-weight:600;">S/O -</p>
+            <p id="sIdBatch" style="font-size:12px; color:var(--primary); font-weight:700; margin-bottom:8px;">Batch</p>
+            <div style="background:var(--bg-card-2); border-radius:6px; padding:6px; margin-top:5px;">
+              <p id="sIdNo" style="font-weight:800; color:var(--accent); margin-bottom:1px; font-size:13px;">Adm No: -</p>
+              <p id="sIdBlood" style="font-size:11px; color:#dc3545; margin-bottom:1px; font-weight:700;"><i class="fa fa-tint"></i> Blood: -</p>
+              <p id="sIdPhone" style="font-size:10px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
             </div>
           </div>
-
-          <!-- USTHAD DASHBOARD CONTENT -->
-          <div id="usthadDashContent" style="display: none;">
-  <!-- Usthad Tabs -->
-  <ul class="nav nav-pills nav-fill mb-4 custom-nav-pills">
-    <li class="nav-item">
-      <a class="nav-link active font-weight-bold" data-toggle="tab" href="#tabUsthadHome">
-        <i class="fa fa-home text-warning"></i> Dashboard
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link font-weight-bold" data-toggle="tab" href="#tabUsthadProfile">
-        <i class="fa fa-user text-primary"></i> Edit Profile
-      </a>
-    </li>
-  </ul>
-  
-  <div class="tab-content">
-    <div class="tab-pane fade show active" id="tabUsthadHome">
-
-            
-            <div class="d-flex flex-wrap gap-2 mb-4">
-              
-              <button class="btn btn-info font-weight-bold rounded-pill text-white" onclick="openPostNotificationModal()">
-                <i class="fa fa-bullhorn"></i> Post Announcement
-              </button>
-              
-              <button class="btn btn-primary font-weight-bold rounded-pill text-white" onclick="openUsthadDirectMsgModal()">
-                <i class="fa fa-paper-plane"></i> Message Student
-              </button>
-
-              <button class="btn btn-secondary font-weight-bold rounded-pill" onclick="openUsthadMessagesModal()">
-                <i class="fa fa-envelope"></i> View Student Messages
-              </button>
-            </div>
-
-            
-            <div style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:12px; padding:16px; margin-bottom:24px;">
-              <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-trophy"></i> Exam Mark Entry Panel</h5>
-              <!-- Exam Selection & Filter Controls -->
-            <div style="display:flex; gap:16px; flex-wrap:wrap; background:var(--bg-card-2); padding:16px; border-radius:12px; border:1px solid var(--border-soft); margin-bottom:20px;">
-              <div style="flex:1; min-width:220px;">
-                <label style="font-size:0.8rem; font-weight:600; color:var(--text-soft); display:block; margin-bottom:6px;">Select Exam *</label>
-                <select id="examSelectUsthad" class="form-control" onchange="onUsthadExamChange()" style="background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
-                  <option value="">Loading Exams...</option>
-                </select>
-              </div>
-
-              <div style="flex:1; min-width:220px;">
-                <label style="font-size:0.8rem; font-weight:600; color:var(--text-soft); display:block; margin-bottom:6px;">Select Target Batch Number *</label>
-                <select id="examBatchSelectUsthad" class="form-control" onchange="onUsthadExamChange()" style="background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
-<option value="">Select Batch</option>
-<option value="1">Batch 1</option><option value="2">Batch 2</option><option value="3">Batch 3</option><option value="4">Batch 4</option><option value="5">Batch 5</option><option value="6">Batch 6</option><option value="7">Batch 7</option><option value="8">Batch 8</option><option value="9">Batch 9</option><option value="10">Batch 10</option><option value="11">Batch 11</option><option value="12">Batch 12</option><option value="13">Batch 13</option><option value="14">Batch 14</option><option value="15">Batch 15</option><option value="16">Batch 16</option><option value="17">Batch 17</option><option value="18">Batch 18</option><option value="19">Batch 19</option><option value="20">Batch 20</option><option value="21">Batch 21</option><option value="22">Batch 22</option><option value="23">Batch 23</option><option value="24">Batch 24</option><option value="25">Batch 25</option><option value="26">Batch 26</option><option value="27">Batch 27</option><option value="28">Batch 28</option><option value="29">Batch 29</option><option value="30">Batch 30</option></select>
-              </div>
-
-              <div style="display:flex; align-items:flex-end;">
-                <button class="btn btn-primary" onclick="loadUsthadExamMatrix()">
-                  <i class="fa fa-refresh"></i> Load Mark Matrix
-                </button>
-              </div>
-            </div>
-
-            <!-- Subject Config Preview Banner -->
-            <div id="examSubjectConfigBanner" style="background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.2); border-radius:10px; padding:12px 16px; margin-bottom:20px; display:none;">
-              <div style="font-size:0.85rem; font-weight:700; color:var(--accent);" id="examBannerTitle">Subjects Configured:</div>
-              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;" id="examBannerBadges"></div>
-            </div>
-
-            <!-- Student Mark Entry Matrix Table -->
-            <div class="table-container" style="margin-top:0;">
-              <table class="modern-table">
-                <thead>
-                  <tr id="examMatrixHeaderRow">
-                    <th>Adm No</th>
-                    <th>Student Name</th>
-                    <th>Status</th>
-                    <th>Total Score</th>
-                    <th>%</th>
-                    <th>Grade</th>
-                    <th>Batch Rank</th>
-                  </tr>
-                </thead>
-                <tbody id="examMatrixTableBody">
-                  <tr><td colspan="7" class="text-center text-muted py-4">Please select an Exam and Class to load mark entry matrix.</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
-              <button class="btn btn-accent btn-lg" onclick="submitExamMarksUsthad()">
-                <i class="fa fa-trophy"></i> Calculate Ranks & Publish Results
-              </button>
-            </div>
-          </div>
-
-          <!-- Student Roster Overview -->
-            <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-users"></i> Student Roster & Academic Status</h5>
-            <div class="table-responsive">
-              <table class="table table-hover border">
-                <thead class="bg-light">
-                  <tr>
-                    <th>Adm No</th>
-                    <th>Name</th>
-                    <th>Class</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="usthadStudentRosterTable">
-                  <tr><td colspan="5" class="text-center text-muted">Loading student list...</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- COUNTER STATISTICS SECTION -->
-  <section class="counter-section">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h2 class="font-weight-bold text-success" style="font-family:'Outfit',sans-serif;">Bayanul Uloom Dars Statistics</h2>
-        <p class="text-muted">Live overview of our students, graduates (Biruthadhari), and faculty</p>
-      </div>
-
-      <div class="row g-4" id="counterStatsRow">
-        <div class="col-md-3 col-6 mb-3">
-          <div class="counter-card-box">
-            <i class="fa fa-graduation-cap"></i>
-            <div class="num" id="cntAlumni">0</div>
-            <div class="label">Biruthadhari / Alumni</div>
-          </div>
-        </div>
-        <div class="col-md-3 col-6 mb-3">
-          <div class="counter-card-box">
-            <i class="fa fa-book"></i>
-            <div class="num" id="cntStudents">0</div>
-            <div class="label">Current Students</div>
-          </div>
-        </div>
-        <div class="col-md-3 col-6 mb-3">
-          <div class="counter-card-box">
-            <i class="fa fa-users"></i>
-            <div class="num" id="cntUsthads">0</div>
-            <div class="label">Respected Usthads</div>
-          </div>
-        </div>
-        <div class="col-md-3 col-6 mb-3">
-          <div class="counter-card-box">
-            <i class="fa fa-university"></i>
-            <div class="num" id="cntYears">0</div>
-            <div class="label">Years of Tradition</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ALUMNI / BIRUTHADHARI SEARCH DIRECTORY SECTION -->
-  <section class="alumni-section">
-    <div class="container">
-      <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-        <div>
-          <h2 class="font-weight-bold text-success m-0" style="font-family:'Outfit',sans-serif;">
-            <i class="fa fa-award text-warning"></i> Biruthadhari & Alumni Directory
-          </h2>
-          <p class="text-muted m-0">Search and discover graduates (Poorva Vidyarthigal) of Muttichira Dars</p>
-        </div>
-        <div class="d-flex gap-2 mt-2 mt-md-0">
-          <input type="text" id="searchAlumniInput" class="form-control rounded-pill px-3" placeholder="Search by Name or Place..." onkeyup="loadAlumniDirectory()">
-          <button class="btn btn-success rounded-pill px-4 font-weight-bold" onclick="loadAlumniDirectory()">
-            <i class="fa fa-search"></i> Search
+          <button class="btn btn-outline-accent btn-sm mt-3 font-weight-bold" onclick="downloadIdCard('studentIdCard', 'Student_ID')">
+            <i class="fa fa-download"></i> Download ID
           </button>
         </div>
       </div>
-
-      <div class="row" id="alumniCardsContainer">
-        <!-- Populated via JS -->
-      </div>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer style="background:#063821; color:#ffffff; padding:25px 0; text-align:center; margin-top:auto;" class="small">
-    <div class="container">
-      <p class="m-0">&copy; 2026 Bayanul Uloom Dars Muttichira. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- ── MODALS ── -->
-
-  <!-- Modal 1: Change Password -->
-  <div class="modal fade" id="modalChangePassword" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header bg-success text-white">
-          <h5 class="modal-title font-weight-bold"><i class="fa fa-key"></i> Change Password</h5>
-          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body p-4">
-          <form id="formChangePass" onsubmit="handleChangePasswordSubmit(event)">
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">Current Password</label>
-              <input type="password" id="chgOldPass" class="form-control" required placeholder="Enter current password">
-            </div>
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">New Password</label>
-              <input type="password" id="chgNewPass" class="form-control" required placeholder="Enter new password (min 4 chars)">
-            </div>
-            <div id="chgPassAlert"></div>
-            <button type="submit" class="btn btn-success font-weight-bold w-100 rounded-pill py-2">
-              Update Password
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 2: Student Send Message to Usthad -->
-  <div class="modal fade" id="modalStudentMsg" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header bg-success text-white">
-          <h5 class="modal-title font-weight-bold"><i class="fa fa-paper-plane"></i> Send Message to Usthad</h5>
-          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body p-4">
-          <form onsubmit="handleSendStudentMsg(event)">
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">Select Usthad</label>
-              <select id="msgUsthadSelect" class="form-control">
-                <option value="UST101">Sheikhuna Ibrahim Baqavi (Head Mudarris)</option>
-                <option value="UST102">Usthad Abdul Rahiman Faizi</option>
-                <option value="UST103">Usthad Muhammed Musthafa Saqafi</option>
-              </select>
-            </div>
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">Subject</label>
-              <input type="text" id="msgSubject" class="form-control" required placeholder="e.g. Leave Permission / Lesson Query">
-            </div>
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">Message Details</label>
-              <textarea id="msgContent" class="form-control" rows="3" required placeholder="Write your message here..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-success font-weight-bold w-100 rounded-pill py-2">
-              Send Message
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 3: Usthad Post Exam Mark / Result -->
-  <div class="modal fade" id="modalPostMark" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header bg-warning text-dark">
-          <h5 class="modal-title font-weight-bold"><i class="fa fa-trophy"></i> Send Exam Result / Grade to Student</h5>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body p-4">
-          <form onsubmit="handlePostMarkSubmit(event)">
-            <div class="form-group mb-2">
-              <label class="small font-weight-bold">Select Target Student</label>
-              <select id="postMarkStudentSelect" class="form-control" required>
-                <!-- Populated via JS -->
-              </select>
-            </div>
-            <div class="form-group mb-2">
-              <label class="small font-weight-bold">Exam Name</label>
-              <input type="text" id="postMarkExamName" class="form-control" required placeholder="e.g. First Terminal Exam 2025">
-            </div>
-            <div class="form-group mb-2">
-              <label class="small font-weight-bold">Subject Name</label>
-              <input type="text" id="postMarkSubject" class="form-control" required placeholder="e.g. Fiqh (Fathul Mueen)">
-            </div>
-            <div class="row g-2 mb-2">
-              <div class="col-6">
-                <label class="small font-weight-bold">Marks Obtained</label>
-                <input type="text" id="postMarkObtained" class="form-control" required placeholder="95">
+    <!-- MIDDLE PANEL: DETAILED PROFILE EDIT FORM -->
+    <div class="col-lg-5 mb-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-body p-4">
+          <h5 class="font-weight-bold mb-3 text-primary"><i class="fa fa-user-edit"></i> Complete Your Profile</h5>
+          <p class="small text-muted mb-4">Please keep your details up to date. You can edit them anytime.</p>
+          
+          <form onsubmit="handleStudentSelfUpdate(event)">
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label class="small font-weight-bold text-muted">Full Name</label>
+                <input type="text" id="selfName" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required>
               </div>
-              <div class="col-6">
-                <label class="small font-weight-bold">Total Marks</label>
-                <input type="text" id="postMarkTotal" class="form-control" required value="100">
+              <div class="col-md-6 mb-2">
+                <label class="small font-weight-bold text-muted">Father / Guardian Name</label>
+                <input type="text" id="selfFather" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required>
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="small font-weight-bold text-muted">Phone Number</label>
+                <input type="text" id="selfPhone" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required>
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="small font-weight-bold text-muted">Blood Group</label>
+                <select id="selfBlood" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
+                  <option value="">Unknown</option>
+                  <option>O+</option><option>O-</option>
+                  <option>A+</option><option>A-</option>
+                  <option>B+</option><option>B-</option>
+                  <option>AB+</option><option>AB-</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="small font-weight-bold text-muted">Date of Birth</label>
+                <input type="date" id="selfDob" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="small font-weight-bold text-muted">Emergency Contact</label>
+                <input type="text" id="selfEmergency" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
+              </div>
+              <div class="col-12 mb-3">
+                <label class="small font-weight-bold text-muted">Full Address</label>
+                <textarea id="selfAddress" class="form-control form-control-sm" rows="2" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);"></textarea>
               </div>
             </div>
-            <div class="form-group mb-2">
-              <label class="small font-weight-bold">Grade</label>
-              <input type="text" id="postMarkGrade" class="form-control" placeholder="A+ / Mumtaz">
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <small class="text-muted d-block">Login Password:</small>
+                <input type="text" id="selfPassword" class="form-control form-control-sm d-inline-block" style="width:120px; background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
+              </div>
+              <button type="submit" class="btn btn-primary font-weight-bold rounded-pill px-4">
+                <i class="fa fa-save"></i> Save Profile
+              </button>
             </div>
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">Usthad Remarks</label>
-              <textarea id="postMarkRemarks" class="form-control" rows="2" placeholder="Great understanding of Mas'ala..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-warning font-weight-bold w-100 rounded-pill py-2">
-              Submit & Send Result
-            </button>
           </form>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: EXAMS & MESSAGES -->
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-body p-4 d-flex flex-column">
+          <ul class="nav nav-pills mb-3 border-bottom pb-2" style="gap:10px;">
+            <li class="nav-item">
+              <a class="nav-link active font-weight-bold px-3 py-1" data-toggle="tab" href="#tabStudentResultsTab">
+                <i class="fa fa-trophy text-warning"></i> Results
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link font-weight-bold px-3 py-1" data-toggle="tab" href="#tabStudentMsgsTab">
+                <i class="fa fa-envelope text-info"></i> Messages
+              </a>
+            </li>
+          </ul>
+          
+          <div class="tab-content flex-grow-1" style="overflow-y:auto; max-height:400px; padding-right:5px;">
+            <div class="tab-pane fade show active" id="tabStudentResultsTab">
+              <div id="studentResultsContainer">
+                <div class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Loading results...</div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="tabStudentMsgsTab">
+              <button class="btn btn-sm btn-outline-info w-100 mb-3 font-weight-bold" onclick="$('#modalStudentMsg').modal('show')">
+                <i class="fa fa-paper-plane"></i> Send Msg to Usthad
+              </button>
+              <div id="studentNotificationsContainer">
+                <div class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Loading messages...</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Modal 4: Usthad Post Notification -->
-  <div class="modal fade" id="modalPostNotif" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header bg-info text-white">
-          <h5 class="modal-title font-weight-bold"><i class="fa fa-bullhorn"></i> Post Announcement / Notification</h5>
-          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body p-4">
-          <form onsubmit="handlePostNotifSubmit(event)">
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">Target Audience</label>
-              <select id="postNotifTarget" class="form-control">
-                <option value="ALL">All Students (General Broadcast)</option>
-              </select>
+
+
+<div id="usthadDashContent" style="display: none; width:100%;">
+  <div class="row">
+    <!-- LEFT PANEL: PROFILE & ID CARD -->
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 rounded-4" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-body text-center p-4">
+          <h5 class="font-weight-bold mb-3 text-primary"><i class="fa fa-id-badge"></i> Usthad ID Card</h5>
+          <div id="usthadIdCard" style="border:2px solid var(--primary); border-radius:10px; padding:15px; background: #fff; max-width:280px; margin:0 auto; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+            <img src="img/new_logo.png" style="width:45px; margin-bottom:10px;">
+            <h6 style="color:var(--primary); font-weight:800; font-size:12px; margin-bottom:10px;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
+            <img id="uIdPhoto" src="img/new_logo.png" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft); margin-bottom:10px;">
+            <h5 id="uIdName" style="font-weight:700; margin-bottom:5px; color:#1e293b; font-size:16px;">Name</h5>
+            <p id="uIdRole" style="font-size:12px; color:#64748b; margin-bottom:5px; font-weight:600;">Mudarris</p>
+            <div style="background:var(--bg-card-2); border-radius:6px; padding:8px; margin-top:10px;">
+              <p id="uIdNo" style="font-weight:800; color:var(--accent); margin-bottom:2px; font-size:14px;">ID: -</p>
+              <p id="uIdPhone" style="font-size:11px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
             </div>
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">Subject / Title</label>
-              <input type="text" id="postNotifSubject" class="form-control" required placeholder="e.g. Special Bayan Program">
-            </div>
-            <div class="form-group mb-3">
-              <label class="small font-weight-bold">Notification Details</label>
-              <textarea id="postNotifContent" class="form-control" rows="3" required placeholder="Write announcement..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-info text-white font-weight-bold w-100 rounded-pill py-2">
-              Broadcast Notification
-            </button>
-          </form>
+          </div>
+          <button class="btn btn-outline-primary btn-sm mt-3 font-weight-bold" onclick="downloadIdCard('usthadIdCard', 'Usthad_ID')">
+            <i class="fa fa-download"></i> Download ID
+          </button>
         </div>
       </div>
+    </div>
+
+    <!-- MIDDLE PANEL: MESSAGES & ACTIONS -->
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-body p-4">
+          <h5 class="font-weight-bold mb-4 text-info"><i class="fa fa-comments"></i> Communication</h5>
+          
+          <div class="d-grid gap-3" style="display:grid;">
+            <button class="btn btn-info font-weight-bold rounded-pill text-white py-2" onclick="openPostNotificationModal()">
+              <i class="fa fa-bullhorn"></i> Broadcast to All Students
+            </button>
+            <button class="btn btn-primary font-weight-bold rounded-pill text-white py-2" onclick="openUsthadDirectMsgModal()">
+              <i class="fa fa-paper-plane"></i> Message Specific Student
+            </button>
+            <button class="btn btn-secondary font-weight-bold rounded-pill py-2" onclick="openUsthadMessagesModal()">
+              <i class="fa fa-envelope"></i> View Inbox (From Students)
+            </button>
+          </div>
+          
+          <hr class="my-4" style="border-color:var(--border-soft);">
+          <h5 class="font-weight-bold mb-3 text-secondary"><i class="fa fa-users"></i> Students Overview</h5>
+          <div class="d-flex justify-content-between align-items-center p-3 rounded" style="background:var(--bg-card-2); border:1px solid var(--border-soft);">
+            <div class="font-weight-bold text-muted">Total Active Students</div>
+            <div class="h3 mb-0 font-weight-bold text-primary" id="dashTotalStudents">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: EXAM HALL -->
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-body p-4">
+          <h5 class="font-weight-bold mb-4 text-warning"><i class="fa fa-graduation-cap"></i> Exam Hall</h5>
+          
+          <!-- Published Exams -->
+          <h6 class="font-weight-bold text-success mb-2"><i class="fa fa-check-circle"></i> Published Exams</h6>
+          <div id="usthadPublishedExamsList" class="mb-4" style="max-height:180px; overflow-y:auto; padding-right:5px;">
+            <div class="text-muted small">Loading...</div>
+          </div>
+
+          <!-- Pending Exams -->
+          <h6 class="font-weight-bold text-danger mb-2"><i class="fa fa-clock-o"></i> Pending / Upcoming Exams</h6>
+          <div id="usthadPendingExamsList" style="max-height:180px; overflow-y:auto; padding-right:5px;">
+            <div class="text-muted small">Loading...</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
     </div>
   </div>
 
@@ -1115,6 +896,50 @@
     let selectedUserObject = null;
     let currentUserSession = null;
     let debounceTimer = null;
+
+    
+    function downloadIdCard(elemId, filename) {
+      if(typeof html2canvas === 'undefined') { alert('Library loading, please wait.'); return; }
+      html2canvas(document.getElementById(elemId), { scale: 3 }).then(canvas => {
+        let link = document.createElement('a');
+        link.download = filename + '.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    function handleStudentSelfUpdate(e) {
+      e.preventDefault();
+      if (!currentUserSession || currentUserSession.role !== 'student') return;
+      
+      const payload = {
+        name: document.getElementById('selfName').value,
+        fatherName: document.getElementById('selfFather').value,
+        phone: document.getElementById('selfPhone').value,
+        bloodGroup: document.getElementById('selfBlood').value,
+        dob: document.getElementById('selfDob').value,
+        emergencyContact: document.getElementById('selfEmergency').value,
+        address: document.getElementById('selfAddress').value,
+        password: document.getElementById('selfPassword').value
+      };
+
+      fetch('/api/portal/student/' + currentUserSession._id, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(res => {
+        if(res.success) {
+          showToast('Profile updated successfully!', false);
+          // Update session object locally
+          Object.assign(currentUserSession, payload);
+          populateStudentDash(currentUserSession);
+        } else {
+          showToast(res.message || 'Error updating profile', true);
+        }
+      });
+    }
 
     // Switch Role between Student & Usthad
     function switchRole(role) {
@@ -1342,11 +1167,45 @@
     // Render Dashboard upon Login
     function renderDashboard(user) {
       document.getElementById('loginCard').style.display = 'none';
+        const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-11 col-xl-10 transition-all duration-300';
+        const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container'); pContainer.classList.add('container-fluid'); }
       document.getElementById('dashboardCard').style.display = 'block';
 
       document.getElementById('dashUserPhoto').src = user.photoUrl || 'img/new_logo.png';
       document.getElementById('dashUserName').textContent = user.name;
       renderQRCodeForUser(user);
+
+      // Inject to ID Cards
+      if (user.role === 'usthad') {
+        if(document.getElementById('uIdName')) {
+          document.getElementById('uIdName').textContent = user.name;
+          document.getElementById('uIdRole').textContent = user.designation || 'Usthad';
+          document.getElementById('uIdNo').innerHTML = 'ID: ' + (user.usthadId || 'N/A');
+          document.getElementById('uIdPhone').innerHTML = '<i class="fa fa-phone"></i> ' + (user.phone || 'N/A');
+          if(user.photoUrl) document.getElementById('uIdPhoto').src = user.photoUrl;
+        }
+      } else {
+        if(document.getElementById('sIdName')) {
+          document.getElementById('sIdName').textContent = user.name;
+          document.getElementById('sIdFather').textContent = 'S/O ' + (user.fatherName || '-');
+          document.getElementById('sIdBatch').textContent = 'Batch ' + (user.batchNumber || user.batchYear || '-');
+          document.getElementById('sIdNo').textContent = 'Adm No: ' + user.admissionNo;
+          document.getElementById('sIdBlood').innerHTML = '<i class="fa fa-tint"></i> Blood: ' + (user.bloodGroup || 'Unknown');
+          document.getElementById('sIdPhone').innerHTML = '<i class="fa fa-phone"></i> ' + (user.phone || '-');
+          if(user.photoUrl) document.getElementById('sIdPhoto').src = user.photoUrl;
+          
+          // Populate Edit Form
+          document.getElementById('selfName').value = user.name || '';
+          document.getElementById('selfFather').value = user.fatherName || '';
+          document.getElementById('selfPhone').value = user.phone || '';
+          document.getElementById('selfBlood').value = user.bloodGroup || '';
+          document.getElementById('selfDob').value = user.dob ? user.dob.split('T')[0] : '';
+          document.getElementById('selfEmergency').value = user.emergencyContact || '';
+          document.getElementById('selfAddress').value = user.address || '';
+          document.getElementById('selfPassword').value = user.password || '';
+        }
+      }
+
 
       if (user.role === 'usthad') {
         document.getElementById('dashUserRole').textContent = 'Usthad • ' + (user.designation || 'Faculty') + ' (' + (user.subject || 'Dars') + ')';
