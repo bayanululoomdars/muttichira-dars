@@ -522,6 +522,10 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
+  <style>
+    .modal-backdrop { z-index: 1040 !important; }
+    .modal { z-index: 1050 !important; }
+  </style>
 </head>
 <body>
 
@@ -2138,7 +2142,7 @@ window.addEventListener('DOMContentLoaded', () => {
 <!-- Global Cropper Modal -->
 <div class="modal fade" id="cropperModal">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="background:var(--bg-card); color:var(--text); border-radius:12px; border:1px solid var(--border-soft);">
+    <div class="modal-content" style="background:#1e293b; color:var(--text); border-radius:12px; border:1px solid var(--border-soft);">
       <div class="modal-header border-0">
         <h5 class="modal-title font-weight-bold text-accent"><i class="fa fa-crop"></i> Crop Profile Photo</h5>
         <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
@@ -2160,7 +2164,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <!-- Modal: Usthad Messages -->
   <div class="modal fade" id="modalUsthadMessages">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:var(--bg-card); color:var(--text);">
+      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:#1e293b; color:var(--text);">
         <div class="modal-header bg-secondary text-white border-0">
           <h5 class="modal-title font-weight-bold"><i class="fa fa-envelope"></i> Messages from Students</h5>
           <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
@@ -2176,7 +2180,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <!-- Modal: Usthad Direct Message to Student -->
   <div class="modal fade" id="modalUsthadDirectMsg">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:var(--bg-card); color:var(--text);">
+      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:#1e293b; color:var(--text);">
         <div class="modal-header bg-primary text-white border-0">
           <h5 class="modal-title font-weight-bold"><i class="fa fa-paper-plane"></i> Direct Message to Student</h5>
           <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
@@ -2210,7 +2214,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <!-- Modal: View ID Card -->
   <div class="modal fade" id="modalViewIdCard">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:var(--bg-card); color:var(--text); text-align:center;">
+      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:#1e293b; color:var(--text); text-align:center;">
         <div class="modal-header border-0">
           <h5 class="modal-title font-weight-bold text-primary"><i class="fa fa-id-badge"></i> ID Card Preview</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -2229,7 +2233,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <!-- Modal: Post Notification / Broadcast (Usthad) -->
   <div class="modal fade" id="modalPostNotif">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:var(--bg-card); color:var(--text);">
+      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:#1e293b; color:var(--text);">
         <div class="modal-header bg-info text-white border-0">
           <h5 class="modal-title font-weight-bold"><i class="fa fa-bullhorn"></i> Broadcast Notification</h5>
           <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
@@ -2256,7 +2260,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <!-- Modal: Send Message to Usthad (Student) -->
   <div class="modal fade" id="modalStudentMsg">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:var(--bg-card); color:var(--text);">
+      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:#1e293b; color:var(--text);">
         <div class="modal-header bg-info text-white border-0">
           <h5 class="modal-title font-weight-bold"><i class="fa fa-envelope"></i> Send Message to Usthad</h5>
           <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
@@ -2291,7 +2295,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <!-- FULL STUDENT PROFILE MODAL -->
   <div class="modal fade" id="modalStudentFullProfile">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content" style="background:var(--bg-card); color:var(--text); border:1px solid var(--border-soft); border-radius:16px;">
+      <div class="modal-content" style="background:#1e293b; color:var(--text); border:1px solid var(--border-soft); border-radius:16px;">
         <div class="modal-header border-bottom-0">
           <h5 class="modal-title font-weight-bold text-primary"><i class="fa fa-user-edit"></i> Complete Your Profile (Official Data)</h5>
           <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
@@ -2359,7 +2363,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <!-- SINGLE STUDENT MARK ENTRY MODAL -->
   <div class="modal fade" id="modalSingleStudentMark">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content" style="background:var(--bg-card); color:var(--text); border:1px solid var(--border-soft); border-radius:16px;">
+      <div class="modal-content" style="background:#1e293b; color:var(--text); border:1px solid var(--border-soft); border-radius:16px;">
         <div class="modal-header border-bottom-0">
           <h5 class="modal-title font-weight-bold text-success"><i class="fa fa-graduation-cap"></i> Enter/Edit Marks</h5>
           <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
