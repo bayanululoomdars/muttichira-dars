@@ -713,58 +713,34 @@
     <div class="col-lg-5 mb-4">
       <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
         <div class="card-body p-4">
-          <h5 class="font-weight-bold mb-3 text-primary"><i class="fa fa-user-edit"></i> Complete Your Profile</h5>
-          <p class="small text-muted mb-4">Please keep your details up to date. You can edit them anytime.</p>
-          
-          <form onsubmit="handleStudentSelfUpdate(event)">
-            <div class="row">
-              <div class="col-md-6 mb-2">
-                <label class="small font-weight-bold text-muted">Full Name</label>
-                <input type="text" id="selfName" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required>
-              </div>
-              <div class="col-md-6 mb-2">
-                <label class="small font-weight-bold text-muted">Father / Guardian Name</label>
-                <input type="text" id="selfFather" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required>
-              </div>
-              <div class="col-md-6 mb-2">
-                <label class="small font-weight-bold text-muted">Phone Number</label>
-                <input type="text" id="selfPhone" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required>
-              </div>
-              <div class="col-md-6 mb-2">
-                <label class="small font-weight-bold text-muted">Blood Group</label>
-                <select id="selfBlood" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
-                  <option value="">Unknown</option>
-                  <option>O+</option><option>O-</option>
-                  <option>A+</option><option>A-</option>
-                  <option>B+</option><option>B-</option>
-                  <option>AB+</option><option>AB-</option>
-                </select>
-              </div>
-              <div class="col-md-6 mb-2">
-                <label class="small font-weight-bold text-muted">Date of Birth</label>
-                <input type="date" id="selfDob" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
-              </div>
-              <div class="col-md-6 mb-2">
-                <label class="small font-weight-bold text-muted">Emergency Contact</label>
-                <input type="text" id="selfEmergency" class="form-control form-control-sm" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
-              </div>
-              <div class="col-12 mb-3">
-                <label class="small font-weight-bold text-muted">Full Address</label>
-                <textarea id="selfAddress" class="form-control form-control-sm" rows="2" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);"></textarea>
-              </div>
+          <h5 class="font-weight-bold mb-3 text-primary"><i class="fa fa-user"></i> My Profile</h5>
+          <p class="small text-muted mb-4">Official records matching your admission profile.</p>
+          <div class="row" id="studentProfileReadonly">
+            <div class="col-md-6 mb-3">
+              <label class="small text-muted mb-0">Full Name</label>
+              <div class="font-weight-bold" id="roName">Loading...</div>
             </div>
-            
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <small class="text-muted d-block">Login Password:</small>
-                <input type="text" id="selfPassword" class="form-control form-control-sm d-inline-block" style="width:120px; background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
-              </div>
-              <button type="submit" class="btn btn-primary font-weight-bold rounded-pill px-4">
-                <i class="fa fa-save"></i> Save Profile
-              </button>
+            <div class="col-md-6 mb-3">
+              <label class="small text-muted mb-0">Father's Name</label>
+              <div class="font-weight-bold" id="roFather">Loading...</div>
             </div>
-          </form>
-
+            <div class="col-md-6 mb-3">
+              <label class="small text-muted mb-0">Phone Number</label>
+              <div class="font-weight-bold" id="roPhone">Loading...</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="small text-muted mb-0">Blood Group</label>
+              <div class="font-weight-bold" id="roBlood">Loading...</div>
+            </div>
+            <div class="col-12 mb-3">
+              <label class="small text-muted mb-0">Full Address</label>
+              <div class="font-weight-bold" id="roAddress">Loading...</div>
+            </div>
+          </div>
+          <hr>
+          <button class="btn btn-warning btn-block font-weight-bold rounded-pill shadow-sm py-2" onclick="openStudentFullProfileModal()">
+            <i class="fa fa-edit"></i> Edit Your Profile
+          </button>
         </div>
       </div>
     </div>
@@ -997,7 +973,6 @@
     function handleStudentSelfUpdate(e) {
       e.preventDefault();
       if (!currentUserSession || currentUserSession.role !== 'student') return;
-      
       const payload = {
         name: document.getElementById('selfName').value,
         fatherName: document.getElementById('selfFather').value,
@@ -1008,7 +983,6 @@
         address: document.getElementById('selfAddress').value,
         password: document.getElementById('selfPassword').value
       };
-
       fetch('/api/portal/student/' + currentUserSession._id, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
@@ -1018,9 +992,9 @@
       .then(res => {
         if(res.success) {
           showToast('Profile updated successfully!', false);
-          // Update session object locally
+          $('#modalStudentFullProfile').modal('hide');
           Object.assign(currentUserSession, payload);
-          populateStudentDash(currentUserSession);
+          renderDashboard(currentUserSession);
         } else {
           showToast(res.message || 'Error updating profile', true);
         }
@@ -1251,6 +1225,20 @@
     }
 
     // Render Dashboard upon Login
+        function openStudentFullProfileModal() {
+      if(!currentUserSession) return;
+      document.getElementById('selfName').value = currentUserSession.name || '';
+      document.getElementById('selfFather').value = currentUserSession.fatherName || '';
+      document.getElementById('selfPhone').value = currentUserSession.phone || '';
+      document.getElementById('selfBlood').value = currentUserSession.bloodGroup || '';
+      document.getElementById('selfDob').value = currentUserSession.dob || '';
+      document.getElementById('selfEmergency').value = currentUserSession.emergencyContact || '';
+      document.getElementById('selfAddress').value = currentUserSession.address || '';
+      document.getElementById('selfPassword').value = currentUserSession.password || '';
+      document.getElementById('selfDeclaration').checked = false;
+      $('#modalStudentFullProfile').modal('show');
+    }
+
     function renderDashboard(user) {
       document.getElementById('loginCard').style.display = 'none';
         const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-11 col-xl-10 transition-all duration-300';
@@ -1282,14 +1270,13 @@
           if(user.photoUrl) document.getElementById('sIdPhoto').src = user.photoUrl;
           
           // Populate Edit Form
-          document.getElementById('selfName').value = user.name || '';
-          document.getElementById('selfFather').value = user.fatherName || '';
-          document.getElementById('selfPhone').value = user.phone || '';
-          document.getElementById('selfBlood').value = user.bloodGroup || '';
-          document.getElementById('selfDob').value = user.dob ? user.dob.split('T')[0] : '';
-          document.getElementById('selfEmergency').value = user.emergencyContact || '';
-          document.getElementById('selfAddress').value = user.address || '';
-          document.getElementById('selfPassword').value = user.password || '';
+          if (document.getElementById('roName')) {
+            document.getElementById('roName').textContent = user.name || 'Not Provided';
+            document.getElementById('roFather').textContent = user.fatherName || 'Not Provided';
+            document.getElementById('roPhone').textContent = user.phone || 'Not Provided';
+            document.getElementById('roBlood').textContent = user.bloodGroup || 'Not Provided';
+            document.getElementById('roAddress').textContent = user.address || 'Not Provided';
+          }
         }
       }
 
