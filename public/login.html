@@ -1535,7 +1535,7 @@ function loadUsthadDashboardData() {
           let pendHtml = '';
           data.exams.forEach(e => {
             const isPub = e.status === 'Published';
-            const item = `<div class="p-2 mb-2 rounded" style="background:var(--bg-card-2); border-left:4px solid ${isPub ? 'var(--success)' : 'var(--danger)'};">
+            const item = `<div class="p-2 mb-2 rounded" style="background:var(--bg-card-2); border-left:4px solid ${isPub ? 'var(--success)' : 'var(--danger)'}; cursor:pointer;" onclick="selectExamInMatrix('${e._id}')" title="Click to manage marks">
               <strong style="color:var(--text);">${e.examName}</strong>
               <div class="small text-muted">${e.term} • Batch: ${e.batchYear}</div>
             </div>`;
@@ -1597,7 +1597,17 @@ function loadUsthadExamMatrix() {
 }
 
 
-function renderExamMatrixTable() {
+
+    function selectExamInMatrix(examId) {
+      const el = document.getElementById('examSelectUsthad');
+      if(el) {
+        el.value = examId;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast('Exam selected. Please select a Target Batch to view/edit marks.', false);
+      }
+    }
+
+    function renderExamMatrixTable() {
   if (!currentExamRosterData) return;
 
   const { exam, subjects, students, existingResults } = currentExamRosterData;
