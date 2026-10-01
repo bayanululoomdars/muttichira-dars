@@ -1541,6 +1541,7 @@ function loadUsthadDashboardData() {
           });
           document.getElementById('usthadPublishedExamsList').innerHTML = pubHtml || '<div class="text-muted small">No published exams</div>';
           document.getElementById('usthadPendingExamsList').innerHTML = pendHtml || '<div class="text-muted small">No pending exams</div>';
+          window.allExamsUsthadCache = data.exams;
           
           // Also populate select dropdown
           const select = document.getElementById('examSelectUsthad');
@@ -1575,6 +1576,22 @@ function loadExamsUsthad() {
 }
 
 function onUsthadExamChange() {
+  const examId = safeGetValue('examSelectUsthad');
+  const batchSelect = document.getElementById('examBatchSelectUsthad');
+  if (examId && window.allExamsUsthadCache) {
+    const exam = window.allExamsUsthadCache.find(e => e._id === examId);
+    if (exam && exam.classSubjects) {
+      const batches = Object.keys(exam.classSubjects);
+      let opts = '<option value="">Select Target Batch</option>';
+      batches.forEach(b => {
+        opts += `<option value="${b}">${b}</option>`;
+      });
+      batchSelect.innerHTML = opts;
+      if (batches.length === 1) {
+        batchSelect.value = batches[0];
+      }
+    }
+  }
   loadUsthadExamMatrix();
 }
 
@@ -1599,8 +1616,9 @@ function loadUsthadExamMatrix() {
       const el = document.getElementById('examSelectUsthad');
       if(el) {
         el.value = examId;
+        onUsthadExamChange();
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        showToast('Exam selected. Please select a Target Batch to view/edit marks.', false);
+        showToast('Exam selected!', false);
       }
     }
 
@@ -1648,9 +1666,14 @@ function loadUsthadExamMatrix() {
     const existing = existingResults.find(r => r.admissionNo === s.admissionNo) || {};
     const existingSubMarks = existing.subjectMarks || [];
     
+    const hasResult = existing.totalMarksObtained !== undefined;
+    const statusBadge = hasResult ? '<span class="badge badge-success" style="font-size:10px;">Entered</span>' : '<span class="badge badge-danger" style="font-size:10px;">Pending</span>';
     html += `<tr data-student-id="${s.admissionNo}">
       <td><code style="font-weight:700; color:var(--accent);">${s.admissionNo}</code></td>
-      <td><strong style="color:var(--text);">${s.name}</strong></td>`;
+      <td>
+        <strong style="color:var(--text);">${s.name}</strong><br>
+        ${statusBadge}
+      </td>`;
 
     // Input for each subject
     subjects.forEach(sub => {
