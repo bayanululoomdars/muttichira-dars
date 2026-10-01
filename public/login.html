@@ -697,9 +697,14 @@
               <p id="sIdPhone" style="font-size:10px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
             </div>
           </div>
-          <button class="btn btn-outline-accent btn-sm mt-3 font-weight-bold" onclick="downloadIdCard('studentIdCard', 'Student_ID')">
-            <i class="fa fa-download"></i> Download ID
-          </button>
+          <div class="d-flex justify-content-center gap-2 mt-3" style="gap:10px;">
+            <button class="btn btn-outline-info btn-sm font-weight-bold" onclick="viewIdCard('studentIdCard')">
+              <i class="fa fa-eye"></i> View
+            </button>
+            <button class="btn btn-outline-accent btn-sm font-weight-bold" onclick="downloadIdCard('studentIdCard', 'Student_ID')">
+              <i class="fa fa-download"></i> Download
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -811,20 +816,27 @@
       <div class="card shadow-sm border-0 rounded-4" style="background:var(--bg-card); color:var(--text);">
         <div class="card-body text-center p-4">
           <h5 class="font-weight-bold mb-3 text-primary"><i class="fa fa-id-badge"></i> Usthad ID Card</h5>
-          <div id="usthadIdCard" style="border:2px solid var(--primary); border-radius:10px; padding:15px; background: #fff; max-width:280px; margin:0 auto; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-            <img src="img/new_logo.png" style="width:45px; margin-bottom:10px;">
-            <h6 style="color:var(--primary); font-weight:800; font-size:12px; margin-bottom:10px;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
-            <img id="uIdPhoto" src="img/new_logo.png" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft); margin-bottom:10px;">
-            <h5 id="uIdName" style="font-weight:700; margin-bottom:5px; color:#1e293b; font-size:16px;">Name</h5>
-            <p id="uIdRole" style="font-size:12px; color:#64748b; margin-bottom:5px; font-weight:600;">Mudarris</p>
-            <div style="background:var(--bg-card-2); border-radius:6px; padding:8px; margin-top:10px;">
-              <p id="uIdNo" style="font-weight:800; color:var(--accent); margin-bottom:2px; font-size:14px;">ID: -</p>
-              <p id="uIdPhone" style="font-size:11px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
+          
+          <div id="usthadIdCard" style="border:2px solid var(--accent); border-radius:10px; padding:15px; background: #fff; max-width:280px; margin:0 auto; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+            <img src="img/new_logo.png" style="width:40px; margin-bottom:5px;">
+            <h6 style="color:var(--accent); font-weight:800; font-size:11px; margin-bottom:10px;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
+            <img id="uIdPhoto" src="img/new_logo.png" style="width:75px; height:75px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft); margin-bottom:5px;">
+            <h5 id="uIdName" style="font-weight:700; margin-bottom:3px; color:#1e293b; font-size:15px; line-height:1.2;">Name</h5>
+            <p id="uIdRole" style="font-size:11px; color:#64748b; margin-bottom:8px; font-weight:600;">Mudarris</p>
+            <div style="background:var(--bg-card-2); border-radius:6px; padding:6px; margin-top:5px;">
+              <p id="uIdNo" style="font-weight:800; color:var(--accent); margin-bottom:1px; font-size:13px;">ID: -</p>
+              <p id="uIdPhone" style="font-size:10px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
             </div>
           </div>
-          <button class="btn btn-outline-primary btn-sm mt-3 font-weight-bold" onclick="downloadIdCard('usthadIdCard', 'Usthad_ID')">
-            <i class="fa fa-download"></i> Download ID
-          </button>
+          <div class="d-flex justify-content-center gap-2 mt-3" style="gap:10px;">
+            <button class="btn btn-outline-info btn-sm font-weight-bold" onclick="viewIdCard('usthadIdCard')">
+              <i class="fa fa-eye"></i> View
+            </button>
+            <button class="btn btn-outline-accent btn-sm font-weight-bold" onclick="downloadIdCard('usthadIdCard', 'Usthad_ID')">
+              <i class="fa fa-download"></i> Download
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
@@ -898,6 +910,21 @@
     let debounceTimer = null;
 
     
+    
+    function viewIdCard(elemId) {
+      const source = document.getElementById(elemId);
+      const container = document.getElementById('idCardPreviewContainer');
+      container.innerHTML = '';
+      const clone = source.cloneNode(true);
+      clone.style.margin = '0 auto'; // Ensure centered
+      // We can scale it up for better viewing if desired
+      clone.style.transform = 'scale(1.2)';
+      clone.style.transformOrigin = 'top center';
+      clone.style.marginBottom = '60px'; // Account for scale
+      container.appendChild(clone);
+      $('#modalViewIdCard').modal('show');
+    }
+
     function downloadIdCard(elemId, filename) {
       if(typeof html2canvas === 'undefined') { alert('Library loading, please wait.'); return; }
       html2canvas(document.getElementById(elemId), { scale: 3 }).then(canvas => {
@@ -1499,6 +1526,7 @@ function loadUsthadExamMatrix() {
     });
 }
 
+
 function renderExamMatrixTable() {
   if (!currentExamRosterData) return;
 
@@ -1528,13 +1556,13 @@ function renderExamMatrixTable() {
   subjects.forEach(s => {
     headerHtml += `<th>${s.subjectName} <small>(${s.maxMarks})</small></th>`;
   });
-  headerHtml += '<th>Attendance (Present/Total)</th><th>Total Score</th><th>%</th><th>Grade</th><th>Batch Rank</th>';
+  headerHtml += '<th>Attendance (Present/Total)</th><th>Total Score</th><th>%</th><th>Grade</th><th>Batch Rank</th><th>Action</th>';
   headerRow.innerHTML = headerHtml;
 
   // Render Student Rows
   const tbody = document.getElementById('examMatrixTableBody');
   if (!students || students.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="${subjects.length + 7}" class="text-center text-muted py-4">No students enrolled in Batch ${className}.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="${subjects.length + 8}" class="text-center text-muted py-4">No students enrolled in Batch ${className}.</td></tr>`;
     return;
   }
 
@@ -1570,10 +1598,37 @@ function renderExamMatrixTable() {
     <td><span id="matrixPct_${s.admissionNo}">${existing.percentage || 0}%</span></td>
     <td><span class="badge badge-info" id="matrixGrade_${s.admissionNo}">${existing.grade || '—'}</span></td>
     <td><span class="badge badge-accent" id="matrixRank_${s.admissionNo}">${existing.rank || '—'}</span></td>
+    <td>
+      <button class="btn btn-outline-danger btn-sm font-weight-bold" onclick="deleteExamMarkUsthad('${s.admissionNo}')" title="Delete Mark">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
     </tr>`;
   });
 
   tbody.innerHTML = html;
+}
+
+
+function deleteExamMarkUsthad(admissionNo) {
+  const examId = safeGetValue('examSelectUsthad');
+  if (!examId) return;
+  if (!confirm('Are you sure you want to completely delete the mark record for this student?')) return;
+  
+  fetch('/api/portal/exam/delete-mark', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ examId, admissionNo })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.success) {
+      showToast('Mark deleted successfully', false);
+      loadUsthadExamMatrix(); // refresh
+    } else {
+      showToast('Failed to delete: ' + res.message, true);
+    }
+  });
 }
 
 function submitExamMarksUsthad() {
@@ -2003,6 +2058,25 @@ window.addEventListener('DOMContentLoaded', () => {
               Send Message
             </button>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal: View ID Card -->
+  <div class="modal fade" id="modalViewIdCard" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:var(--bg-card); color:var(--text); text-align:center;">
+        <div class="modal-header border-0">
+          <h5 class="modal-title font-weight-bold text-primary"><i class="fa fa-id-badge"></i> ID Card Preview</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body p-4 d-flex justify-content-center" id="idCardPreviewContainer">
+          <!-- Copied ID card goes here -->
+        </div>
+        <div class="modal-footer border-0 justify-content-center">
+          <button type="button" class="btn btn-secondary rounded-pill font-weight-bold px-4" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

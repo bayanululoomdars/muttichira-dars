@@ -33,6 +33,7 @@ router.post('/exam', portalController.createExamAdmin);
 router.delete('/exam/:id', portalController.deleteExamAdmin);
 router.get('/exam/roster', portalController.getExamClassRoster);
 router.post('/exam/save-marks', portalController.saveExamClassMarks);
+router.delete('/exam/delete-mark', portalController.deleteExamClassMark);
 
 
 router.post('/upload-photo', portalController.uploadProfilePhoto);
