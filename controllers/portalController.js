@@ -498,9 +498,7 @@ exports.updateStudentAdmin = async (req, res) => {
   try {
     const { id } = req.params;
     let student = null;
-    try { student = await Student.findById(id); } catch(e) {}
-    const isMemory = !student;
-    if (!student) student = memoryStudents.find(s => s._id === id || s.admissionNo === id);
+    try { student = await Student.findById(id); } catch(e) {} if (!student) { try { let sList = await Student.find({ admissionNo: id }); if(sList && sList.data && sList.data.length > 0) student = sList.data[0]; else if(sList && sList.length > 0) student = sList[0]; } catch(e) {} } const isMemory = !student; if (!student) student = memoryStudents.find(s => String(s._id) === String(id) || String(s.admissionNo) === String(id));
     if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
 
     const updates = req.body;
@@ -584,9 +582,7 @@ exports.updateUsthadAdmin = async (req, res) => {
   try {
     const { id } = req.params;
     let usthad = null;
-    try { usthad = await Usthad.findById(id); } catch(e) {}
-    const isMemory = !usthad;
-    if (!usthad) usthad = memoryUsthads.find(u => u._id === id || u.usthadId === id);
+    try { usthad = await Usthad.findById(id); } catch(e) {} if (!usthad) { try { let uList = await Usthad.find({ usthadId: id }); if(uList && uList.data && uList.data.length > 0) usthad = uList.data[0]; else if(uList && uList.length > 0) usthad = uList[0]; } catch(e) {} } const isMemory = !usthad; if (!usthad) usthad = memoryUsthads.find(u => String(u._id) === String(id) || String(u.usthadId) === String(id));
     if (!usthad) return res.status(404).json({ success: false, message: 'Usthad not found' });
 
     const updates = req.body;
