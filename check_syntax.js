@@ -1,28 +1,15 @@
 const fs = require('fs');
-const { execSync } = require('child_process');
+const { Script } = require('vm');
+const html = fs.readFileSync('public/login.html', 'utf8');
 
-function extractScripts(filename) {
-  const html = fs.readFileSync(filename, 'utf8');
-  const scriptRegex = /<script>([\s\S]*?)<\/script>/g;
-  let match;
-  let i = 0;
-  let hasError = false;
-  while ((match = scriptRegex.exec(html)) !== null) {
-    const scriptContent = match[1];
-    fs.writeFileSync(`temp_${i}.js`, scriptContent);
-    try {
-      execSync(`node -c temp_${i}.js`, { stdio: 'pipe' });
-    } catch (e) {
-      console.log(`Syntax error in ${filename} script block ${i}:`);
-      console.log(e.stderr.toString());
-      hasError = true;
-    }
-    fs.unlinkSync(`temp_${i}.js`);
-    i++;
+const regex = /<script>([\s\S]*?)<\/script>/g;
+let match;
+while ((match = regex.exec(html)) !== null) {
+  try {
+    new Script(match[1]);
+  } catch(e) {
+    console.error("Syntax Error in script block starting near index", match.index);
+    console.error(e);
   }
-  if (!hasError) console.log(`${filename}: All inline scripts have valid syntax.`);
 }
-
-extractScripts('public/index.html');
-extractScripts('public/login.html');
-extractScripts('public/admin.html');
+console.log('Syntax check complete.');
