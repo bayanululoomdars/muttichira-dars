@@ -692,7 +692,14 @@
           <div id="studentIdCard" style="border:2px solid var(--accent); border-radius:10px; padding:15px; background: #fff; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
             <img src="img/new_logo.png" style="width:40px; margin-bottom:5px;">
             <h6 style="color:var(--accent); font-weight:800; font-size:11px; margin-bottom:10px;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
-            <img id="sIdPhoto" src="img/new_logo.png" style="width:75px; height:75px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft); margin-bottom:5px;">
+            
+            <div class="d-flex justify-content-center align-items-center flex-column mb-2">
+              <img id="sIdPhoto" src="img/new_logo.png" style="width:75px; height:75px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft);">
+              <button class="btn btn-warning btn-sm mt-2 font-weight-bold" style="font-size:11px; border-radius:20px; padding: 4px 12px; box-shadow:0 2px 5px rgba(0,0,0,0.2);" onclick="openStudentFullProfileModal()">
+                <i class="fa fa-edit"></i> Edit Your Profile
+              </button>
+            </div>
+            
             <h5 id="sIdName" style="font-weight:700; margin-bottom:3px; color:#1e293b; font-size:15px; line-height:1.2;">Name</h5>
             <p id="sIdFather" style="font-size:11px; color:#64748b; margin-bottom:5px; font-weight:600;">S/O -</p>
             <p id="sIdBatch" style="font-size:12px; color:var(--primary); font-weight:700; margin-bottom:8px;">Batch</p>
@@ -714,80 +721,49 @@
       </div>
     </div>
 
-    <!-- MIDDLE PANEL: DETAILED PROFILE EDIT FORM -->
-    <div class="col-lg-5 mb-4">
-      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
-        <div class="card-body p-4">
-          <h5 class="font-weight-bold mb-3 text-primary"><i class="fa fa-user"></i> My Profile</h5>
-          <p class="small text-muted mb-4">Official records matching your admission profile.</p>
-          <div class="row" id="studentProfileReadonly">
-            <div class="col-md-6 mb-3">
-              <label class="small text-muted mb-0">Full Name</label>
-              <div class="font-weight-bold" id="roName">Loading...</div>
+    <!-- RIGHT PANEL: EXAMS & MESSAGES (LARGE BOXES) -->
+    <div class="col-lg-9 mb-4">
+      <div class="row">
+        
+        <!-- EXAM RESULTS BOX -->
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
+              <h5 class="font-weight-bold text-warning mb-0"><i class="fa fa-trophy"></i> Exam Results</h5>
+              <p class="small text-muted mt-1">Your official marks and progress reports.</p>
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="small text-muted mb-0">Father's Name</label>
-              <div class="font-weight-bold" id="roFather">Loading...</div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="small text-muted mb-0">Phone Number</label>
-              <div class="font-weight-bold" id="roPhone">Loading...</div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="small text-muted mb-0">Blood Group</label>
-              <div class="font-weight-bold" id="roBlood">Loading...</div>
-            </div>
-            <div class="col-12 mb-3">
-              <label class="small text-muted mb-0">Full Address</label>
-              <div class="font-weight-bold" id="roAddress">Loading...</div>
-            </div>
-          </div>
-          <hr>
-          <button class="btn btn-warning btn-block font-weight-bold rounded-pill shadow-sm py-2" onclick="openStudentFullProfileModal()">
-            <i class="fa fa-edit"></i> Edit Your Profile
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT PANEL: EXAMS & MESSAGES -->
-    <div class="col-lg-4 mb-4">
-      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
-        <div class="card-body p-4 d-flex flex-column">
-          <ul class="nav nav-pills mb-3 border-bottom pb-2" style="gap:10px;">
-            <li class="nav-item">
-              <a class="nav-link active font-weight-bold px-3 py-1" data-toggle="tab" href="#tabStudentResultsTab">
-                <i class="fa fa-trophy text-warning"></i> Results
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link font-weight-bold px-3 py-1" data-toggle="tab" href="#tabStudentMsgsTab">
-                <i class="fa fa-envelope text-info"></i> Messages
-              </a>
-            </li>
-          </ul>
-          
-          <div class="tab-content flex-grow-1" style="overflow-y:auto; max-height:400px; padding-right:5px;">
-            <div class="tab-pane fade show active" id="tabStudentResultsTab">
+            <div class="card-body p-4" style="overflow-y:auto; max-height:550px;">
               <div id="studentResultsContainer">
                 <div class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Loading results...</div>
               </div>
             </div>
-            <div class="tab-pane fade" id="tabStudentMsgsTab">
-              <button class="btn btn-sm btn-outline-info w-100 mb-3 font-weight-bold" onclick="$('#modalStudentMsg').modal('show')">
-                <i class="fa fa-paper-plane"></i> Send Msg to Usthad
+          </div>
+        </div>
+        
+        <!-- MESSAGES BOX -->
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+              <div>
+                <h5 class="font-weight-bold text-info mb-0"><i class="fa fa-envelope"></i> Messages</h5>
+                <p class="small text-muted mt-1">Notices from Usthads and Admin.</p>
+              </div>
+              <button class="btn btn-sm btn-info font-weight-bold rounded-pill shadow-sm" onclick="$('#modalStudentMsg').modal('show')">
+                <i class="fa fa-paper-plane"></i> Send
               </button>
+            </div>
+            <div class="card-body p-4" style="overflow-y:auto; max-height:550px;">
               <div id="studentNotificationsContainer">
                 <div class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Loading messages...</div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </div>
-
 
 
 <div id="usthadDashContent" style="display: none; width:100%;">
