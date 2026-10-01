@@ -692,14 +692,7 @@
           <div id="studentIdCard" style="border:2px solid var(--accent); border-radius:10px; padding:15px; background: #fff; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
             <img src="img/new_logo.png" style="width:40px; margin-bottom:5px;">
             <h6 style="color:var(--accent); font-weight:800; font-size:11px; margin-bottom:10px;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
-            
-            <div class="d-flex justify-content-center align-items-center flex-column mb-2">
-              <img id="sIdPhoto" src="img/new_logo.png" style="width:75px; height:75px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft);">
-              <button class="btn btn-warning btn-sm mt-2 font-weight-bold" style="font-size:11px; border-radius:20px; padding: 4px 12px; box-shadow:0 2px 5px rgba(0,0,0,0.2);" onclick="openStudentFullProfileModal()">
-                <i class="fa fa-edit"></i> Edit Your Profile
-              </button>
-            </div>
-            
+            <img id="sIdPhoto" src="img/new_logo.png" style="width:75px; height:75px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft); margin-bottom:5px;">
             <h5 id="sIdName" style="font-weight:700; margin-bottom:3px; color:#1e293b; font-size:15px; line-height:1.2;">Name</h5>
             <p id="sIdFather" style="font-size:11px; color:#64748b; margin-bottom:5px; font-weight:600;">S/O -</p>
             <p id="sIdBatch" style="font-size:12px; color:var(--primary); font-weight:700; margin-bottom:8px;">Batch</p>
@@ -721,52 +714,83 @@
       </div>
     </div>
 
-    <!-- RIGHT PANEL: EXAMS & MESSAGES (LARGE BOXES) -->
-    <div class="col-lg-9 mb-4">
-      <div class="row">
-        
-        <!-- EXAM RESULTS BOX -->
-        <div class="col-md-6 mb-4">
-          <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
-            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
-              <h5 class="font-weight-bold text-warning mb-0"><i class="fa fa-trophy"></i> Exam Results</h5>
-              <p class="small text-muted mt-1">Your official marks and progress reports.</p>
+    <!-- MIDDLE PANEL: DETAILED PROFILE EDIT FORM -->
+    <div class="col-lg-5 mb-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-body p-4">
+          <h5 class="font-weight-bold mb-3 text-primary"><i class="fa fa-user"></i> My Profile</h5>
+          <p class="small text-muted mb-4">Official records matching your admission profile.</p>
+          <div class="row" id="studentProfileReadonly">
+            <div class="col-md-6 mb-3">
+              <label class="small text-muted mb-0">Full Name</label>
+              <div class="font-weight-bold" id="roName">Loading...</div>
             </div>
-            <div class="card-body p-4" style="overflow-y:auto; max-height:550px;">
+            <div class="col-md-6 mb-3">
+              <label class="small text-muted mb-0">Father's Name</label>
+              <div class="font-weight-bold" id="roFather">Loading...</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="small text-muted mb-0">Phone Number</label>
+              <div class="font-weight-bold" id="roPhone">Loading...</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="small text-muted mb-0">Blood Group</label>
+              <div class="font-weight-bold" id="roBlood">Loading...</div>
+            </div>
+            <div class="col-12 mb-3">
+              <label class="small text-muted mb-0">Full Address</label>
+              <div class="font-weight-bold" id="roAddress">Loading...</div>
+            </div>
+          </div>
+          <hr>
+          <button class="btn btn-warning btn-block font-weight-bold rounded-pill shadow-sm py-2" onclick="openStudentFullProfileModal()">
+            <i class="fa fa-edit"></i> Edit Your Profile
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: EXAMS & MESSAGES -->
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-body p-4 d-flex flex-column">
+          <ul class="nav nav-pills mb-3 border-bottom pb-2" style="gap:10px;">
+            <li class="nav-item">
+              <a class="nav-link active font-weight-bold px-3 py-1" data-toggle="tab" href="#tabStudentResultsTab">
+                <i class="fa fa-trophy text-warning"></i> Results
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link font-weight-bold px-3 py-1" data-toggle="tab" href="#tabStudentMsgsTab">
+                <i class="fa fa-envelope text-info"></i> Messages
+              </a>
+            </li>
+          </ul>
+          
+          <div class="tab-content flex-grow-1" style="overflow-y:auto; max-height:400px; padding-right:5px;">
+            <div class="tab-pane fade show active" id="tabStudentResultsTab">
               <div id="studentResultsContainer">
                 <div class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Loading results...</div>
               </div>
             </div>
-          </div>
-        </div>
-        
-        <!-- MESSAGES BOX -->
-        <div class="col-md-6 mb-4">
-          <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
-            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
-              <div>
-                <h5 class="font-weight-bold text-info mb-0"><i class="fa fa-envelope"></i> Messages</h5>
-                <p class="small text-muted mt-1">Notices from Usthads and Admin.</p>
-              </div>
-              <button class="btn btn-sm btn-info font-weight-bold rounded-pill shadow-sm" onclick="$('#modalStudentMsg').modal('show')">
-                <i class="fa fa-paper-plane"></i> Send
+            <div class="tab-pane fade" id="tabStudentMsgsTab">
+              <button class="btn btn-sm btn-outline-info w-100 mb-3 font-weight-bold" onclick="$('#modalStudentMsg').modal('show')">
+                <i class="fa fa-paper-plane"></i> Send Msg to Usthad
               </button>
-            </div>
-            <div class="card-body p-4" style="overflow-y:auto; max-height:550px;">
               <div id="studentNotificationsContainer">
                 <div class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Loading messages...</div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
 
 
-</div></div>\n<div id="usthadDashContent" style="display: none; width:100%;">
+
+<div id="usthadDashContent" style="display: none; width:100%;">
   <div class="row">
     <!-- LEFT PANEL: PROFILE & ID CARD -->
     <div class="col-lg-4 mb-4">
@@ -1591,12 +1615,11 @@ function loadUsthadExamMatrix() {
     }
 
     function renderExamMatrixTable() {
-  const container = document.getElementById('examMatrixTableBody'); // Wait, let's replace the whole table structure properly
   if (!currentExamRosterData) return;
-  const { students, existingResults, exam, subjects } = currentExamRosterData;
+
+  const { exam, subjects, students, existingResults } = currentExamRosterData;
   const className = safeGetValue('examBatchSelectUsthad');
-  currentSubjectInputList = subjects || [];
-  
+
   // Render Subject Badges Banner
   const banner = document.getElementById('examSubjectConfigBanner');
   const bannerTitle = document.getElementById('examBannerTitle');
@@ -1614,137 +1637,153 @@ function loadUsthadExamMatrix() {
     banner.style.display = 'none';
   }
 
-  // Rewrite Table Header
+  // Render Matrix Header
   const headerRow = document.getElementById('examMatrixHeaderRow');
-  headerRow.innerHTML = '<th>Adm No</th><th>Student Name</th><th>Status</th><th>Actions</th>';
+  let headerHtml = '<th>Adm No</th><th>Student Name</th>';
+  subjects.forEach(s => {
+    headerHtml += `<th>${s.subjectName} <small>(${s.maxMarks})</small></th>`;
+  });
+  headerHtml += '<th>Attendance (Present/Total)</th><th>Total Score</th><th>%</th><th>Grade</th><th>Batch Rank</th><th>Action</th>';
+  headerRow.innerHTML = headerHtml;
 
+  // Render Student Rows
+  const tbody = document.getElementById('examMatrixTableBody');
   if (!students || students.length === 0) {
-    container.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-4">No active students in this batch.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="${subjects.length + 8}" class="text-center text-muted py-4">No students enrolled in Batch ${className}.</td></tr>`;
     return;
   }
-  
-  let htmlStr = '';
-  students.forEach((s) => {
+
+  let html = '';
+  students.forEach((s, idx) => {
     const existing = existingResults.find(r => r.admissionNo === s.admissionNo) || {};
+    const existingSubMarks = existing.subjectMarks || [];
+    
     const hasResult = existing.totalMarksObtained !== undefined;
-    const statusBadge = hasResult ? '<span class="badge badge-success px-2 py-1"><i class="fa fa-check-circle"></i> Published</span>' : '<span class="badge badge-warning px-2 py-1 text-dark"><i class="fa fa-clock-o"></i> Pending</span>';
-    let actionBtns = '';
-    
-    if (hasResult) {
-      actionBtns = `<button class="btn btn-sm btn-info rounded-pill font-weight-bold" onclick="openSingleStudentMarkModal('${s.admissionNo}', '${s.name}')"><i class="fa fa-edit"></i> Edit</button> ` +
-                   `<button class="btn btn-sm btn-danger rounded-pill font-weight-bold ml-1" onclick="unpublishStudentMark('${s.admissionNo}')"><i class="fa fa-times"></i> Unpublish</button>`;
+    const statusBadge = hasResult ? '<span class="badge badge-success" style="font-size:10px;">Entered</span>' : '<span class="badge badge-danger" style="font-size:10px;">Pending</span>';
+    html += `<tr data-student-id="${s.admissionNo}">
+      <td><code style="font-weight:700; color:var(--accent);">${s.admissionNo}</code></td>
+      <td>
+        <strong style="color:var(--text);">${s.name}</strong><br>
+        ${statusBadge}
+      </td>`;
+
+    // Input for each subject
+    subjects.forEach(sub => {
+      const exSub = existingSubMarks.find(m => m.subjectName === sub.subjectName) || {};
+      const score = exSub.marksObtained !== undefined ? exSub.marksObtained : '';
+      html += `<td>
+        <input type="number" class="form-control form-control-sm matrix-score-input" data-student="${s.admissionNo}" data-subject="${sub.subjectName}" data-max="${sub.maxMarks}" value="${score}" style="width:75px; background:var(--bg-input); color:var(--text); font-weight:700;" min="0" max="${sub.maxMarks}">
+      </td>`;
+    });
+
+    // Attendance inputs
+    const presDays = existing.attendancePresentDays !== undefined ? existing.attendancePresentDays : 100;
+    const totDays = existing.attendanceTotalDays !== undefined ? existing.attendanceTotalDays : 100;
+
+    html += `<td>
+      <div style="display:flex; gap:4px; align-items:center;">
+        <input type="number" class="form-control form-control-sm matrix-att-pres" data-student="${s.admissionNo}" value="${presDays}" style="width:60px; background:var(--bg-input); color:var(--text);" title="Present Days"> /
+        <input type="number" class="form-control form-control-sm matrix-att-tot" data-student="${s.admissionNo}" value="${totDays}" style="width:60px; background:var(--bg-input); color:var(--text);" title="Total Days">
+      </div>
+    </td>
+    <td><strong id="matrixTotal_${s.admissionNo}" style="color:var(--accent);">${existing.totalMarksObtained || 0} / ${existing.totalMaxMarks || 100}</strong></td>
+    <td><span id="matrixPct_${s.admissionNo}">${existing.percentage || 0}%</span></td>
+    <td><span class="badge badge-info" id="matrixGrade_${s.admissionNo}">${existing.grade || '—'}</span></td>
+    <td><span class="badge badge-accent" id="matrixRank_${s.admissionNo}">${existing.rank || '—'}</span></td>
+    <td>
+      <button class="btn btn-outline-danger btn-sm font-weight-bold" onclick="deleteExamMarkUsthad('${s.admissionNo}')" title="Delete Mark">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+}
+
+
+function deleteExamMarkUsthad(admissionNo) {
+  const examId = safeGetValue('examSelectUsthad');
+  if (!examId) return;
+  if (!confirm('Are you sure you want to completely delete the mark record for this student?')) return;
+  
+  fetch('/api/portal/exam/delete-mark', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ examId, admissionNo })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.success) {
+      showToast('Mark deleted successfully', false);
+      loadUsthadExamMatrix(); // refresh
     } else {
-      actionBtns = `<button class="btn btn-sm btn-success rounded-pill font-weight-bold" onclick="openSingleStudentMarkModal('${s.admissionNo}', '${s.name}')"><i class="fa fa-upload"></i> Publish Marks</button>`;
+      showToast('Failed to delete: ' + res.message, true);
     }
-    
-    htmlStr += `<tr>\n` +
-      `<td class="align-middle"><code style="font-weight:700; color:var(--accent); font-size:14px;">${s.admissionNo}</code></td>\n` +
-      `<td class="align-middle"><strong style="color:var(--text); font-size:15px;">${s.name}</strong></td>\n` +
-      `<td class="align-middle">${statusBadge}</td>\n` +
-      `<td class="align-middle">${actionBtns}</td>\n` +
-    `</tr>`;
   });
-  container.innerHTML = htmlStr;
 }
 
-let editingMarkStudentAdmNo = null;
+function submitExamMarksUsthad() {
+  if (!currentExamRosterData) return;
 
-function openSingleStudentMarkModal(admNo, name) {
-  editingMarkStudentAdmNo = admNo;
-  document.getElementById('singleMarkStudentName').textContent = name + " (" + admNo + ")";
-  const existingResults = currentExamRosterData.existingResults || [];
-  const existing = existingResults.find(r => r.admissionNo === admNo) || {};
-  const existingSubMarks = existing.subjectMarks || {};
-  let htmlStr = '';
-  
-  currentSubjectInputList.forEach((subj, idx) => {
-    // Determine the prefill value
-    let val = '';
-    // Look at existingSubMarks - originally it was an object { "Subject1": 50 }
-    if (existingSubMarks[subj.subjectName] !== undefined) {
-      val = existingSubMarks[subj.subjectName];
-    } else if (Array.isArray(existingSubMarks)) {
-      const prefill = existingSubMarks.find(em => em.subjectName === subj.subjectName);
-      if (prefill) val = prefill.marksObtained;
-    }
-    
-    htmlStr += `<div class="form-group mb-3">\n` +
-      `<label class="form-label font-weight-bold text-dark">${subj.subjectName} <span class="text-muted">(Max: ${subj.maxMarks})</span></label>\n` +
-      `<input type="number" id="singleMarkInput_${idx}" class="form-control" style="background:var(--bg-input); color:var(--text); font-weight:bold;" max="${subj.maxMarks}" placeholder="Enter mark obtained" value="${val}" required>\n` +
-    `</div>`;
-  });
-  
-  document.getElementById('singleMarkInputsContainer').innerHTML = htmlStr;
-  
-  // Make sure Bootstrap modal backdrop works
-  $('#modalSingleStudentMark').modal('show');
-}
-
-function saveSingleStudentMark(e) {
-  e.preventDefault();
+  const { exam, subjects, students } = currentExamRosterData;
   const examId = safeGetValue('examSelectUsthad');
   const className = safeGetValue('examBatchSelectUsthad');
-  if (!examId || !className || !editingMarkStudentAdmNo) return;
-  
-  const marksData = [];
-  const subMarksObj = {};
-  let isComplete = true;
-  
-  currentSubjectInputList.forEach((subj, idx) => {
-    const val = document.getElementById('singleMarkInput_' + idx).value;
-    if (val === '') { isComplete = false; } else {
-      subMarksObj[subj.subjectName] = Number(val);
-    }
+
+  if (!examId || !className || !students || students.length === 0) {
+    alert('Please select a valid Exam and Batch with students');
+    return;
+  }
+
+  const marksDataPayload = [];
+
+  students.forEach(s => {
+    const subMarksObj = {};
+    subjects.forEach(sub => {
+      const input = document.querySelector(`.matrix-score-input[data-student="${s.admissionNo}"][data-subject="${sub.subjectName}"]`);
+      subMarksObj[sub.subjectName] = input ? Number(input.value || 0) : 0;
+    });
+
+    const presInput = document.querySelector(`.matrix-att-pres[data-student="${s.admissionNo}"]`);
+    const totInput = document.querySelector(`.matrix-att-tot[data-student="${s.admissionNo}"]`);
+
+    marksDataPayload.push({
+      admissionNo: s.admissionNo,
+      studentName: s.name,
+      subjectsConfig: subjects,
+      subjectMarks: subMarksObj,
+      attendancePresentDays: presInput ? Number(presInput.value || 100) : 100,
+      attendanceTotalDays: totInput ? Number(totInput.value || 100) : 100,
+      usthadRemarks: 'Published'
+    });
   });
-  
-  if (!isComplete) { showToast('Please fill all marks before publishing!', true); return; }
-  
-  const student = currentExamRosterData.students.find(s => s.admissionNo === editingMarkStudentAdmNo);
-  
-  marksData.push({
-    admissionNo: editingMarkStudentAdmNo,
-    studentName: student ? student.name : 'Student',
-    subjectsConfig: currentSubjectInputList,
-    subjectMarks: subMarksObj,
-    attendancePresentDays: 100,
-    attendanceTotalDays: 100,
-    usthadRemarks: 'Published via single edit'
-  });
-  
+
   fetch('/api/portal/exam/save-marks', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       examId,
-      examName: currentExamRosterData.exam.examName,
-      term: currentExamRosterData.exam.term,
-      batchYear: className,
-      marksData: marksData
+      examName: exam ? exam.examName : 'Semester Exam',
+      className,
+      marksData: marksDataPayload,
+      usthadName: 'Head Usthad'
     })
   }).then(r => r.json()).then(res => {
-    if (res.success) {
-      showToast('Student marks published/updated!', false);
-      $('#modalSingleStudentMark').modal('hide');
-      loadUsthadExamMatrix();
-    } else { showToast(res.message, true); }
-  });
-}
+    alert(res.message || 'Marks and Ranks published!');
+    if (res.success && res.results) {
+      res.results.forEach(r => {
+        const totalEl = document.getElementById(`matrixTotal_${r.admissionNo}`);
+        const pctEl = document.getElementById(`matrixPct_${r.admissionNo}`);
+        const gradeEl = document.getElementById(`matrixGrade_${r.admissionNo}`);
+        const rankEl = document.getElementById(`matrixRank_${r.admissionNo}`);
 
-function unpublishStudentMark(admNo) {
-  if (!confirm('Are you sure you want to unpublish and delete this student\'s marks?')) return;
-  const examId = safeGetValue('examSelectUsthad');
-  if (!examId) return;
-  
-  fetch('/api/portal/exam/delete-mark', {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ examId, admissionNo: admNo })
-  }).then(r => r.json()).then(res => {
-    if (res.success) {
-      showToast('Marks unpublished.', false);
-      loadUsthadExamMatrix();
-    } else { showToast(res.message, true); }
-  });
+        if (totalEl) totalEl.textContent = `${r.totalMarksObtained} / ${r.totalMaxMarks}`;
+        if (pctEl) pctEl.textContent = `${r.percentage}%`;
+        if (gradeEl) gradeEl.textContent = r.grade;
+        if (rankEl) rankEl.textContent = r.rank;
+      });
+    }
+  }).catch(() => showAlert('Error publishing exam marks', "warning"));
 }
 
     // Counter Stats Loader
