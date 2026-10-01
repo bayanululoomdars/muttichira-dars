@@ -1,9 +1,6 @@
 const fs = require('fs');
-const html = fs.readFileSync('public/admin.html','utf8');
-const lines = html.split('\n');
-lines.forEach((l, i) => {
-    if (l.includes('unifiedAddUserModal') || l.includes('modalCreateExam')) {
-        console.log(`\n--- Line ${i} ---`);
-        console.log(lines.slice(Math.max(0, i-5), i+3).join('\n'));
-    }
-});
+const html = fs.readFileSync('public/login.html', 'utf8');
+console.log('modalPostNotif exists:', html.includes('id="modalPostNotif"'));
+console.log('modalUsthadMessages exists:', html.includes('id="modalUsthadMessages"'));
+console.log('modalUsthadDirectMsg exists:', html.includes('id="modalUsthadDirectMsg"'));
+console.log('modalStudentMsg exists:', html.includes('id="modalStudentMsg"'));

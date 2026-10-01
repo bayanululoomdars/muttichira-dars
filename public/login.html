@@ -1326,7 +1326,7 @@
       fetch('/api/portal/student/progress-card?admissionNo=' + encodeURIComponent(admNo))
         .then(r => r.json())
         .then(cardData => {
-          const resultsBox = document.getElementById('studentResultsList');
+          const resultsBox = document.getElementById('studentResultsContainer');
           if (cardData.success && cardData.results && cardData.results.length > 0) {
             let html = '';
             cardData.results.forEach(res => {
@@ -1447,31 +1447,28 @@
         .then(data => {
           if (data.success) {
             // Render Notifications
-            const notifBox = document.getElementById('studentNotificationsList');
+            
+            const notifBox = document.getElementById('studentNotificationsContainer');
+            if (!notifBox) return; // Prevent crashes
+            let combinedHtml = '';
+            
             if (data.notifications && data.notifications.length > 0) {
-              let html = '';
               data.notifications.forEach(n => {
-                html += `
-                  <div class="card-dashboard-item border-left border-info" style="border-left-width: 5px !important;">
+                combinedHtml += `
+                  <div class="p-2 mb-2 rounded border-left" style="background:var(--bg-card-2); border-left:4px solid var(--info) !important;">
                     <h6 class="font-weight-bold text-info m-0">${n.subject || 'Announcement'}</h6>
-                    <small class="text-muted d-block mb-2">${new Date(n.createdAt).toLocaleDateString()}</small>
+                    <small class="text-muted d-block mb-1">${new Date(n.createdAt).toLocaleDateString()}</small>
                     <p class="m-0 small text-dark">${n.content}</p>
                   </div>
                 `;
               });
-              notifBox.innerHTML = html;
-            } else {
-              notifBox.innerHTML = '<p class="text-muted small">No notifications posted yet.</p>';
             }
 
-            // Render Messages
-            const msgBox = document.getElementById('studentMessagesList');
             if (data.messages && data.messages.length > 0) {
-              let html = '';
               data.messages.forEach(m => {
                 const isMe = m.senderRole === 'student';
-                html += `
-                  <div class="card-dashboard-item ${isMe ? 'bg-light' : 'border-success'} mb-2">
+                combinedHtml += `
+                  <div class="p-2 mb-2 rounded border-left" style="background:${isMe ? 'var(--bg-card)' : 'var(--bg-card-2)'}; border-left:4px solid ${isMe ? 'var(--secondary)' : 'var(--success)'} !important;">
                     <div class="d-flex justify-content-between">
                       <strong class="small text-${isMe ? 'secondary' : 'success'}">${isMe ? 'You' : m.senderName}</strong>
                       <small class="text-muted">${new Date(m.createdAt).toLocaleDateString()}</small>
@@ -1480,16 +1477,29 @@
                   </div>
                 `;
               });
-              msgBox.innerHTML = html;
-            } else {
-              msgBox.innerHTML = '<p class="text-muted small">No message history with Usthads.</p>';
             }
 
-            // Fill Edit Profile Form
-            document.getElementById('editStudentPhone').value = data.student.phone || '';
-            document.getElementById('editStudentPlace').value = data.student.place || '';
-            document.getElementById('editStudentPhoto').value = data.student.photoUrl || '';
-            document.getElementById('editStudentBio').value = data.student.bio || '';
+            if (!combinedHtml) {
+              combinedHtml = '<p class="text-muted small">No notifications or messages yet.</p>';
+            }
+            notifBox.innerHTML = combinedHtml;
+            
+            // Note: we removed editStudentPhone etc because we have selfPhone populated in renderDashboard.
+          }
+        });
+        
+        // Also populate msgUsthadSelect
+        fetch('/api/portal/usthads').then(r=>r.json()).then(res => {
+          if(res.success) {
+            const sel = document.getElementById('msgUsthadSelect');
+            if(sel) {
+               let opts = '<option value="">Select Usthad...</option>';
+               res.usthads.forEach(u => opts += `<option value="${u._id}">${u.name}</option>`);
+               sel.innerHTML = opts;
+            }
+          }
+        });
+
           }
         });
     }
@@ -1808,6 +1818,61 @@ function submitExamMarksUsthad() {
     function openChangePasswordModal() { $('#modalChangePassword').modal('show'); }
     function openStudentMessageModal() { $('#modalStudentMsg').modal('show'); }
     function openPostMarkModal() { $('#modalPostMark').modal('show'); }
+    
+    function openUsthadDirectMsgModal() {
+      $('#modalUsthadDirectMsg').modal('show');
+    }
+
+    function openUsthadMessagesModal() {
+      if(!currentUserSession) return;
+      fetch('/api/portal/usthad/messages?usthadId=' + currentUserSession.usthadId)
+        .then(r => r.json())
+        .then(data => {
+          const container = document.getElementById('usthadMessagesList');
+          if(data.success && data.messages && data.messages.length > 0) {
+            let h = '';
+            data.messages.forEach(m => {
+              h += `<div class="p-2 mb-2 border rounded" style="background:var(--bg-card-2);">
+                <div class="d-flex justify-content-between">
+                  <strong class="text-primary">${m.senderName} (${m.senderRole})</strong>
+                  <small class="text-muted">${new Date(m.createdAt).toLocaleDateString()}</small>
+                </div>
+                <strong class="small text-dark">${m.subject}</strong>
+                <p class="m-0 small text-dark mt-1">${m.content}</p>
+              </div>`;
+            });
+            container.innerHTML = h;
+          } else {
+            container.innerHTML = '<div class="text-muted text-center p-3">No messages in inbox.</div>';
+          }
+          $('#modalUsthadMessages').modal('show');
+        });
+    }
+
+    function handleUsthadDirectMsgSubmit(e) {
+      e.preventDefault();
+      if(!currentUserSession) return;
+      fetch('/api/portal/usthad/post-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'message',
+          usthadId: currentUserSession.usthadId,
+          usthadName: currentUserSession.name,
+          studentAdmNo: document.getElementById('dmTargetStudent').value,
+          subject: document.getElementById('dmSubject').value,
+          content: document.getElementById('dmBody').value
+        })
+      }).then(r=>r.json()).then(res=>{
+        if(res.success) {
+          showToast('Direct message sent!', false);
+          $('#modalUsthadDirectMsg').modal('hide');
+        } else {
+          showToast(res.message, true);
+        }
+      });
+    }
+
     function openPostNotificationModal() { $('#modalPostNotif').modal('show'); }
 
     function handleChangePasswordSubmit(e) {
@@ -2137,6 +2202,68 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="modal-footer border-0 justify-content-center">
           <button type="button" class="btn btn-secondary rounded-pill font-weight-bold px-4" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal: Post Notification / Broadcast (Usthad) -->
+  <div class="modal fade" id="modalPostNotif" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:var(--bg-card); color:var(--text);">
+        <div class="modal-header bg-info text-white border-0">
+          <h5 class="modal-title font-weight-bold"><i class="fa fa-bullhorn"></i> Broadcast Notification</h5>
+          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body p-4">
+          <form onsubmit="handlePostNotifSubmit(event)">
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Title / Subject</label>
+              <input type="text" id="notifTitle" class="form-control" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required placeholder="e.g. Exam Tomorrow">
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Message Content</label>
+              <textarea id="notifMessage" class="form-control" rows="4" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required placeholder="Write your broadcast message here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-info font-weight-bold w-100 rounded-pill py-2 text-white">
+              <i class="fa fa-send"></i> Send Broadcast
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Send Message to Usthad (Student) -->
+  <div class="modal fade" id="modalStudentMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg" style="background:var(--bg-card); color:var(--text);">
+        <div class="modal-header bg-info text-white border-0">
+          <h5 class="modal-title font-weight-bold"><i class="fa fa-envelope"></i> Send Message to Usthad</h5>
+          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body p-4">
+          <form onsubmit="handleSendStudentMsg(event)">
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Select Usthad</label>
+              <select id="msgUsthadSelect" class="form-control" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required>
+                <option value="">Select Usthad...</option>
+                <!-- Populated via JS -->
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Subject</label>
+              <input type="text" id="msgSubject" class="form-control" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required placeholder="e.g. Leave Request">
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Message Details</label>
+              <textarea id="msgBody" class="form-control" rows="4" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required placeholder="Write your message here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-info font-weight-bold w-100 rounded-pill py-2 text-white">
+              <i class="fa fa-paper-plane"></i> Send Message
+            </button>
+          </form>
         </div>
       </div>
     </div>
