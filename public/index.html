@@ -862,12 +862,14 @@
                   '</div></div>';
               }
 
-              cardsHtml += '<div class="col-12 mb-4">' +
+              cardsHtml += '<div class="col-12 mb-4" style="cursor:pointer;" onclick="openNewsModal(\'' + item._id + '\')">' +
                 '<div style="background:#fff; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.06); display:flex; align-items:center; overflow:hidden; transition:transform 0.3s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'none\'">' +
                 imgHtml +
                 '<div style="padding: 15px 20px; flex: 1;">' +
-                '  <h4 style="font-family:\'Outfit\',sans-serif; color:#000; font-weight:700; font-size:1.6rem; margin:0 0 8px 0;">' + item.title + '</h4>' +
-                '  <p style="color:#0056b3; font-size:1.05rem; line-height:1.5; margin:0;">' + (item.description || '') + '</p>' +
+                (item.category ? '<span style="display:inline-block; background:rgba(10,77,46,0.1); color:#0a4d2e; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px; margin-bottom:6px; text-transform:uppercase;">' + item.category + '</span>' : '') +
+                '  <h4 style="font-family:\'Outfit\',sans-serif; color:#000; font-weight:700; font-size:1.5rem; margin:0 0 8px 0;">' + item.title + '</h4>' +
+                '  <p style="color:#0056b3; font-size:1.02rem; line-height:1.5; margin:0 0 8px 0;">' + (item.description || '') + '</p>' +
+                '  <small style="color:#888;"><i class="fa fa-calendar" style="color:#d4af37; margin-right:4px;"></i>' + (item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN') : '') + '</small>' +
                 '</div>' +
                 '</div></div>';
             });
@@ -898,9 +900,24 @@
       var modalDate = document.getElementById('newsModalDate');
       var modalImg = document.getElementById('newsModalImg');
       var modalBody = document.getElementById('newsModalBody');
+      var modalCategory = document.getElementById('newsModalCategory');
+      var modalLinkWrap = document.getElementById('newsModalLinkWrap');
+      var modalLinkBtn = document.getElementById('newsModalLinkBtn');
       
       if (modalTitle) modalTitle.textContent = item.title;
       if (modalDate) modalDate.textContent = date;
+      if (modalCategory) {
+        modalCategory.textContent = item.category || 'News';
+        modalCategory.style.display = 'inline-block';
+      }
+      if (modalLinkWrap && modalLinkBtn) {
+        if (item.link) {
+          modalLinkBtn.href = item.link;
+          modalLinkWrap.style.display = 'block';
+        } else {
+          modalLinkWrap.style.display = 'none';
+        }
+      }
       if (modalImg) {
         if (item.imageUrl) {
           modalImg.src = item.imageUrl;

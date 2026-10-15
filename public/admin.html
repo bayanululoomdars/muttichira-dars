@@ -1656,7 +1656,7 @@
             <div class="table-wrap">
               <table class="data-table">
                 <thead>
-                  <tr><th>Image</th><th>Title</th><th>Description</th><th>Date</th><th>Action</th></tr>
+                  <tr><th>Image</th><th>Category</th><th>Title</th><th>Description</th><th>Date</th><th>Action</th></tr>
                 </thead>
                 <tbody id="newsTableBody"></tbody>
               </table>
@@ -2319,25 +2319,79 @@
 
 <!-- Add News Modal -->
 <div class="modal-overlay" id="addNewsModal">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width: 650px;">
     <button class="modal-close-btn" type="button" onclick="closeModal('addNewsModal')">&times;</button>
     <div class="modal-title"><i class="fa fa-newspaper-o"></i> Add News / Achievement</div>
+    
     <form id="newsForm" enctype="multipart/form-data">
       <div class="form-grid-2">
         <div class="form-group">
-          <label class="form-label">Title *</label>
-          <input class="form-control" type="text" id="newsTitle" placeholder="News / Achievement Title" required>
+          <label class="form-label">Category *</label>
+          <select class="form-control" id="newsCategory">
+            <option value="News" selected>News / വാർത്തകൾ</option>
+            <option value="Achievement">Achievement / നേട്ടങ്ങൾ</option>
+            <option value="Announcement">Announcement / അറിയിപ്പുകൾ</option>
+            <option value="Event">Event / പരിപാടികൾ</option>
+            <option value="Academic">Academic / വിദ്യാഭ്യാസം</option>
+          </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Image (optional)</label>
-          <input class="form-control" type="file" id="newsImage" accept="image/*">
+          <label class="form-label">Publish Date</label>
+          <input class="form-control" type="date" id="newsDate">
         </div>
       </div>
+
+      <div class="form-group">
+        <label class="form-label">Title *</label>
+        <input class="form-control" type="text" id="newsTitle" placeholder="News / Achievement Title" required>
+      </div>
+
       <div class="form-group">
         <label class="form-label">Description *</label>
-        <textarea class="form-control" id="newsDesc" rows="4" placeholder="News details or achievement summary..." required></textarea>
+        <textarea class="form-control" id="newsDesc" rows="4" placeholder="Detailed news information or achievement report..." required></textarea>
       </div>
-      <button type="submit" class="btn btn-accent" id="addNewsSubmitBtn" style="width:100%;">
+
+      <div class="form-group">
+        <label class="form-label">External / Action Link (Optional)</label>
+        <input class="form-control" type="url" id="newsLink" placeholder="e.g. https://youtube.com/watch?... or https://drive.google.com/...">
+        <small class="text-muted">Optional web link for more details, YouTube video, PDF, or certificate</small>
+      </div>
+
+      <!-- Image Add Options -->
+      <div style="background:var(--bg-input); border:1px solid var(--border-soft); border-radius:10px; padding:15px; margin-bottom:20px;">
+        <label class="form-label" style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <span><i class="fa fa-image" style="color:var(--accent);"></i> Image Options (Optional)</span>
+          <span style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-ghost btn-sm active" id="newsImgModeFile" onclick="setNewsImgMode('add', 'file')"><i class="fa fa-upload"></i> Upload File</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="newsImgModeUrl" onclick="setNewsImgMode('add', 'url')"><i class="fa fa-link"></i> Direct URL</button>
+          </span>
+        </label>
+
+        <!-- Mode File -->
+        <div id="addNewsFileWrap">
+          <input class="form-control" type="file" id="newsImage" accept="image/*" onchange="previewNewsImage('add', this)">
+          <small class="text-muted">Accepts JPG, PNG, WEBP images from your device</small>
+        </div>
+
+        <!-- Mode URL -->
+        <div id="addNewsUrlWrap" style="display:none;">
+          <input class="form-control" type="url" id="newsImageUrl" placeholder="https://example.com/image.jpg" oninput="previewNewsUrl('add', this.value)">
+          <small class="text-muted">Paste any direct online image URL</small>
+        </div>
+
+        <!-- Live Preview -->
+        <div id="addNewsPreviewBox" style="display:none; margin-top:12px; align-items:center; gap:12px; background:var(--bg-card); padding:8px 12px; border-radius:8px; border:1px solid var(--border-soft);">
+          <img id="addNewsPreviewImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px; border:1px solid var(--border);">
+          <div style="flex:1;">
+            <div style="font-size:0.85rem; font-weight:600; color:var(--text);">Image Preview</div>
+            <small style="color:var(--text-muted);" id="addNewsPreviewText">Ready to upload</small>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm text-danger" onclick="clearNewsImage('add')" title="Remove Image"><i class="fa fa-times"></i> Clear</button>
+        </div>
+      </div>
+
+      <div id="addNewsStatus" style="margin-bottom:12px; font-weight:600;"></div>
+      <button type="submit" class="btn btn-accent" id="addNewsSubmitBtn" style="width:100%; padding:12px;">
         <i class="fa fa-plus"></i> Add News / Achievement
       </button>
     </form>
@@ -2346,29 +2400,91 @@
 
 <!-- Edit News Modal -->
 <div class="modal-overlay" id="editNewsModal">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width: 650px;">
     <button class="modal-close-btn" type="button" onclick="closeModal('editNewsModal')">&times;</button>
-    <div class="modal-title"><i class="fa fa-edit"></i> Edit News</div>
+    <div class="modal-title"><i class="fa fa-edit"></i> Edit News / Achievement</div>
+
     <form id="editNewsForm" onsubmit="submitEditNews(event)">
       <input type="hidden" id="editNewsId">
+      <input type="hidden" id="editNewsRemoveImage" value="false">
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select class="form-control" id="editNewsCategory">
+            <option value="News">News / വാർത്തകൾ</option>
+            <option value="Achievement">Achievement / നേട്ടങ്ങൾ</option>
+            <option value="Announcement">Announcement / അറിയിപ്പുകൾ</option>
+            <option value="Event">Event / പരിപാടികൾ</option>
+            <option value="Academic">Academic / വിദ്യാഭ്യാസം</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Publish Date</label>
+          <input class="form-control" type="date" id="editNewsDate">
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="form-label">Title *</label>
         <input class="form-control" type="text" id="editNewsTitle" required>
       </div>
+
       <div class="form-group">
         <label class="form-label">Description *</label>
         <textarea class="form-control" id="editNewsDesc" rows="4" required></textarea>
       </div>
+
       <div class="form-group">
-        <label class="form-label">Update Image (optional)</label>
-        <input class="form-control" type="file" id="editNewsImage" accept="image/*">
-        <small class="text-muted" style="display:block;margin-top:4px;">Leave empty to keep existing image</small>
-        <div id="editNewsCurrentImgWrap" style="margin-top:8px; display:none;">
-          <img id="editNewsCurrentImg" src="" style="max-height:80px; border-radius:6px; object-fit:cover;">
+        <label class="form-label">External / Action Link (Optional)</label>
+        <input class="form-control" type="url" id="editNewsLink" placeholder="e.g. https://...">
+      </div>
+
+      <!-- Image Options -->
+      <div style="background:var(--bg-input); border:1px solid var(--border-soft); border-radius:10px; padding:15px; margin-bottom:20px;">
+        <label class="form-label" style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <span><i class="fa fa-image" style="color:var(--accent);"></i> Image Management</span>
+          <span style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-ghost btn-sm active" id="editNewsImgModeFile" onclick="setNewsImgMode('edit', 'file')"><i class="fa fa-upload"></i> Upload</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="editNewsImgModeUrl" onclick="setNewsImgMode('edit', 'url')"><i class="fa fa-link"></i> URL</button>
+          </span>
+        </label>
+
+        <!-- Current Image preview if exists -->
+        <div id="editNewsCurrentImgWrap" style="margin-bottom:12px; display:none; align-items:center; gap:12px; background:var(--bg-card); padding:8px 12px; border-radius:8px; border:1px solid var(--border-soft);">
+          <img id="editNewsCurrentImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px;">
+          <div style="flex:1;">
+            <div style="font-size:0.85rem; font-weight:600; color:var(--text);">Current Image</div>
+            <small style="color:var(--text-muted);" id="editNewsCurrentImgLabel">Currently active</small>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm text-danger" onclick="markRemoveNewsImage()" id="btnRemoveEditImg" title="Delete current image"><i class="fa fa-trash"></i> Remove Image</button>
+        </div>
+
+        <!-- Mode File -->
+        <div id="editNewsFileWrap">
+          <input class="form-control" type="file" id="editNewsImage" accept="image/*" onchange="previewNewsImage('edit', this)">
+          <small class="text-muted">Select a new image file to replace current (optional)</small>
+        </div>
+
+        <!-- Mode URL -->
+        <div id="editNewsUrlWrap" style="display:none;">
+          <input class="form-control" type="url" id="editNewsImageUrl" placeholder="https://example.com/new-image.jpg" oninput="previewNewsUrl('edit', this.value)">
+          <small class="text-muted">Or enter a new image link to replace current (optional)</small>
+        </div>
+
+        <!-- New Image Live Preview -->
+        <div id="editNewsPreviewBox" style="display:none; margin-top:12px; align-items:center; gap:12px; background:var(--bg-card); padding:8px 12px; border-radius:8px; border:1px solid var(--border-soft);">
+          <img id="editNewsPreviewImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px; border:1px solid var(--border);">
+          <div style="flex:1;">
+            <div style="font-size:0.85rem; font-weight:600; color:var(--text);">New Image Preview</div>
+            <small style="color:var(--text-muted);">Will be saved upon submit</small>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm text-danger" onclick="clearNewsImage('edit')" title="Cancel Replacement"><i class="fa fa-times"></i> Cancel</button>
         </div>
       </div>
+
       <div id="editNewsStatus" style="margin-bottom:12px; font-weight:600;"></div>
-      <button type="submit" class="btn btn-accent" id="editNewsBtn" style="width:100%;">
+      <button type="submit" class="btn btn-accent" id="editNewsBtn" style="width:100%; padding:12px;">
         <i class="fa fa-save"></i> Save Changes
       </button>
     </form>
@@ -3450,6 +3566,71 @@ function printAdmission(id) {
    NEWS & HOMEPAGE SECTION SETTINGS
 ═══════════════════════════════════════ */
 window.allNewsAdminCache = [];
+var newsImgModes = { add: 'file', edit: 'file' };
+
+function setNewsImgMode(type, mode) {
+  newsImgModes[type] = mode;
+  var btnFile = document.getElementById(type === 'add' ? 'newsImgModeFile' : 'editNewsImgModeFile');
+  var btnUrl = document.getElementById(type === 'add' ? 'newsImgModeUrl' : 'editNewsImgModeUrl');
+  var wrapFile = document.getElementById(type === 'add' ? 'addNewsFileWrap' : 'editNewsFileWrap');
+  var wrapUrl = document.getElementById(type === 'add' ? 'addNewsUrlWrap' : 'editNewsUrlWrap');
+
+  if (btnFile) btnFile.classList.toggle('active', mode === 'file');
+  if (btnUrl) btnUrl.classList.toggle('active', mode === 'url');
+  if (wrapFile) wrapFile.style.display = mode === 'file' ? 'block' : 'none';
+  if (wrapUrl) wrapUrl.style.display = mode === 'url' ? 'block' : 'none';
+}
+
+function previewNewsImage(type, input) {
+  var file = input.files && input.files[0];
+  var box = document.getElementById(type === 'add' ? 'addNewsPreviewBox' : 'editNewsPreviewBox');
+  var img = document.getElementById(type === 'add' ? 'addNewsPreviewImg' : 'editNewsPreviewImg');
+  if (file && img && box) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      img.src = e.target.result;
+      box.style.display = 'flex';
+      if (type === 'edit') safeSetValue('editNewsRemoveImage', 'false');
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function previewNewsUrl(type, url) {
+  var box = document.getElementById(type === 'add' ? 'addNewsPreviewBox' : 'editNewsPreviewBox');
+  var img = document.getElementById(type === 'add' ? 'addNewsPreviewImg' : 'editNewsPreviewImg');
+  if (url && url.trim() && img && box) {
+    img.src = url.trim();
+    box.style.display = 'flex';
+    if (type === 'edit') safeSetValue('editNewsRemoveImage', 'false');
+  } else if (box) {
+    box.style.display = 'none';
+  }
+}
+
+function clearNewsImage(type) {
+  if (type === 'add') {
+    var fileIn = document.getElementById('newsImage');
+    if (fileIn) fileIn.value = '';
+    safeSetValue('newsImageUrl', '');
+    var box = document.getElementById('addNewsPreviewBox');
+    if (box) box.style.display = 'none';
+  } else {
+    var fileIn = document.getElementById('editNewsImage');
+    if (fileIn) fileIn.value = '';
+    safeSetValue('editNewsImageUrl', '');
+    var box = document.getElementById('editNewsPreviewBox');
+    if (box) box.style.display = 'none';
+  }
+}
+
+function markRemoveNewsImage() {
+  safeSetValue('editNewsRemoveImage', 'true');
+  var curImgWrap = document.getElementById('editNewsCurrentImgWrap');
+  if (curImgWrap) curImgWrap.style.display = 'none';
+  clearNewsImage('edit');
+  showToast('Image marked for removal on save', false);
+}
 
 function loadNews() {
   loadNewsAdmin();
@@ -3469,9 +3650,13 @@ function loadNewsAdmin() {
       var html = '';
       data.forEach(function(item) {
         var d = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN') : '—';
+        var catBadge = item.category ? '<span style="background:rgba(10,77,46,0.12); color:#0a4d2e; font-weight:700; padding:3px 8px; border-radius:4px; font-size:0.75rem; text-transform:uppercase;">' + item.category + '</span>' : '<span style="color:var(--text-muted);">News</span>';
+        var linkIcon = item.link ? ' <a href="' + item.link + '" target="_blank" title="Open Link" style="color:var(--accent); margin-left:4px;"><i class="fa fa-external-link"></i></a>' : '';
+
         html += '<tr>' +
           '<td>' + (item.imageUrl ? '<img src="' + item.imageUrl + '" style="width:45px;height:45px;object-fit:cover;border-radius:6px;">' : '<span style="color:var(--text-muted);">—</span>') + '</td>' +
-          '<td><strong>' + (item.title || '') + '</strong></td>' +
+          '<td>' + catBadge + '</td>' +
+          '<td><strong>' + (item.title || '') + '</strong>' + linkIcon + '</td>' +
           '<td style="color:var(--text-muted);">' + ((item.description || '').length > 60 ? (item.description || '').substring(0, 60) + '...' : (item.description || '')) + '</td>' +
           '<td>' + d + '</td>' +
           '<td>' +
@@ -3479,7 +3664,7 @@ function loadNewsAdmin() {
           '<button type="button" class="btn btn-danger btn-sm" onclick="deleteItem(\'news\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button>' +
           '</td></tr>';
       });
-      safeSetHtml('newsTableBody', html || '<tr class="empty-row"><td colspan="5">No news yet</td></tr>');
+      safeSetHtml('newsTableBody', html || '<tr class="empty-row"><td colspan="6">No news yet</td></tr>');
     }).catch(function(err) {
       console.error('Error loading news admin:', err);
     });
@@ -3534,6 +3719,10 @@ safeAddListener('newsForm', 'submit', function(e) {
   e.preventDefault();
   var title = safeGetValue('newsTitle');
   var desc = safeGetValue('newsDesc');
+  var category = safeGetValue('newsCategory') || 'News';
+  var date = safeGetValue('newsDate');
+  var link = safeGetValue('newsLink');
+
   if (!title || !desc) {
     showToast('Please provide both Title and Description', true);
     return;
@@ -3541,9 +3730,19 @@ safeAddListener('newsForm', 'submit', function(e) {
   var fd = new FormData();
   fd.append('title', title);
   fd.append('description', desc);
-  var imgInput = document.getElementById('newsImage');
-  var img = imgInput && imgInput.files ? imgInput.files[0] : null;
-  if (img) fd.append('image', img);
+  fd.append('category', category);
+  if (date) fd.append('date', date);
+  if (link) fd.append('link', link);
+
+  if (newsImgModes.add === 'file') {
+    var imgInput = document.getElementById('newsImage');
+    var img = imgInput && imgInput.files ? imgInput.files[0] : null;
+    if (img) fd.append('image', img);
+  } else {
+    var urlVal = safeGetValue('newsImageUrl');
+    if (urlVal) fd.append('imageUrl', urlVal);
+  }
+
   var btn = document.getElementById('addNewsSubmitBtn') || this.querySelector('button[type=submit]');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Adding...'; }
   fetch('/api/news', { method: 'POST', body: fd })
@@ -3554,6 +3753,7 @@ safeAddListener('newsForm', 'submit', function(e) {
       if (data.success) {
         var form = document.getElementById('newsForm');
         if (form) form.reset();
+        clearNewsImage('add');
         closeModal('addNewsModal');
         loadNewsAdmin();
       }
@@ -4319,25 +4519,40 @@ function executeReset() {
 </script>
 
 <script>
-function openEditNewsModal(id, title, desc) {
+function openEditNewsModal(id) {
   var item = (window.allNewsAdminCache || []).find(function(n) { return n._id === id; });
-  var actualTitle = item ? item.title : (title || '');
-  var actualDesc = item ? item.description : (desc || '');
-  safeSetValue('editNewsId', id);
-  safeSetValue('editNewsTitle', actualTitle);
-  safeSetValue('editNewsDesc', actualDesc);
-  var imgInput = document.getElementById('editNewsImage');
-  if (imgInput) imgInput.value = '';
+  if (!item) return;
+
+  safeSetValue('editNewsId', item._id);
+  safeSetValue('editNewsTitle', item.title || '');
+  safeSetValue('editNewsDesc', item.description || '');
+  safeSetValue('editNewsCategory', item.category || 'News');
+  safeSetValue('editNewsLink', item.link || '');
+  safeSetValue('editNewsRemoveImage', 'false');
+
+  if (item.createdAt) {
+    try {
+      var dStr = new Date(item.createdAt).toISOString().split('T')[0];
+      safeSetValue('editNewsDate', dStr);
+    } catch(e) {}
+  } else {
+    safeSetValue('editNewsDate', '');
+  }
+
+  clearNewsImage('edit');
+  setNewsImgMode('edit', 'file');
+
   var curImgWrap = document.getElementById('editNewsCurrentImgWrap');
   var curImg = document.getElementById('editNewsCurrentImg');
   if (curImgWrap && curImg) {
-    if (item && item.imageUrl) {
+    if (item.imageUrl) {
       curImg.src = item.imageUrl;
-      curImgWrap.style.display = 'block';
+      curImgWrap.style.display = 'flex';
     } else {
       curImgWrap.style.display = 'none';
     }
   }
+
   safeSetHtml('editNewsStatus', '');
   openModal('editNewsModal');
 }
@@ -4345,13 +4560,34 @@ function openEditNewsModal(id, title, desc) {
 function submitEditNews(e) {
   e.preventDefault();
   var id = safeGetValue('editNewsId');
+  if (!id) return;
+  var title = safeGetValue('editNewsTitle');
+  var desc = safeGetValue('editNewsDesc');
+  var category = safeGetValue('editNewsCategory') || 'News';
+  var date = safeGetValue('editNewsDate');
+  var link = safeGetValue('editNewsLink');
+  var removeImg = safeGetValue('editNewsRemoveImage') === 'true';
+
+  if (!title || !desc) {
+    safeSetHtml('editNewsStatus', '<span style="color:var(--danger);">Title and description are required</span>');
+    return;
+  }
   var fd = new FormData();
-  fd.append('title', safeGetValue('editNewsTitle'));
-  fd.append('description', safeGetValue('editNewsDesc'));
-  
-  var imgInput = document.getElementById('editNewsImage');
-  var img = imgInput && imgInput.files ? imgInput.files[0] : null;
-  if (img) fd.append('image', img);
+  fd.append('title', title);
+  fd.append('description', desc);
+  fd.append('category', category);
+  if (date) fd.append('date', date);
+  if (link !== undefined) fd.append('link', link);
+  if (removeImg) fd.append('removeImage', 'true');
+
+  if (newsImgModes.edit === 'file') {
+    var imgInput = document.getElementById('editNewsImage');
+    var img = imgInput && imgInput.files ? imgInput.files[0] : null;
+    if (img) fd.append('image', img);
+  } else {
+    var urlVal = safeGetValue('editNewsImageUrl');
+    if (urlVal) fd.append('imageUrl', urlVal);
+  }
   
   var btn = document.getElementById('editNewsBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...'; }
@@ -4359,7 +4595,7 @@ function submitEditNews(e) {
   fetch('/api/news/' + id, { method: 'PUT', body: fd })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      if (btn) { btn.disabled = false; btn.innerHTML = 'Save Changes'; }
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-save"></i> Save Changes'; }
       if (data.success) {
         showToast('News updated successfully', false);
         closeModal('editNewsModal');
@@ -4367,29 +4603,12 @@ function submitEditNews(e) {
       } else {
         safeSetHtml('editNewsStatus', '<span style="color:var(--danger);">' + (data.message || 'Error updating news') + '</span>');
       }
-    }).catch(function() {
-      if (btn) { btn.disabled = false; btn.innerHTML = 'Save Changes'; }
-      safeSetHtml('editNewsStatus', '<span style="color:var(--danger);">Network error</span>');
+    }).catch(function(err) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-save"></i> Save Changes'; }
+      safeSetHtml('editNewsStatus', '<span style="color:var(--danger);">Network error: ' + err.message + '</span>');
     });
 }
-/* ===========================================
-   EXAM & RANK MANAGEMENT JS
-=========================================== */
-let allExamsCache = [];
-let currentExamRosterData = null;
-let currentSubjectInputList = [];
 
-function loadExamsAdmin() {
-  fetch('/api/portal/exams')
-    .then(r => r.json())
-    .then(data => {
-      if (data.success && data.exams) {
-        allExamsCache = data.exams;
-        renderExamSelectList();
-        renderExamTableList();
-      }
-    });
-}
 
 function renderExamSelectList() {
   const select = document.getElementById('examSelectAdmin');

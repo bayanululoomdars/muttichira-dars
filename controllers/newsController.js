@@ -11,18 +11,29 @@ exports.getAllNews = async (req, res) => {
   }
 };
 
-// POST /api/news — Create a news item with optional image upload
+// POST /api/news — Create a news item with optional image upload or image URL
 exports.createNews = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, category, date, link, imageUrl } = req.body;
     if (!title || !description) {
       return res.status(400).json({ success: false, message: 'Title and description are required' });
     }
 
-    const newsData = { title, description };
+    const newsData = { 
+      title, 
+      description,
+      category: category || 'News',
+      link: link || ''
+    };
+    if (date) {
+      newsData.createdAt = new Date(date);
+    }
+
     if (req.file) {
       newsData.imageUrl = req.file.path;
       newsData.telegramFileId = req.file.filename || '';
+    } else if (imageUrl && imageUrl.trim()) {
+      newsData.imageUrl = imageUrl.trim();
     }
 
     const news = new News(newsData);
@@ -54,19 +65,30 @@ exports.deleteNews = async (req, res) => {
 // PUT /api/news/:id — Update a news item
 exports.updateNews = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, category, date, link, imageUrl, removeImage } = req.body;
     const news = await News.findById(req.params.id);
     if (!news) return res.status(404).json({ message: 'News not found' });
 
-    news.title = title || news.title;
-    news.description = description || news.description;
+    if (title !== undefined) news.title = title;
+    if (description !== undefined) news.description = description;
+    if (category !== undefined) news.category = category;
+    if (link !== undefined) news.link = link;
+    if (date) news.createdAt = new Date(date);
 
-    if (req.file) {
+    if (removeImage === 'true' || removeImage === true) {
+      if (news.telegramFileId) {
+        try { await deleteFile(news.telegramFileId); } catch (e) {}
+      }
+      news.imageUrl = '';
+      news.telegramFileId = '';
+    } else if (req.file) {
       if (news.telegramFileId) {
         try { await deleteFile(news.telegramFileId); } catch (e) {}
       }
       news.imageUrl = req.file.path;
       news.telegramFileId = req.file.filename || '';
+    } else if (imageUrl !== undefined && imageUrl.trim()) {
+      news.imageUrl = imageUrl.trim();
     }
 
     await news.save();
