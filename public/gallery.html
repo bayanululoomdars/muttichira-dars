@@ -543,16 +543,20 @@
     <div class="story-bar-container" id="storyBar" style="display:none;"></div>
 
     <!-- Instagram Profile Style Filter Tabs -->
-    <div class="ig-tabs" id="igTabs">
+    <div class="ig-tabs" id="igTabs" style="display:none;">
       <button class="ig-tab-btn active" id="tab-all" onclick="filterGallery('all')">
         <i class="fa fa-th"></i> All Posts
       </button>
     </div>
 
     <!-- Gallery Grid -->
-    <div class="ig-grid" id="galleryGrid"></div>
+    <div class="ig-grid" id="galleryGrid" style="display:none;"></div>
     <!-- Instagram Embed Container -->
-    <div id="igEmbedContainerGallery" style="width:100%; text-align:center; display:none; margin-top:20px;"></div>
+    <div id="igEmbedContainerGallery" style="width:100%; text-align:center; display:block; margin-top:20px;">
+      <!-- Elfsight Instagram Feed | Untitled Instagram Feed -->
+      <script src="https://elfsightcdn.com/platform.js" async></script>
+      <div class="elfsight-app-5ed2095d-749d-42e8-b90c-989c77228f19" data-elfsight-app-lazy></div>
+    </div>
   </div>
 
   <!-- Story Viewer Modal -->
@@ -1076,14 +1080,20 @@
           if (s.igEmbedCode) {
             var igCont = document.getElementById('igEmbedContainerGallery');
             if (igCont) {
-              igCont.innerHTML = '';
-              igCont.innerHTML = s.igEmbedCode;
-              var scripts = igCont.getElementsByTagName('script');
-              for (var i = 0; i < scripts.length; i++) {
-                var sTag = document.createElement('script');
-                if (scripts[i].src) sTag.src = scripts[i].src;
-                else sTag.innerHTML = scripts[i].innerHTML;
-                document.body.appendChild(sTag);
+              var needsUpdate = true;
+              var existingApp = igCont.querySelector('[class*="elfsight-app"]');
+              if (existingApp && s.igEmbedCode.indexOf(existingApp.className.split(' ')[0]) !== -1) {
+                needsUpdate = false;
+              }
+              if (needsUpdate) {
+                igCont.innerHTML = s.igEmbedCode;
+                var scripts = igCont.getElementsByTagName('script');
+                for (var i = 0; i < scripts.length; i++) {
+                  var sTag = document.createElement('script');
+                  if (scripts[i].src) sTag.src = scripts[i].src;
+                  else sTag.innerHTML = scripts[i].innerHTML;
+                  document.body.appendChild(sTag);
+                }
               }
               igCont.style.display = 'block';
               
