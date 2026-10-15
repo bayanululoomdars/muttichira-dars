@@ -1604,16 +1604,55 @@
         <div class="page" id="page-homepage">
 
 
-          <!-- Latest News Settings & Management -->
+                              <!-- Latest News Settings & Management -->
           <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
               <div class="card-title"><i class="fa fa-newspaper-o"></i> Latest News Settings & Add News</div>
+              <button type="button" class="btn btn-accent btn-sm" onclick="openModal('addNewsModal')">
+                <i class="fa fa-plus"></i> Add News / Achievement
+              </button>
             </div>
-            <div style="padding: 15px;"><button class="btn btn-accent" onclick="openModal('addNewsModal')"><i class="fa fa-plus"></i> Add News / Achievement</button></div>
+
+            <!-- Latest News Section Settings (Homepage Header) -->
+            <div style="background:var(--bg-input); border:1px solid var(--border-soft); border-radius:12px; padding:18px; margin:16px 0;">
+              <div style="font-weight:700; color:var(--text); margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+                <span><i class="fa fa-sliders" style="color:var(--accent); margin-right:6px;"></i> Homepage Section Header Settings</span>
+                <small style="color:var(--text-muted); font-weight:normal;">Customizes the News title & subtitle displayed on the public website</small>
+              </div>
+              <form id="newsSectionForm" onsubmit="saveNewsSectionSettings(event)">
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label class="form-label">Section Title</label>
+                    <input class="form-control" type="text" id="newsSectionTitle" placeholder="e.g. Latest News">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Read More Link URL (Optional)</label>
+                    <input class="form-control" type="text" id="newsSectionLink" placeholder="e.g. /news or #services">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Section Subtitle / Description</label>
+                  <input class="form-control" type="text" id="newsSectionDesc" placeholder="e.g. All the news that are relevant for our small community">
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:8px;">
+                  <button type="submit" class="btn btn-accent btn-sm" id="saveNewsSecBtn">
+                    <i class="fa fa-save"></i> Save Section Settings
+                  </button>
+                </div>
+              </form>
+            </div>
 
             <hr style="border:none;border-top:1px solid var(--border-soft);margin:24px 0;">
 
-            <div class="card-title" style="margin-bottom:16px;"><i class="fa fa-list"></i> All Published News Items</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div class="card-title" style="margin:0;"><i class="fa fa-list"></i> All Published News Items</div>
+              <div style="display:flex; gap:8px;">
+                <button type="button" class="btn btn-ghost btn-sm" onclick="loadNewsAdmin()"><i class="fa fa-refresh"></i> Refresh</button>
+                <button type="button" class="btn btn-accent btn-sm" onclick="openModal('addNewsModal')">
+                  <i class="fa fa-plus"></i> Add News / Achievement
+                </button>
+              </div>
+            </div>
             <div class="table-wrap">
               <table class="data-table">
                 <thead>
@@ -2278,6 +2317,174 @@
 <!-- Toast Container -->
 <div id="toastContainer"></div>
 
+<!-- Add News Modal -->
+<div class="modal-overlay" id="addNewsModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" type="button" onclick="closeModal('addNewsModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-newspaper-o"></i> Add News / Achievement</div>
+    <form id="newsForm" enctype="multipart/form-data">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Title *</label>
+          <input class="form-control" type="text" id="newsTitle" placeholder="News / Achievement Title" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Image (optional)</label>
+          <input class="form-control" type="file" id="newsImage" accept="image/*">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description *</label>
+        <textarea class="form-control" id="newsDesc" rows="4" placeholder="News details or achievement summary..." required></textarea>
+      </div>
+      <button type="submit" class="btn btn-accent" id="addNewsSubmitBtn" style="width:100%;">
+        <i class="fa fa-plus"></i> Add News / Achievement
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Edit News Modal -->
+<div class="modal-overlay" id="editNewsModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" type="button" onclick="closeModal('editNewsModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-edit"></i> Edit News</div>
+    <form id="editNewsForm" onsubmit="submitEditNews(event)">
+      <input type="hidden" id="editNewsId">
+      <div class="form-group">
+        <label class="form-label">Title *</label>
+        <input class="form-control" type="text" id="editNewsTitle" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description *</label>
+        <textarea class="form-control" id="editNewsDesc" rows="4" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Update Image (optional)</label>
+        <input class="form-control" type="file" id="editNewsImage" accept="image/*">
+        <small class="text-muted" style="display:block;margin-top:4px;">Leave empty to keep existing image</small>
+        <div id="editNewsCurrentImgWrap" style="margin-top:8px; display:none;">
+          <img id="editNewsCurrentImg" src="" style="max-height:80px; border-radius:6px; object-fit:cover;">
+        </div>
+      </div>
+      <div id="editNewsStatus" style="margin-bottom:12px; font-weight:600;"></div>
+      <button type="submit" class="btn btn-accent" id="editNewsBtn" style="width:100%;">
+        <i class="fa fa-save"></i> Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Admission Details Modal -->
+<div class="modal-overlay" id="admissionModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" type="button" onclick="closeModal('admissionModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-graduation-cap"></i> Application Details</div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Edit Gallery Modal -->
+<div class="modal-overlay" id="editGalleryModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" type="button" onclick="closeModal('editGalleryModal')">&times;</button>
+    <div class="modal-title"><i class="fa fa-edit"></i> Edit Gallery Item</div>
+    <form id="editGalleryForm">
+      <input type="hidden" id="editGalleryId">
+      <div class="form-group">
+        <label>Title *</label>
+        <input class="form-control" type="text" id="editGalleryTitle" required>
+      </div>
+      <div class="form-group">
+        <label>Category *</label>
+        <select class="form-control" id="editGalleryCategory" required></select>
+      </div>
+      <div class="form-group">
+        <label>Media Type *</label>
+        <select class="form-control" id="editGalleryMediaType" required onchange="setEditGallerySource(this.value)">
+          <option value="image">Image File</option>
+          <option value="video">Video URL (YouTube)</option>
+        </select>
+      </div>
+      <div class="form-group" id="editGalleryImageGroup">
+        <label>Change Image (Leave empty to keep current)</label>
+        <input class="form-control" type="file" id="editGalleryImage" accept="image/*">
+        <div style="margin-top:8px;">
+          <img id="editGalleryCurrentImg" src="#" style="max-height:80px;border-radius:4px;display:none;">
+        </div>
+      </div>
+      <div class="form-group" id="editGalleryVideoGroup" style="display:none;">
+        <label>Video URL *</label>
+        <input class="form-control" type="url" id="editGalleryVideoUrl" placeholder="https://youtube.com/watch?...">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control" id="editGalleryDesc" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Hashtags</label>
+        <input class="form-control" type="text" id="editGalleryHashtags" placeholder="e.g. event, campus (comma separated)">
+      </div>
+      <button class="btn btn-primary" type="submit" style="width:100%;">
+        <i class="fa fa-save"></i> Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Reset Confirmation Modal -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-box" style="max-width:500px;text-align:center;">
+    <button class="modal-close-btn" type="button" onclick="closeModal('resetModal')">&times;</button>
+    <div style="font-size:2.5rem;margin-bottom:16px;">🔐</div>
+    <div class="modal-title" style="justify-content:center;color:#f87171;">Confirm Full Reset</div>
+    <p style="color:var(--text-muted);margin-bottom:14px;font-size:0.88rem;">
+      To prevent accidental deletion, you must <strong>manually type</strong> the confirmation sentence below:
+    </p>
+    <div style="background:var(--bg-input);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);color:#f87171;font-weight:700;font-size:0.82rem;margin-bottom:14px;user-select:none;" id="resetConfirmationTarget">
+      I CONFIRM PERMANENT RESET OF ALL BAYANUL ULOOM DARS DATA
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <input class="form-control" type="text" id="resetConfirmTextInput"
+        placeholder="Type the exact sentence above..."
+        onpaste="return false;" oncopy="return false;" oncut="return false;" autocomplete="off"
+        style="text-align:center;border-color:rgba(239,68,68,0.4);" onkeyup="validateResetTyping()">
+      <small style="color:var(--danger);display:block;margin-top:5px;font-size:0.75rem;">
+        <i class="fa fa-ban"></i> Pasting is disabled! You must physically type out each letter.
+      </small>
+    </div>
+    <div class="form-group" style="margin-bottom:16px;">
+      <input class="form-control" type="password" id="resetPasswordInput"
+        placeholder="Enter Super Admin Password" style="text-align:center;">
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button type="button" class="btn btn-ghost" onclick="closeModal('resetModal')">Cancel</button>
+      <button type="button" class="btn btn-danger" id="executeResetBtn" disabled style="opacity:0.5;cursor:not-allowed;" onclick="executeReset()">
+        <i class="fa fa-trash"></i> Confirm Reset
+      </button>
+    </div>
+    <div id="resetStatus" style="margin-top:14px;font-weight:600;font-size:0.9rem;"></div>
+  </div>
+</div>
+
+<!-- Global Cropper Modal -->
+<div class="unified-modal" id="cropperModal" style="z-index: 10005;">
+  <div class="unified-modal-content" style="max-width: 500px; text-align:center;">
+    <div class="unified-modal-header">
+      <h3 style="color:var(--accent);"><i class="fa fa-crop"></i> Crop Profile Photo</h3>
+      <button class="unified-modal-close" type="button" onclick="closeCropperModal()">&times;</button>
+    </div>
+    <div style="max-height: 400px; width: 100%; overflow: hidden; border-radius:8px; margin-bottom: 20px;">
+      <img id="cropperImage" style="max-width: 100%; display: block;">
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button type="button" class="btn btn-secondary" onclick="closeCropperModal()">Cancel</button>
+      <button type="button" class="btn btn-accent" id="btnCropSaveAdmin"><i class="fa fa-upload"></i> Upload & Save</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- ══════════════════════════════════
      JAVASCRIPT
 ══════════════════════════════════ -->
@@ -2664,6 +2871,7 @@ function loadAll() {
     checkAdmissionStatus();
     loadAdmissions();
     loadNewsAdmin();
+    loadNewsSectionSettings();
     loadGalleryAdmin();
     loadContacts();
     loadSubscribers();
@@ -2732,8 +2940,12 @@ function showPage(page) {
   safeSetText('topbarTitle', titles[page] || titles[targetPage] || page);
 
   // Load data for specific pages
-  if (targetPage === 'homepage') loadNews();
-  if (targetPage === 'gallery') loadGallery();
+  if (targetPage === 'homepage') {
+    loadNewsAdmin();
+    loadNewsSectionSettings();
+    loadHomeSettings();
+  }
+  if (targetPage === 'gallery') loadGalleryAdmin();
   if (targetPage === 'admissions') loadAdmissions();
   if (targetPage === 'messages') { loadContacts(); loadSubscribers(); }
   if (targetPage === 'overview') loadOverview();
@@ -3228,80 +3440,126 @@ function printAdmission(id) {
 <body>
   <button class="print-btn no-print" onclick="window.print()">🖨️ Print / Download PDF</button>
   ${html}
-
-  <div style="position:fixed; bottom:10px; right:10px; font-size:12px; color:rgba(255,255,255,0.3); z-index:9999; pointer-events:none;">
-    Version 2.1
-  </div>
-
-<!-- Global Cropper Modal -->
-<div class="unified-modal" id="cropperModal" style="z-index: 10005;">
-  <div class="unified-modal-content" style="max-width: 500px; text-align:center;">
-    <div class="unified-modal-header">
-      <h3 style="color:var(--accent);"><i class="fa fa-crop"></i> Crop Profile Photo</h3>
-      <button class="unified-modal-close" onclick="closeCropperModal()">&times;</button>
-    </div>
-    <div style="max-height: 400px; width: 100%; overflow: hidden; border-radius:8px; margin-bottom: 20px;">
-      <img id="cropperImage" style="max-width: 100%; display: block;">
-    </div>
-    <div style="display:flex; justify-content:flex-end; gap:10px;">
-      <button class="btn btn-secondary" onclick="closeCropperModal()">Cancel</button>
-      <button class="btn btn-accent" id="btnCropSaveAdmin"><i class="fa fa-upload"></i> Upload & Save</button>
-    </div>
-  </div>
-</div>
-
-</div></div></div></div></div>\n</body>
+</body>
 </html>`);
     pw.document.close();
   }, 60);
 }
 
 /* ═══════════════════════════════════════
-   NEWS
+   NEWS & HOMEPAGE SECTION SETTINGS
 ═══════════════════════════════════════ */
+window.allNewsAdminCache = [];
+
+function loadNews() {
+  loadNewsAdmin();
+}
+function loadGallery() {
+  loadGalleryAdmin();
+}
+
 function loadNewsAdmin() {
-  fetch('/api/news').then(function(r) { return r.json(); }).then(function(data) {
-    safeSetText('statNews', data.length);
-    safeSetText('badge-news', data.length);
-    var html = '';
-    data.forEach(function(item) {
-      var d = new Date(item.createdAt).toLocaleDateString('en-IN');
-      var safeTitle = (item.title || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
-      var safeDesc = (item.description || '').replace(/'/g, "\\'").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
-      
-      html += '<tr>' +
-        '<td>' + (item.imageUrl ? '<img src="' + item.imageUrl + '">' : '<span style="color:var(--text-muted);">—</span>') + '</td>' +
-        '<td><strong>' + item.title + '</strong></td>' +
-        '<td style="color:var(--text-muted);">' + (item.description || '').substring(0, 60) + '...</td>' +
-        '<td>' + d + '</td>' +
-        '<td>' +
-        '<button class="btn btn-sm" style="background:var(--accent); color:#1a0e00; margin-right:5px;" onclick="openEditNewsModal(\'' + item._id + '\', \'' + safeTitle + '\', \'' + safeDesc + '\')"><i class="fa fa-edit"></i></button>' +
-        '<button class="btn btn-danger btn-sm" onclick="deleteItem(\'news\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button>' +
-        '</td></tr>';
+  fetch('/api/news')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!Array.isArray(data)) data = [];
+      window.allNewsAdminCache = data;
+      safeSetText('statNews', data.length);
+      safeSetText('badge-news', data.length);
+      var html = '';
+      data.forEach(function(item) {
+        var d = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN') : '—';
+        html += '<tr>' +
+          '<td>' + (item.imageUrl ? '<img src="' + item.imageUrl + '" style="width:45px;height:45px;object-fit:cover;border-radius:6px;">' : '<span style="color:var(--text-muted);">—</span>') + '</td>' +
+          '<td><strong>' + (item.title || '') + '</strong></td>' +
+          '<td style="color:var(--text-muted);">' + ((item.description || '').length > 60 ? (item.description || '').substring(0, 60) + '...' : (item.description || '')) + '</td>' +
+          '<td>' + d + '</td>' +
+          '<td>' +
+          '<button type="button" class="btn btn-sm" style="background:var(--accent); color:#1a0e00; margin-right:5px;" onclick="openEditNewsModal(\'' + item._id + '\')"><i class="fa fa-edit"></i></button>' +
+          '<button type="button" class="btn btn-danger btn-sm" onclick="deleteItem(\'news\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button>' +
+          '</td></tr>';
+      });
+      safeSetHtml('newsTableBody', html || '<tr class="empty-row"><td colspan="5">No news yet</td></tr>');
+    }).catch(function(err) {
+      console.error('Error loading news admin:', err);
     });
-    safeSetHtml('newsTableBody', html || '<tr class="empty-row"><td colspan="5">No news yet</td></tr>');
-  }).catch(function() {});
+}
+
+function loadNewsSectionSettings() {
+  fetch('/api/sections')
+    .then(function(r) { return r.json(); })
+    .then(function(sections) {
+      if (Array.isArray(sections)) {
+        var sec = sections.find(function(s) { return s.sectionId === 'latestNews'; });
+        if (sec) {
+          safeSetValue('newsSectionTitle', sec.title || '');
+          safeSetValue('newsSectionDesc', sec.description || '');
+          safeSetValue('newsSectionLink', sec.readMoreLink || '');
+        } else {
+          safeSetValue('newsSectionTitle', 'Latest News');
+          safeSetValue('newsSectionDesc', 'All the news that are relevant for our small community');
+          safeSetValue('newsSectionLink', '#');
+        }
+      }
+    }).catch(function(e) { console.error('Error loading section settings:', e); });
+}
+
+function saveNewsSectionSettings(e) {
+  if (e) e.preventDefault();
+  var title = safeGetValue('newsSectionTitle') || 'Latest News';
+  var desc = safeGetValue('newsSectionDesc');
+  var link = safeGetValue('newsSectionLink') || '#';
+  var btn = document.getElementById('saveNewsSecBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...'; }
+  
+  fetch('/api/sections/latestNews', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      title: title,
+      description: desc,
+      readMoreLink: link
+    })
+  }).then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-save"></i> Save Section Settings'; }
+      showToast(res.success ? 'Latest News Settings saved!' : (res.message || 'Failed to save'), !res.success);
+    }).catch(function(err) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-save"></i> Save Section Settings'; }
+      showToast('Network error: ' + err.message, true);
+    });
 }
 
 safeAddListener('newsForm', 'submit', function(e) {
   e.preventDefault();
+  var title = safeGetValue('newsTitle');
+  var desc = safeGetValue('newsDesc');
+  if (!title || !desc) {
+    showToast('Please provide both Title and Description', true);
+    return;
+  }
   var fd = new FormData();
-  fd.append('title', safeGetValue('newsTitle'));
-  fd.append('description', safeGetValue('newsDesc'));
+  fd.append('title', title);
+  fd.append('description', desc);
   var imgInput = document.getElementById('newsImage');
   var img = imgInput && imgInput.files ? imgInput.files[0] : null;
   if (img) fd.append('image', img);
-  var btn = this.querySelector('button[type=submit]');
+  var btn = document.getElementById('addNewsSubmitBtn') || this.querySelector('button[type=submit]');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Adding...'; }
   fetch('/api/news', { method: 'POST', body: fd })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-plus"></i> Add News / Achievement'; }
-      showToast(data.message, !data.success);
-      if (data.success) { e.target.reset(); loadNewsAdmin(); }
-    }).catch(function() {
+      showToast(data.message || (data.success ? 'News added successfully!' : 'Failed to add news'), !data.success);
+      if (data.success) {
+        var form = document.getElementById('newsForm');
+        if (form) form.reset();
+        closeModal('addNewsModal');
+        loadNewsAdmin();
+      }
+    }).catch(function(err) {
       if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-plus"></i> Add News / Achievement'; }
-      showToast('Network error', true);
+      showToast('Network error: ' + err.message, true);
     });
 });
 
@@ -4062,11 +4320,24 @@ function executeReset() {
 
 <script>
 function openEditNewsModal(id, title, desc) {
+  var item = (window.allNewsAdminCache || []).find(function(n) { return n._id === id; });
+  var actualTitle = item ? item.title : (title || '');
+  var actualDesc = item ? item.description : (desc || '');
   safeSetValue('editNewsId', id);
-  safeSetValue('editNewsTitle', title);
-  safeSetValue('editNewsDesc', desc);
+  safeSetValue('editNewsTitle', actualTitle);
+  safeSetValue('editNewsDesc', actualDesc);
   var imgInput = document.getElementById('editNewsImage');
-  if (imgInput) imgInput.value = ''; // clear file input
+  if (imgInput) imgInput.value = '';
+  var curImgWrap = document.getElementById('editNewsCurrentImgWrap');
+  var curImg = document.getElementById('editNewsCurrentImg');
+  if (curImgWrap && curImg) {
+    if (item && item.imageUrl) {
+      curImg.src = item.imageUrl;
+      curImgWrap.style.display = 'block';
+    } else {
+      curImgWrap.style.display = 'none';
+    }
+  }
   safeSetHtml('editNewsStatus', '');
   openModal('editNewsModal');
 }
