@@ -2317,6 +2317,23 @@
 <!-- Toast Container -->
 <div id="toastContainer"></div>
 
+<!-- IMAGE ZOOM / LIGHTBOX MODAL -->
+<div id="imageZoomModal" style="display:none; position:fixed; inset:0; z-index:999999; background:rgba(0,0,0,0.92); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px; cursor:zoom-out;" onclick="closeImageZoom(event)">
+  <button type="button" onclick="closeImageZoom()" style="position:absolute; top:20px; right:25px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s; z-index:1000000;" onmouseover="this.style.background='rgba(239,68,68,0.85)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'" title="Close zoom (Esc)">&times;</button>
+  <div style="max-width:94vw; max-height:94vh; display:flex; flex-direction:column; align-items:center; cursor:default;" onclick="event.stopPropagation()">
+    <img id="imageZoomImg" src="" alt="Zoomed News Image" style="max-width:92vw; max-height:84vh; object-fit:contain; border-radius:12px; box-shadow:0 25px 60px rgba(0,0,0,0.8); animation:zoomModalAnim 0.25s ease both; background:#fff;">
+    <div id="imageZoomCaption" style="color:#f1f5f9; font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:600; margin-top:14px; text-align:center; max-width:85vw; text-shadow:0 2px 6px rgba(0,0,0,0.7);"></div>
+  </div>
+</div>
+
+<style>
+  @keyframes zoomModalAnim {
+    from { transform: scale(0.88); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+</style>
+
+
 <!-- Add News Modal -->
 <div class="modal-overlay" id="addNewsModal">
   <div class="modal-box" style="max-width: 650px;">
@@ -2381,7 +2398,7 @@
 
         <!-- Live Preview -->
         <div id="addNewsPreviewBox" style="display:none; margin-top:12px; align-items:center; gap:12px; background:var(--bg-card); padding:8px 12px; border-radius:8px; border:1px solid var(--border-soft);">
-          <img id="addNewsPreviewImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px; border:1px solid var(--border);">
+          <img id="addNewsPreviewImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px; border:1px solid var(--border); cursor:zoom-in;" onclick="zoomNewsImage(this.src, 'Image Preview')" title="Click to zoom preview">
           <div style="flex:1;">
             <div style="font-size:0.85rem; font-weight:600; color:var(--text);">Image Preview</div>
             <small style="color:var(--text-muted);" id="addNewsPreviewText">Ready to upload</small>
@@ -2452,7 +2469,7 @@
 
         <!-- Current Image preview if exists -->
         <div id="editNewsCurrentImgWrap" style="margin-bottom:12px; display:none; align-items:center; gap:12px; background:var(--bg-card); padding:8px 12px; border-radius:8px; border:1px solid var(--border-soft);">
-          <img id="editNewsCurrentImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px;">
+          <img id="editNewsCurrentImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px; cursor:zoom-in;" onclick="zoomNewsImage(this.src, 'Current Image')" title="Click to zoom">
           <div style="flex:1;">
             <div style="font-size:0.85rem; font-weight:600; color:var(--text);">Current Image</div>
             <small style="color:var(--text-muted);" id="editNewsCurrentImgLabel">Currently active</small>
@@ -2474,7 +2491,7 @@
 
         <!-- New Image Live Preview -->
         <div id="editNewsPreviewBox" style="display:none; margin-top:12px; align-items:center; gap:12px; background:var(--bg-card); padding:8px 12px; border-radius:8px; border:1px solid var(--border-soft);">
-          <img id="editNewsPreviewImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px; border:1px solid var(--border);">
+          <img id="editNewsPreviewImg" src="" style="width:70px; height:70px; object-fit:cover; border-radius:6px; border:1px solid var(--border); cursor:zoom-in;" onclick="zoomNewsImage(this.src, 'New Image Preview')" title="Click to zoom preview">
           <div style="flex:1;">
             <div style="font-size:0.85rem; font-weight:600; color:var(--text);">New Image Preview</div>
             <small style="color:var(--text-muted);">Will be saved upon submit</small>
@@ -3632,6 +3649,32 @@ function markRemoveNewsImage() {
   showToast('Image marked for removal on save', false);
 }
 
+
+function zoomNewsImage(src, caption) {
+  if (!src) return;
+  var modal = document.getElementById('imageZoomModal');
+  var img = document.getElementById('imageZoomImg');
+  var cap = document.getElementById('imageZoomCaption');
+  if (img) img.src = src;
+  if (cap) cap.textContent = caption || '';
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeImageZoom(e) {
+  var modal = document.getElementById('imageZoomModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeImageZoom();
+});
+
 function loadNews() {
   loadNewsAdmin();
 }
@@ -3653,8 +3696,9 @@ function loadNewsAdmin() {
         var catBadge = item.category ? '<span style="background:rgba(10,77,46,0.12); color:#0a4d2e; font-weight:700; padding:3px 8px; border-radius:4px; font-size:0.75rem; text-transform:uppercase;">' + item.category + '</span>' : '<span style="color:var(--text-muted);">News</span>';
         var linkIcon = item.link ? ' <a href="' + item.link + '" target="_blank" title="Open Link" style="color:var(--accent); margin-left:4px;"><i class="fa fa-external-link"></i></a>' : '';
 
+        var safeImgTitle = (item.title || '').replace(/'/g, "\\'");
         html += '<tr>' +
-          '<td>' + (item.imageUrl ? '<img src="' + item.imageUrl + '" style="width:45px;height:45px;object-fit:cover;border-radius:6px;">' : '<span style="color:var(--text-muted);">—</span>') + '</td>' +
+          '<td>' + (item.imageUrl ? '<img src="' + item.imageUrl + '" style="width:48px;height:48px;object-fit:cover;border-radius:6px;cursor:zoom-in;transition:transform 0.2s;" onmouseover="this.style.transform=\'scale(1.15)\'" onmouseout="this.style.transform=\'none\'" onclick="zoomNewsImage(\'' + item.imageUrl + '\', \'' + safeImgTitle + '\')" title="Click to zoom image">' : '<span style="color:var(--text-muted);">—</span>') + '</td>' +
           '<td>' + catBadge + '</td>' +
           '<td><strong>' + (item.title || '') + '</strong>' + linkIcon + '</td>' +
           '<td style="color:var(--text-muted);">' + ((item.description || '').length > 60 ? (item.description || '').substring(0, 60) + '...' : (item.description || '')) + '</td>' +
