@@ -4708,6 +4708,28 @@ function submitEditNews(e) {
 }
 
 
+let allExamsCache = [];
+
+function loadExamsAdmin() {
+  fetch('/api/portal/exams')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.success && data.exams) {
+        allExamsCache = data.exams;
+        renderExamSelectList();
+        renderExamTableList();
+      } else {
+        allExamsCache = [];
+        renderExamSelectList();
+        renderExamTableList();
+      }
+    })
+    .catch(function(err) {
+      console.error('Error loading exams:', err);
+      showToast('Error loading exams: ' + err.message, true);
+    });
+}
+
 function renderExamSelectList() {
   const select = document.getElementById('examSelectAdmin');
   if (!select) return;

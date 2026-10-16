@@ -1838,9 +1838,12 @@ function loadUsthadDashboardData() {
           let pendHtml = '';
           data.exams.forEach(e => {
             const isPub = e.status === 'Published';
-            const item = `<div class="p-2 mb-2 rounded" style="background:var(--bg-card-2); border-left:4px solid ${isPub ? 'var(--success)' : 'var(--danger)'}; cursor:pointer;" onclick="selectExamInMatrix('${e._id}')" title="Click to manage marks">
-              <strong style="color:var(--text);">${e.examName}</strong>
-              <div class="small text-muted">${e.term} • Batch: ${e.batchYear}</div>
+            const item = `<div class="p-2 mb-2 rounded shadow-sm" style="background:var(--bg-card-2); border-left:4px solid ${isPub ? '#10b981' : '#f59e0b'}; border-top:1px solid var(--border-soft); border-right:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); cursor:pointer; transition:transform 0.15s ease;" onclick="selectExamInMatrix('${e._id}')" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" title="Click to open and manage marks">
+              <div class="d-flex justify-content-between align-items-center">
+                <strong style="color:var(--text); font-size:13.5px;">${e.examName}</strong>
+                <span class="badge badge-${isPub ? 'success' : 'warning text-dark'}" style="font-size:10px;">${isPub ? 'Published' : 'Pending'}</span>
+              </div>
+              <div class="small text-muted mt-1"><i class="fa fa-calendar-check-o mr-1"></i>${e.term} &nbsp;•&nbsp; Batch: ${e.batchYear}</div>
             </div>`;
             if(isPub) pubHtml += item;
             else pendHtml += item;
@@ -2425,7 +2428,7 @@ function unpublishStudentMark(admNo) {
       fetch('/api/portal/usthad/messages?usthadId=' + currentUserSession.usthadId)
         .then(r => r.json())
         .then(data => {
-          const container = document.getElementById('usthadMessagesList');
+          const container = document.getElementById('usthadMessagesContainer') || document.getElementById('usthadMessagesList');
           if(data.success && data.messages && data.messages.length > 0) {
             let h = '';
             data.messages.forEach(m => {
@@ -2458,7 +2461,7 @@ function unpublishStudentMark(admNo) {
           usthadName: currentUserSession.name,
           studentAdmNo: document.getElementById('dmTargetStudent').value,
           subject: document.getElementById('dmSubject').value,
-          content: document.getElementById('dmBody').value
+          content: (document.getElementById('dmContent') || document.getElementById('dmBody')).value
         })
       }).then(r=>r.json()).then(res=>{
         if(res.success) {
@@ -2508,7 +2511,7 @@ function unpublishStudentMark(admNo) {
           studentName: currentUserSession.name,
           usthadId: document.getElementById('msgUsthadSelect').value,
           subject: document.getElementById('msgSubject').value,
-          content: document.getElementById('msgContent').value
+          content: (document.getElementById('msgBody') || document.getElementById('msgContent')).value
         })
       }).then(r => r.json()).then(res => {
         alert(res.message || 'Message sent!');
