@@ -9,6 +9,7 @@ const chatId = (process.env.TELEGRAM_CHAT_ID || '').trim();
 
 let dbState = {
   Admission: [],
+  Batch: [],
   Contact: [],
   Exam: [],
   ExamResult: [],
@@ -341,6 +342,7 @@ function createMockModel(modelName) {
     }
 
     async save() {
+      if (!dbState[modelName]) dbState[modelName] = [];
       const collection = dbState[modelName];
       const index = collection.findIndex(item => item._id === this._id);
       if (index !== -1) {
@@ -353,6 +355,7 @@ function createMockModel(modelName) {
     }
 
     static find(query = {}) {
+      if (!dbState[modelName]) dbState[modelName] = [];
       let result = dbState[modelName].filter(item => {
         for (let key in query) {
           if (key === '$or') {
@@ -444,7 +447,11 @@ function createMockModel(modelName) {
 module.exports = {
   uploadDbToTelegram,
   loadDbFromTelegram,
+  saveLocalDb,
+  scheduleSave,
+  dbState,
   Admission: createMockModel('Admission'),
+  Batch: createMockModel('Batch'),
   Contact: createMockModel('Contact'),
   Exam: createMockModel('Exam'),
   ExamResult: createMockModel('ExamResult'),

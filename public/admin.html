@@ -2042,8 +2042,15 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Batch Number *</label>
-                  <input type="text" id="adminStudentBatchNo" class="form-control" placeholder="e.g. 1, 2, 3..." required>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <label class="form-label" style="margin-bottom:0; font-weight:700;">Batch Number *</label>
+                    <button type="button" class="btn btn-xs btn-outline-warning" onclick="promptAddNewBatch('adminStudentBatchNo')" style="font-size:11px; padding:2px 8px; border-radius:6px; cursor:pointer;">
+                      <i class="fa fa-plus"></i> Add New Batch
+                    </button>
+                  </div>
+                  <select id="adminStudentBatchNo" class="form-control" required style="background:var(--bg-input); color:var(--text);">
+                    <option value="">Select Batch...</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Native Place</label>
@@ -2101,21 +2108,23 @@
 
         <!-- Create Exam Modal -->
         <div class="unified-modal" id="modalCreateExam">
-          <div class="unified-modal-content" style="max-width:650px;">
-            <div class="unified-modal-header">
-              <h3>Create New Exam Configuration</h3>
+          <div class="unified-modal-content" style="max-width:740px; width:95%;">
+            <div class="unified-modal-header" style="border-bottom:1px solid var(--border-soft); padding-bottom:14px;">
+              <h3 style="margin:0; font-weight:800; font-size:1.25rem; color:var(--accent); display:flex; align-items:center; gap:8px;">
+                <i class="fa fa-graduation-cap"></i> Create New Exam Configuration
+              </h3>
               <button class="unified-modal-close" onclick="closeCreateExamModal()">&times;</button>
             </div>
             
             <form onsubmit="submitCreateExamForm(event)">
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Exam Name *</label>
-                  <input type="text" id="newExamName" class="form-control" placeholder="e.g. First Semester Exam 2025" required>
+              <div class="form-grid-2" style="margin-top:14px;">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label" style="font-weight:700;">Exam Name * <small style="color:var(--text-soft); font-weight:normal;">(Staff / Committee can freely specify title, semester, or manual evaluation in brackets)</small></label>
+                  <input type="text" id="newExamName" class="form-control" placeholder="e.g. First Semester Examination (2025-2026) or Annual Exam (Manual Evaluation)" required style="background:var(--bg-input); color:var(--text); font-weight:600;">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Term / Type</label>
-                  <select id="newExamTerm" class="form-control">
+                  <label class="form-label" style="font-weight:700;">Term / Evaluation Type</label>
+                  <select id="newExamTerm" class="form-control" style="background:var(--bg-input); color:var(--text);">
                     <option value="Semester 1">Semester 1</option>
                     <option value="Semester 2">Semester 2</option>
                     <option value="Half Yearly">Half Yearly</option>
@@ -2123,25 +2132,67 @@
                     <option value="Monthly Evaluation">Monthly Evaluation</option>
                   </select>
                 </div>
-                
                 <div class="form-group">
-                  <label class="form-label">Target Batch Number</label>
-                  <input type="text" id="newExamBatchNo" class="form-control" placeholder="Enter Batch Number (e.g. 1, 2, 18)" oninput="renderSubjectInputRows()">
+                  <label class="form-label" style="font-weight:700;">Academic Year</label>
+                  <input type="text" id="newExamBatch" class="form-control" placeholder="e.g. 2025-2026" value="2025-2026" style="background:var(--bg-input); color:var(--text);">
                 </div>
               </div>
 
-              <!-- Dynamic Subject Input Rows -->
-              <div style="margin-top:16px; background:var(--bg-card-2); padding:16px; border-radius:12px; border:1px solid var(--border-soft);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                  <strong style="color:var(--accent); font-size:0.9rem;">Subjects & Max Marks for selected Class:</strong>
-                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addSubjectInputRow()">+ Add Subject</button>
+              <!-- Multi-Batch Setup with Open/Close Toggle and Subject Matrix -->
+              <div style="margin-top:18px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <label class="form-label" style="font-weight:700; color:var(--text); margin-bottom:0;">
+                    <i class="fa fa-layer-group text-primary mr-1"></i> Select Batch to Configure Exam:
+                  </label>
+                  <button type="button" class="btn btn-xs btn-outline-warning" onclick="promptAddNewBatch('examModal')" style="font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">
+                    <i class="fa fa-plus"></i> Add New Batch
+                  </button>
                 </div>
-                <div id="subjectInputRowsContainer">
-                  <!-- Populated by JS -->
+                
+                <!-- Batch Buttons Bar -->
+                <div id="examBatchButtonsContainer" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; max-height:130px; overflow-y:auto; padding:8px; background:var(--bg-card); border:1px solid var(--border-soft); border-radius:10px;">
+                  <!-- Dynamic Batch Buttons rendered here -->
+                </div>
+
+                <!-- Active Batch Configuration Card -->
+                <div id="activeBatchConfigCard" style="background:var(--bg-card-2); border:1px solid var(--border-soft); border-radius:12px; padding:16px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-soft); padding-bottom:12px; margin-bottom:14px;">
+                    <div>
+                      <h4 id="activeBatchTitle" style="margin:0; font-weight:800; color:var(--accent);">Batch 1</h4>
+                      <small id="activeBatchSubtitle" style="color:var(--text-soft);">Configure subjects & question paper max marks</small>
+                    </div>
+                    <!-- Open / Stopped Exam Toggle -->
+                    <div style="display:flex; align-items:center; gap:10px;">
+                      <span id="batchExamStatusLabel" style="font-size:12px; font-weight:700; color:#10b981;">Exam Active</span>
+                      <label style="position:relative; display:inline-block; width:46px; height:24px; margin:0; cursor:pointer;">
+                        <input type="checkbox" id="toggleBatchExamOpen" checked onchange="onToggleBatchExamStatus(this.checked)" style="opacity:0; width:0; height:0;">
+                        <span id="batchSliderSpan" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#10b981; transition:.3s; border-radius:24px;">
+                          <span style="position:absolute; height:18px; width:18px; left:24px; bottom:3px; background-color:white; transition:.3s; border-radius:50%;"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- If Stopped Notice -->
+                  <div id="batchStoppedNotice" style="display:none; padding:14px; background:rgba(239,68,68,0.1); border:1px dashed #ef4444; border-radius:8px; color:#f87171; text-align:center; font-size:13px; font-weight:600;">
+                    <i class="fa fa-ban mr-1"></i> Exam is <strong>STOPPED</strong> for this batch. No exam or mark entry will be scheduled for this batch.
+                  </div>
+
+                  <!-- Subjects list when Active -->
+                  <div id="batchSubjectsSection">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                      <span style="font-size:0.88rem; font-weight:700; color:var(--text);">Subjects & Question Paper Max Marks:</span>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addSubjectToActiveBatch()">+ Add Subject</button>
+                    </div>
+                    <div id="activeBatchSubjectRowsContainer">
+                      <!-- Dynamic subject rows for active batch -->
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-accent mt-3" style="width:100%;">
+              <button type="submit" class="btn btn-accent mt-4" style="width:100%; font-weight:800; padding:12px; font-size:1rem; border-radius:10px;">
                 <i class="fa fa-save"></i> Save Exam Configuration
               </button>
             </form>
@@ -2711,6 +2762,7 @@ function loadPortalUsersAdmin() {
 
 function loadOverview() {
   loadPortalUsersAdmin();
+  loadPortalBatches();
   fetch('/api/admissions').then(r => r.json()).then(d => {
     safeSetText('statAdmissions', Array.isArray(d) ? d.length : (d.admissions ? d.admissions.length : 0));
   }).catch(() => {});
@@ -2777,7 +2829,8 @@ function renderPortalUsersAdmin() {
       '<td><code style="font-weight:700;color:var(--accent);">' + idVal + '</code></td>' +
       '<td>' + details + (u.place ? ' <small style="color:var(--text-soft);">(' + u.place + ')</small>' : '') + '</td>' +
       '<td><code style="color:var(--text-soft);">' + phoneVal + '</code></td>' +
-      '<td><code style="color:var(--accent);">' + (u.password || phoneVal) + '</code></td>' +
+      '<td><code style="color:var(--accent); font-weight:700;">' + (u.password || phoneVal) + '</code> ' +
+        '<button class="btn btn-outline-secondary btn-sm p-1 ml-1" style="font-size:10px; line-height:1; border-radius:4px;" title="Copy Password" onclick="navigator.clipboard.writeText(\'' + (u.password || phoneVal) + '\'); alert(\'Password copied: ' + (u.password || phoneVal) + '\');"><i class="fa fa-copy"></i></button></td>' +
       '<td><div class="action-buttons">' +
         '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')"><i class="fa fa-edit"></i> Edit</button>' +
         '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')"><i class="fa fa-trash"></i> Delete</button>' +
@@ -2796,6 +2849,7 @@ function openAddUserModal() {
     console.log('Opening Add User Modal...');
   editingUserId = null;
   editingUserRole = null;
+  loadPortalBatches();
   document.getElementById('formAddStudentAdmin').reset();
   document.getElementById('previewStudentPhoto').src = 'img/new_logo.png';
   document.getElementById('formAddUsthadAdmin').reset();
@@ -2830,6 +2884,7 @@ function editUserAdmin(id, role) {
       safeSetVal('adminStudentPassword', user.password);
       safeSetVal('adminStudentAdmNo', user.admissionNo);
       safeSetVal('adminStudentStatus', user.status);
+      populateBatchDropdowns(user.batchNumber || user.batchYear);
       safeSetVal('adminStudentBatchNo', user.batchNumber || user.batchYear);
       if(user.photoUrl) document.getElementById('previewStudentPhoto').src = user.photoUrl;
       safeSetVal('adminStudentPlace', user.place);
@@ -4693,79 +4748,302 @@ function renderExamTableList() {
   tbody.innerHTML = html;
 }
 
+let allBatchesCache = [];
+let activeExamConfig = {};
+let currentSelectedBatchInModal = 'Batch 1';
+
+// Load batches across admin
+function loadPortalBatches(selectedVal = null) {
+  return fetch('/api/portal/batches')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.batches) {
+        allBatchesCache = data.batches;
+        populateBatchDropdowns(selectedVal);
+      }
+    }).catch(e => console.error('Error loading batches:', e));
+}
+
+function populateBatchDropdowns(selectedVal = null) {
+  const studentBatchSelect = document.getElementById('adminStudentBatchNo');
+  if (studentBatchSelect) {
+    const curVal = selectedVal || studentBatchSelect.value;
+    let html = '<option value="">Select Batch...</option>';
+    allBatchesCache.forEach(b => {
+      html += `<option value="${b}">${b}</option>`;
+    });
+    studentBatchSelect.innerHTML = html;
+    if (curVal) {
+      const normVal = curVal.toString().toLowerCase().replace(/^batch\s*/i, '').trim();
+      const found = Array.from(studentBatchSelect.options).find(o => 
+        o.value.toLowerCase() === curVal.toString().toLowerCase() || 
+        o.value.toLowerCase().replace(/^batch\s*/i, '').trim() === normVal
+      );
+      if (found) studentBatchSelect.value = found.value;
+      else {
+        const opt = document.createElement('option');
+        opt.value = curVal;
+        opt.textContent = curVal;
+        studentBatchSelect.appendChild(opt);
+        studentBatchSelect.value = curVal;
+      }
+    }
+  }
+}
+
+function promptAddNewBatch(targetSelectId) {
+  const input = prompt("Enter New Batch Number or Name (e.g. 15, 16, Batch 17):");
+  if (!input || !input.trim()) return;
+  const raw = input.trim();
+  fetch('/api/portal/batch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ batchName: raw })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.success) {
+      showToast(res.message || 'Batch added successfully!', false);
+      allBatchesCache = res.batches || allBatchesCache;
+      populateBatchDropdowns(res.batch);
+      if (targetSelectId === 'examModal') {
+        if (!activeExamConfig[res.batch]) {
+          activeExamConfig[res.batch] = {
+            enabled: true,
+            subjects: [
+              { subjectName: 'Fiqh', maxMarks: 100 },
+              { subjectName: 'Nahw', maxMarks: 80 }
+            ]
+          };
+        }
+        currentSelectedBatchInModal = res.batch;
+        renderExamBatchTabs();
+        renderActiveBatchConfigView();
+      }
+    } else {
+      showToast(res.message || 'Failed to add batch', true);
+    }
+  })
+  .catch(err => showToast(err.message, true));
+}
+
 function openCreateExamModal() {
   document.getElementById('newExamName').value = '';
+  document.getElementById('newExamTerm').value = 'Semester 1';
+  safeSetVal('newExamBatch', '2025-2026');
   document.getElementById('modalCreateExam').classList.add('show');
-  renderSubjectInputRows();
+  
+  if (!allBatchesCache || allBatchesCache.length === 0) {
+    loadPortalBatches().then(() => initExamBatchConfig());
+  } else {
+    initExamBatchConfig();
+  }
 }
 
 function closeCreateExamModal() {
   document.getElementById('modalCreateExam').classList.remove('show');
 }
 
-function renderSubjectInputRows() {
-  const targetClass = safeGetValue('newExamBatchNo') || '1';
-  const container = document.getElementById('subjectInputRowsContainer');
-  if (!container) return;
-
-  if (!currentSubjectInputList || currentSubjectInputList.length === 0) {
-    if (targetClass === '3') {
-      currentSubjectInputList = [
+function initExamBatchConfig(selectBatch = null) {
+  activeExamConfig = {};
+  allBatchesCache.forEach(b => {
+    const isSpecial3 = (b === 'Batch 3' || b === '3');
+    activeExamConfig[b] = {
+      enabled: true,
+      subjects: isSpecial3 ? [
         { subjectName: 'Fiqh (Fathul Mueen)', maxMarks: 100 },
         { subjectName: 'Nahw (Alfiyya)', maxMarks: 80 },
         { subjectName: 'Tafseer (Jalalain)', maxMarks: 50 },
         { subjectName: 'Balagha (Mukhtasar)', maxMarks: 40 }
-      ];
-    } else {
-      currentSubjectInputList = [
+      ] : [
         { subjectName: 'Fiqh', maxMarks: 100 },
         { subjectName: 'Nahw', maxMarks: 80 },
         { subjectName: 'Hadith', maxMarks: 50 }
-      ];
-    }
-  }
+      ]
+    };
+  });
 
+  currentSelectedBatchInModal = selectBatch || (allBatchesCache[0] || 'Batch 1');
+  renderExamBatchTabs();
+  renderActiveBatchConfigView();
+}
+
+function renderExamBatchTabs() {
+  const container = document.getElementById('examBatchButtonsContainer');
+  if (!container) return;
   let html = '';
-  currentSubjectInputList.forEach((s, idx) => {
-    html += `<div style="display:flex; gap:10px; margin-bottom:8px; align-items:center;">
-      <input type="text" class="form-control" style="flex:2; background:var(--bg-input); color:var(--text);" placeholder="Subject Name" value="${s.subjectName}" onchange="currentSubjectInputList[${idx}].subjectName = this.value">
-      <input type="number" class="form-control" style="flex:1; background:var(--bg-input); color:var(--text);" placeholder="Max Marks" value="${s.maxMarks}" onchange="currentSubjectInputList[${idx}].maxMarks = Number(this.value)">
-      <button type="button" class="btn btn-danger btn-sm" onclick="removeSubjectInputRow(${idx})">&times;</button>
-    </div>`;
+  allBatchesCache.forEach(b => {
+    const isSelected = (b === currentSelectedBatchInModal);
+    const cfg = activeExamConfig[b] || { enabled: true, subjects: [] };
+    const isStopped = !cfg.enabled;
+    const count = cfg.subjects ? cfg.subjects.length : 0;
+    
+    let btnStyle = isSelected 
+      ? 'background:var(--accent); color:#1a0e00; font-weight:800; border-color:var(--accent); box-shadow:0 2px 8px rgba(245,158,11,0.3);' 
+      : 'background:var(--bg-card-2); color:var(--text); border:1px solid var(--border-soft);';
+      
+    if (isStopped && !isSelected) {
+      btnStyle = 'background:rgba(239,68,68,0.08); color:#ef4444; border:1px dashed #ef4444; opacity:0.8;';
+    }
+
+    html += `<button type="button" class="btn btn-sm" onclick="selectExamBatch('${b}')" style="${btnStyle} padding:5px 12px; border-radius:8px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
+      <span>${b}</span>
+      <span style="font-size:10px; padding:1px 6px; border-radius:10px; background:${isStopped ? '#ef4444' : (isSelected ? '#1a0e00' : 'rgba(0,0,0,0.08)')}; color:${isSelected && !isStopped ? '#fff' : (isStopped ? '#fff' : 'var(--text-soft)')}; font-weight:700;">
+        ${isStopped ? 'Stopped' : (count + ' Subj')}
+      </span>
+    </button>`;
   });
   container.innerHTML = html;
 }
 
-function addSubjectInputRow() {
-  currentSubjectInputList.push({ subjectName: 'New Subject', maxMarks: 100 });
-  renderSubjectInputRows();
+function selectExamBatch(batchName) {
+  currentSelectedBatchInModal = batchName;
+  if (!activeExamConfig[batchName]) {
+    activeExamConfig[batchName] = {
+      enabled: true,
+      subjects: [
+        { subjectName: 'Fiqh', maxMarks: 100 },
+        { subjectName: 'Nahw', maxMarks: 80 }
+      ]
+    };
+  }
+  renderExamBatchTabs();
+  renderActiveBatchConfigView();
 }
 
-function removeSubjectInputRow(idx) {
-  currentSubjectInputList.splice(idx, 1);
-  renderSubjectInputRows();
+function renderActiveBatchConfigView() {
+  const batch = currentSelectedBatchInModal;
+  const cfg = activeExamConfig[batch] || { enabled: true, subjects: [] };
+  
+  const titleEl = document.getElementById('activeBatchTitle');
+  if (titleEl) titleEl.textContent = batch;
+  
+  const toggle = document.getElementById('toggleBatchExamOpen');
+  const statusLabel = document.getElementById('batchExamStatusLabel');
+  const slider = document.getElementById('batchSliderSpan');
+  const stoppedNotice = document.getElementById('batchStoppedNotice');
+  const subjectsSection = document.getElementById('batchSubjectsSection');
+  
+  const isEnabled = (cfg.enabled !== false);
+  if (toggle) toggle.checked = isEnabled;
+  if (statusLabel) {
+    statusLabel.textContent = isEnabled ? 'Exam Active' : 'Exam Stopped';
+    statusLabel.style.color = isEnabled ? '#10b981' : '#ef4444';
+  }
+  if (slider) {
+    slider.style.backgroundColor = isEnabled ? '#10b981' : '#64748b';
+    slider.innerHTML = `<span style="position:absolute; height:18px; width:18px; left:${isEnabled ? '24px' : '3px'}; bottom:3px; background-color:white; transition:.3s; border-radius:50%;"></span>`;
+  }
+  
+  if (!isEnabled) {
+    if (stoppedNotice) stoppedNotice.style.display = 'block';
+    if (subjectsSection) subjectsSection.style.display = 'none';
+  } else {
+    if (stoppedNotice) stoppedNotice.style.display = 'none';
+    if (subjectsSection) subjectsSection.style.display = 'block';
+  }
+
+  const subContainer = document.getElementById('activeBatchSubjectRowsContainer');
+  if (!subContainer) return;
+
+  let sHtml = '';
+  (cfg.subjects || []).forEach((s, idx) => {
+    sHtml += `<div style="display:flex; gap:10px; margin-bottom:8px; align-items:center;">
+      <input type="text" class="form-control" style="flex:2; background:var(--bg-input); color:var(--text);" placeholder="Subject Name (e.g. Fathul Mueen)" value="${s.subjectName || ''}" onchange="updateActiveBatchSubject(${idx}, 'name', this.value)">
+      <div style="flex:1; display:flex; align-items:center; gap:6px;">
+        <input type="number" class="form-control" style="background:var(--bg-input); color:var(--text);" placeholder="Max Marks" value="${s.maxMarks || 100}" onchange="updateActiveBatchSubject(${idx}, 'marks', this.value)">
+        <span style="font-size:11px; color:var(--text-soft); font-weight:700;">Marks</span>
+      </div>
+      <button type="button" class="btn btn-danger btn-sm" onclick="removeSubjectFromActiveBatch(${idx})" title="Remove Subject">&times;</button>
+    </div>`;
+  });
+
+  if ((cfg.subjects || []).length === 0) {
+    sHtml = '<div style="color:var(--text-soft); font-size:13px; font-style:italic; margin-bottom:8px;">No subjects added yet. Click "+ Add Subject" to add subjects for this batch.</div>';
+  }
+  subContainer.innerHTML = sHtml;
+}
+
+function onToggleBatchExamStatus(isChecked) {
+  const batch = currentSelectedBatchInModal;
+  if (!activeExamConfig[batch]) activeExamConfig[batch] = { enabled: isChecked, subjects: [] };
+  activeExamConfig[batch].enabled = isChecked;
+  renderExamBatchTabs();
+  renderActiveBatchConfigView();
+}
+
+function updateActiveBatchSubject(idx, field, val) {
+  const batch = currentSelectedBatchInModal;
+  if (!activeExamConfig[batch] || !activeExamConfig[batch].subjects) return;
+  if (field === 'name') activeExamConfig[batch].subjects[idx].subjectName = val;
+  if (field === 'marks') activeExamConfig[batch].subjects[idx].maxMarks = Number(val) || 100;
+  renderExamBatchTabs();
+}
+
+function addSubjectToActiveBatch() {
+  const batch = currentSelectedBatchInModal;
+  if (!activeExamConfig[batch]) activeExamConfig[batch] = { enabled: true, subjects: [] };
+  if (!activeExamConfig[batch].subjects) activeExamConfig[batch].subjects = [];
+  activeExamConfig[batch].subjects.push({ subjectName: '', maxMarks: 100 });
+  renderActiveBatchConfigView();
+  renderExamBatchTabs();
+}
+
+function removeSubjectFromActiveBatch(idx) {
+  const batch = currentSelectedBatchInModal;
+  if (!activeExamConfig[batch] || !activeExamConfig[batch].subjects) return;
+  activeExamConfig[batch].subjects.splice(idx, 1);
+  renderActiveBatchConfigView();
+  renderExamBatchTabs();
 }
 
 function submitCreateExamForm(e) {
   e.preventDefault();
   const examName = safeGetValue('newExamName');
-  const term = safeGetValue('newExamTerm');
-  const batchYear = safeGetValue('newExamBatch');
-  const targetClass = safeGetValue('newExamBatchNo');
+  const term = safeGetValue('newExamTerm') || 'Semester 1';
+  const batchYear = safeGetValue('newExamBatch') || '2025-2026';
 
-  if (!examName) { showToast('Exam Name required', true); return; }
+  if (!examName || !examName.trim()) {
+    showToast('Please enter Exam Name', true);
+    return;
+  }
 
-  const classSubjects = {};
-  classSubjects[targetClass] = currentSubjectInputList.filter(s => s.subjectName.trim() !== '');
+  const finalClassSubjects = {};
+  let totalActiveBatches = 0;
+
+  for (let b in activeExamConfig) {
+    const cfg = activeExamConfig[b];
+    if (cfg.enabled) {
+      const validSubjects = (cfg.subjects || []).filter(s => s.subjectName && s.subjectName.trim() !== '');
+      if (validSubjects.length > 0) {
+        finalClassSubjects[b] = {
+          enabled: true,
+          subjects: validSubjects
+        };
+        totalActiveBatches++;
+      }
+    } else {
+      finalClassSubjects[b] = {
+        enabled: false,
+        subjects: []
+      };
+    }
+  }
+
+  if (totalActiveBatches === 0) {
+    if (!confirm('No batches currently have active subjects configured. Create exam anyway?')) {
+      return;
+    }
+  }
 
   fetch('/api/portal/exam', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      examName,
+      examName: examName.trim(),
       term,
       batchYear,
-      classSubjects
+      classSubjects: finalClassSubjects
     })
   }).then(r => r.json()).then(res => {
     showToast(res.message || 'Exam Created!', !res.success);
@@ -4773,8 +5051,11 @@ function submitCreateExamForm(e) {
       closeCreateExamModal();
       loadExamsAdmin();
     }
+  }).catch(err => {
+    showToast(err.message, true);
   });
 }
+
 
 function deleteExamAdmin(id) {
   if (!confirm('Delete this exam configuration?')) return;

@@ -27,16 +27,23 @@ router.post('/student/message', portalController.postStudentMessage);
 
 router.post('/usthad/post-data', portalController.postUsthadData);
 
+// Dynamic Batch Management
+router.get('/batches', portalController.getBatches);
+router.post('/batch', portalController.addBatch);
+
 // Exam & Mark Management (Multi-subject, Auto-rank, Attendance %)
 router.get('/exams', portalController.getExamsAdmin);
 router.post('/exam', portalController.createExamAdmin);
 router.delete('/exam/:id', portalController.deleteExamAdmin);
 router.get('/exam/roster', portalController.getExamClassRoster);
 router.post('/exam/save-marks', portalController.saveExamClassMarks);
+router.post('/exam/publish-batch', portalController.publishExamBatch);
 router.delete('/exam/delete-mark', portalController.deleteExamClassMark);
 
 
 router.post('/upload-photo', portalController.uploadProfilePhoto);
+router.post('/my-data', portalController.uploadMyData);
+router.delete('/my-data', portalController.deleteMyData);
 router.get('/usthad/messages', portalController.getUsthadMessages); // Usthad messages use the same DB method
 module.exports = router;
 

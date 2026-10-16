@@ -3,6 +3,8 @@ const Usthad = require('../models/Usthad');
 const PortalMessage = require('../models/PortalMessage');
 const Exam = require('../models/Exam');
 const ExamResult = require('../models/ExamResult');
+const Batch = require('../models/Batch');
+const { scheduleSave, saveLocalDb, uploadDbToTelegram, dbState } = require('../config/telegramDB');
 
 // In-Memory Fallback Stores for when DB is offline or for rapid demo
 const memoryExams = [
@@ -175,7 +177,8 @@ exports.lookup = async (req, res) => {
             status: s.status || (s.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
             isAlumni: s.isAlumni,
           photoUrl: s.photoUrl || 'img/new_logo.png',
-          place: s.place
+          place: s.place || 'Muttichira',
+          fatherName: s.fatherName || s.guardianName || ''
         });
       }
     });
@@ -199,8 +202,9 @@ exports.lookup = async (req, res) => {
           designation: u.designation,
           subject: u.subject || 'Dars Mudarris',
           photoUrl: u.photoUrl || 'img/new_logo.png',
-          place: u.place,
-          phone: u.phone
+          place: u.place || 'Muttichira',
+          phone: u.phone,
+          fatherName: u.fatherName || ''
         });
       }
     });
@@ -252,7 +256,14 @@ exports.login = async (req, res) => {
         designation: usthad.designation,
         subject: usthad.subject,
         photoUrl: usthad.photoUrl,
-        place: usthad.place
+        place: usthad.place || 'Muttichira',
+        fatherName: usthad.fatherName || '',
+        postOffice: usthad.postOffice || usthad.address || '',
+        education: usthad.education || 'Baqavi / Faizi',
+        job: usthad.job || 'Mudarris / Scholar',
+        bloodGroup: usthad.bloodGroup || '',
+        myDatas: usthad.myDatas || [],
+        bio: usthad.bio || ''
       };
       return res.json({ success: true, message: 'Usthad Login successful', user: req.session.portalUser });
     } else {
@@ -277,8 +288,14 @@ exports.login = async (req, res) => {
           status: student.status,
           isAlumni: student.isAlumni,
         photoUrl: student.photoUrl,
-        place: student.place,
+        place: student.place || 'Muttichira',
+        fatherName: student.fatherName || student.guardianName || '',
         guardianName: student.guardianName,
+        postOffice: student.postOffice || student.post || student.address || '',
+        education: student.education || 'SSLC / Dars',
+        job: student.job || student.occupation || 'Student',
+        bloodGroup: student.bloodGroup || '',
+        myDatas: student.myDatas || [],
         bio: student.bio
       };
       return res.json({ success: true, message: 'Student Login successful', user: req.session.portalUser });
@@ -306,6 +323,9 @@ exports.changePassword = async (req, res) => {
           }
           u.password = newPassword;
           await u.save();
+          // PASSWORD SYNC HOOK
+          const tdb = require('../config/telegramDB');
+          if (tdb.uploadDbToTelegram) tdb.uploadDbToTelegram();
           return res.json({ success: true, message: 'Password updated successfully!' });
         }
       } catch (e) {}
@@ -754,6 +774,108 @@ exports.postStudentMessage = async (req, res) => {
 
 // ── 11. Exam & Mark Management Endpoints ──
 
+
+// Helper to normalize batch name
+function normalizeBatchName(val) {
+  if (!val) return '';
+  let str = String(val).trim();
+  if (/^\d+$/.test(str)) {
+    return 'Batch ' + str;
+  }
+  if (/^batch\s*\d+$/i.test(str)) {
+    const num = str.replace(/^batch\s*/i, '').trim();
+    return 'Batch ' + num;
+  }
+  return str;
+}
+
+// GET /api/portal/batches
+exports.getBatches = async (req, res) => {
+  try {
+    const batchSet = new Set();
+    for (let i = 1; i <= 14; i++) {
+      batchSet.add(`Batch ${i}`);
+    }
+
+    try {
+      const savedBatches = await Batch.find({});
+      (savedBatches || []).forEach(b => {
+        if (b && (b.name || b.batchName)) batchSet.add(normalizeBatchName(b.name || b.batchName));
+      });
+    } catch (e) {}
+
+    try {
+      const students = await Student.find({});
+      (students || []).forEach(s => {
+        const b = s.batchNumber || s.className;
+        if (b) batchSet.add(normalizeBatchName(b));
+      });
+    } catch (e) {}
+
+    const batches = Array.from(batchSet).sort((a, b) => {
+      const numA = parseInt(a.replace(/\D/g, ''), 10);
+      const numB = parseInt(b.replace(/\D/g, ''), 10);
+      if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+      return a.localeCompare(b);
+    });
+
+    res.json({ success: true, batches });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// POST /api/portal/batch
+exports.addBatch = async (req, res) => {
+  try {
+    const { batchName } = req.body;
+    if (!batchName) {
+      return res.status(400).json({ success: false, message: 'Batch name or number is required' });
+    }
+
+    const normalized = normalizeBatchName(batchName);
+
+    const exists = await Batch.findOne({ name: normalized });
+    if (!exists) {
+      const newBatch = new Batch({
+        name: normalized,
+        batchName: normalized,
+        createdAt: new Date()
+      });
+      await newBatch.save();
+    }
+
+    scheduleSave();
+
+    const batchSet = new Set();
+    for (let i = 1; i <= 14; i++) {
+      batchSet.add(`Batch ${i}`);
+    }
+    try {
+      const savedBatches = await Batch.find({});
+      (savedBatches || []).forEach(b => {
+        if (b && (b.name || b.batchName)) batchSet.add(normalizeBatchName(b.name || b.batchName));
+      });
+      const students = await Student.find({});
+      (students || []).forEach(s => {
+        const b = s.batchNumber || s.className;
+        if (b) batchSet.add(normalizeBatchName(b));
+      });
+    } catch (e) {}
+
+    const batches = Array.from(batchSet).sort((a, b) => {
+      const numA = parseInt(a.replace(/\D/g, ''), 10);
+      const numB = parseInt(b.replace(/\D/g, ''), 10);
+      if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+      return a.localeCompare(b);
+    });
+
+    res.json({ success: true, message: `Batch ${normalized} added successfully!`, batch: normalized, batches });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // GET /api/portal/exams
 exports.getExamsAdmin = async (req, res) => {
   try {
@@ -827,7 +949,27 @@ exports.getExamClassRoster = async (req, res) => {
     try { exam = await Exam.findById(examId); } catch (e) {}
     if (!exam) exam = memoryExams.find(e => e._id === examId);
 
-    const subjects = (exam && exam.classSubjects && exam.classSubjects[className]) ? exam.classSubjects[className] : [];
+    const norm = b => (b || '').toString().toLowerCase().replace(/^batch\s*/i, '').trim();
+    const targetNorm = norm(className);
+
+    // Extract subjects and enabled status for this batch
+    let subjects = [];
+    let isEnabled = true;
+    if (exam && exam.classSubjects) {
+      const targetKey = Object.keys(exam.classSubjects).find(k =>
+        k.toLowerCase() === className.toLowerCase() ||
+        norm(k) === targetNorm
+      );
+      if (targetKey) {
+        const batchConfig = exam.classSubjects[targetKey];
+        if (Array.isArray(batchConfig)) {
+          subjects = batchConfig;
+        } else if (batchConfig && typeof batchConfig === 'object') {
+          subjects = batchConfig.subjects || [];
+          if (batchConfig.enabled === false) isEnabled = false;
+        }
+      }
+    }
 
     // Find Students of Class
     let allStudents = [];
@@ -835,21 +977,25 @@ exports.getExamClassRoster = async (req, res) => {
     if (!allStudents || allStudents.length === 0) allStudents = memoryStudents;
 
     let classStudents = allStudents.filter(s => 
-      !s.isAlumni && (className === 'ALL' || (s.batchNumber || s.className || '').toString().toLowerCase() === className.toLowerCase())
+      !s.isAlumni && (className === 'ALL' || norm(s.batchNumber || s.className) === targetNorm)
     );
 
     // Find Existing Results for Exam & Class
     let existingResults = [];
     try {
-      existingResults = await ExamResult.find({ examId, className });
+      existingResults = await ExamResult.find({ examId });
     } catch (e) {}
     if (!existingResults || existingResults.length === 0) {
-      existingResults = memoryExamResults.filter(r => r.examId === examId && r.className === className);
+      existingResults = memoryExamResults.filter(r => r.examId === examId);
     }
+    existingResults = existingResults.filter(r =>
+      norm(r.className) === targetNorm || classStudents.some(s => s.admissionNo === r.admissionNo)
+    );
 
     res.json({
       success: true,
       exam,
+      isEnabled,
       subjects,
       students: classStudents,
       existingResults
@@ -862,15 +1008,15 @@ exports.getExamClassRoster = async (req, res) => {
 // POST /api/portal/exam/save-marks
 exports.saveExamClassMarks = async (req, res) => {
   try {
-    const { examId, examName, className, marksData, usthadName } = req.body;
+    const { examId, examName, className, marksData, usthadName, isPublished } = req.body;
     if (!examId || !className || !Array.isArray(marksData) || marksData.length === 0) {
       return res.status(400).json({ success: false, message: 'Valid Exam, Class, and Student Marks required' });
     }
 
     // 1. Process each student's total marks, percentage, grade, and attendance
     let processedEntries = marksData.map(item => {
-      const subMarks = item.subjectMarks || {}; // { "Fiqh": 90, "Nahw": 75 }
-      const subjectsList = item.subjectsConfig || []; // [{ subjectName: "Fiqh", maxMarks: 100 }]
+      const subMarks = item.subjectMarks || {};
+      const subjectsList = item.subjectsConfig || [];
 
       let totalMax = 0;
       let totalObtained = 0;
@@ -904,6 +1050,8 @@ exports.saveExamClassMarks = async (req, res) => {
       const presDays = Number(item.attendancePresentDays || totDays);
       const attPct = parseFloat(((presDays / totDays) * 100).toFixed(1));
 
+      const shouldPublish = (item.isPublished !== undefined ? item.isPublished : (isPublished !== undefined ? isPublished : true));
+
       return {
         examId,
         examName: examName || 'Semester Exam',
@@ -920,12 +1068,13 @@ exports.saveExamClassMarks = async (req, res) => {
         attendancePercentage: attPct,
         usthadRemarks: item.usthadRemarks || '',
         publishedBy: usthadName || 'Usthad',
+        isPublished: shouldPublish,
+        status: shouldPublish ? 'published' : 'draft',
         createdAt: new Date()
       };
     });
 
-    // 2. AUTOMATIC CLASS RANK CALCULATION
-    // Sort descending by totalMarksObtained
+    // 2. Class rank calculation
     processedEntries.sort((a, b) => b.totalMarksObtained - a.totalMarksObtained);
 
     let currentRank = 1;
@@ -942,7 +1091,7 @@ exports.saveExamClassMarks = async (req, res) => {
       entry.rankNumber = currentRank;
     });
 
-    // 3. Save to DB/Memory & Broadcast Notifications to Students
+    // 3. Save to DB/Memory & Broadcast Notifications if published
     for (let entry of processedEntries) {
       try {
         await ExamResult.findOneAndUpdate(
@@ -956,38 +1105,41 @@ exports.saveExamClassMarks = async (req, res) => {
         else memoryExamResults.unshift(entry);
       }
 
-      // Send automated notification in Student Dashboard
-      const notifPayload = {
-        type: 'mark',
-        senderRole: 'usthad',
-        senderId: 'UST101',
-        senderName: entry.publishedBy,
-        targetStudentNo: entry.admissionNo,
-        subject: entry.examName + ' Result Published',
-        content: `Your result for ${entry.examName} is published. Total: ${entry.totalMarksObtained}/${entry.totalMaxMarks} (${entry.percentage}%), Grade: ${entry.grade}, Rank: ${entry.rank}.`,
-        marksData: {
-          examName: entry.examName,
-          subjectName: 'Overall Evaluation',
-          marksObtained: String(entry.totalMarksObtained),
-          totalMarks: String(entry.totalMaxMarks),
-          grade: entry.grade,
-          rank: entry.rank,
-          percentage: entry.percentage,
-          remarks: entry.usthadRemarks
-        },
-        createdAt: new Date()
-      };
-      try {
-        const pm = new PortalMessage(notifPayload);
-        await pm.save();
-      } catch (e) {
-        memoryMessages.unshift({ _id: 'mem_msg_' + Date.now(), ...notifPayload });
+      if (entry.isPublished) {
+        const notifPayload = {
+          type: 'mark',
+          senderRole: 'usthad',
+          senderId: 'UST101',
+          senderName: entry.publishedBy,
+          targetStudentNo: entry.admissionNo,
+          subject: entry.examName + ' Result Published',
+          content: `Your result for ${entry.examName} is published. Total: ${entry.totalMarksObtained}/${entry.totalMaxMarks} (${entry.percentage}%), Grade: ${entry.grade}, Rank: ${entry.rank}.`,
+          marksData: {
+            examName: entry.examName,
+            subjectName: 'Overall Evaluation',
+            marksObtained: String(entry.totalMarksObtained),
+            totalMarks: String(entry.totalMaxMarks),
+            grade: entry.grade,
+            rank: entry.rank,
+            percentage: entry.percentage,
+            remarks: entry.usthadRemarks
+          },
+          createdAt: new Date()
+        };
+        try {
+          const pm = new PortalMessage(notifPayload);
+          await pm.save();
+        } catch (e) {
+          memoryMessages.unshift({ _id: 'mem_msg_' + Date.now(), ...notifPayload });
+        }
       }
     }
 
+    scheduleSave();
+
     res.json({
       success: true,
-      message: `Exam results & Batch Ranks for ${className} published successfully!`,
+      message: `Marks for ${className} ${processedEntries[0]?.isPublished ? 'published' : 'saved as draft'} successfully!`,
       results: processedEntries
     });
   } catch (err) {
@@ -995,6 +1147,77 @@ exports.saveExamClassMarks = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+// POST /api/portal/exam/publish-batch
+exports.publishExamBatch = async (req, res) => {
+  try {
+    const { examId, className, usthadName } = req.body;
+    if (!examId || !className) {
+      return res.status(400).json({ success: false, message: 'Exam ID and Class Name are required' });
+    }
+
+    const norm = b => (b || '').toString().toLowerCase().replace(/^batch\s*/i, '').trim();
+    const targetNorm = norm(className);
+
+    let allStudents = [];
+    try { allStudents = await Student.find({}); } catch (e) {}
+    const batchStudentAdmNos = new Set(
+      allStudents.filter(s => norm(s.batchNumber || s.className) === targetNorm).map(s => s.admissionNo)
+    );
+
+    let results = [];
+    try { results = await ExamResult.find({ examId }); } catch (e) {}
+    let updatedCount = 0;
+
+    for (let r of results) {
+      if (batchStudentAdmNos.has(r.admissionNo) || norm(r.className) === targetNorm) {
+        r.isPublished = true;
+        r.status = 'published';
+        r.publishedBy = usthadName || r.publishedBy || 'Usthad';
+        try {
+          await ExamResult.findOneAndUpdate(
+            { examId: r.examId, admissionNo: r.admissionNo },
+            { isPublished: true, status: 'published', publishedBy: r.publishedBy }
+          );
+        } catch (e) {}
+        updatedCount++;
+
+        const notifPayload = {
+          type: 'mark',
+          senderRole: 'usthad',
+          senderId: 'UST101',
+          senderName: r.publishedBy,
+          targetStudentNo: r.admissionNo,
+          subject: (r.examName || 'Exam') + ' Result Published',
+          content: `Your result for ${r.examName || 'Exam'} has been officially published! Total: ${r.totalMarksObtained}/${r.totalMaxMarks} (${r.percentage}%), Grade: ${r.grade}, Rank: ${r.rank}.`,
+          marksData: {
+            examName: r.examName,
+            marksObtained: String(r.totalMarksObtained),
+            totalMarks: String(r.totalMaxMarks),
+            grade: r.grade,
+            rank: r.rank,
+            percentage: r.percentage
+          },
+          createdAt: new Date()
+        };
+        try {
+          const pm = new PortalMessage(notifPayload);
+          await pm.save();
+        } catch (e) {}
+      }
+    }
+
+    scheduleSave();
+
+    res.json({
+      success: true,
+      message: `All marks for ${className} (${updatedCount} students) have been published successfully!`
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 
 // GET /api/portal/student/progress-card?admissionNo=xxx
 exports.getStudentProgressCard = async (req, res) => {
@@ -1116,6 +1339,111 @@ exports.deleteExamClassMark = async (req, res) => {
       res.json({ success: false, message: 'Mark not found' });
     }
   } catch(err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+
+// ── 12. My Datas (Document / Image Vault) ──
+exports.uploadMyData = async (req, res) => {
+  try {
+    const { userId, role, title, base64Image } = req.body;
+    if (!userId || !base64Image) {
+      return res.status(400).json({ success: false, message: 'Missing user ID or image' });
+    }
+
+    const matches = base64Image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ success: false, message: 'Invalid image format' });
+    }
+
+    const ext = matches[1].split('/')[1] || 'jpg';
+    const buffer = Buffer.from(matches[2], 'base64');
+    const fileName = 'doc_' + userId + '_' + Date.now() + '.' + ext;
+    const uploadDir = path.join(__dirname, '../public/uploads/mydatas');
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const physicalPath = path.join(uploadDir, fileName);
+    fs.writeFileSync(physicalPath, buffer);
+    const docUrl = 'uploads/mydatas/' + fileName;
+
+    let user;
+    if (role === 'usthad') {
+      try { user = await Usthad.findById(userId); } catch(e){}
+      if (!user) user = memoryUsthads.find(u => String(u._id) === String(userId) || String(u.usthadId) === String(userId));
+    } else {
+      try { user = await Student.findById(userId); } catch(e){}
+      if (!user) user = memoryStudents.find(s => String(s._id) === String(userId) || String(s.admissionNo) === String(userId));
+    }
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    if (!Array.isArray(user.myDatas)) {
+      user.myDatas = [];
+    }
+
+    const newDoc = {
+      id: 'doc_' + Date.now(),
+      title: title || 'Document Image',
+      url: docUrl,
+      size: (buffer.length / 1024).toFixed(1) + ' KB',
+      createdAt: new Date().toISOString()
+    };
+
+    user.myDatas.unshift(newDoc);
+    if (user.save) await user.save();
+
+    const tdb = require('../config/telegramDB');
+    if (tdb.uploadDbToTelegram) tdb.uploadDbToTelegram();
+
+    res.json({ success: true, message: 'Image saved to My Datas!', doc: newDoc, myDatas: user.myDatas });
+  } catch (err) {
+    console.error('uploadMyData error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+exports.deleteMyData = async (req, res) => {
+  try {
+    const { userId, role, docId } = req.body;
+    if (!userId || !docId) {
+      return res.status(400).json({ success: false, message: 'Missing parameters' });
+    }
+
+    let user;
+    if (role === 'usthad') {
+      try { user = await Usthad.findById(userId); } catch(e){}
+      if (!user) user = memoryUsthads.find(u => String(u._id) === String(userId) || String(u.usthadId) === String(userId));
+    } else {
+      try { user = await Student.findById(userId); } catch(e){}
+      if (!user) user = memoryStudents.find(s => String(s._id) === String(userId) || String(s.admissionNo) === String(userId));
+    }
+
+    if (!user || !Array.isArray(user.myDatas)) {
+      return res.status(404).json({ success: false, message: 'User or documents not found' });
+    }
+
+    const idx = user.myDatas.findIndex(d => d.id === docId);
+    if (idx !== -1) {
+      const doc = user.myDatas[idx];
+      if (doc && doc.url) {
+        const physicalPath = path.join(__dirname, '../public', doc.url);
+        if (fs.existsSync(physicalPath)) {
+          try { fs.unlinkSync(physicalPath); } catch(e){}
+        }
+      }
+      user.myDatas.splice(idx, 1);
+      if (user.save) await user.save();
+    }
+
+    res.json({ success: true, message: 'Document removed', myDatas: user.myDatas });
+  } catch (err) {
+    console.error('deleteMyData error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };

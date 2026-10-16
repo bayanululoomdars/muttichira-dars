@@ -526,6 +526,162 @@
     .modal-backdrop { z-index: 1040 !important; }
     .modal { z-index: 1050 !important; }
   </style>
+
+  <style>
+    /* 3-Field Pre-Password Lookup Card */
+    .prelogin-card {
+      background: #ffffff;
+      border: 2px solid #10b981;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .prelogin-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 2px solid #10b981;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .prelogin-field {
+      font-size: 0.88rem;
+      color: #334155;
+      margin-bottom: 3px;
+      font-weight: 600;
+    }
+
+    /* Dashboard Header Modern Bar */
+    .dash-header-new {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #0f766e 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(6, 78, 59, 0.25);
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+    }
+    .dash-user-photo-lg {
+      width: 88px;
+      height: 88px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+
+    /* Overview Counter Cards */
+    .stat-overview-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+    .stat-overview-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-overview-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    }
+    .stat-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    /* Landscape ID Card 3D Flip */
+    .landscape-perspective {
+      perspective: 1200px;
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .landscape-card-inner {
+      width: 100%;
+      height: 310px;
+      position: relative;
+      transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .landscape-card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+    .landscape-front, .landscape-back {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 24px;
+    }
+    .landscape-front {
+      background: linear-gradient(135deg, #091e17 0%, #112a22 50%, #064e3b 100%);
+      border: 2px solid rgba(212, 175, 55, 0.6);
+      color: #ffffff;
+    }
+    .landscape-back {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      color: #1e293b;
+      transform: rotateY(180deg);
+    }
+
+    /* My Datas Gallery Grid */
+    .mydatas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 15px;
+    }
+    .mydata-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .mydata-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    .mydata-thumb {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    .mydata-actions {
+      padding: 8px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
 </head>
 <body>
 
@@ -597,34 +753,49 @@
             <!-- Live Selectable Search Results Dropdown List -->
             <div id="liveSearchResultsSelect" style="display: none;" class="mb-3"></div>
 
-            <!-- Live Preview Card (Single Selected Item) -->
-            <div id="livePreviewBox" style="display: none;" class="preview-card">
-              <img id="previewPhoto" src="img/new_logo.png" alt="Avatar" class="preview-avatar">
-              <div class="preview-info flex-grow-1">
-                <h4 id="previewName">Loading...</h4>
-                <p id="previewSub">Admission No: -</p>
-                <span id="previewRoleBadge" class="badge-role badge-student">Student</span>
+            <!-- Live Preview Card (Single Selected Item - Name, Place, Father ONLY) -->
+            <div id="livePreviewBox" style="display: none;" class="prelogin-card mb-3">
+              <div class="d-flex align-items-center gap-3">
+                <img id="previewPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar">
+                <div class="flex-grow-1 text-left pl-2">
+                  <div class="text-muted" style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Student Name:</div>
+                  <h4 id="previewName" class="font-weight-bold mb-2 text-dark" style="font-size:1.15rem; line-height:1.2;">-</h4>
+                  
+                  <div class="prelogin-field">
+                    <i class="fa fa-user-circle text-success mr-1"></i> Father's Name: <strong id="previewFatherText" class="text-dark">-</strong>
+                  </div>
+                  <div class="prelogin-field mb-0">
+                    <i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="previewPlaceText" class="text-dark">-</strong>
+                  </div>
+                </div>
               </div>
-              <button class="btn btn-sm btn-success rounded-pill font-weight-bold" onclick="proceedToPassword()">
-                Open <i class="fa fa-lock"></i>
-              </button>
+              <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center">
+                <span class="text-success small font-weight-bold"><i class="fa fa-check-circle"></i> Profile Verified</span>
+                <button class="btn btn-sm btn-success rounded-pill font-weight-bold px-4 py-2 shadow-sm" onclick="proceedToPassword()">
+                  Proceed to Login <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
             </div>
 
-            <button class="btn btn-block btn-success py-3 rounded-pill font-weight-bold" id="btnCheckProfile" onclick="handleManualLookup()">
-              <i class="fa fa-search"></i> Search
+            <button class="btn btn-block btn-success py-3 rounded-pill font-weight-bold shadow-sm" id="btnCheckProfile" onclick="handleManualLookup()">
+              <i class="fa fa-search"></i> Search Profile
             </button>
           </div>
 
           <!-- Step 2: Password Prompt -->
           <div id="stepPassword" style="display: none;">
             
-            <!-- Selected User Banner -->
-            <div class="preview-card mb-3">
-              <img id="selectedPhoto" src="img/new_logo.png" alt="Avatar" class="preview-avatar">
-              <div class="preview-info">
-                <h4 id="selectedName">User Name</h4>
-                <p id="selectedSub">ID: ADM101</p>
-                <small class="text-success font-weight-bold"><i class="fa fa-check-circle"></i> Profile Verified</small>
+            <!-- Selected User Banner (Name, Place, Father ONLY) -->
+            <div class="prelogin-card mb-3 p-3 bg-light">
+              <div class="d-flex align-items-center gap-3">
+                <img id="selectedPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar" style="width:60px; height:60px;">
+                <div class="text-left flex-grow-1 pl-2">
+                  <h4 id="selectedName" class="font-weight-bold mb-1 text-dark" style="font-size:1.05rem;">User Name</h4>
+                  <div class="small font-weight-bold text-muted">
+                    <span><i class="fa fa-user-circle text-success"></i> Father: <strong id="selectedFatherText" class="text-dark">-</strong></span> &nbsp;•&nbsp; 
+                    <span><i class="fa fa-map-marker text-danger"></i> Place: <strong id="selectedPlaceText" class="text-dark">-</strong></span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -658,26 +829,84 @@
         <!-- DASHBOARD CONTAINER (REPLACES LOGIN AFTER SUCCESSFUL AUTH) -->
         <div class="portal-box dashboard-panel" id="dashboardCard">
           
-          <!-- Dashboard Top Header -->
-          <div class="dash-header">
-            <div class="dash-header-user" style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-              <img id="dashUserPhoto" src="img/new_logo.png" alt="User Photo">
-              <div style="flex:1;">
-                <h3 class="m-0 font-weight-bold" id="dashUserName">User Name</h3>
-                <p class="m-0 text-white-50 small" id="dashUserRole">Student | Dars 3rd Year</p>
-                <span class="badge badge-warning font-weight-bold" id="dashUserStatus">Current Student</span>
-                <br>
-                <button id="btnDownloadID" class="btn btn-sm btn-light rounded-pill mt-2" style="display:none; font-weight:bold; color:var(--primary);" onclick="downloadIDCard()"><i class="fa fa-id-card"></i> Download ID Card</button>
+          <!-- Dashboard Top Header (Modern Profile Bar With All Requested Details) -->
+          <div class="dash-header-new">
+            <div class="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-4">
+              
+              <!-- User Profile Details -->
+              <div class="d-flex flex-column flex-sm-row align-items-center text-center text-sm-left gap-3">
+                <div class="position-relative">
+                  <img id="dashUserPhoto" src="img/new_logo.png" alt="Profile Photo" class="dash-user-photo-lg">
+                  <span id="dashRoleBadge" class="badge badge-warning position-absolute" style="bottom:-5px; right:-5px; font-weight:800; border-radius:10px; font-size:10px; padding:3px 8px; border:2px solid #fff;">STUDENT</span>
+                </div>
+                <div>
+                  <h3 class="font-weight-bold mb-1 text-white" id="dashUserName" style="font-size:1.45rem;">-</h3>
+                  <div class="text-white-50 small mb-1" style="font-size:0.92rem;">
+                    <span>Father's Name: <strong id="dashUserFather" class="text-white">-</strong></span> &nbsp;•&nbsp; 
+                    <span>Place: <strong id="dashUserPlace" class="text-white">-</strong></span>
+                  </div>
+                  <div class="text-white-50 small font-weight-bold">
+                    <span><i class="fa fa-phone text-warning"></i> <span id="dashUserPhone" class="text-white">-</span></span> &nbsp;|&nbsp; 
+                    <span><i class="fa fa-id-badge text-info"></i> <span id="dashUserRole" class="text-white">-</span></span>
+                  </div>
+                </div>
               </div>
-              <div id="dashQRCode" style="background:#fff; padding:5px; border-radius:8px; display:none;"></div>
+
+              <!-- Top Action Buttons: View Profile, Edit Profile, My Datas, Landscape ID Card -->
+              <div class="d-flex flex-wrap align-items-center justify-content-center gap-2" style="gap:8px;">
+                <button class="btn btn-sm btn-light font-weight-bold rounded-pill px-3 py-2 shadow-sm" onclick="openViewProfileModal()">
+                  <i class="fa fa-eye text-primary"></i> View Profile
+                </button>
+                <button class="btn btn-sm btn-warning font-weight-bold rounded-pill px-3 py-2 shadow-sm text-dark" onclick="openEditProfileModal()">
+                  <i class="fa fa-pencil"></i> Edit Profile
+                </button>
+                <button class="btn btn-sm btn-info font-weight-bold rounded-pill px-3 py-2 shadow-sm text-white" onclick="openMyDatasModal()">
+                  <i class="fa fa-folder-open"></i> My Datas
+                </button>
+                <button class="btn btn-sm btn-success font-weight-bold rounded-pill px-3 py-2 shadow-sm" onclick="openLandscapeIdCardModal()">
+                  <i class="fa fa-id-card"></i> Landscape ID Card
+                </button>
+                <button class="btn btn-sm btn-outline-danger font-weight-bold rounded-pill px-3 py-2" onclick="handleLogout()" style="background:rgba(220,53,69,0.15); border-color:rgba(220,53,69,0.5);">
+                  <i class="fa fa-sign-out"></i> Logout
+                </button>
+              </div>
+
             </div>
-            <div class="d-flex gap-2">
-              <button class="btn btn-sm btn-outline-light rounded-pill" onclick="openChangePasswordModal()">
-                <i class="fa fa-key"></i> Change Password
-              </button>
-              <button class="btn btn-sm btn-danger rounded-pill" onclick="handleLogout()">
-                <i class="fa fa-sign-out"></i> Logout
-              </button>
+          </div>
+
+          <!-- OVERVIEW STATS ROW (Students Count, Exam Results Status, Messages Count) -->
+          <div class="stat-overview-row">
+            <div class="stat-overview-card">
+              <div class="stat-icon-box bg-success text-white shadow-sm" style="background:#10b981 !important;">
+                <i class="fa fa-users"></i>
+              </div>
+              <div>
+                <div class="text-muted small font-weight-bold uppercase" style="font-size:0.75rem;">Total Students</div>
+                <div class="h4 font-weight-bold text-dark mb-0" id="statTotalStudents">87</div>
+                <small class="text-success font-weight-bold"><i class="fa fa-check-circle"></i> 6 Active Batches</small>
+              </div>
+            </div>
+
+            <div class="stat-overview-card">
+              <div class="stat-icon-box text-white shadow-sm" style="background:#f59e0b !important;">
+                <i class="fa fa-trophy"></i>
+              </div>
+              <div>
+                <div class="text-muted small font-weight-bold uppercase" style="font-size:0.75rem;">Exam Results</div>
+                <div class="h5 font-weight-bold text-dark mb-0" id="statExamStatus">Results Published</div>
+                <small class="text-warning font-weight-bold">First Semester Exam 2025</small>
+              </div>
+            </div>
+
+            <div class="stat-overview-card">
+              <div class="stat-icon-box text-white shadow-sm" style="background:#0ea5e9 !important;">
+                <i class="fa fa-envelope-open-o"></i>
+              </div>
+              <div>
+                <div class="text-muted small font-weight-bold uppercase" style="font-size:0.75rem;">Notices & Messages</div>
+                <div class="h4 font-weight-bold text-dark mb-0" id="statMessagesCount">3 New Notices</div>
+                <small class="text-info font-weight-bold">From Usthads & Admin</small>
+              </div>
             </div>
           </div>
 
@@ -766,7 +995,8 @@
 </div>
 
 
-</div></div>\n<div id="usthadDashContent" style="display: none; width:100%;">
+</div>
+<div id="usthadDashContent" style="display: none; width:100%;">
   <div class="row">
     <!-- LEFT PANEL: PROFILE & ID CARD -->
     <div class="col-lg-4 mb-4">
@@ -854,57 +1084,33 @@
     </div>
   </div>
 
-  <!-- MARK ENTRY MATRIX (Restored) -->
+  <!-- MARK ENTRY PANEL: BATCH BARS ACCORDION -->
   <div class="row mt-4">
     <div class="col-12">
       <div class="card shadow-sm border-0 rounded-4" style="background:var(--bg-card); color:var(--text);">
         <div class="card-body p-4">
-          <h5 class="font-weight-bold mb-4 text-primary"><i class="fa fa-edit"></i> Mark Entry Panel</h5>
-          <div class="row mb-3">
-            <div class="col-md-6 mb-2">
-              <label class="small font-weight-bold text-muted">Select Exam</label>
-              <select id="examSelectUsthad" class="form-control" onchange="onUsthadExamChange()" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
+          
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+              <h5 class="font-weight-bold mb-1 text-primary"><i class="fa fa-graduation-cap"></i> Exam Mark Entry & Batch Hall</h5>
+              <div class="text-muted small">Select an exam to view and manage marks batch by batch. Click each Batch Bar to view students and record marks.</div>
+            </div>
+            <div style="min-width:300px;">
+              <label class="small font-weight-bold text-muted mb-1 d-block">Current Active Exam</label>
+              <select id="examSelectUsthad" class="form-control" onchange="onUsthadExamChange()" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft); font-weight:700;">
                 <option value="">Select Exam...</option>
               </select>
             </div>
-            <div class="col-md-6 mb-2">
-              <label class="small font-weight-bold text-muted">Target Batch</label>
-              <select id="examBatchSelectUsthad" class="form-control" onchange="onUsthadExamChange()" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
-                <option value="">Select Batch...</option>
-                <option value="Batch 1">Batch 1</option>
-                <option value="Batch 2">Batch 2</option>
-                <option value="Batch 3">Batch 3</option>
-                <option value="Batch 4">Batch 4</option>
-                <option value="Batch 5">Batch 5</option>
-                <option value="Batch 6">Batch 6</option>
-                <option value="Batch 7">Batch 7</option>
-                <option value="Alumni">Alumni</option>
-              </select>
-            </div>
-          </div>
-          
-          <div id="examSubjectConfigBanner" style="display:none; background:var(--bg-card-2); padding:15px; border-radius:10px; border:1px solid var(--border-soft); margin-bottom:15px;">
-            <strong id="examBannerTitle" style="color:var(--text);">Configured Subjects:</strong>
-            <div id="examBannerBadges" class="mt-2" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
           </div>
 
-          <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
-            <table class="table table-hover table-bordered table-sm text-center align-middle" style="color:var(--text); border-color:var(--border-soft);">
-              <thead class="bg-primary text-white" style="position: sticky; top: 0; z-index: 10;">
-                <tr id="examMatrixHeaderRow">
-                  <th>Adm No</th>
-                  <th>Student Name</th>
-                  <th>Loading...</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="examMatrixTableBody" style="background:var(--bg-card-2);">
-                <tr><td colspan="10" class="text-center text-muted py-4">Please select Exam and Batch to load student roster.</td></tr>
-              </tbody>
-            </table>
+          <!-- DYNAMIC BATCH BARS CONTAINER -->
+          <div id="usthadBatchBarsContainer">
+            <div class="text-center text-muted py-5">
+              <i class="fa fa-folder-open-o fa-2x mb-2 text-secondary"></i>
+              <div>Please select an exam above to load active batch bars.</div>
+            </div>
           </div>
-          
-          
+
         </div>
       </div>
     </div>
@@ -1030,7 +1236,7 @@
 
     let currentMatchesList = [];
 
-    // Live Lookup preview on typing (SELECT OPTION VARANAM)
+    // Live Lookup preview on typing (Name, Place, Father ONLY)
     function handleLiveLookup() {
       clearTimeout(debounceTimer);
       const val = document.getElementById('inputIdentifier').value.trim();
@@ -1053,23 +1259,21 @@
               currentMatchesList = data.matches;
 
               if (currentMatchesList.length > 1) {
-                // Render Selectable Options List
-                let selectHtml = '<div style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:12px; max-height:220px; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.08); margin-bottom:15px; padding:6px;">' +
+                // Render Selectable Options List (Showing ONLY Name, Place, Father)
+                let selectHtml = '<div style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:12px; max-height:240px; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.08); margin-bottom:15px; padding:6px;">' +
                   '<div style="font-size:0.75rem; font-weight:700; color:#64748b; padding:6px 10px; border-bottom:1px solid #f1f5f9; text-transform:uppercase;"><i class="fa fa-list"></i> Select matching profile (' + currentMatchesList.length + ' found):</div>';
 
                 currentMatchesList.forEach((item, index) => {
-                  const idText = item.role === 'usthad' ? item.usthadId : item.admissionNo;
-                  const subText = item.role === 'usthad' ? (item.designation || 'Usthad') : ('Batch ' + (item.batchNumber || 'Student'));
-                  const badgeClass = item.role === 'usthad' ? 'badge-usthad' : (item.isAlumni ? 'badge-alumni' : 'badge-student');
-                  const badgeLabel = item.role === 'usthad' ? 'Usthad' : (item.isAlumni ? 'Alumni' : 'Student');
-
-                  selectHtml += '<div onclick="selectUserFromList(' + index + ')" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid #f8fafc;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\'transparent\'">' +
-                    '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:1px solid #e2e8f0;">' +
-                    '<div style="flex:1;">' +
-                      '<div style="font-weight:700; color:#1e293b; font-size:0.92rem;">' + item.name + '</div>' +
-                      '<div style="font-size:0.78rem; color:#64748b;">' + (item.place ? item.place : '') + (item.role === 'usthad' && item.phone ? ' • ' + item.phone : '') + '</div>' +
+                  selectHtml += '<div onclick="selectUserFromList(' + index + ', false)" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid #f8fafc;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\'transparent\'">' +
+                    '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:42px; height:42px; border-radius:10px; object-fit:cover; border:1px solid #e2e8f0;">' +
+                    '<div style="flex:1; text-align:left;">' +
+                      '<div style="font-weight:700; color:#1e293b; font-size:0.95rem;">' + item.name + '</div>' +
+                      '<div style="font-size:0.78rem; color:#64748b; font-weight:600;">' +
+                        '<span><i class="fa fa-user-circle text-success"></i> Father: ' + (item.fatherName || '-') + '</span> &nbsp;•&nbsp; ' +
+                        '<span><i class="fa fa-map-marker text-danger"></i> Place: ' + (item.place || 'Muttichira') + '</span>' +
+                      '</div>' +
                     '</div>' +
-                    '<span class="badge-role ' + badgeClass + '" style="font-size:0.68rem;">' + badgeLabel + '</span>' +
+                    '<button class="btn btn-xs btn-outline-success font-weight-bold rounded-pill px-2.5 py-1" style="font-size:11px;">Select</button>' +
                   '</div>';
                 });
 
@@ -1094,7 +1298,8 @@
       }, 250);
     }
 
-    function selectUserFromList(index, autoProceed = true) {
+    // Select profile - Populates ONLY Name, Place, Father's Name!
+    function selectUserFromList(index, autoProceed = false) {
       if (!currentMatchesList || !currentMatchesList[index]) return;
       selectedUserObject = currentMatchesList[index];
 
@@ -1104,55 +1309,23 @@
       if (selectBox) selectBox.style.display = 'none';
 
       document.getElementById('previewPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
-      document.getElementById('previewName').textContent = selectedUserObject.name;
-      document.getElementById('previewSub').textContent = selectedUserObject.place ? 'Place: ' + selectedUserObject.place : '';
-      if (selectedUserObject.role === 'usthad' && selectedUserObject.phone) {
-        document.getElementById('previewSub').textContent += ' | Phone: ' + selectedUserObject.phone;
-      }
+      document.getElementById('previewName').textContent = selectedUserObject.name || '-';
+      document.getElementById('previewFatherText').textContent = selectedUserObject.fatherName || '-';
+      document.getElementById('previewPlaceText').textContent = selectedUserObject.place || 'Muttichira';
 
-      const badge = document.getElementById('previewRoleBadge');
-      if (selectedUserObject.role === 'usthad') {
-        badge.className = 'badge-role badge-usthad';
-        badge.textContent = 'Usthad • ' + (selectedUserObject.designation || 'Faculty');
-      } else if (selectedUserObject.isAlumni) {
-        badge.className = 'badge-role badge-alumni';
-        badge.textContent = 'Biruthadhari / Alumni';
-      } else {
-        badge.className = 'badge-role badge-student';
-        badge.textContent = 'Student • ' + (selectedUserObject.className || 'Dars');
-      }
-      previewBox.style.display = 'flex';
+      previewBox.style.display = 'block';
 
       if (autoProceed) {
         proceedToPassword();
       }
     }
 
-    function handleManualLookup() {
-      const val = document.getElementById('inputIdentifier').value.trim();
-      if (!val) {
-        showAlert('Please enter your Name, Admission Number, or Phone Number', 'danger');
-        return;
-      }
-      if (selectedUserObject) {
-        proceedToPassword();
-      } else {
-        showAlert('Looking up record...', 'info');
-        fetch('/api/portal/lookup?q=' + encodeURIComponent(val) + '&role=' + currentRole)
-          .then(r => r.json())
-          .then(data => {
-            if (data.success && data.matches && data.matches.length > 0) {
-              currentMatchesList = data.matches;
-              selectUserFromList(0, true);
-            } else {
-              showAlert(data.message || 'No record found matching "' + val + '"', 'danger');
-            }
-          });
-      }
-    }
-
     function proceedToPassword() {
       if (!selectedUserObject) return;
+      document.getElementById('selectedPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
+      document.getElementById('selectedName').textContent = selectedUserObject.name;
+      document.getElementById('selectedFatherText').textContent = selectedUserObject.fatherName || '-';
+      document.getElementById('selectedPlaceText').textContent = selectedUserObject.place || 'Muttichira';
       document.getElementById('stepLookup').style.display = 'none';
       document.getElementById('stepPassword').style.display = 'block';
 
@@ -1327,13 +1500,42 @@
 
     function renderDashboard(user) {
       document.getElementById('loginCard').style.display = 'none';
-        const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-11 col-xl-10 transition-all duration-300';
-        const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container'); pContainer.classList.add('container-fluid'); }
+      const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-11 col-xl-10 transition-all duration-300';
+      const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container'); pContainer.classList.add('container-fluid'); }
       document.getElementById('dashboardCard').style.display = 'block';
-      const dh = document.querySelector('.dash-header'); if(dh) dh.style.display = 'none';
 
+      // 1. Populate New Top Header Details
       document.getElementById('dashUserPhoto').src = user.photoUrl || 'img/new_logo.png';
-      document.getElementById('dashUserName').textContent = user.name;
+      document.getElementById('dashUserName').textContent = user.name || '-';
+      document.getElementById('dashUserFather').textContent = user.fatherName || user.guardianName || '-';
+      document.getElementById('dashUserPlace').textContent = user.place || 'Muttichira';
+      document.getElementById('dashUserPhone').textContent = user.phone || '-';
+      
+      const roleBadge = document.getElementById('dashRoleBadge');
+      if (user.role === 'usthad') {
+        document.getElementById('dashUserRole').textContent = 'Usthad • ' + (user.designation || 'Faculty');
+        if (roleBadge) {
+          roleBadge.textContent = 'USTHAD';
+          roleBadge.className = 'badge badge-warning position-absolute';
+        }
+      } else {
+        document.getElementById('dashUserRole').textContent = 'Student • Batch ' + (user.batchNumber || user.batchYear || '1') + ' (' + user.admissionNo + ')';
+        if (roleBadge) {
+          roleBadge.textContent = user.isAlumni ? 'ALUMNI' : 'STUDENT';
+          roleBadge.className = 'badge badge-success position-absolute';
+        }
+      }
+
+      // 2. Fetch live counter for overview
+      fetch('/api/portal/counter')
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.stats) {
+            const totEl = document.getElementById('statTotalStudents');
+            if (totEl) totEl.textContent = data.stats.currentStudents || 87;
+          }
+        }).catch(e => {});
+
       renderQRCodeForUser(user);
 
       // Inject to ID Cards
@@ -1648,192 +1850,468 @@ function loadExamsUsthad() {
   });
 }
 
+let usthadBatchRosterCache = {};
+let currentActiveExamForUsthad = null;
+
 function onUsthadExamChange() {
   const examId = safeGetValue('examSelectUsthad');
-  const batchSelect = document.getElementById('examBatchSelectUsthad');
-  if (examId && window.allExamsUsthadCache) {
-    const exam = window.allExamsUsthadCache.find(e => e._id === examId);
-    if (exam && exam.classSubjects) {
-      const batches = Object.keys(exam.classSubjects);
-      let opts = '<option value="">Select Target Batch</option>';
-      batches.forEach(b => {
-        opts += `<option value="${b}">${b}</option>`;
-      });
-      batchSelect.innerHTML = opts;
-      if (batches.length === 1) {
-        batchSelect.value = batches[0];
+  const container = document.getElementById('usthadBatchBarsContainer');
+  if (!container) return;
+
+  if (!examId || !window.allExamsUsthadCache) {
+    container.innerHTML = `<div class="text-center text-muted py-5">
+      <i class="fa fa-folder-open-o fa-2x mb-2 text-secondary"></i>
+      <div>Please select an exam above to load active batch bars.</div>
+    </div>`;
+    return;
+  }
+
+  const exam = window.allExamsUsthadCache.find(e => e._id === examId);
+  currentActiveExamForUsthad = exam;
+  if (!exam || !exam.classSubjects) {
+    container.innerHTML = `<div class="text-center text-muted py-4">No batch subject configurations found for this exam.</div>`;
+    return;
+  }
+
+  // Filter batches where exam is enabled
+  const allBatchKeys = Object.keys(exam.classSubjects);
+  const activeBatches = [];
+
+  allBatchKeys.forEach(bKey => {
+    const cfg = exam.classSubjects[bKey];
+    if (Array.isArray(cfg)) {
+      if (cfg.length > 0) activeBatches.push({ name: bKey, subjects: cfg });
+    } else if (cfg && typeof cfg === 'object') {
+      if (cfg.enabled !== false) {
+        activeBatches.push({ name: bKey, subjects: cfg.subjects || [] });
       }
     }
+  });
+
+  if (activeBatches.length === 0) {
+    container.innerHTML = `<div class="alert alert-warning text-center my-3">
+      <i class="fa fa-info-circle mr-1"></i> Exam is currently closed or stopped for all batches in this schedule.
+    </div>`;
+    return;
   }
-  loadUsthadExamMatrix();
+
+  // Sort batches naturally
+  activeBatches.sort((a, b) => {
+    const numA = parseInt(a.name.replace(/\D/g, ''), 10);
+    const numB = parseInt(b.name.replace(/\D/g, ''), 10);
+    if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+    return a.name.localeCompare(b.name);
+  });
+
+  let html = '';
+  activeBatches.forEach(b => {
+    const cleanId = b.name.replace(/[^a-zA-Z0-9]/g, '_');
+    const subjNames = b.subjects.map(s => s.subjectName).join(', ') || 'No subjects';
+
+    html += `<div class="batch-bar-card mb-3" style="border:1px solid var(--border-soft); border-radius:12px; background:var(--bg-card-2); overflow:hidden;">
+      <div class="batch-bar-header p-3 d-flex justify-content-between align-items-center" onclick="toggleUsthadBatchBar('${b.name}')" style="cursor:pointer; background:rgba(0,0,0,0.02); transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.05)'" onmouseout="this.style.background='rgba(0,0,0,0.02)'">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-size:1.15rem; font-weight:bold; box-shadow:0 2px 6px rgba(16,185,129,0.25);">
+            <i class="fa fa-folder-open"></i>
+          </div>
+          <div>
+            <h5 class="mb-0 font-weight-bold" style="color:var(--text); font-size:1.05rem;">${b.name}</h5>
+            <div class="small text-muted mt-1">
+              <span class="badge badge-success px-2 py-0" style="font-size:10px;">Exam Open</span> &nbsp;•&nbsp;
+              <span id="batchSubjSummary_${cleanId}">${b.subjects.length} Subjects: ${subjNames}</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <span class="badge badge-pill badge-primary px-3 py-1 font-weight-bold" id="batchBadgeStatus_${cleanId}" style="font-size:12px;">
+            Click to expand
+          </span>
+          <i class="fa fa-chevron-down text-muted" id="batchChevron_${cleanId}" style="transition:transform 0.3s; font-size:14px;"></i>
+        </div>
+      </div>
+
+      <div class="batch-bar-body p-3" id="batchBody_${cleanId}" style="display:none; border-top:1px solid var(--border-soft); background:var(--bg-card);">
+        <div class="text-center text-muted py-3">
+          <i class="fa fa-spinner fa-spin mr-1"></i> Loading students for ${b.name}...
+        </div>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+
+  // Auto-expand the first batch bar for smooth workflow
+  if (activeBatches.length > 0) {
+    toggleUsthadBatchBar(activeBatches[0].name);
+  }
 }
 
-function loadUsthadExamMatrix() {
-  const examId = safeGetValue('examSelectUsthad');
-  const className = safeGetValue('examBatchSelectUsthad');
-  if (!examId || !className) return;
+function selectExamInMatrix(examId) {
+  const el = document.getElementById('examSelectUsthad');
+  if (el) {
+    el.value = examId;
+    onUsthadExamChange();
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast('Exam selected!', false);
+  }
+}
 
-  fetch(`/api/portal/exam/roster?examId=${encodeURIComponent(examId)}&className=${encodeURIComponent(className)}`)
+function toggleUsthadBatchBar(batchName) {
+  const cleanId = batchName.replace(/[^a-zA-Z0-9]/g, '_');
+  const body = document.getElementById(`batchBody_${cleanId}`);
+  const chevron = document.getElementById(`batchChevron_${cleanId}`);
+  if (!body) return;
+
+  const isExpanded = (body.style.display !== 'none');
+  if (isExpanded) {
+    body.style.display = 'none';
+    if (chevron) chevron.style.transform = 'rotate(0deg)';
+  } else {
+    body.style.display = 'block';
+    if (chevron) chevron.style.transform = 'rotate(180deg)';
+    loadBatchRosterAndRender(batchName);
+  }
+}
+
+function loadBatchRosterAndRender(batchName) {
+  const examId = safeGetValue('examSelectUsthad');
+  const cleanId = batchName.replace(/[^a-zA-Z0-9]/g, '_');
+  const body = document.getElementById(`batchBody_${cleanId}`);
+  if (!body || !examId) return;
+
+  fetch(`/api/portal/exam/roster?examId=${encodeURIComponent(examId)}&className=${encodeURIComponent(batchName)}`)
     .then(r => r.json())
     .then(data => {
       if (data.success) {
-        currentExamRosterData = data;
-        renderExamMatrixTable();
+        usthadBatchRosterCache[batchName] = data;
+        renderUsthadBatchRosterTable(batchName);
+      } else {
+        body.innerHTML = `<div class="alert alert-danger">${data.message || 'Error loading roster'}</div>`;
       }
+    })
+    .catch(err => {
+      body.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
     });
 }
 
+function renderUsthadBatchRosterTable(batchName) {
+  const cleanId = batchName.replace(/[^a-zA-Z0-9]/g, '_');
+  const body = document.getElementById(`batchBody_${cleanId}`);
+  const rosterData = usthadBatchRosterCache[batchName];
+  if (!body || !rosterData) return;
 
+  const { students, subjects, existingResults } = rosterData;
 
-    function selectExamInMatrix(examId) {
-      const el = document.getElementById('examSelectUsthad');
-      if(el) {
-        el.value = examId;
-        onUsthadExamChange();
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        showToast('Exam selected!', false);
-      }
+  // Calculate published status
+  let publishedCount = 0;
+  (students || []).forEach(s => {
+    const res = (existingResults || []).find(r => r.admissionNo === s.admissionNo);
+    if (res && res.isPublished !== false && res.totalMarksObtained !== undefined) {
+      publishedCount++;
     }
+  });
 
-    function renderExamMatrixTable() {
-  const container = document.getElementById('examMatrixTableBody'); // Wait, let's replace the whole table structure properly
-  if (!currentExamRosterData) return;
-  const { students, existingResults, exam, subjects } = currentExamRosterData;
-  const className = safeGetValue('examBatchSelectUsthad');
-  currentSubjectInputList = subjects || [];
-  
-  // Render Subject Badges Banner
-  const banner = document.getElementById('examSubjectConfigBanner');
-  const bannerTitle = document.getElementById('examBannerTitle');
-  const bannerBadges = document.getElementById('examBannerBadges');
-
-  if (subjects && subjects.length > 0) {
-    bannerTitle.textContent = `Configured Subjects for Batch ${className}:`;
-    let bHtml = '';
-    subjects.forEach(s => {
-      bHtml += `<span class="badge badge-accent">${s.subjectName} (Max: ${s.maxMarks})</span>`;
-    });
-    bannerBadges.innerHTML = bHtml;
-    banner.style.display = 'block';
-  } else {
-    banner.style.display = 'none';
+  const totalCount = (students || []).length;
+  const badgeStatus = document.getElementById(`batchBadgeStatus_${cleanId}`);
+  if (badgeStatus) {
+    badgeStatus.className = `badge badge-pill ${publishedCount === totalCount && totalCount > 0 ? 'badge-success' : 'badge-warning text-dark'} px-3 py-1 font-weight-bold`;
+    badgeStatus.textContent = `${publishedCount} / ${totalCount} Published`;
   }
 
-  // Rewrite Table Header
-  const headerRow = document.getElementById('examMatrixHeaderRow');
-  headerRow.innerHTML = '<th>Adm No</th><th>Student Name</th><th>Status</th><th>Actions</th>';
+  // Badges of subjects
+  let subjBadgesHtml = '';
+  (subjects || []).forEach(s => {
+    subjBadgesHtml += `<span class="badge badge-accent mr-1 mb-1">${s.subjectName} (Max: ${s.maxMarks})</span>`;
+  });
+
+  // Top action bar
+  let topBarHtml = `<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center p-3 mb-3 rounded gap-2" style="background:var(--bg-card-2); border:1px solid var(--border-soft);">
+    <div>
+      <div class="font-weight-bold text-dark" style="font-size:0.92rem;">
+        <i class="fa fa-book text-primary mr-1"></i> Subjects: ${subjBadgesHtml || '<span class="text-muted">None</span>'}
+      </div>
+      <small class="text-muted">Enter marks obtained. Status automatically tracks Published vs Pending.</small>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-success rounded-pill font-weight-bold px-3 py-2 shadow-sm" onclick="publishEntireBatch('${batchName}')">
+        <i class="fa fa-check-circle"></i> Publish All ${batchName} Marks
+      </button>
+    </div>
+  </div>`;
 
   if (!students || students.length === 0) {
-    container.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-4">No active students in this batch.</td></tr>`;
+    body.innerHTML = topBarHtml + `<div class="text-center text-muted py-4">No active students found in ${batchName}.</div>`;
     return;
   }
-  
-  let htmlStr = '';
-  students.forEach((s) => {
-    const existing = existingResults.find(r => r.admissionNo === s.admissionNo) || {};
-    const hasResult = existing.totalMarksObtained !== undefined;
-    const statusBadge = hasResult ? '<span class="badge badge-success px-2 py-1"><i class="fa fa-check-circle"></i> Published</span>' : '<span class="badge badge-warning px-2 py-1 text-dark"><i class="fa fa-clock-o"></i> Pending</span>';
-    let actionBtns = '';
-    
-    if (hasResult) {
-      actionBtns = `<button class="btn btn-sm btn-info rounded-pill font-weight-bold" onclick="openSingleStudentMarkModal('${s.admissionNo}', '${s.name}')"><i class="fa fa-edit"></i> Edit</button> ` +
-                   `<button class="btn btn-sm btn-danger rounded-pill font-weight-bold ml-1" onclick="unpublishStudentMark('${s.admissionNo}')"><i class="fa fa-times"></i> Unpublish</button>`;
-    } else {
-      actionBtns = `<button class="btn btn-sm btn-success rounded-pill font-weight-bold" onclick="openSingleStudentMarkModal('${s.admissionNo}', '${s.name}')"><i class="fa fa-upload"></i> Publish Marks</button>`;
-    }
-    
-    htmlStr += `<tr>\n` +
-      `<td class="align-middle"><code style="font-weight:700; color:var(--accent); font-size:14px;">${s.admissionNo}</code></td>\n` +
-      `<td class="align-middle"><strong style="color:var(--text); font-size:15px;">${s.name}</strong></td>\n` +
-      `<td class="align-middle">${statusBadge}</td>\n` +
-      `<td class="align-middle">${actionBtns}</td>\n` +
-    `</tr>`;
+
+  // Header columns for subjects
+  let subjThs = '';
+  (subjects || []).forEach(s => {
+    subjThs += `<th style="min-width:90px;">${s.subjectName}<br><small style="opacity:0.85; font-size:11px;">Max ${s.maxMarks}</small></th>`;
   });
-  container.innerHTML = htmlStr;
+
+  let tableHtml = `${topBarHtml}
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered table-sm text-center align-middle" style="color:var(--text); border-color:var(--border-soft); font-size:13.5px;">
+      <thead class="bg-primary text-white" style="position: sticky; top: 0; z-index: 5;">
+        <tr>
+          <th style="width:75px;">Adm No</th>
+          <th style="text-align:left; min-width:160px;">Student Name</th>
+          ${subjThs}
+          <th style="min-width:85px;">Total</th>
+          <th style="min-width:65px;">%</th>
+          <th style="min-width:90px;">Grade</th>
+          <th style="min-width:95px;">Status</th>
+          <th style="min-width:150px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+  students.forEach(s => {
+    const existing = (existingResults || []).find(r => r.admissionNo === s.admissionNo) || {};
+    const isPub = (existing.isPublished !== false && existing.totalMarksObtained !== undefined);
+    const hasData = (existing.totalMarksObtained !== undefined);
+
+    let rowTotal = existing.totalMarksObtained !== undefined ? existing.totalMarksObtained : 0;
+    let rowMax = existing.totalMaxMarks || 0;
+    let rowPct = existing.percentage !== undefined ? existing.percentage : 0;
+    let rowGrade = existing.grade || '—';
+
+    // Subject inputs
+    let subjInputsHtml = '';
+    (subjects || []).forEach((subj, sIdx) => {
+      let markVal = '';
+      if (existing.subjectMarks) {
+        if (Array.isArray(existing.subjectMarks)) {
+          const match = existing.subjectMarks.find(sm => sm.subjectName === subj.subjectName);
+          if (match) markVal = match.marksObtained;
+        } else if (existing.subjectMarks[subj.subjectName] !== undefined) {
+          markVal = existing.subjectMarks[subj.subjectName];
+        }
+      }
+
+      subjInputsHtml += `<td>
+        <input type="number" 
+          id="inputMark_${s.admissionNo}_${sIdx}" 
+          class="form-control form-control-sm text-center font-weight-bold" 
+          min="0" max="${subj.maxMarks}" 
+          value="${markVal}" 
+          placeholder="0-${subj.maxMarks}"
+          oninput="recalcStudentRowScore('${s.admissionNo}', '${batchName}')" 
+          style="width:75px; margin:0 auto; background:var(--bg-input); color:var(--text); font-size:13px;">
+      </td>`;
+    });
+
+    const statusBadge = isPub 
+      ? `<span class="badge badge-success px-2 py-1"><i class="fa fa-check-circle"></i> Published</span>` 
+      : `<span class="badge badge-warning text-dark px-2 py-1"><i class="fa fa-clock-o"></i> Pending</span>`;
+
+    const actionButtons = `<div class="d-flex justify-content-center align-items-center gap-1">
+      <button class="btn btn-xs btn-outline-primary" onclick="saveSingleStudentMarksRow('${s.admissionNo}', '${batchName}', false)" title="Save as Draft">
+        <i class="fa fa-save"></i> Draft
+      </button>
+      <button class="btn btn-xs btn-success" onclick="saveSingleStudentMarksRow('${s.admissionNo}', '${batchName}', true)" title="Publish marks">
+        <i class="fa fa-upload"></i> Publish
+      </button>
+      ${hasData ? `<button class="btn btn-xs btn-outline-danger" onclick="unpublishStudentMark('${s.admissionNo}')" title="Delete / Unpublish"><i class="fa fa-trash"></i></button>` : ''}
+    </div>`;
+
+    tableHtml += `<tr>
+      <td><code style="font-weight:700; color:var(--accent);">${s.admissionNo}</code></td>
+      <td style="text-align:left;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <img src="${s.photoUrl || 'img/new_logo.png'}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1px solid #e2e8f0;">
+          <strong style="color:var(--text); font-size:13.5px;">${s.name}</strong>
+        </div>
+      </td>
+      ${subjInputsHtml}
+      <td><strong id="spanTotal_${s.admissionNo}" style="color:var(--accent); font-weight:800;">${hasData ? rowTotal + '/' + rowMax : '—'}</strong></td>
+      <td><span id="spanPct_${s.admissionNo}" class="badge badge-light" style="font-size:12px;">${hasData ? rowPct + '%' : '—'}</span></td>
+      <td><span id="spanGrade_${s.admissionNo}" class="badge badge-info" style="font-size:11px;">${rowGrade}</span></td>
+      <td id="tdStatus_${s.admissionNo}">${statusBadge}</td>
+      <td>${actionButtons}</td>
+    </tr>`;
+  });
+
+  tableHtml += `</tbody></table></div>`;
+  body.innerHTML = tableHtml;
 }
 
-let editingMarkStudentAdmNo = null;
+function recalcStudentRowScore(admNo, batchName) {
+  const rosterData = usthadBatchRosterCache[batchName];
+  if (!rosterData) return;
+  const subjects = rosterData.subjects || [];
 
-function openSingleStudentMarkModal(admNo, name) {
-  editingMarkStudentAdmNo = admNo;
-  document.getElementById('singleMarkStudentName').textContent = name + " (" + admNo + ")";
-  const existingResults = currentExamRosterData.existingResults || [];
-  const existing = existingResults.find(r => r.admissionNo === admNo) || {};
-  const existingSubMarks = existing.subjectMarks || {};
-  let htmlStr = '';
-  
-  currentSubjectInputList.forEach((subj, idx) => {
-    // Determine the prefill value
-    let val = '';
-    // Look at existingSubMarks - originally it was an object { "Subject1": 50 }
-    if (existingSubMarks[subj.subjectName] !== undefined) {
-      val = existingSubMarks[subj.subjectName];
-    } else if (Array.isArray(existingSubMarks)) {
-      const prefill = existingSubMarks.find(em => em.subjectName === subj.subjectName);
-      if (prefill) val = prefill.marksObtained;
+  let totalObt = 0;
+  let totalMax = 0;
+  let hasAnyInput = false;
+
+  subjects.forEach((subj, idx) => {
+    const input = document.getElementById(`inputMark_${admNo}_${idx}`);
+    const mMax = Number(subj.maxMarks || 100);
+    totalMax += mMax;
+    if (input && input.value !== '') {
+      hasAnyInput = true;
+      totalObt += Number(input.value);
     }
-    
-    htmlStr += `<div class="form-group mb-3">\n` +
-      `<label class="form-label font-weight-bold text-dark">${subj.subjectName} <span class="text-muted">(Max: ${subj.maxMarks})</span></label>\n` +
-      `<input type="number" id="singleMarkInput_${idx}" class="form-control" style="background:var(--bg-input); color:var(--text); font-weight:bold;" max="${subj.maxMarks}" placeholder="Enter mark obtained" value="${val}" required>\n` +
-    `</div>`;
   });
-  
-  document.getElementById('singleMarkInputsContainer').innerHTML = htmlStr;
-  
-  // Make sure Bootstrap modal backdrop works
-  $('#modalSingleStudentMark').modal('show');
+
+  const totalSpan = document.getElementById(`spanTotal_${admNo}`);
+  const pctSpan = document.getElementById(`spanPct_${admNo}`);
+  const gradeSpan = document.getElementById(`spanGrade_${admNo}`);
+
+  if (!hasAnyInput) {
+    if (totalSpan) totalSpan.textContent = '—';
+    if (pctSpan) pctSpan.textContent = '—';
+    if (gradeSpan) gradeSpan.textContent = '—';
+    return;
+  }
+
+  const pct = totalMax > 0 ? parseFloat(((totalObt / totalMax) * 100).toFixed(1)) : 0;
+  let grade = 'ممتاز (Mumtaz)';
+  if (pct >= 85) grade = 'ممتاز (Mumtaz)';
+  else if (pct >= 75) grade = 'جيد جداً (Jayyid Jiddan)';
+  else if (pct >= 60) grade = 'جيد (Jayyid)';
+  else if (pct >= 40) grade = 'مقبول (Maqbool)';
+  else grade = 'راسب (Rasib)';
+
+  if (totalSpan) totalSpan.textContent = `${totalObt} / ${totalMax}`;
+  if (pctSpan) pctSpan.textContent = `${pct}%`;
+  if (gradeSpan) gradeSpan.textContent = grade;
 }
 
-function saveSingleStudentMark(e) {
-  e.preventDefault();
+function saveSingleStudentMarksRow(admNo, batchName, publishNow = true) {
   const examId = safeGetValue('examSelectUsthad');
-  const className = safeGetValue('examBatchSelectUsthad');
-  if (!examId || !className || !editingMarkStudentAdmNo) return;
-  
-  const marksData = [];
+  const rosterData = usthadBatchRosterCache[batchName];
+  if (!examId || !rosterData) return;
+
+  const subjects = rosterData.subjects || [];
   const subMarksObj = {};
-  let isComplete = true;
-  
-  currentSubjectInputList.forEach((subj, idx) => {
-    const val = document.getElementById('singleMarkInput_' + idx).value;
-    if (val === '') { isComplete = false; } else {
-      subMarksObj[subj.subjectName] = Number(val);
+  let anyFilled = false;
+
+  subjects.forEach((subj, idx) => {
+    const input = document.getElementById(`inputMark_${admNo}_${idx}`);
+    if (input && input.value !== '') {
+      subMarksObj[subj.subjectName] = Number(input.value);
+      anyFilled = true;
+    } else {
+      subMarksObj[subj.subjectName] = 0;
     }
   });
-  
-  if (!isComplete) { showToast('Please fill all marks before publishing!', true); return; }
-  
-  const student = currentExamRosterData.students.find(s => s.admissionNo === editingMarkStudentAdmNo);
-  
-  marksData.push({
-    admissionNo: editingMarkStudentAdmNo,
+
+  if (!anyFilled) {
+    showToast('Please enter at least one subject mark', true);
+    return;
+  }
+
+  const student = (rosterData.students || []).find(s => s.admissionNo === admNo);
+
+  const marksData = [{
+    admissionNo: admNo,
     studentName: student ? student.name : 'Student',
-    subjectsConfig: currentSubjectInputList,
+    subjectsConfig: subjects,
     subjectMarks: subMarksObj,
+    isPublished: publishNow,
     attendancePresentDays: 100,
     attendanceTotalDays: 100,
-    usthadRemarks: 'Published via single edit'
-  });
-  
+    usthadRemarks: publishNow ? 'Published by Usthad' : 'Draft'
+  }];
+
   fetch('/api/portal/exam/save-marks', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       examId,
-      examName: currentExamRosterData.exam.examName,
-      term: currentExamRosterData.exam.term,
-      batchYear: className,
-      marksData: marksData
+      examName: rosterData.exam ? rosterData.exam.examName : 'Semester Exam',
+      className: batchName,
+      isPublished: publishNow,
+      marksData
     })
-  }).then(r => r.json()).then(res => {
+  })
+  .then(r => r.json())
+  .then(res => {
     if (res.success) {
-      showToast('Student marks published/updated!', false);
-      $('#modalSingleStudentMark').modal('hide');
-      loadUsthadExamMatrix();
-    } else { showToast(res.message, true); }
-  });
+      showToast(publishNow ? 'Marks published successfully!' : 'Marks saved as draft', false);
+      loadBatchRosterAndRender(batchName);
+    } else {
+      showToast(res.message || 'Error saving marks', true);
+    }
+  })
+  .catch(err => showToast(err.message, true));
 }
+
+function publishEntireBatch(batchName) {
+  const examId = safeGetValue('examSelectUsthad');
+  const rosterData = usthadBatchRosterCache[batchName];
+  if (!examId || !rosterData) return;
+
+  const students = rosterData.students || [];
+  const subjects = rosterData.subjects || [];
+
+  if (students.length === 0) {
+    showToast('No students in this batch', true);
+    return;
+  }
+
+  // Gather marks from all rows
+  const marksData = [];
+  let filledCount = 0;
+
+  students.forEach(s => {
+    const subMarksObj = {};
+    let studentFilled = false;
+
+    subjects.forEach((subj, idx) => {
+      const input = document.getElementById(`inputMark_${s.admissionNo}_${idx}`);
+      if (input && input.value !== '') {
+        subMarksObj[subj.subjectName] = Number(input.value);
+        studentFilled = true;
+      } else {
+        subMarksObj[subj.subjectName] = 0;
+      }
+    });
+
+    if (studentFilled) filledCount++;
+
+    marksData.push({
+      admissionNo: s.admissionNo,
+      studentName: s.name,
+      subjectsConfig: subjects,
+      subjectMarks: subMarksObj,
+      isPublished: true,
+      attendancePresentDays: 100,
+      attendanceTotalDays: 100,
+      usthadRemarks: 'Batch Published'
+    });
+  });
+
+  if (!confirm(`Publish marks for all ${students.length} students in ${batchName}? (${filledCount} students have marks entered)`)) {
+    return;
+  }
+
+  fetch('/api/portal/exam/save-marks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      examId,
+      examName: rosterData.exam ? rosterData.exam.examName : 'Semester Exam',
+      className: batchName,
+      isPublished: true,
+      marksData
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.success) {
+      showToast(`All ${batchName} marks published successfully!`, false);
+      loadBatchRosterAndRender(batchName);
+    } else {
+      showToast(res.message || 'Error publishing batch marks', true);
+    }
+  })
+  .catch(err => showToast(err.message, true));
+}
+
 
 function unpublishStudentMark(admNo) {
   if (!confirm('Are you sure you want to unpublish and delete this student\'s marks?')) return;
@@ -2199,6 +2677,281 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 });
+
+    // ==================== VIEW PROFILE MODAL ====================
+    function openViewProfileModal() {
+      const user = currentUserSession;
+      if (!user) return;
+      document.getElementById('vpPhoto').src = user.photoUrl || 'img/new_logo.png';
+      document.getElementById('vpName').textContent = user.name || '-';
+      document.getElementById('vpRoleBadge').textContent = user.role === 'usthad' ? 'Usthad' : (user.isAlumni ? 'Biruthadhari / Alumni' : 'Student');
+      document.getElementById('vpRoleBadge').className = user.role === 'usthad' ? 'badge badge-warning px-3 py-1 font-weight-bold rounded-pill' : 'badge badge-success px-3 py-1 font-weight-bold rounded-pill';
+      document.getElementById('vpFather').textContent = user.fatherName || user.guardianName || '-';
+      document.getElementById('vpPlace').textContent = user.place || 'Muttichira';
+      document.getElementById('vpPost').textContent = user.postOffice || user.post || user.address || '-';
+      document.getElementById('vpPhone').textContent = user.phone || '-';
+      document.getElementById('vpEducation').textContent = user.education || (user.role === 'usthad' ? 'Baqavi / Faizi' : 'SSLC / Dars');
+      document.getElementById('vpJob').textContent = user.job || (user.role === 'usthad' ? 'Dars Mudarris' : 'Student');
+      document.getElementById('vpBlood').textContent = user.bloodGroup || 'Unknown';
+      document.getElementById('vpId').textContent = user.admissionNo || user.usthadId || '-';
+      $('#modalViewProfile').modal('show');
+    }
+
+    // ==================== EDIT PROFILE MODAL ====================
+    function openEditProfileModal() {
+      const user = currentUserSession;
+      if (!user) return;
+      document.getElementById('epName').value = user.name || '';
+      document.getElementById('epFather').value = user.fatherName || user.guardianName || '';
+      document.getElementById('epPlace').value = user.place || 'Muttichira';
+      document.getElementById('epPost').value = user.postOffice || user.post || user.address || '';
+      document.getElementById('epPhone').value = user.phone || '';
+      document.getElementById('epBlood').value = user.bloodGroup || '';
+      document.getElementById('epEducation').value = user.education || '';
+      document.getElementById('epJob').value = user.job || '';
+      document.getElementById('epPassword').value = '';
+      $('#modalEditProfile').modal('show');
+    }
+
+    function handleSaveEditProfile(e) {
+      e.preventDefault();
+      const user = currentUserSession;
+      if (!user) return;
+      const isUsthad = user.role === 'usthad';
+      const targetId = user._id || user.admissionNo || user.usthadId;
+      const url = isUsthad ? ('/api/portal/usthad/' + targetId) : ('/api/portal/student/' + targetId);
+
+      const formData = new FormData();
+      formData.append('name', document.getElementById('epName').value);
+      formData.append('fatherName', document.getElementById('epFather').value);
+      formData.append('place', document.getElementById('epPlace').value);
+      formData.append('postOffice', document.getElementById('epPost').value);
+      formData.append('phone', document.getElementById('epPhone').value);
+      formData.append('bloodGroup', document.getElementById('epBlood').value);
+      formData.append('education', document.getElementById('epEducation').value);
+      formData.append('job', document.getElementById('epJob').value);
+      const pass = document.getElementById('epPassword').value.trim();
+      if (pass) formData.append('password', pass);
+      const photoFile = document.getElementById('epPhoto').files[0];
+      if (photoFile) formData.append('photo', photoFile);
+
+      const btn = document.getElementById('btnSaveEditProfile');
+      const oldText = btn.innerHTML;
+      btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+      btn.disabled = true;
+
+      fetch(url, { method: 'PUT', body: formData })
+        .then(r => r.json())
+        .then(res => {
+          btn.innerHTML = oldText;
+          btn.disabled = false;
+          if (res.success) {
+            showToast('Profile updated successfully!', false);
+            $('#modalEditProfile').modal('hide');
+            const updated = res.student || res.usthad || {};
+            Object.assign(currentUserSession, updated);
+            renderDashboard(currentUserSession);
+          } else {
+            showToast(res.message || 'Error updating profile', true);
+          }
+        })
+        .catch(err => {
+          btn.innerHTML = oldText;
+          btn.disabled = false;
+          showToast('Network error while updating profile', true);
+        });
+    }
+
+    // ==================== MY DATAS (IMAGE VAULT) ====================
+    function renderMyDatasGallery() {
+      const container = document.getElementById('myDatasGalleryContainer');
+      if (!container) return;
+      const list = (currentUserSession && Array.isArray(currentUserSession.myDatas)) ? currentUserSession.myDatas : [];
+      if (list.length === 0) {
+        container.innerHTML = '<div class="text-muted small py-4 text-center col-12"><i class="fa fa-folder-open-o fa-2x mb-2 d-block text-muted"></i>No documents uploaded yet. മുകളിൽ നിന്ന് ഫോട്ടോകൾ ചേർക്കാം.</div>';
+        return;
+      }
+      let html = '';
+      list.forEach(doc => {
+        html += `
+          <div class="mydata-item">
+            <img src="${doc.url}" alt="${doc.title}" class="mydata-thumb" onclick="window.open('${doc.url}', '_blank')">
+            <div class="mydata-actions">
+              <div style="flex:1; min-width:0; padding-right:5px;">
+                <strong class="d-block text-truncate text-dark" style="font-size:0.75rem;">${doc.title || 'Document'}</strong>
+                <small class="text-muted" style="font-size:0.68rem;">${doc.size || 'Image'}</small>
+              </div>
+              <div class="d-flex" style="gap:4px;">
+                <a href="${doc.url}" download="${doc.title || 'document'}" class="btn btn-xs btn-outline-success p-1" title="Download" style="font-size:10px;"><i class="fa fa-download"></i></a>
+                <button onclick="handleDeleteMyData('${doc.id}')" class="btn btn-xs btn-outline-danger p-1" title="Delete" style="font-size:10px;"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function openMyDatasModal() {
+      renderMyDatasGallery();
+      $('#modalMyDatas').modal('show');
+    }
+
+    function handleUploadMyData() {
+      const fileInput = document.getElementById('myDataFileInput');
+      const titleInput = document.getElementById('myDataTitle');
+      if (!fileInput.files || !fileInput.files[0]) {
+        alert('ദയവായി ഒരു ഇമേജ് ഫയൽ തെരഞ്ഞെടുക്കുക (JPG, PNG, WebP)');
+        return;
+      }
+      const file = fileInput.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('ഇമേജ് ഫയലുകൾ മാത്രമേ അപ്‌ലോഡ് ചെയ്യാൻ സാധിക്കൂ!');
+        return;
+      }
+      const title = titleInput.value.trim() || file.name;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Image = e.target.result;
+        const user = currentUserSession;
+        const payload = {
+          userId: user._id || user.admissionNo || user.usthadId,
+          role: user.role,
+          title: title,
+          base64Image: base64Image
+        };
+
+        fetch('/api/portal/my-data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            showToast('ഇമേജ് മൈ ഡാറ്റാസിലേക്ക് വിജയകരമായി സൂക്ഷിച്ചു!', false);
+            currentUserSession.myDatas = res.myDatas || [];
+            fileInput.value = '';
+            titleInput.value = '';
+            renderMyDatasGallery();
+          } else {
+            showToast(res.message || 'Upload failed', true);
+          }
+        })
+        .catch(err => {
+          showToast('Error saving image', true);
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleDeleteMyData(docId) {
+      if (!confirm('ഈ ഇമേജ് നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?')) return;
+      const user = currentUserSession;
+      fetch('/api/portal/my-data', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user._id || user.admissionNo || user.usthadId,
+          role: user.role,
+          docId: docId
+        })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          showToast('ഇമേജ് നീക്കം ചെയ്തു', false);
+          currentUserSession.myDatas = res.myDatas || [];
+          renderMyDatasGallery();
+        } else {
+          showToast(res.message || 'Delete failed', true);
+        }
+      });
+    }
+
+    // ==================== LANDSCAPE ID CARD ====================
+    function openLandscapeIdCardModal() {
+      const user = currentUserSession;
+      if (!user) return;
+      document.getElementById('licPhoto').src = user.photoUrl || 'img/new_logo.png';
+      document.getElementById('licName').textContent = user.name || '-';
+      document.getElementById('licFather').textContent = user.fatherName || user.guardianName || '-';
+      document.getElementById('licPlace').textContent = user.place || 'Muttichira';
+      document.getElementById('licId').textContent = user.admissionNo || user.usthadId || '-';
+      document.getElementById('licBatch').textContent = user.role === 'usthad' ? (user.designation || 'Usthad') : ('Batch ' + (user.batchNumber || '1'));
+      document.getElementById('licFrontBadge').textContent = user.role === 'usthad' ? 'USTHAD ID' : 'STUDENT ID';
+
+      // Dynamic QR Code pointing to this user's pre-password login preview
+      const qrBox = document.getElementById('landscapeQrBox');
+      qrBox.innerHTML = '';
+      const scanTargetUrl = window.location.origin + window.location.pathname + '?id=' + encodeURIComponent(user.admissionNo || user.usthadId);
+
+      try {
+        new QRCode(qrBox, {
+          text: scanTargetUrl,
+          width: 60,
+          height: 60,
+          colorDark: "#064e3b",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch(e) {
+        console.error('QR code generation error:', e);
+      }
+
+      document.getElementById('landscapeFlipCardInner').classList.remove('flipped');
+      $('#modalLandscapeIdCard').modal('show');
+    }
+
+    function flipLandscapeCard() {
+      const card = document.getElementById('landscapeFlipCardInner');
+      if (card) card.classList.toggle('flipped');
+    }
+
+    function downloadLandscapeCard() {
+      if (typeof html2canvas === 'undefined') {
+        alert('Canvas library loading, please try again.');
+        return;
+      }
+      const isFlipped = document.getElementById('landscapeFlipCardInner').classList.contains('flipped');
+      const targetSide = isFlipped ? document.getElementById('landscapeBackSide') : document.getElementById('landscapeFrontSide');
+      const fileName = (currentUserSession.name || 'ID_Card') + (isFlipped ? '_Back' : '_Front') + '.png';
+
+      html2canvas(targetSide, { scale: 3, backgroundColor: null, useCORS: true }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    // Auto-Lookup from QR Code on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const autoUser = urlParams.get('id') || urlParams.get('user') || urlParams.get('adm') || urlParams.get('lookup');
+      if (autoUser) {
+        const input = document.getElementById('inputIdentifier');
+        if (input) {
+          input.value = autoUser;
+          setTimeout(() => {
+            fetch('/api/portal/lookup?q=' + encodeURIComponent(autoUser) + '&role=' + currentRole)
+              .then(r => r.json())
+              .then(data => {
+                if (data.success && data.matches && data.matches.length > 0) {
+                  currentMatchesList = data.matches;
+                  selectUserFromList(0, false);
+                  const preview = document.getElementById('livePreviewBox');
+                  if (preview) {
+                    preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                }
+              });
+          }, 300);
+        }
+      }
+    });
+
 </script>
 
   <div style="position:fixed; bottom:10px; right:10px; font-size:12px; color:rgba(255,255,255,0.3); z-index:9999; pointer-events:none;">
@@ -2501,6 +3254,300 @@ window.addEventListener('DOMContentLoaded', () => {
             <button type="submit" class="btn btn-success rounded-pill font-weight-bold px-4">Publish/Save Marks</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== 1. VIEW PROFILE MODAL ==================== -->
+  <div class="modal fade" id="modalViewProfile" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background:#ffffff; color:#1e293b; border-radius:20px; border:1px solid #cbd5e1; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+        <div class="modal-header border-bottom-0 pb-0">
+          <h5 class="modal-title font-weight-bold text-dark"><i class="fa fa-user-circle text-success"></i> Official Student Profile</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-4">
+            <img id="vpPhoto" src="img/new_logo.png" style="width:90px; height:90px; border-radius:50%; object-fit:cover; border:3px solid #10b981; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+            <h4 id="vpName" class="font-weight-bold mt-2 mb-0 text-dark">-</h4>
+            <span id="vpRoleBadge" class="badge badge-success px-3 py-1 font-weight-bold rounded-pill">Student</span>
+          </div>
+
+          <div class="p-3 rounded-4" style="background:#f8fafc; border:1px solid #e2e8f0; font-size:0.9rem;">
+            <div class="row">
+              <div class="col-6 mb-3">
+                <span class="text-muted small d-block font-weight-bold">Father's Name:</span>
+                <strong id="vpFather" class="text-dark">-</strong>
+              </div>
+              <div class="col-6 mb-3">
+                <span class="text-muted small d-block font-weight-bold">Place:</span>
+                <strong id="vpPlace" class="text-dark">-</strong>
+              </div>
+              <div class="col-6 mb-3">
+                <span class="text-muted small d-block font-weight-bold">Post Office & Address:</span>
+                <strong id="vpPost" class="text-dark">-</strong>
+              </div>
+              <div class="col-6 mb-3">
+                <span class="text-muted small d-block font-weight-bold">Phone Number:</span>
+                <strong id="vpPhone" class="text-dark">-</strong>
+              </div>
+              <div class="col-6 mb-3">
+                <span class="text-muted small d-block font-weight-bold">Education:</span>
+                <strong id="vpEducation" class="text-dark">-</strong>
+              </div>
+              <div class="col-6 mb-3">
+                <span class="text-muted small d-block font-weight-bold">Occupation / Job:</span>
+                <strong id="vpJob" class="text-dark">-</strong>
+              </div>
+              <div class="col-6 mb-1">
+                <span class="text-muted small d-block font-weight-bold">Blood Group:</span>
+                <strong id="vpBlood" class="text-danger">-</strong>
+              </div>
+              <div class="col-6 mb-1">
+                <span class="text-muted small d-block font-weight-bold">Admission No / ID:</span>
+                <strong id="vpId" class="text-primary font-mono">-</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-light rounded-pill font-weight-bold" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-warning rounded-pill font-weight-bold text-dark" onclick="$('#modalViewProfile').modal('hide'); openEditProfileModal();">
+            <i class="fa fa-pencil"></i> Edit Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 2. EDIT PROFILE MODAL ==================== -->
+  <div class="modal fade" id="modalEditProfile" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="background:#ffffff; color:#1e293b; border-radius:20px; border:1px solid #cbd5e1; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+        <div class="modal-header border-bottom-0 pb-0">
+          <h5 class="modal-title font-weight-bold text-dark"><i class="fa fa-pencil text-warning"></i> Edit Profile Details</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form onsubmit="handleSaveEditProfile(event)">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Full Name <span class="text-danger">*</span></label>
+                <input type="text" id="epName" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Father's / Guardian's Name <span class="text-danger">*</span></label>
+                <input type="text" id="epFather" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Place <span class="text-danger">*</span></label>
+                <input type="text" id="epPlace" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Post Office & Address</label>
+                <input type="text" id="epPost" class="form-control">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Phone Number <span class="text-danger">*</span></label>
+                <input type="text" id="epPhone" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Blood Group</label>
+                <select id="epBlood" class="form-control">
+                  <option value="">Unknown</option>
+                  <option value="A+">A+</option><option value="A-">A-</option>
+                  <option value="B+">B+</option><option value="B-">B-</option>
+                  <option value="O+">O+</option><option value="O-">O-</option>
+                  <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Education</label>
+                <input type="text" id="epEducation" class="form-control" placeholder="SSLC / Dars">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Occupation / Job</label>
+                <input type="text" id="epJob" class="form-control" placeholder="വിദ്യാർത്ഥി / തൊഴിൽ">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Login Password (Set New)</label>
+                <input type="text" id="epPassword" class="form-control" placeholder="Enter new password if changing">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="small font-weight-bold text-muted">Upload Profile Photo (Optional)</label>
+                <input type="file" id="epPhoto" accept="image/*" class="form-control" style="padding-bottom:35px;">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 pt-0">
+            <button type="button" class="btn btn-secondary rounded-pill font-weight-bold" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success rounded-pill font-weight-bold px-4" id="btnSaveEditProfile">
+              <i class="fa fa-save"></i> Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 3. MY DATAS (IMAGE VAULT) MODAL ==================== -->
+  <div class="modal fade" id="modalMyDatas" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="background:#ffffff; color:#1e293b; border-radius:20px; border:1px solid #cbd5e1; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+        <div class="modal-header border-bottom-0 pb-0">
+          <div>
+            <span class="badge badge-info px-2 py-1 uppercase" style="font-size:10px;">Image Locker</span>
+            <h5 class="modal-title font-weight-bold text-dark mt-1"><i class="fa fa-folder-open text-info"></i> My Datas (Document & Image Vault)</h5>
+          </div>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small mb-3">
+            Securely store and manage your passport photo, ID cards, and academic certificates (Images only).
+          </p>
+
+          <!-- UPLOAD CARD -->
+          <div class="p-3 mb-4 rounded-4" style="background:#f0f9ff; border:2px dashed #0ea5e9; text-align:center;">
+            <div class="row align-items-center justify-content-center">
+              <div class="col-md-6 mb-2 mb-md-0">
+                <input type="text" id="myDataTitle" class="form-control form-control-sm" placeholder="Document Title (e.g., Aadhaar Card, Passport Photo)..." style="background:#fff !important;">
+              </div>
+              <div class="col-md-4 mb-2 mb-md-0">
+                <input type="file" id="myDataFileInput" accept="image/*" class="form-control form-control-sm" style="background:#fff !important; padding-bottom:30px;">
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-sm btn-info font-weight-bold btn-block rounded-pill py-2" onclick="handleUploadMyData()">
+                  <i class="fa fa-upload"></i> Upload & Save
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- GALLERY -->
+          <h6 class="font-weight-bold text-dark mb-3"><i class="fa fa-images text-primary"></i> Saved Documents & Photos:</h6>
+          <div class="mydatas-grid" id="myDatasGalleryContainer">
+            <div class="text-muted small py-4 text-center col-12">ഇതുവരെ ഇമേജുകൾ ഒന്നും അപ്‌ലോഡ് ചെയ്തിട്ടില്ല.</div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-secondary rounded-pill font-weight-bold" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 4. LANDSCAPE ID CARD MODAL WITH FLIP & QR ==================== -->
+  <div class="modal fade" id="modalLandscapeIdCard" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="background:#0f172a; color:#ffffff; border-radius:24px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 25px 50px rgba(0,0,0,0.5);">
+        <div class="modal-header border-bottom-0 pb-0">
+          <div>
+            <span class="badge badge-success px-2 py-1" style="font-size:10px;">Official Academic Card</span>
+            <h5 class="modal-title font-weight-bold text-white mt-1"><i class="fa fa-id-card text-success"></i> Minimal Landscape ID Card</h5>
+          </div>
+          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body py-4">
+          
+          <div class="landscape-perspective">
+            <div class="landscape-card-inner" id="landscapeFlipCardInner">
+              
+              <!-- ===== FRONT SIDE ===== -->
+              <div class="landscape-front" id="landscapeFrontSide">
+                <!-- Header -->
+                <div class="d-flex align-items-center justify-content-between pb-2" style="border-bottom:1px solid rgba(212,175,55,0.3);">
+                  <div class="d-flex align-items-center gap-2">
+                    <img src="img/new_logo.png" style="width:36px; height:36px;">
+                    <div>
+                      <div style="font-weight:900; font-size:11px; color:#d4af37; letter-spacing:0.5px; text-transform:uppercase;">Bayanul Uloom Dars</div>
+                      <div style="font-size:9px; color:#94a3b8;">Muttichira • Malappuram, Kerala</div>
+                    </div>
+                  </div>
+                  <span id="licFrontBadge" class="badge" style="background:rgba(212,175,55,0.2); color:#fef08a; border:1px solid rgba(212,175,55,0.4); font-size:9px; padding:3px 8px;">STUDENT ID</span>
+                </div>
+
+                <!-- Middle Content -->
+                <div class="d-flex align-items-center justify-content-between my-auto gap-3">
+                  <img id="licPhoto" src="img/new_logo.png" style="width:75px; height:90px; border-radius:12px; object-fit:cover; border:2px solid #d4af37; box-shadow:0 4px 10px rgba(0,0,0,0.3); flex-shrink:0;">
+                  
+                  <div class="text-left flex-grow-1 pl-2">
+                    <h5 id="licName" class="font-weight-bold mb-1 text-white" style="font-size:1.15rem; line-height:1.2;">-</h5>
+                    <div style="font-size:0.8rem; color:#cbd5e1; line-height:1.4;">
+                      <div><span style="color:#94a3b8;">S/O:</span> <strong id="licFather" class="text-white">-</strong></div>
+                      <div><span style="color:#94a3b8;">Place:</span> <strong id="licPlace" class="text-white">-</strong></div>
+                      <div><span style="color:#94a3b8;">ID/Adm No:</span> <strong id="licId" style="color:#d4af37;" class="font-mono">-</strong> &nbsp;|&nbsp; <span style="color:#94a3b8;">Batch:</span> <strong id="licBatch" class="text-white">-</strong></div>
+                    </div>
+                  </div>
+
+                  <!-- QR CODE (Dynamic Scanner linking to Login Page) -->
+                  <div class="text-center p-2 rounded-3 bg-white" style="box-shadow:0 4px 12px rgba(0,0,0,0.2); flex-shrink:0;">
+                    <div id="landscapeQrBox" style="width:65px; height:65px; display:flex; align-items:center; justify-content:center;"></div>
+                    <div style="font-size:7px; font-weight:800; color:#0f172a; margin-top:2px; text-transform:uppercase;">Scan to Login</div>
+                  </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="d-flex align-items-center justify-content-between pt-2" style="border-top:1px solid rgba(212,175,55,0.3); font-size:9px; color:#94a3b8;">
+                  <span>Authorized Academic Card</span>
+                  <span style="color:#d4af37; font-weight:600;">Permanent Academic Member</span>
+                </div>
+              </div>
+
+              <!-- ===== BACK SIDE ===== -->
+              <div class="landscape-back" id="landscapeBackSide">
+                <div>
+                  <div class="d-flex align-items-center justify-content-between pb-2 mb-2" style="border-bottom:1px solid #e2e8f0;">
+                    <div class="font-weight-bold" style="font-size:11px; text-transform:uppercase; color:#0f766e;">
+                      <i class="fa fa-university"></i> Bayanul Uloom Dars Muttichira
+                    </div>
+                    <span class="badge badge-success px-2 py-0.5" style="font-size:9px;">Estd. 2001</span>
+                  </div>
+
+                  <p style="font-size:10px; color:#475569; line-height:1.45; text-align:justify; margin-bottom:8px;">
+                    മുട്ടിച്ചിറ ബയാനുൽ ഉലൂം ദർസ് കേരളത്തിലെ പ്രമുഖമായ ഇസ്‌ലാമിക വിജ്ഞാന കേന്ദ്രമാണ്. സമസ്ത കേരള ജംഇയ്യത്തുൽ ഉലമായുടെ ആദർശത്തിൽ ശൈഖുനാ ഇബ്രാഹിം ബാഖവി അൽ ഹൈതമിയുടെ നേതൃത്വത്തിൽ ഉന്നത ദർസ് വിദ്യാഭ്യാസം പകർന്നു നൽകുന്നു.
+                  </p>
+
+                  <div class="row no-gutters p-2 rounded" style="background:#f1f5f9; font-size:9px;">
+                    <div class="col-6">
+                      <span class="text-muted d-block font-weight-bold" style="font-size:8px;">Chief Mudarris:</span>
+                      <strong class="text-dark">ശൈഖുനാ ഇബ്രാഹിം ബാഖവി</strong>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-muted d-block font-weight-bold" style="font-size:8px;">Helpline:</span>
+                      <strong class="text-dark">+91 95269 19218</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Seal & Signature -->
+                <div class="d-flex align-items-end justify-content-between pt-2" style="border-top:1px solid #e2e8f0; font-size:9px;">
+                  <div>
+                    <span class="text-muted d-block" style="font-size:8px;">Place & District:</span>
+                    <strong class="text-dark">Muttichira, Malappuram Dt.</strong>
+                  </div>
+                  <div class="text-right">
+                    <div style="font-family:serif; font-style:italic; font-weight:bold; color:#065f46; font-size:12px;">Ibrahim Baqavi</div>
+                    <span class="text-muted d-block font-weight-bold" style="font-size:8px; text-transform:uppercase;">Principal Seal & Signature</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-light rounded-pill font-weight-bold" onclick="flipLandscapeCard()">
+            <i class="fa fa-refresh"></i> Flip Card (Front / Back)
+          </button>
+          <div>
+            <button type="button" class="btn btn-secondary rounded-pill font-weight-bold" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success rounded-pill font-weight-bold px-4" onclick="downloadLandscapeCard()">
+              <i class="fa fa-download"></i> Download ID Card (PNG)
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
