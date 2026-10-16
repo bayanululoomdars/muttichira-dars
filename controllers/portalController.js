@@ -793,6 +793,8 @@ function normalizeBatchName(val) {
 exports.getBatches = async (req, res) => {
   try {
     const batchSet = new Set();
+    const currentStudentBatchSet = new Set();
+
     for (let i = 1; i <= 14; i++) {
       batchSet.add(`Batch ${i}`);
     }
@@ -808,18 +810,31 @@ exports.getBatches = async (req, res) => {
       const students = await Student.find({});
       (students || []).forEach(s => {
         const b = s.batchNumber || s.className;
-        if (b) batchSet.add(normalizeBatchName(b));
+        if (b) {
+          const norm = normalizeBatchName(b);
+          batchSet.add(norm);
+          const isAlumni = (s.isAlumni === true) || (String(s.status || '').toLowerCase().includes('alumni') || String(s.status || '').toLowerCase().includes('biruthadhari'));
+          if (!isAlumni) {
+            currentStudentBatchSet.add(norm);
+          }
+        }
       });
     } catch (e) {}
 
-    const batches = Array.from(batchSet).sort((a, b) => {
+    const sorter = (a, b) => {
       const numA = parseInt(a.replace(/\D/g, ''), 10);
       const numB = parseInt(b.replace(/\D/g, ''), 10);
       if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
       return a.localeCompare(b);
-    });
+    };
 
-    res.json({ success: true, batches });
+    const batches = Array.from(batchSet).sort(sorter);
+    let currentStudentBatches = Array.from(currentStudentBatchSet).sort(sorter);
+    if (currentStudentBatches.length === 0) {
+      currentStudentBatches = batches.slice(0, 4);
+    }
+
+    res.json({ success: true, batches, currentStudentBatches });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -848,6 +863,8 @@ exports.addBatch = async (req, res) => {
     scheduleSave();
 
     const batchSet = new Set();
+    const currentStudentBatchSet = new Set();
+
     for (let i = 1; i <= 14; i++) {
       batchSet.add(`Batch ${i}`);
     }
@@ -859,18 +876,32 @@ exports.addBatch = async (req, res) => {
       const students = await Student.find({});
       (students || []).forEach(s => {
         const b = s.batchNumber || s.className;
-        if (b) batchSet.add(normalizeBatchName(b));
+        if (b) {
+          const norm = normalizeBatchName(b);
+          batchSet.add(norm);
+          const isAlumni = (s.isAlumni === true) || (String(s.status || '').toLowerCase().includes('alumni') || String(s.status || '').toLowerCase().includes('biruthadhari'));
+          if (!isAlumni) {
+            currentStudentBatchSet.add(norm);
+          }
+        }
       });
     } catch (e) {}
 
-    const batches = Array.from(batchSet).sort((a, b) => {
+    const sorter = (a, b) => {
       const numA = parseInt(a.replace(/\D/g, ''), 10);
       const numB = parseInt(b.replace(/\D/g, ''), 10);
       if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
       return a.localeCompare(b);
-    });
+    };
 
-    res.json({ success: true, message: `Batch ${normalized} added successfully!`, batch: normalized, batches });
+    const batches = Array.from(batchSet).sort(sorter);
+    let currentStudentBatches = Array.from(currentStudentBatchSet).sort(sorter);
+    if (!currentStudentBatches.includes(normalized)) {
+      currentStudentBatches.push(normalized);
+      currentStudentBatches.sort(sorter);
+    }
+
+    res.json({ success: true, message: `Batch ${normalized} added successfully!`, batch: normalized, batches, currentStudentBatches });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
