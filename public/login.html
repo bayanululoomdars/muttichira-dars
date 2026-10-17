@@ -685,6 +685,62 @@
       align-items: center;
       justify-content: space-between;
     }
+
+    /* Print Styles for Official Batch Mark Report */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #modalBatchMarkReport,
+      #modalBatchMarkReport * {
+        visibility: visible !important;
+      }
+      #modalBatchMarkReport {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        overflow: visible !important;
+      }
+      .modal-dialog {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .modal-content {
+        border: none !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .modal-header, .modal-footer, .close, .btn {
+        display: none !important;
+      }
+      .d-print-flex {
+        display: flex !important;
+      }
+      #batchMarkReportPrintArea {
+        padding: 10px !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      table {
+        page-break-inside: auto;
+        color: #000000 !important;
+      }
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      th, td {
+        border-color: #94a3b8 !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -2066,10 +2122,26 @@ function renderUsthadBatchRosterTable(batchName) {
       </div>
       <small class="text-muted">Enter marks obtained. Status automatically tracks Published vs Pending.</small>
     </div>
-    <div class="d-flex align-items-center gap-2">
-      <button class="btn btn-sm btn-success rounded-pill font-weight-bold px-3 py-2 shadow-sm" onclick="publishEntireBatch('${batchName}')">
-        <i class="fa fa-check-circle"></i> Publish All ${batchName} Marks
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <button class="btn btn-sm btn-info rounded-pill font-weight-bold px-3 py-2 shadow-sm text-white" onclick="openBatchMarkReport('${batchName}')">
+        <i class="fa fa-file-text-o mr-1"></i> Mark Report / Mark List
       </button>
+      <button class="btn btn-sm btn-success rounded-pill font-weight-bold px-3 py-2 shadow-sm" onclick="publishEntireBatch('${batchName}')">
+        <i class="fa fa-check-circle mr-1"></i> Publish All Marks
+      </button>
+      <div class="btn-group">
+        <button class="btn btn-sm btn-outline-secondary rounded-pill font-weight-bold px-3 py-2 dropdown-toggle shadow-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-users mr-1"></i> Students (${students.length})
+        </button>
+        <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 p-2" style="font-size:13px; min-width:220px; border-radius:12px; z-index:1050;">
+          <a class="dropdown-item py-2 rounded text-dark font-weight-bold" href="javascript:void(0)" onclick="openAddStudentToBatchModal('${batchName}')">
+            <i class="fa fa-user-plus text-success mr-2"></i> Add Single Student
+          </a>
+          <a class="dropdown-item py-2 rounded text-primary font-weight-bold" href="javascript:void(0)" onclick="ensureThirtyStudentsInBatch('${batchName}')">
+            <i class="fa fa-magic text-warning mr-2"></i> Auto-Fill 30 Students
+          </a>
+        </div>
+      </div>
     </div>
   </div>`;
 
@@ -2147,7 +2219,7 @@ function renderUsthadBatchRosterTable(batchName) {
       <button class="btn btn-xs btn-success" onclick="saveSingleStudentMarksRow('${s.admissionNo}', '${batchName}', true)" title="Publish marks">
         <i class="fa fa-upload"></i> Publish
       </button>
-      ${hasData ? `<button class="btn btn-xs btn-outline-danger" onclick="unpublishStudentMark('${s.admissionNo}')" title="Delete / Unpublish"><i class="fa fa-trash"></i></button>` : ''}
+      ${hasData ? `<button class="btn btn-xs btn-outline-danger" onclick="unpublishStudentMark('${s.admissionNo}', '${batchName}')" title="Delete / Unpublish"><i class="fa fa-trash"></i></button>` : ''}
     </div>`;
 
     tableHtml += `<tr>
@@ -2347,7 +2419,7 @@ function publishEntireBatch(batchName) {
 }
 
 
-function unpublishStudentMark(admNo) {
+function unpublishStudentMark(admNo, batchName) {
   if (!confirm('Are you sure you want to unpublish and delete this student\'s marks?')) return;
   const examId = safeGetValue('examSelectUsthad');
   if (!examId) return;
@@ -2359,9 +2431,252 @@ function unpublishStudentMark(admNo) {
   }).then(r => r.json()).then(res => {
     if (res.success) {
       showToast('Marks unpublished.', false);
-      loadUsthadExamMatrix();
+      if (batchName) {
+        loadBatchRosterAndRender(batchName);
+      }
     } else { showToast(res.message, true); }
   });
+}
+
+// ── Batch Mark Report & Print ──
+let currentReportBatch = '';
+function openBatchMarkReport(batchName) {
+  const rosterData = usthadBatchRosterCache[batchName];
+  if (!rosterData) {
+    showToast('Please open the batch to load marks first', true);
+    return;
+  }
+
+  currentReportBatch = batchName;
+  const exam = rosterData.exam || {};
+  const students = rosterData.students || [];
+  const subjects = rosterData.subjects || [];
+  const results = rosterData.existingResults || [];
+
+  // Set modal headers
+  const examTitleElem = document.getElementById('reportExamTitle');
+  const batchTitleElem = document.getElementById('reportBatchTitle');
+  const dateElem = document.getElementById('reportDate');
+  if (examTitleElem) examTitleElem.textContent = exam.examName || 'Academic Examination';
+  if (batchTitleElem) batchTitleElem.textContent = `${batchName} • Academic Session ${exam.batchYear || '2025-2026'}`;
+  if (dateElem) dateElem.textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  // Compute Class Stats
+  let evaluatedCount = 0;
+  let passedCount = 0;
+  let totalPctSum = 0;
+
+  // Map each student with their existing marks
+  const rowsData = students.map(s => {
+    const existing = results.find(r => r.admissionNo === s.admissionNo) || {};
+    const hasData = (existing.totalMarksObtained !== undefined);
+    if (hasData) {
+      evaluatedCount++;
+      totalPctSum += (existing.percentage || 0);
+      if ((existing.percentage || 0) >= 40) passedCount++;
+    }
+    return {
+      student: s,
+      existing,
+      hasData,
+      totalObt: hasData ? existing.totalMarksObtained : -1,
+      totalMax: hasData ? (existing.totalMaxMarks || 100) : 100,
+      pct: hasData ? (existing.percentage || 0) : 0,
+      grade: hasData ? (existing.grade || '—') : 'Pending',
+      status: hasData ? (existing.isPublished ? 'Published' : 'Draft') : 'Not Entered'
+    };
+  });
+
+  // Sort by totalObt desc for accurate ranking in the report
+  rowsData.sort((a, b) => b.totalObt - a.totalObt);
+
+  // Assign class ranks for those who have marks
+  let curRank = 1;
+  rowsData.forEach((r, idx) => {
+    if (r.hasData) {
+      if (idx > 0 && rowsData[idx - 1].hasData && r.totalObt < rowsData[idx - 1].totalObt) {
+        curRank = idx + 1;
+      }
+      r.rank = curRank;
+    } else {
+      r.rank = '—';
+    }
+  });
+
+  const classAvg = evaluatedCount > 0 ? (totalPctSum / evaluatedCount).toFixed(1) : '0';
+  const passPct = evaluatedCount > 0 ? Math.round((passedCount / evaluatedCount) * 100) : 0;
+
+  // Top 3 Rankers
+  const evaluatedRows = rowsData.filter(r => r.hasData);
+  const rank1 = evaluatedRows[0] ? `${evaluatedRows[0].student.name} (${evaluatedRows[0].totalObt})` : '—';
+  const rank2 = evaluatedRows[1] ? `${evaluatedRows[1].student.name} (${evaluatedRows[1].totalObt})` : '—';
+  const rank3 = evaluatedRows[2] ? `${evaluatedRows[2].student.name} (${evaluatedRows[2].totalObt})` : '—';
+
+  // Render Stats
+  const totElem = document.getElementById('reportTotalStudents');
+  const evalElem = document.getElementById('reportEvaluated');
+  const avgElem = document.getElementById('reportClassAvg');
+  const passElem = document.getElementById('reportPassRate');
+  const r1Elem = document.getElementById('reportRank1');
+  const r2Elem = document.getElementById('reportRank2');
+  const r3Elem = document.getElementById('reportRank3');
+  if (totElem) totElem.textContent = students.length;
+  if (evalElem) evalElem.textContent = `${evaluatedCount} / ${students.length}`;
+  if (avgElem) avgElem.textContent = `${classAvg}%`;
+  if (passElem) passElem.textContent = `${passPct}%`;
+  if (r1Elem) r1Elem.textContent = rank1;
+  if (r2Elem) r2Elem.textContent = rank2;
+  if (r3Elem) r3Elem.textContent = rank3;
+
+  // Render Subject Table Headers
+  let subjHeaders = '';
+  subjects.forEach(s => {
+    subjHeaders += `<th class="text-center" style="font-size:12px; min-width:75px;">${s.subjectName}<br><span style="font-weight:normal; opacity:0.8;">(${s.maxMarks})</span></th>`;
+  });
+  const subHeadElem = document.getElementById('reportSubjectHeaders');
+  if (subHeadElem) subHeadElem.innerHTML = subjHeaders;
+
+  // Render Rows
+  let tableRows = '';
+  rowsData.forEach(r => {
+    const s = r.student;
+    const ex = r.existing;
+
+    let subjMarksCells = '';
+    subjects.forEach(subj => {
+      let mark = '—';
+      if (ex.subjectMarks) {
+        if (Array.isArray(ex.subjectMarks)) {
+          const match = ex.subjectMarks.find(sm => sm.subjectName === subj.subjectName);
+          if (match) mark = match.marksObtained;
+        } else if (ex.subjectMarks[subj.subjectName] !== undefined) {
+          mark = ex.subjectMarks[subj.subjectName];
+        }
+      }
+      subjMarksCells += `<td class="text-center font-weight-bold">${mark}</td>`;
+    });
+
+    let rankBadge = r.rank;
+    if (r.rank === 1) rankBadge = '<span class="badge badge-warning text-dark font-weight-bold">1st 🏆</span>';
+    else if (r.rank === 2) rankBadge = '<span class="badge badge-secondary font-weight-bold">2nd 🥈</span>';
+    else if (r.rank === 3) rankBadge = '<span class="badge badge-warning font-weight-bold" style="background:#cd7f32; color:#fff;">3rd 🥉</span>';
+
+    const statusBadge = r.status === 'Published' 
+      ? '<span class="badge badge-success px-2 py-1">Published</span>'
+      : (r.status === 'Draft' ? '<span class="badge badge-warning text-dark px-2 py-1">Draft</span>' : '<span class="badge badge-light text-muted px-2 py-1">Pending</span>');
+
+    tableRows += `<tr>
+      <td class="text-center font-weight-bold">${rankBadge}</td>
+      <td class="text-center"><code>${s.admissionNo}</code></td>
+      <td class="font-weight-bold text-dark text-left">${s.name}</td>
+      ${subjMarksCells}
+      <td class="text-center font-weight-bold text-primary">${r.hasData ? `${r.totalObt} / ${r.totalMax}` : '—'}</td>
+      <td class="text-center font-weight-bold">${r.hasData ? `${r.pct}%` : '—'}</td>
+      <td class="text-center"><span class="badge badge-info">${r.grade}</span></td>
+      <td class="text-center">${statusBadge}</td>
+    </tr>`;
+  });
+
+  const bodyElem = document.getElementById('reportTableBody');
+  if (bodyElem) bodyElem.innerHTML = tableRows;
+  $('#modalBatchMarkReport').modal('show');
+}
+
+function printBatchMarkReport() {
+  window.print();
+}
+
+// ── Quick Add Student & Ensure 30 Students ──
+let currentAddBatchName = '';
+function openAddStudentToBatchModal(batchName) {
+  currentAddBatchName = batchName;
+  document.getElementById('quickAddBatchInput').value = batchName;
+  document.getElementById('quickAddName').value = '';
+  document.getElementById('quickAddPhone').value = '1234567890';
+  document.getElementById('quickAddPlace').value = 'Muttichira';
+
+  // Suggest next admission number
+  fetch('/api/portal/students')
+    .then(r => r.json())
+    .then(data => {
+      const list = data.students || [];
+      let maxNum = 200;
+      list.forEach(s => {
+        const n = parseInt(s.admissionNo, 10);
+        if (!isNaN(n) && n > maxNum) maxNum = n;
+      });
+      document.getElementById('quickAddAdmNo').value = String(maxNum + 1);
+      $('#modalQuickAddStudent').modal('show');
+    })
+    .catch(() => {
+      document.getElementById('quickAddAdmNo').value = '';
+      $('#modalQuickAddStudent').modal('show');
+    });
+}
+
+function submitQuickAddStudent(e) {
+  e.preventDefault();
+  const admNo = document.getElementById('quickAddAdmNo').value.trim();
+  const name = document.getElementById('quickAddName').value.trim();
+  const phone = document.getElementById('quickAddPhone').value.trim() || '1234567890';
+  const place = document.getElementById('quickAddPlace').value.trim() || 'Muttichira';
+  const batch = currentAddBatchName || document.getElementById('quickAddBatchInput').value.trim();
+
+  if (!name) {
+    showToast('Student name is required', true);
+    return;
+  }
+
+  fetch('/api/portal/student', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      admissionNo: admNo,
+      name,
+      phone,
+      password: '1234',
+      batchNumber: batch.replace(/^batch\s*/i, '').trim(),
+      className: batch,
+      place,
+      photoUrl: 'img/new_logo.png',
+      isAlumni: false,
+      status: 'Current Student'
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.success) {
+      $('#modalQuickAddStudent').modal('hide');
+      showToast(`Student ${name} added to ${batch}!`, false);
+      loadBatchRosterAndRender(batch);
+    } else {
+      showToast(res.message || 'Error adding student', true);
+    }
+  })
+  .catch(err => showToast(err.message, true));
+}
+
+function ensureThirtyStudentsInBatch(batchName) {
+  if (!confirm(`Do you want to automatically fill ${batchName} up to 30 students?`)) {
+    return;
+  }
+
+  showToast(`Checking and populating ${batchName} to 30 students...`, false);
+  fetch('/api/portal/batch/ensure-thirty', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ batchName })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.success) {
+      showToast(res.message, false);
+      loadBatchRosterAndRender(batchName);
+    } else {
+      showToast(res.message || 'Error updating batch', true);
+    }
+  })
+  .catch(err => showToast(err.message, true));
 }
 
     // Counter Stats Loader
@@ -3290,8 +3605,169 @@ window.addEventListener('DOMContentLoaded', () => {
         </form>
       </div>
     </div>
+  <!-- BATCH MARK REPORT & PRINT MODAL -->
+  <div class="modal fade" id="modalBatchMarkReport" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 10060 !important;">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden; background:#ffffff; color:#1e293b;">
+        <div class="modal-header border-bottom d-flex justify-content-between align-items-center px-4 py-3" style="background:#f8fafc;">
+          <div class="d-flex align-items-center gap-3">
+            <img src="img/new_logo.png" alt="Logo" style="width:42px; height:42px; object-fit:contain;">
+            <div>
+              <h5 class="modal-title font-weight-bold m-0 text-success" style="font-family:'Outfit',sans-serif;">Batch Mark List & Examination Report</h5>
+              <small class="text-muted">Bayanul Uloom Dars Muttichira • Official Academic Evaluation</small>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 font-weight-bold" onclick="printBatchMarkReport()">
+              <i class="fa fa-print mr-1"></i> Print / PDF
+            </button>
+            <button type="button" class="close text-dark ml-2" data-dismiss="modal" aria-label="Close" style="font-size:1.6rem; opacity:0.8;">&times;</button>
+          </div>
+        </div>
+
+        <div class="modal-body p-4" id="batchMarkReportPrintArea" style="background:#ffffff; color:#1e293b;">
+          <!-- Printable Sheet Header -->
+          <div class="text-center pb-3 mb-4 border-bottom">
+            <div class="text-uppercase font-weight-bold text-success tracking-wide mb-1" style="font-size:13px; letter-spacing:1.5px;">Bayanul Uloom Dars • Muttichira</div>
+            <h3 class="font-weight-bold text-dark mb-1" id="reportExamTitle" style="font-family:'Outfit',sans-serif;">Academic Examination</h3>
+            <div class="h6 font-weight-bold text-primary mb-1" id="reportBatchTitle">Batch 14 • Session 2025-2026</div>
+            <small class="text-muted">Report Generated: <span id="reportDate" class="font-weight-bold"></span></small>
+          </div>
+
+          <!-- Summary Metric Cards -->
+          <div class="row g-2 mb-4 text-center">
+            <div class="col-6 col-md-3">
+              <div class="p-3 bg-light rounded-3 border">
+                <small class="text-muted d-block text-uppercase font-weight-bold" style="font-size:11px;">Class Strength</small>
+                <div class="h4 font-weight-bold text-dark m-0" id="reportTotalStudents">30</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-3 bg-light rounded-3 border">
+                <small class="text-muted d-block text-uppercase font-weight-bold" style="font-size:11px;">Evaluated</small>
+                <div class="h4 font-weight-bold text-success m-0" id="reportEvaluated">0 / 30</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-3 bg-light rounded-3 border">
+                <small class="text-muted d-block text-uppercase font-weight-bold" style="font-size:11px;">Class Average</small>
+                <div class="h4 font-weight-bold text-primary m-0" id="reportClassAvg">0%</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-3 bg-light rounded-3 border">
+                <small class="text-muted d-block text-uppercase font-weight-bold" style="font-size:11px;">Pass Rate</small>
+                <div class="h4 font-weight-bold text-info m-0" id="reportPassRate">0%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Rankers Ribbon -->
+          <div class="p-3 rounded-3 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-2" style="background:#f1f5f9; border-left:4px solid #10b981;">
+            <div><strong class="text-dark"><i class="fa fa-trophy text-warning mr-1"></i> Top Performers:</strong></div>
+            <div class="d-flex flex-wrap gap-3 small">
+              <span><strong>1st 🏆:</strong> <span id="reportRank1" class="text-success font-weight-bold">—</span></span>
+              <span><strong>2nd 🥈:</strong> <span id="reportRank2" class="text-secondary font-weight-bold">—</span></span>
+              <span><strong>3rd 🥉:</strong> <span id="reportRank3" class="text-warning font-weight-bold">—</span></span>
+            </div>
+          </div>
+
+          <!-- Full Students Mark Table -->
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered table-hover text-center align-middle" style="font-size:13px; color:#1e293b; border-color:#cbd5e1;">
+              <thead class="bg-dark text-white">
+                <tr>
+                  <th style="width:65px;">Rank</th>
+                  <th style="width:75px;">Adm No</th>
+                  <th style="text-align:left; min-width:180px;">Student Name</th>
+                  <th id="reportSubjectHeaders">Subjects</th>
+                  <th style="min-width:90px;">Total</th>
+                  <th style="min-width:65px;">%</th>
+                  <th style="min-width:90px;">Grade</th>
+                  <th style="min-width:85px;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="reportTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Printable Signatures Block -->
+          <div class="row mt-5 pt-4 border-top d-none d-print-flex justify-content-between text-center">
+            <div class="col-4">
+              <div style="border-top:1px dashed #64748b; margin-top:40px; padding-top:6px; font-weight:bold; font-size:12px;">Class Mudarris Signature</div>
+            </div>
+            <div class="col-4">
+              <div style="border-top:1px dashed #64748b; margin-top:40px; padding-top:6px; font-weight:bold; font-size:12px;">Exam Controller Signature</div>
+            </div>
+            <div class="col-4">
+              <div style="border-top:1px dashed #64748b; margin-top:40px; padding-top:6px; font-weight:bold; font-size:12px;">Head Mudarris / Principal</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-top px-4 py-3" style="background:#f8fafc;">
+          <button type="button" class="btn btn-secondary rounded-pill font-weight-bold px-4" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success rounded-pill font-weight-bold px-4 shadow-sm" onclick="printBatchMarkReport()">
+            <i class="fa fa-print mr-1"></i> Print Mark Sheet
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- QUICK ADD STUDENT MODAL -->
+  <div class="modal fade" id="modalQuickAddStudent" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 10060 !important;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden; background:#ffffff; color:#1e293b;">
+        <div class="modal-header border-bottom px-4 py-3" style="background:#f8fafc;">
+          <h5 class="modal-title font-weight-bold text-success"><i class="fa fa-user-plus mr-1"></i> Add Student to Batch</h5>
+          <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close" style="font-size:1.5rem;">&times;</button>
+        </div>
+        <form onsubmit="submitQuickAddStudent(event)">
+          <div class="modal-body p-4">
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Target Batch</label>
+              <input type="text" id="quickAddBatchInput" class="form-control" readonly style="background:#f1f5f9; font-weight:bold; color:#0f172a;">
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Admission Number</label>
+              <input type="text" id="quickAddAdmNo" class="form-control" placeholder="e.g. 251" required style="font-weight:bold;">
+              <small class="text-muted">Unique student admission number.</small>
+            </div>
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Full Student Name</label>
+              <input type="text" id="quickAddName" class="form-control" placeholder="e.g. Muhammed Shamil" required style="font-weight:600;">
+            </div>
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="form-group mb-3">
+                  <label class="small font-weight-bold text-muted">Phone Number</label>
+                  <input type="text" id="quickAddPhone" class="form-control" value="1234567890">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group mb-3">
+                  <label class="small font-weight-bold text-muted">Place / Native</label>
+                  <input type="text" id="quickAddPlace" class="form-control" value="Muttichira">
+                </div>
+              </div>
+            </div>
+            <div class="alert alert-info py-2 px-3 small rounded-3 mb-0">
+              <i class="fa fa-info-circle mr-1"></i> Default student login password will be set to <code>1234</code>.
+            </div>
+          </div>
+          <div class="modal-footer border-top px-4 py-3" style="background:#f8fafc;">
+            <button type="button" class="btn btn-secondary rounded-pill font-weight-bold px-3" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success rounded-pill font-weight-bold px-4 shadow-sm">
+              <i class="fa fa-check mr-1"></i> Add Student
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- ==================== 1. VIEW PROFILE MODAL ==================== -->
   <div class="modal fade" id="modalViewProfile" tabindex="-1" role="dialog" aria-hidden="true" style="z-index:10050 !important;">

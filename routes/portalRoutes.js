@@ -30,6 +30,7 @@ router.post('/usthad/post-data', portalController.postUsthadData);
 // Dynamic Batch Management
 router.get('/batches', portalController.getBatches);
 router.post('/batch', portalController.addBatch);
+router.post('/batch/ensure-thirty', portalController.ensureBatchThirtyStudents);
 
 // Exam & Mark Management (Multi-subject, Auto-rank, Attendance %)
 router.get('/exams', portalController.getExamsAdmin);

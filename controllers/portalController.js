@@ -907,6 +907,87 @@ exports.addBatch = async (req, res) => {
   }
 };
 
+// POST /api/portal/batch/ensure-thirty
+exports.ensureBatchThirtyStudents = async (req, res) => {
+  try {
+    const { batchName } = req.body;
+    if (!batchName) {
+      return res.status(400).json({ success: false, message: 'Batch name is required' });
+    }
+
+    const norm = b => (b || '').toString().toLowerCase().replace(/^batch\s*/i, '').trim();
+    const targetNorm = norm(batchName);
+
+    let allStudents = [];
+    try { allStudents = await Student.find({}); } catch (e) {}
+    if (!allStudents || allStudents.length === 0) allStudents = memoryStudents;
+
+    const existingClassStudents = allStudents.filter(s => 
+      !s.isAlumni && norm(s.batchNumber || s.className) === targetNorm
+    );
+
+    const needed = 30 - existingClassStudents.length;
+    if (needed <= 0) {
+      return res.json({
+        success: true,
+        message: `Batch ${batchName} already has ${existingClassStudents.length} students (>= 30).`,
+        count: existingClassStudents.length,
+        addedCount: 0
+      });
+    }
+
+    // Determine max admission number across all students
+    let maxAdm = 200;
+    allStudents.forEach(s => {
+      const num = parseInt(s.admissionNo, 10);
+      if (!isNaN(num) && num > maxAdm) maxAdm = num;
+    });
+
+    const keralaStudentNames = [
+      'Muhammed Shamil', 'Abdurrahman K', 'Sayyid Fawaz', 'Bilal Ahmed', 'Salmanul Farisi',
+      'Rayan Muhammed', 'Shaheen K', 'Musthafa VP', 'Ameen Ahsan', 'Thahir Ali',
+      'Yaseen Mubarak', 'Adil Rahman', 'Rashidul Islam', 'Safwan KT', 'Naeemudheen',
+      'Junaid Al-Ameen', 'Hamdan Bin Ali', 'Sayyid Sufyan', 'Farzeen K', 'Danish Ali',
+      'Muhammed Hashim', 'Sinanul Haq', 'Rayeesul Islam', 'Nihad K', 'Fayaz Rahman',
+      'Sayyid Bilal', 'Irshadul Haque', 'Shuhaib Ali', 'Basil Ahamed', 'Mahirudheen',
+      'Shakir K', 'Luqmanul Hakeem', 'Ziyad Muhammed', 'Tahirul Islam', 'Waseem Akram',
+      'Sayyid Rayan', 'Fawas Ali', 'Abdul Majeed', 'Zahidul Islam', 'Muzzammil K',
+      'Nabeel Hassan', 'Swadiqul Ameen', 'Shafeeque Rahman', 'Shabeerul Islam', 'Sayyid Munawwar',
+      'Ayman Zahid', 'Naufal Ali', 'Ashik Rahman', 'Shamil Hakeem', 'Sayyid Arshad'
+    ];
+
+    const addedStudents = [];
+    for (let i = 0; i < needed; i++) {
+      maxAdm++;
+      const name = keralaStudentNames[i % keralaStudentNames.length] + (i >= keralaStudentNames.length ? ` ${Math.floor(i / keralaStudentNames.length) + 1}` : '');
+      const newS = new Student({
+        admissionNo: String(maxAdm),
+        name: name,
+        phone: '1234567890',
+        password: '1234',
+        role: 'student',
+        isAlumni: false,
+        status: 'Current Student',
+        batchNumber: targetNorm,
+        className: 'Batch ' + targetNorm,
+        place: 'Muttichira',
+        photoUrl: 'img/new_logo.png'
+      });
+      await newS.save();
+      addedStudents.push(newS);
+    }
+
+    return res.json({
+      success: true,
+      message: `Successfully added ${addedStudents.length} students to ${batchName}. Total is now 30 students!`,
+      count: existingClassStudents.length + addedStudents.length,
+      addedCount: addedStudents.length
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // GET /api/portal/exams
 exports.getExamsAdmin = async (req, res) => {
   try {
