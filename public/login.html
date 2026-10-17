@@ -1488,73 +1488,11 @@
     // Render Dashboard upon Login
         
     function openUsthadFullProfileModal() {
-      if(!currentUserSession) return;
-      document.getElementById('uSelfName').value = currentUserSession.name || '';
-      document.getElementById('uSelfPhone').value = currentUserSession.phone || '';
-      document.getElementById('uSelfDesignation').value = currentUserSession.designation || '';
-      document.getElementById('uSelfSubject').value = currentUserSession.subject || '';
-      document.getElementById('uSelfAddress').value = currentUserSession.address || '';
-      document.getElementById('uSelfPassword').value = currentUserSession.password || '';
-      document.getElementById('uSelfPhoto').value = '';
-      $('#modalUsthadFullProfile').modal('show');
-    }
-
-    function handleUsthadSelfUpdate(e) {
-      e.preventDefault();
-      if (!currentUserSession || currentUserSession.role !== 'usthad') return;
-      
-      const formData = new FormData();
-      formData.append('name', document.getElementById('uSelfName').value);
-      formData.append('phone', document.getElementById('uSelfPhone').value);
-      formData.append('designation', document.getElementById('uSelfDesignation').value);
-      formData.append('subject', document.getElementById('uSelfSubject').value);
-      formData.append('address', document.getElementById('uSelfAddress').value);
-      formData.append('password', document.getElementById('uSelfPassword').value);
-      
-      const photoFile = document.getElementById('uSelfPhoto').files[0];
-      if (photoFile) formData.append('photo', photoFile);
-
-      const usthadId = currentUserSession._id || currentUserSession.usthadId;
-      const btn = e.target.querySelector('button[type="submit"]');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
-      btn.disabled = true;
-
-      fetch('/api/portal/usthad/' + usthadId, {
-        method: 'PUT',
-        body: formData
-      })
-      .then(r => r.json())
-      .then(res => {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-        if(res.success) {
-          showToast('Profile updated successfully!', false);
-          $('#modalUsthadFullProfile').modal('hide');
-          Object.assign(currentUserSession, res.usthad || {});
-          renderDashboard(currentUserSession);
-        } else {
-          showToast(res.message || 'Error updating profile', true);
-        }
-      }).catch(err => {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-        showToast('Network error while saving.', true);
-      });
+      openEditProfileModal();
     }
 
     function openStudentFullProfileModal() {
-      if(!currentUserSession) return;
-      document.getElementById('selfName').value = currentUserSession.name || '';
-      document.getElementById('selfFather').value = currentUserSession.fatherName || '';
-      document.getElementById('selfPhone').value = currentUserSession.phone || '';
-      document.getElementById('selfBlood').value = currentUserSession.bloodGroup || '';
-      document.getElementById('selfDob').value = currentUserSession.dob || '';
-      document.getElementById('selfEmergency').value = currentUserSession.emergencyContact || '';
-      document.getElementById('selfAddress').value = currentUserSession.address || '';
-      document.getElementById('selfPassword').value = currentUserSession.password || '';
-      document.getElementById('selfDeclaration').checked = false;
-      $('#modalStudentFullProfile').modal('show');
+      openEditProfileModal();
     }
 
     function renderDashboard(user) {
@@ -3041,14 +2979,31 @@ window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('vpName').textContent = user.name || '-';
       document.getElementById('vpRoleBadge').textContent = user.role === 'usthad' ? 'Usthad' : (user.isAlumni ? 'Biruthadhari / Alumni' : 'Student');
       document.getElementById('vpRoleBadge').className = user.role === 'usthad' ? 'badge badge-warning px-3 py-1 font-weight-bold rounded-pill' : 'badge badge-success px-3 py-1 font-weight-bold rounded-pill';
+      
+      // Personal
       document.getElementById('vpFather').textContent = user.fatherName || user.guardianName || '-';
+      document.getElementById('vpMother').textContent = user.motherName || '-';
+      document.getElementById('vpDob').textContent = user.dob || '-';
+      document.getElementById('vpBlood').textContent = user.bloodGroup || 'Unknown';
+      document.getElementById('vpPhone').textContent = user.phone || '-';
+      document.getElementById('vpEmail').textContent = user.email || '-';
+      document.getElementById('vpId').textContent = user.admissionNo || user.usthadId || '-';
+
+      // Address
+      document.getElementById('vpHouse').textContent = user.houseName || '-';
+      document.getElementById('vpHomePhone').textContent = user.homePhone || '-';
       document.getElementById('vpPlace').textContent = user.place || 'Muttichira';
       document.getElementById('vpPost').textContent = user.postOffice || user.post || user.address || '-';
-      document.getElementById('vpPhone').textContent = user.phone || '-';
-      document.getElementById('vpEducation').textContent = user.education || (user.role === 'usthad' ? 'Baqavi / Faizi' : 'SSLC / Dars');
-      document.getElementById('vpJob').textContent = user.job || (user.role === 'usthad' ? 'Dars Mudarris' : 'Student');
-      document.getElementById('vpBlood').textContent = user.bloodGroup || 'Unknown';
-      document.getElementById('vpId').textContent = user.admissionNo || user.usthadId || '-';
+      document.getElementById('vpDistrict').textContent = user.district || '-';
+      document.getElementById('vpPincode').textContent = user.pincode || '-';
+
+      // Education & Guardian
+      document.getElementById('vpEduRel').textContent = user.educationReligious || (user.role === 'usthad' ? 'Baqavi / Faizi' : (user.education || '-'));
+      document.getElementById('vpEduSec').textContent = user.educationSecular || user.job || (user.role === 'usthad' ? (user.designation || 'Usthad') : '-');
+      document.getElementById('vpGuardian').textContent = user.guardianName || user.fatherName || '-';
+      document.getElementById('vpRelationship').textContent = user.relationship || (user.guardianName ? 'Guardian' : 'Father');
+      document.getElementById('vpGuardianPhone').textContent = user.guardianPhone || user.phone || '-';
+
       $('#modalViewProfile').modal('show');
     }
 
@@ -3056,15 +3011,45 @@ window.addEventListener('DOMContentLoaded', () => {
     function openEditProfileModal() {
       const user = currentUserSession;
       if (!user) return;
+
+      // Personal Details
       document.getElementById('epName').value = user.name || '';
+      document.getElementById('epDob').value = user.dob || '';
       document.getElementById('epFather').value = user.fatherName || user.guardianName || '';
+      document.getElementById('epMother').value = user.motherName || '';
+      document.getElementById('epPhone').value = user.phone || '';
+      document.getElementById('epEmail').value = user.email || '';
+      document.getElementById('epBlood').value = user.bloodGroup || '';
+
+      // Address Details
+      document.getElementById('epHouseName').value = user.houseName || '';
+      document.getElementById('epHomePhone').value = user.homePhone || '';
       document.getElementById('epPlace').value = user.place || 'Muttichira';
       document.getElementById('epPost').value = user.postOffice || user.post || user.address || '';
-      document.getElementById('epPhone').value = user.phone || '';
-      document.getElementById('epBlood').value = user.bloodGroup || '';
-      document.getElementById('epEducation').value = user.education || '';
-      document.getElementById('epJob').value = user.job || '';
+      document.getElementById('epDistrict').value = user.district || '';
+      document.getElementById('epPincode').value = user.pincode || '';
+
+      // Education & Guardian Details
+      document.getElementById('epEduReligious').value = user.educationReligious || user.education || '';
+      document.getElementById('epEduSecular').value = user.educationSecular || user.job || '';
+      document.getElementById('epGuardianName').value = user.guardianName || '';
+      document.getElementById('epRelationship').value = user.relationship || '';
+      document.getElementById('epGuardianPhone').value = user.guardianPhone || '';
+
+      // Usthad specific fields
+      const usthadBox = document.getElementById('epUsthadSpecificFields');
+      if (user.role === 'usthad') {
+        if (usthadBox) usthadBox.style.display = 'block';
+        document.getElementById('epDesignation').value = user.designation || '';
+        document.getElementById('epSubject').value = user.subject || '';
+      } else {
+        if (usthadBox) usthadBox.style.display = 'none';
+      }
+
+      // Password & Photo
       document.getElementById('epPassword').value = '';
+      document.getElementById('epPhoto').value = '';
+
       $('#modalEditProfile').modal('show');
     }
 
@@ -3077,14 +3062,40 @@ window.addEventListener('DOMContentLoaded', () => {
       const url = isUsthad ? ('/api/portal/usthad/' + targetId) : ('/api/portal/student/' + targetId);
 
       const formData = new FormData();
-      formData.append('name', document.getElementById('epName').value);
-      formData.append('fatherName', document.getElementById('epFather').value);
-      formData.append('place', document.getElementById('epPlace').value);
-      formData.append('postOffice', document.getElementById('epPost').value);
-      formData.append('phone', document.getElementById('epPhone').value);
+      // Section 1: Personal
+      formData.append('name', document.getElementById('epName').value.trim());
+      formData.append('dob', document.getElementById('epDob').value);
+      formData.append('fatherName', document.getElementById('epFather').value.trim());
+      formData.append('motherName', document.getElementById('epMother').value.trim());
+      formData.append('phone', document.getElementById('epPhone').value.trim());
+      formData.append('email', document.getElementById('epEmail').value.trim());
       formData.append('bloodGroup', document.getElementById('epBlood').value);
-      formData.append('education', document.getElementById('epEducation').value);
-      formData.append('job', document.getElementById('epJob').value);
+
+      // Section 2: Address
+      formData.append('houseName', document.getElementById('epHouseName').value.trim());
+      formData.append('homePhone', document.getElementById('epHomePhone').value.trim());
+      formData.append('place', document.getElementById('epPlace').value.trim());
+      formData.append('postOffice', document.getElementById('epPost').value.trim());
+      formData.append('district', document.getElementById('epDistrict').value.trim());
+      formData.append('pincode', document.getElementById('epPincode').value.trim());
+
+      // Section 3: Education & Guardian
+      formData.append('educationReligious', document.getElementById('epEduReligious').value.trim());
+      formData.append('educationSecular', document.getElementById('epEduSecular').value.trim());
+      // Backwards-compatibility aliases for legacy fields
+      formData.append('education', document.getElementById('epEduReligious').value.trim() || document.getElementById('epEduSecular').value.trim());
+      formData.append('job', document.getElementById('epEduSecular').value.trim());
+      formData.append('guardianName', document.getElementById('epGuardianName').value.trim());
+      formData.append('relationship', document.getElementById('epRelationship').value.trim());
+      formData.append('guardianPhone', document.getElementById('epGuardianPhone').value.trim());
+
+      // Section 4: Usthad Specific
+      if (isUsthad) {
+        formData.append('designation', document.getElementById('epDesignation').value.trim());
+        formData.append('subject', document.getElementById('epSubject').value.trim());
+      }
+
+      // Section 5: Password & Photo
       const pass = document.getElementById('epPassword').value.trim();
       if (pass) formData.append('password', pass);
       const photoFile = document.getElementById('epPhoto').files[0];
@@ -3779,55 +3790,112 @@ window.addEventListener('DOMContentLoaded', () => {
 
   <!-- ==================== 1. VIEW PROFILE MODAL ==================== -->
   <div class="modal fade" id="modalViewProfile" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content" style="background:#ffffff; color:#1e293b; border-radius:20px; border:1px solid #cbd5e1; box-shadow:0 20px 40px rgba(0,0,0,0.25);">
         <div class="modal-header border-bottom-0 pb-0">
-          <h5 class="modal-title font-weight-bold text-dark"><i class="fa fa-user-circle text-success"></i> Official Student Profile</h5>
+          <h5 class="modal-title font-weight-bold text-dark"><i class="fa fa-user-circle text-success"></i> Official Profile / പ്രൊഫൈൽ വിവരങ്ങൾ</h5>
           <button type="button" class="close text-dark" data-dismiss="modal" onclick="$('#modalViewProfile').modal('hide')" aria-label="Close" style="opacity:0.8; font-size:1.6rem;">&times;</button>
         </div>
-        <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:20px;">
+        <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:25px;">
           <div class="text-center mb-4">
-            <img id="vpPhoto" src="img/new_logo.png" style="width:90px; height:90px; border-radius:50%; object-fit:cover; border:3px solid #10b981; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+            <img id="vpPhoto" src="img/new_logo.png" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid #10b981; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
             <h4 id="vpName" class="font-weight-bold mt-2 mb-0 text-dark">-</h4>
             <span id="vpRoleBadge" class="badge badge-success px-3 py-1 font-weight-bold rounded-pill">Student</span>
           </div>
 
-          <div class="p-3 rounded-4" style="background:#f8fafc; border:1px solid #e2e8f0; font-size:0.9rem;">
+          <!-- Section 1: Personal -->
+          <div class="mb-3 p-3 rounded-4" style="background:#f8fafc; border:1px solid #e2e8f0; font-size:0.9rem;">
+            <h6 class="font-weight-bold text-success border-bottom pb-2 mb-3"><i class="fa fa-user mr-1"></i> Personal Details / വ്യക്തിഗത വിവരങ്ങൾ</h6>
             <div class="row">
-              <div class="col-6 mb-3">
-                <span class="text-muted small d-block font-weight-bold">Father's Name:</span>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Father's Name / പിതാവിന്റെ പേര്:</span>
                 <strong id="vpFather" class="text-dark">-</strong>
               </div>
-              <div class="col-6 mb-3">
-                <span class="text-muted small d-block font-weight-bold">Place:</span>
-                <strong id="vpPlace" class="text-dark">-</strong>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Mother's Name / മാതാവിന്റെ പേര്:</span>
+                <strong id="vpMother" class="text-dark">-</strong>
               </div>
-              <div class="col-6 mb-3">
-                <span class="text-muted small d-block font-weight-bold">Post Office & Address:</span>
-                <strong id="vpPost" class="text-dark">-</strong>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Date of Birth / ജനനതീയതി:</span>
+                <strong id="vpDob" class="text-dark">-</strong>
               </div>
-              <div class="col-6 mb-3">
-                <span class="text-muted small d-block font-weight-bold">Phone Number:</span>
-                <strong id="vpPhone" class="text-dark">-</strong>
-              </div>
-              <div class="col-6 mb-3">
-                <span class="text-muted small d-block font-weight-bold">Education:</span>
-                <strong id="vpEducation" class="text-dark">-</strong>
-              </div>
-              <div class="col-6 mb-3">
-                <span class="text-muted small d-block font-weight-bold">Occupation / Job:</span>
-                <strong id="vpJob" class="text-dark">-</strong>
-              </div>
-              <div class="col-6 mb-1">
-                <span class="text-muted small d-block font-weight-bold">Blood Group:</span>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Blood Group / രക്ത ഗ്രൂപ്പ്:</span>
                 <strong id="vpBlood" class="text-danger">-</strong>
               </div>
-              <div class="col-6 mb-1">
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Phone Number / ഫോൺ നമ്പർ:</span>
+                <strong id="vpPhone" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Email / ഇമെയിൽ:</span>
+                <strong id="vpEmail" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-6 mb-2">
                 <span class="text-muted small d-block font-weight-bold">Admission No / ID:</span>
                 <strong id="vpId" class="text-primary font-mono">-</strong>
               </div>
             </div>
           </div>
+
+          <!-- Section 2: Address -->
+          <div class="mb-3 p-3 rounded-4" style="background:#f8fafc; border:1px solid #e2e8f0; font-size:0.9rem;">
+            <h6 class="font-weight-bold text-success border-bottom pb-2 mb-3"><i class="fa fa-home mr-1"></i> Address / വിലാസം</h6>
+            <div class="row">
+              <div class="col-md-8 mb-2">
+                <span class="text-muted small d-block font-weight-bold">House Name / വീട്ടു പേര്:</span>
+                <strong id="vpHouse" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-4 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Home Phone / വീട്ടിലെ ഫോൺ:</span>
+                <strong id="vpHomePhone" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Place / സ്ഥലം:</span>
+                <strong id="vpPlace" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Post Office / പോസ്റ്റ്:</span>
+                <strong id="vpPost" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">District / ജില്ല:</span>
+                <strong id="vpDistrict" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Pincode / പിൻകോഡ്:</span>
+                <strong id="vpPincode" class="text-dark">-</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Education & Guardian -->
+          <div class="p-3 rounded-4" style="background:#f8fafc; border:1px solid #e2e8f0; font-size:0.9rem;">
+            <h6 class="font-weight-bold text-success border-bottom pb-2 mb-3"><i class="fa fa-graduation-cap mr-1"></i> Education & Guardian / വിദ്യാഭ്യാസം &amp; രക്ഷിതാവ്</h6>
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Religious Education / വിദ്യാഭ്യാസം: മതം:</span>
+                <strong id="vpEduRel" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-6 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Secular Education / വിദ്യാഭ്യാസം: ഭൗതികം:</span>
+                <strong id="vpEduSec" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-4 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Guardian Name / രക്ഷിതാവ്:</span>
+                <strong id="vpGuardian" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-4 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Relationship / ബന്ധം:</span>
+                <strong id="vpRelationship" class="text-dark">-</strong>
+              </div>
+              <div class="col-md-4 mb-2">
+                <span class="text-muted small d-block font-weight-bold">Guardian Phone / ഫോൺ:</span>
+                <strong id="vpGuardianPhone" class="text-dark">-</strong>
+              </div>
+            </div>
+          </div>
+
         </div>
         <div class="modal-footer border-top-0 pt-0">
           <button type="button" class="btn btn-light rounded-pill font-weight-bold px-4" data-dismiss="modal" onclick="$('#modalViewProfile').modal('hide')">Close</button>
@@ -3848,60 +3916,163 @@ window.addEventListener('DOMContentLoaded', () => {
           <button type="button" class="close text-dark" data-dismiss="modal" onclick="$('#modalEditProfile').modal('hide')" aria-label="Close" style="opacity:0.8; font-size:1.6rem;">&times;</button>
         </div>
         <form onsubmit="handleSaveEditProfile(event)">
-          <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:20px;">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Full Name <span class="text-danger">*</span></label>
-                <input type="text" id="epName" class="form-control" required>
+          <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:25px;">
+            <!-- SECTION 1: PERSONAL INFORMATION -->
+            <h5 class="text-success border-bottom pb-2 mb-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-user mr-2"></i> Personal Details / വ്യക്തിഗത വിവരങ്ങൾ</h5>
+            
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epName" class="small font-weight-bold text-dark">Student / Usthad Name / പേര് <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="name" id="epName" placeholder="Full Name" required>
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Father's / Guardian's Name <span class="text-danger">*</span></label>
-                <input type="text" id="epFather" class="form-control" required>
+              <div class="form-group col-md-6 mb-3">
+                <label for="epDob" class="small font-weight-bold text-dark">Date of Birth / ജനനതീയതി <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" name="dob" id="epDob">
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Place <span class="text-danger">*</span></label>
-                <input type="text" id="epPlace" class="form-control" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epFather" class="small font-weight-bold text-dark">Father's Name / പിതാവിന്റെ പേര് <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="fatherName" id="epFather" placeholder="Father's Name" required>
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Post Office & Address</label>
-                <input type="text" id="epPost" class="form-control">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epMother" class="small font-weight-bold text-dark">Mother's Name / മാതാവിന്റെ പേര്</label>
+                <input type="text" class="form-control" name="motherName" id="epMother" placeholder="Mother's Name">
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Phone Number <span class="text-danger">*</span></label>
-                <input type="text" id="epPhone" class="form-control" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epPhone" class="small font-weight-bold text-dark">Phone / ഫോൺ നമ്പർ <span class="text-danger">*</span></label>
+                <input type="tel" class="form-control" name="phone" id="epPhone" placeholder="Mobile Number" required>
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Blood Group</label>
-                <select id="epBlood" class="form-control">
-                  <option value="">Unknown</option>
-                  <option value="A+">A+</option><option value="A-">A-</option>
-                  <option value="B+">B+</option><option value="B-">B-</option>
-                  <option value="O+">O+</option><option value="O-">O-</option>
-                  <option value="AB+">AB+</option><option value="AB-">AB-</option>
+              <div class="form-group col-md-6 mb-3">
+                <label for="epEmail" class="small font-weight-bold text-dark">Email / ഇമെയിൽ</label>
+                <input type="email" class="form-control" name="email" id="epEmail" placeholder="Email Address (Optional)">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epBlood" class="small font-weight-bold text-dark">Blood Group / രക്ത ഗ്രൂപ്പ്</label>
+                <select class="form-control" name="bloodGroup" id="epBlood">
+                  <option value="">Select Blood Group (Optional)</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
                 </select>
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Education</label>
-                <input type="text" id="epEducation" class="form-control" placeholder="SSLC / Dars">
+            </div>
+
+            <!-- SECTION 2: ADDRESS -->
+            <h5 class="text-success border-bottom pb-2 mb-4 mt-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-home mr-2"></i> Address Details / വിലാസം</h5>
+
+            <div class="form-row">
+              <div class="form-group col-md-8 mb-3">
+                <label for="epHouseName" class="small font-weight-bold text-dark">House Name / വീട്ടു പേര്</label>
+                <input type="text" class="form-control" name="houseName" id="epHouseName" placeholder="House Name">
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Occupation / Job</label>
-                <input type="text" id="epJob" class="form-control" placeholder="വിദ്യാർത്ഥി / തൊഴിൽ">
+              <div class="form-group col-md-4 mb-3">
+                <label for="epHomePhone" class="small font-weight-bold text-dark">Home Phone / വീട്ടിലെ ഫോൺ നമ്പർ</label>
+                <input type="tel" class="form-control" name="homePhone" id="epHomePhone" placeholder="Landline or Alternate">
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Login Password (Set New)</label>
-                <input type="text" id="epPassword" class="form-control" placeholder="Enter new password if changing">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epPlace" class="small font-weight-bold text-dark">Place / സ്ഥലം <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="place" id="epPlace" placeholder="City / Town" required>
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="small font-weight-bold text-muted">Upload Profile Photo (Optional)</label>
-                <input type="file" id="epPhoto" accept="image/*" class="form-control" style="padding-bottom:35px;">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epPost" class="small font-weight-bold text-dark">Post Office / പോസ്റ്റ്</label>
+                <input type="text" class="form-control" name="postOffice" id="epPost" placeholder="Post Office Name">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epDistrict" class="small font-weight-bold text-dark">District / ജില്ല</label>
+                <input type="text" class="form-control" name="district" id="epDistrict" placeholder="District Name (Optional)">
+              </div>
+              <div class="form-group col-md-6 mb-3">
+                <label for="epPincode" class="small font-weight-bold text-dark">Pincode / പിൻകോഡ്</label>
+                <input type="text" class="form-control" name="pincode" id="epPincode" placeholder="6-Digit Postal Code (Optional)">
+              </div>
+            </div>
+
+            <!-- SECTION 3: EDUCATION & GUARDIAN -->
+            <h5 class="text-success border-bottom pb-2 mb-4 mt-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-graduation-cap mr-2"></i> Education &amp; Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ്</h5>
+
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epEduReligious" class="small font-weight-bold text-dark">Religious Education / വിദ്യാഭ്യാസം: മതം</label>
+                <p class="small text-muted mb-1">e.g., Madrassa 5 class passed (മദ്രസ 5 ക്ലാസ്സ് പാസായവർ)</p>
+                <input type="text" class="form-control" name="educationReligious" id="epEduReligious" placeholder="Madrassa / Dars Qualification">
+              </div>
+              <div class="form-group col-md-6 mb-3">
+                <label for="epEduSecular" class="small font-weight-bold text-dark">Secular Education / വിദ്യാഭ്യാസം: ഭൗതികം</label>
+                <p class="small text-muted mb-1">e.g., SSLC / Plus Two / Degree / Job</p>
+                <input type="text" class="form-control" name="educationSecular" id="epEduSecular" placeholder="School / College Qualification">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-4 mb-3">
+                <label for="epGuardianName" class="small font-weight-bold text-dark">Guardian Name / രക്ഷിതാവിന്റെ പേര്</label>
+                <input type="text" class="form-control" name="guardianName" id="epGuardianName" placeholder="Guardian's Full Name">
+              </div>
+              <div class="form-group col-md-4 mb-3">
+                <label for="epRelationship" class="small font-weight-bold text-dark">Relationship / കുട്ടിയുമായുള്ള ബന്ധം</label>
+                <input type="text" class="form-control" name="relationship" id="epRelationship" placeholder="Father/Uncle/Brother etc.">
+              </div>
+              <div class="form-group col-md-4 mb-3">
+                <label for="epGuardianPhone" class="small font-weight-bold text-dark">Guardian Phone / ഫോൺ നമ്പർ</label>
+                <input type="tel" class="form-control" name="guardianPhone" id="epGuardianPhone" placeholder="Guardian Phone">
+              </div>
+            </div>
+
+            <!-- SECTION 4: USTHAD SPECIFIC (Only shown if Usthad) -->
+            <div id="epUsthadSpecificFields" style="display:none;">
+              <h5 class="text-warning border-bottom pb-2 mb-4 mt-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-briefcase mr-2"></i> Faculty Details / അധ്യാപക വിവരങ്ങൾ</h5>
+              <div class="form-row">
+                <div class="form-group col-md-6 mb-3">
+                  <label for="epDesignation" class="small font-weight-bold text-dark">Designation / തസ്തിക</label>
+                  <input type="text" class="form-control" name="designation" id="epDesignation" placeholder="Chief Mudarris / Sadar Mudarris / Mudarris">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                  <label for="epSubject" class="small font-weight-bold text-dark">Subject / വിഷയം</label>
+                  <input type="text" class="form-control" name="subject" id="epSubject" placeholder="Fiqh, Nahw, Tafseer, Hadees etc.">
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 5: ACCOUNT & PHOTO -->
+            <h5 class="text-info border-bottom pb-2 mb-4 mt-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-lock mr-2"></i> Account &amp; Photo / പാസ്‌വേഡ് &amp; ഫോട്ടോ</h5>
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-3">
+                <label for="epPassword" class="small font-weight-bold text-dark">Login Password / ലോഗിൻ പാസ്‌വേഡ്</label>
+                <input type="text" class="form-control" name="password" id="epPassword" placeholder="Enter new password to change">
+                <small class="text-muted">മാറ്റം വരുത്താൻ പുതിയ പാസ്‌വേഡ് നൽകുക (ഓപ്ഷണൽ)</small>
+              </div>
+              <div class="form-group col-md-6 mb-3">
+                <label for="epPhoto" class="small font-weight-bold text-dark">Upload Photo / ഫോട്ടോ <span class="text-muted">(Passport size image)</span></label>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" name="photo" id="epPhoto" accept="image/*">
+                  <label class="custom-file-label" for="epPhoto">Choose image file...</label>
+                </div>
               </div>
             </div>
           </div>
           <div class="modal-footer border-top-0 pt-0">
             <button type="button" class="btn btn-secondary rounded-pill font-weight-bold px-4" data-dismiss="modal" onclick="$('#modalEditProfile').modal('hide')">Cancel</button>
             <button type="submit" class="btn btn-success rounded-pill font-weight-bold px-4" id="btnSaveEditProfile">
-              <i class="fa fa-save"></i> Save Changes
+              <i class="fa fa-save"></i> Save Changes / മാറ്റങ്ങൾ സേവ് ചെയ്യുക
             </button>
           </div>
         </form>
