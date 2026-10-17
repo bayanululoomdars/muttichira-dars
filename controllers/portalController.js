@@ -729,10 +729,12 @@ exports.getUsthadMessages = async (req, res) => {
       messages = memoryMessages;
     }
 
+    const msgList = messages.filter(m => m.type === 'message');
     res.json({
       success: true,
+      messages: msgList,
       data: {
-        messages: messages.filter(m => m.type === 'message')
+        messages: msgList
       }
     });
   } catch (err) {
