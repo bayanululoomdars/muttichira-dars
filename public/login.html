@@ -523,7 +523,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
   <style>
-    .modal-backdrop { z-index: 1040 !important; }
+    .modal-backdrop { z-index: 1050 !important; }
     .modal { z-index: 1055 !important; }
     .modal-dialog-scrollable .modal-body {
       max-height: calc(85vh - 130px);
@@ -1390,13 +1390,11 @@
       document.getElementById('stepLookup').style.display = 'none';
       document.getElementById('stepPassword').style.display = 'block';
 
-      document.getElementById('selectedPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
-      document.getElementById('selectedName').textContent = selectedUserObject.name;
-      document.getElementById('selectedSub').textContent = selectedUserObject.place ? 'Place: ' + selectedUserObject.place : '';
-      if (selectedUserObject.role === 'usthad' && selectedUserObject.phone) {
-        document.getElementById('selectedSub').textContent += ' | Phone: ' + selectedUserObject.phone;
+      const passInput = document.getElementById('inputPassword');
+      if (passInput) {
+        passInput.value = '';
+        passInput.focus();
       }
-      document.getElementById('inputPassword').focus();
     }
 
     function backToLookup() {
@@ -2891,6 +2889,14 @@ function ensureThirtyStudentsInBatch(batchName) {
     document.addEventListener('DOMContentLoaded', () => {
       loadCounterStats();
       loadAlumniDirectory();
+
+      // Ensure modal backdrops are always cleanly removed when any modal is hidden
+      $(document).on('hidden.bs.modal', '.modal', function () {
+        if ($('.modal.show').length === 0) {
+          $('.modal-backdrop').remove();
+          $('body').removeClass('modal-open').css('padding-right', '');
+        }
+      });
     });
   </script>
 
@@ -3605,8 +3611,10 @@ window.addEventListener('DOMContentLoaded', () => {
         </form>
       </div>
     </div>
+  </div>
+
   <!-- BATCH MARK REPORT & PRINT MODAL -->
-  <div class="modal fade" id="modalBatchMarkReport" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 10060 !important;">
+  <div class="modal fade" id="modalBatchMarkReport" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden; background:#ffffff; color:#1e293b;">
         <div class="modal-header border-bottom d-flex justify-content-between align-items-center px-4 py-3" style="background:#f8fafc;">
@@ -3718,7 +3726,7 @@ window.addEventListener('DOMContentLoaded', () => {
   </div>
 
   <!-- QUICK ADD STUDENT MODAL -->
-  <div class="modal fade" id="modalQuickAddStudent" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 10060 !important;">
+  <div class="modal fade" id="modalQuickAddStudent" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden; background:#ffffff; color:#1e293b;">
         <div class="modal-header border-bottom px-4 py-3" style="background:#f8fafc;">
@@ -3770,7 +3778,7 @@ window.addEventListener('DOMContentLoaded', () => {
   </div>
 
   <!-- ==================== 1. VIEW PROFILE MODAL ==================== -->
-  <div class="modal fade" id="modalViewProfile" tabindex="-1" role="dialog" aria-hidden="true" style="z-index:10050 !important;">
+  <div class="modal fade" id="modalViewProfile" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content" style="background:#ffffff; color:#1e293b; border-radius:20px; border:1px solid #cbd5e1; box-shadow:0 20px 40px rgba(0,0,0,0.25);">
         <div class="modal-header border-bottom-0 pb-0">
@@ -3832,8 +3840,7 @@ window.addEventListener('DOMContentLoaded', () => {
   </div>
 
   <!-- ==================== 2. EDIT PROFILE MODAL ==================== -->
-  <!-- ==================== 2. EDIT PROFILE MODAL ==================== -->
-  <div class="modal fade" id="modalEditProfile" tabindex="-1" role="dialog" aria-hidden="true" style="z-index:10050 !important;">
+  <div class="modal fade" id="modalEditProfile" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content" style="background:#ffffff; color:#1e293b; border-radius:20px; border:1px solid #cbd5e1; box-shadow:0 20px 40px rgba(0,0,0,0.25);">
         <div class="modal-header border-bottom-0 pb-0">
@@ -3903,7 +3910,7 @@ window.addEventListener('DOMContentLoaded', () => {
   </div>
 
   <!-- ==================== 3. MY DATAS (IMAGE VAULT) MODAL ==================== -->
-  <div class="modal fade" id="modalMyDatas" tabindex="-1" role="dialog" aria-hidden="true" style="z-index:10050 !important;">
+  <div class="modal fade" id="modalMyDatas" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content" style="background:#ffffff; color:#1e293b; border-radius:20px; border:1px solid #cbd5e1; box-shadow:0 20px 40px rgba(0,0,0,0.25);">
         <div class="modal-header border-bottom-0 pb-0">
