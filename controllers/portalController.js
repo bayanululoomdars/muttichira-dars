@@ -407,33 +407,65 @@ exports.getAlumniList = async (req, res) => {
 
     let alumniList = [];
     try {
-      const query = { isAlumni: true };
+      const query = {
+        $or: [
+          { isAlumni: true },
+          { status: { $regex: 'alumni|biruthadhari', $options: 'i' } }
+        ]
+      };
       if (batchYear) query.batchYear = batchYear;
       if (search) {
-        query.$or = [
-          { name: { $regex: search, $options: 'i' } },
-          { admissionNo: { $regex: search, $options: 'i' } },
-          { place: { $regex: search, $options: 'i' } }
+        query.$and = [
+          {
+            $or: [
+              { name: { $regex: search, $options: 'i' } },
+              { place: { $regex: search, $options: 'i' } },
+              { fatherName: { $regex: search, $options: 'i' } },
+              { guardianName: { $regex: search, $options: 'i' } },
+              { batchNumber: { $regex: search, $options: 'i' } },
+              { batchYear: { $regex: search, $options: 'i' } }
+            ]
+          }
         ];
       }
-      alumniList = await Student.find(query).sort({ batchYear: -1 });
+      alumniList = await Student.find(query).sort({ batchYear: -1, batchNumber: -1 });
     } catch (e) {}
 
     const memAlumni = memoryStudents.filter(s => {
-      if (!s.isAlumni) return false;
+      const isAlum = s.isAlumni || (s.status && (s.status.toLowerCase().includes('alumni') || s.status.toLowerCase().includes('biruthadhari')));
+      if (!isAlum) return false;
       if (batchYear && s.batchYear !== batchYear) return false;
       if (search) {
-        const matchName = s.name.toLowerCase().includes(search);
-        const matchAdm = s.admissionNo.toLowerCase().includes(search);
-        const matchPlace = s.place.toLowerCase().includes(search);
-        return matchName || matchAdm || matchPlace;
+        const matchName = (s.name || '').toLowerCase().includes(search);
+        const matchPlace = (s.place || '').toLowerCase().includes(search);
+        const matchFather = ((s.fatherName || s.guardianName) || '').toLowerCase().includes(search);
+        const matchBatch = ((s.batchNumber || s.batchYear) || '').toLowerCase().includes(search);
+        return matchName || matchPlace || matchFather || matchBatch;
       }
       return true;
     });
 
-    alumniList = [...alumniList, ...memAlumni];
+    const seen = new Set();
+    const merged = [];
+    [...alumniList, ...memAlumni].forEach(item => {
+      const key = String(item.admissionNo || item._id);
+      if (!seen.has(key)) {
+        seen.add(key);
+        merged.push({
+          _id: item._id,
+          admissionNo: item.admissionNo,
+          name: item.name,
+          fatherName: item.fatherName || item.guardianName || '',
+          place: item.place || '',
+          batchNumber: item.batchNumber || item.batchYear || '',
+          batchYear: item.batchYear || '',
+          photoUrl: item.photoUrl || '',
+          status: item.status || 'Biruthadhari'
+        });
+      }
+    });
 
-    res.json({ success: true, count: alumniList.length, alumni: alumniList });
+    res.json({ success: true, count: merged.length, alumni: merged });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

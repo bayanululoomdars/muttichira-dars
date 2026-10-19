@@ -252,7 +252,7 @@
 
     /* Alumni / Biruthadhari Section */
     .alumni-section {
-      padding: 50px 0;
+      padding: 40px 0 60px;
     }
 
     .alumni-card {
@@ -265,20 +265,23 @@
       display: flex;
       align-items: center;
       gap: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     }
 
     .alumni-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-      border-color: #cbd5e1;
+      box-shadow: 0 12px 30px rgba(10, 77, 46, 0.12);
+      border-color: #a7f3d0;
     }
 
     .alumni-card img {
-      width: 70px;
-      height: 70px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid var(--gold-accent);
+      border: 3px solid #10b981;
+      background: #f1f5f9;
+      flex-shrink: 0;
     }
 
     /* Dashboard UI (After Login) */
@@ -1181,11 +1184,101 @@
 
 </div>
 
-
-
     </div>
   </div>
 </div>
+
+  <!-- ALUMNI / BIRUTHADHARI PUBLIC SECTION -->
+  <section class="alumni-section" id="publicAlumniSection">
+    <div class="container">
+      
+      <!-- Section Header -->
+      <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 pb-2 border-bottom">
+        <div class="mb-3 mb-md-0">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge badge-success px-3 py-1 font-weight-bold" style="background:#0a4d2e; font-size:12px; letter-spacing:0.5px;">ALUMNI</span>
+            <h2 class="font-weight-bold text-success m-0" style="font-family:'Outfit', sans-serif; font-size:1.85rem;">
+              ബിരുദധാരികൾ <span style="font-size:1.15rem; font-weight:600; color:#64748b;">(Graduates &amp; Alumni)</span>
+            </h2>
+          </div>
+          <p class="text-muted m-0" style="font-size:0.95rem; max-width:700px; line-height:1.6;">
+            മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസിൽ നിന്നും പഠനം പൂർത്തിയാക്കി സമൂഹത്തിൽ ദീനീ സേവനരംഗങ്ങളിൽ പ്രശോഭിക്കുന്ന പ്രിയപ്പെട്ട ബിരുദധാരികൾ.
+          </p>
+        </div>
+
+        <!-- Search Input -->
+        <div class="d-flex align-items-center gap-2" style="min-width:280px;">
+          <div class="position-relative flex-grow-1">
+            <i class="fa fa-search text-muted position-absolute" style="left:14px; top:50%; transform:translateY(-50%); font-size:14px;"></i>
+            <input type="text" id="searchAlumniInput" class="form-control rounded-pill pl-4 pr-3 py-2" placeholder="പേര്, സ്ഥലം, ബാച്ച് തിരയുക..." oninput="loadAlumniDirectory()" style="border:2px solid #e2e8f0; font-size:0.92rem;">
+          </div>
+          <button class="btn btn-success rounded-pill px-3 py-2 font-weight-bold shadow-sm" onclick="loadAlumniDirectory()" title="Search Alumni">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Alumni Cards Container -->
+      <div class="row" id="alumniCardsContainer">
+        <!-- Dynamically populated via loadAlumniDirectory() -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 footer-info">
+            <h3>BAYANUL ULOOM DARS</h3>
+            <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students.
+              All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya
+              Samajam. It aims the Islamic literary and artistic development of the students.</p>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contact Us</h4>
+            <p>
+              Thalappara <br>
+              Moonniyur P.O, PIN: 676311<br>
+              Kerala, India <br>
+              <strong>Phone:</strong> +91 9526 919 218<br>
+              <strong>Email:</strong> darsbayanululoom@gmail.com<br>
+            </p>
+            <div class="social-links">
+              <a href="https://wa.me/+919526919218/" class="twitter"><i class="fa fa-whatsapp"></i></a>
+              <a href="https://www.facebook.com/muttichiradars/" class="facebook"><i class="fa fa-facebook"></i></a>
+              <a href="https://www.instagram.com/muttichira_dars/" class="instagram"><i class="fa fa-instagram"></i></a>
+              <a href="https://www.youtube.com/channel/UCnfgm7rNEqGDN68loux5-JQ" class="google-plus"><i class="fa fa-youtube"></i></a>
+              <a href="tel:+919526919218" class="linkedin"><i class="fa fa-phone"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-5 col-md-12 footer-mudarris">
+            <h4>PRINCIPAL MUDARRIS:</h4>
+            <p style="margin-bottom: 8px;"><strong><span style="font-size: 15px;">Sheikhuna Ibrahim Baqavi Al Haithami
+                </span></strong><br><span style="color:#d4af37; font-weight:600; font-size:0.8rem;">ASSISTANT
+                MUDARRIS:</span></p>
+            <p><strong>Usthad Mansoor Faizy<br> Usthad Musthafa Baqavi<br> Usthad Jahfar Jalali<br> Usthad Abdulla
+                Faizy<br> Usthad Shameem Jalali<br>Usthad Rashid Baqavi<br> Usthad Shan Baqavi<br> Usthad Shafeeq
+                Jalali</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>BAYANUL ULOOM DARS</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="/about">BAYANUL ULOOM DARS</a>
+      </div>
+    </div>
+  </footer>
 
   <!-- JS Dependencies -->
   <script src="lib/jquery/jquery.min.js"></script>
@@ -1453,6 +1546,8 @@
 
     function renderDashboard(user) {
       document.getElementById('loginCard').style.display = 'none';
+      const alumniSec = document.getElementById('publicAlumniSection');
+      if (alumniSec) alumniSec.style.display = 'none';
       const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-11 col-xl-10 transition-all duration-300';
       const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container'); pContainer.classList.add('container-fluid'); }
       document.getElementById('dashboardCard').style.display = 'block';
@@ -1544,7 +1639,11 @@
         localStorage.removeItem('bu_user_session');
       } catch(e) {}
       document.getElementById('dashboardCard').style.display = 'none';
+      const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-6 col-md-8 transition-all duration-300';
+      const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container-fluid'); pContainer.classList.add('container'); }
       document.getElementById('loginCard').style.display = 'block';
+      const alumniSec = document.getElementById('publicAlumniSection');
+      if (alumniSec) alumniSec.style.display = 'block';
       backToLookup();
     }
 
@@ -2603,24 +2702,41 @@ function ensureThirtyStudentsInBatch(batchName) {
         });
     }
 
-    // Alumni Search Loader
+    // Alumni / Biruthadhari Directory Loader
     function loadAlumniDirectory() {
-      const q = document.getElementById('searchAlumniInput').value.trim();
+      const inputEl = document.getElementById('searchAlumniInput');
+      const q = inputEl ? inputEl.value.trim() : '';
+      const container = document.getElementById('alumniCardsContainer');
+      if (!container) return;
+
+      container.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fa fa-spinner fa-spin mr-1"></i> ബിരുദധാരികളുടെ വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</div>';
+
       fetch('/api/portal/alumni?search=' + encodeURIComponent(q))
         .then(r => r.json())
         .then(data => {
-          const container = document.getElementById('alumniCardsContainer');
           if (data.success && data.alumni && data.alumni.length > 0) {
             let html = '';
             data.alumni.forEach(a => {
+              const photo = a.photoUrl || 'img/new_logo.png';
+              const name = a.name || 'ബിരുദധാരി';
+              const father = a.fatherName || '-';
+              const place = a.place || 'Muttichira';
+              const batchText = a.batchNumber ? ('Batch ' + a.batchNumber) : (a.batchYear ? ('Batch ' + a.batchYear) : 'Biruthadhari');
+
               html += `
                 <div class="col-lg-4 col-md-6 mb-4">
-                  <div class="alumni-card">
-                    <img src="${a.photoUrl || 'img/new_logo.png'}" alt="Alumni Photo">
-                    <div>
-                      <h5 class="font-weight-bold text-success m-0" style="font-size:1rem;">${a.name}</h5>
-                      <span class="badge badge-alumni my-1">Biruthadhari • Batch ${a.batchNumber || 'Alumni'}</span>
-                      <p class="small text-muted m-0"><i class="fa fa-map-marker text-danger"></i> ${a.place || 'Muttichira'}</p>
+                  <div class="alumni-card shadow-sm">
+                    <img src="${photo}" alt="${name}" onerror="this.src='img/new_logo.png'">
+                    <div style="flex-grow:1; min-width:0;">
+                      <h5 class="font-weight-bold text-success mb-1 text-truncate" style="font-size:1.05rem;" title="${name}">${name}</h5>
+                      <span class="badge badge-alumni mb-2"><i class="fa fa-graduation-cap mr-1"></i> ${batchText}</span>
+                      
+                      <div class="small text-muted mb-1 text-truncate" title="പിതാവ്: ${father}">
+                        <i class="fa fa-user-circle text-success mr-1"></i> <strong class="text-dark">പിതാവ്:</strong> ${father}
+                      </div>
+                      <div class="small text-muted text-truncate" title="സ്ഥലം: ${place}">
+                        <i class="fa fa-map-marker text-danger mr-1"></i> <strong class="text-dark">സ്ഥലം:</strong> ${place}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2628,7 +2744,16 @@ function ensureThirtyStudentsInBatch(batchName) {
             });
             container.innerHTML = html;
           } else {
-            container.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fa fa-info-circle"></i> No Biruthadhari / Alumni record matches your search.</div>';
+            container.innerHTML = `
+              <div class="col-12 text-center text-muted py-5">
+                <i class="fa fa-user-graduate fa-2x mb-2 text-secondary d-block"></i>
+                <div>ബിരുദധാരികളുടെ വിവരങ്ങൾ ഒന്നും ലഭ്യമായിട്ടില്ല.</div>
+              </div>`;
+          }
+        }).catch(err => {
+          console.error('Error loading alumni:', err);
+          if (container) {
+            container.innerHTML = '<div class="col-12 text-center text-danger py-4"><i class="fa fa-exclamation-triangle mr-1"></i> വിവരങ്ങൾ ലഭ്യമാക്കാൻ സാധിച്ചില്ല. വീണ്ടും ശ്രമിക്കുക.</div>';
           }
         });
     }
