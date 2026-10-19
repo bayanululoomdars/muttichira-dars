@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Admission Application | Bayanul Uloom Dars | Muttichira</title>
@@ -16,18 +17,21 @@
   <link rel="apple-touch-icon" href="img/favicon.png">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
 
   <!-- CSS Files -->
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="lib/animate/animate.min.css" rel="stylesheet">
   <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
-  
+
   <!-- Main Stylesheet Files -->
   <link href="css/style.css" rel="stylesheet">
   <link href="css/custom.css" rel="stylesheet">
 </head>
+
 <body>
 
   <!-- Modern Header / Navbar -->
@@ -51,7 +55,7 @@
         <li><a href="/admission" class="active nav-btn-admission">Admission</a></li>
         <li><a href="/about">About Us</a></li>
         <li><a href="/contact">Contact Us</a></li>
-        <li><a href="/login" class="nav-btn-portal"><i class="fa fa-user-circle"></i> Portal / പ്രവേശനം</a></li>
+        <li><a href="/login"><i class="fa fa-user-circle mr-1"></i> Portal</a></li>
       </ul>
     </div>
   </header>
@@ -72,39 +76,49 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-10">
-          
+
           <!-- 1. ADMISSION CLOSED MESSAGE -->
-          <div id="admissionClosedMsg" style="display:none;" class="alert alert-warning text-center p-4 shadow-sm bg-white rounded">
+          <div id="admissionClosedMsg" style="display:none;"
+            class="alert alert-warning text-center p-4 shadow-sm bg-white rounded">
             <h2 class="form-title text-success font-weight-bold">അഡ്മിഷൻ അവസാനിച്ചു</h2>
             <h5 class="text-muted mb-3" style="font-family: 'Inter', sans-serif;">ADMISSION CLOSED</h5>
             <p class="font-weight-bold text-success">മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസ് (Bayanul Uloom Dars, Muttichira)</p>
-            <p class="small text-muted">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ, PIN: 676311 (Shuhada Masjid Muttichira, Thalappara)</p>
-             <i class="fa fa-exclamation-triangle fa-2x mb-3 text-warning"></i>
-             <h4>Admissions are currently closed.</h4>
-             <p>Please check back later or contact the administration for more details.</p>
+            <p class="small text-muted">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ, PIN: 676311 (Shuhada Masjid Muttichira,
+              Thalappara)</p>
+            <i class="fa fa-exclamation-triangle fa-2x mb-3 text-warning"></i>
+            <h4>Admissions are currently closed.</h4>
+            <p>Please check back later or contact the administration for more details.</p>
           </div>
 
           <!-- 2. ADMISSION OPEN DETAILS & APPLY BUTTON -->
-          <div id="admissionOpenDetails" style="display:none;" class="bg-white rounded p-4 p-md-5 shadow-sm text-center">
+          <div id="admissionOpenDetails" style="display:none;"
+            class="bg-white rounded p-4 p-md-5 shadow-sm text-center">
             <h2 class="form-title text-success font-weight-bold">അഡ്മിഷൻ ആരംഭിച്ചിരിക്കുന്നു!</h2>
             <h5 class="text-muted mb-3" style="font-family: 'Inter', sans-serif;">ADMISSION OPEN</h5>
             <p class="font-weight-bold text-success">മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസ് (Bayanul Uloom Dars, Muttichira)</p>
-            <p class="small text-muted">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ, PIN: 676311 (Shuhada Masjid Muttichira, Thalappara)</p>
-            
+            <p class="small text-muted">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ, PIN: 676311 (Shuhada Masjid Muttichira,
+              Thalappara)</p>
+
             <hr class="my-4">
 
             <div class="text-left mx-auto my-4" style="max-width: 650px;">
-              <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-info-circle text-success mr-2"></i> പ്രധാന നിർദ്ദേശങ്ങൾ / Instructions:</h5>
+              <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-info-circle text-success mr-2"></i> പ്രധാന
+                നിർദ്ദേശങ്ങൾ / Instructions:</h5>
               <ul class="list-unstyled text-muted" style="line-height: 1.9; font-size: 15px;">
-                <li><i class="fa fa-check-circle text-success mr-2"></i> അപേക്ഷ ഫോം പൂർണ്ണമായും കൃത്യമായും പൂരിപ്പിക്കുക.</li>
-                <li><i class="fa fa-check-circle text-success mr-2"></i> ഒരു ഫോൺ നമ്പറിൽ നിന്ന് ഒരു അപേക്ഷ മാത്രമേ സമർപ്പിക്കാൻ സാധിക്കൂ.</li>
-                <li><i class="fa fa-check-circle text-success mr-2"></i> കുട്ടിയുടെ പാസ്‌പോർട്ട് സൈസ് ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യേണ്ടതാണ്.</li>
-                <li><i class="fa fa-check-circle text-success mr-2"></i> അപേക്ഷ സമർപ്പിച്ചതിന് ശേഷം ദർസ് ഭരണസമിതി നിങ്ങളെ ബന്ധപ്പെടുന്നതാണ്.</li>
+                <li><i class="fa fa-check-circle text-success mr-2"></i> അപേക്ഷ ഫോം പൂർണ്ണമായും കൃത്യമായും
+                  പൂരിപ്പിക്കുക.</li>
+                <li><i class="fa fa-check-circle text-success mr-2"></i> ഒരു ഫോൺ നമ്പറിൽ നിന്ന് ഒരു അപേക്ഷ മാത്രമേ
+                  സമർപ്പിക്കാൻ സാധിക്കൂ.</li>
+                <li><i class="fa fa-check-circle text-success mr-2"></i> കുട്ടിയുടെ പാസ്‌പോർട്ട് സൈസ് ഫോട്ടോ അപ്‌ലോഡ്
+                  ചെയ്യേണ്ടതാണ്.</li>
+                <li><i class="fa fa-check-circle text-success mr-2"></i> അപേക്ഷ സമർപ്പിച്ചതിന് ശേഷം ദർസ് ഭരണസമിതി
+                  നിങ്ങളെ ബന്ധപ്പെടുന്നതാണ്.</li>
               </ul>
             </div>
 
             <div class="mt-4 pt-2">
-              <button type="button" class="btn btn-success btn-lg px-5 py-3 font-weight-bold shadow-lg" data-toggle="modal" data-target="#admissionModal" style="border-radius: 50px; font-size: 18px;">
+              <button type="button" class="btn btn-success btn-lg px-5 py-3 font-weight-bold shadow-lg"
+                data-toggle="modal" data-target="#admissionModal" style="border-radius: 50px; font-size: 18px;">
                 <i class="fa fa-paper-plane mr-2"></i> Apply Now / ഇപ്പോൾ തന്നെ അപേക്ഷിക്കൂ
               </button>
             </div>
@@ -116,10 +130,11 @@
   </section>
 
   <!-- 3. ADMISSION FORM POPUP (MODAL) -->
-  <div class="modal fade" id="admissionModal" tabindex="-1" role="dialog" aria-labelledby="admissionModalLabel" aria-hidden="true">
+  <div class="modal fade" id="admissionModal" tabindex="-1" role="dialog" aria-labelledby="admissionModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content border-0 shadow-lg">
-        
+
         <div class="modal-header bg-success text-white">
           <h5 class="modal-title font-weight-bold" id="admissionModalLabel">
             <i class="fa fa-user-plus mr-2"></i> സ്റ്റുഡന്റ്സ് ബയോഡാറ്റ ഫോം (Student Biodata)
@@ -131,10 +146,12 @@
 
         <div class="modal-body p-4">
           <form id="admissionForm" enctype="multipart/form-data">
-            
+
             <!-- SECTION 1: PERSONAL INFORMATION -->
-            <h5 class="text-success border-bottom pb-2 mb-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-user mr-2"></i> Personal Details / വ്യക്തിഗത വിവരങ്ങൾ</h5>
-            
+            <h5 class="text-success border-bottom pb-2 mb-4 font-weight-bold"
+              style="font-family: 'Outfit', sans-serif;"><i class="fa fa-user mr-2"></i> Personal Details / വ്യക്തിഗത
+              വിവരങ്ങൾ</h5>
+
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="studentName">Student Name / പേര് <span class="text-danger">*</span></label>
@@ -149,22 +166,26 @@
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="fatherName">Father's Name / പിതാവിന്റെ പേര് <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fatherName" id="fatherName" placeholder="Father's Name" required>
+                <input type="text" class="form-control" name="fatherName" id="fatherName" placeholder="Father's Name"
+                  required>
               </div>
               <div class="form-group col-md-6">
                 <label for="motherName">Mother's Name / മാതാവിന്റെ പേര് <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="motherName" id="motherName" placeholder="Mother's Name" required>
+                <input type="text" class="form-control" name="motherName" id="motherName" placeholder="Mother's Name"
+                  required>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="studentPhone">Student Phone / ഫോൺ നമ്പർ <span class="text-danger">*</span></label>
-                <input type="tel" class="form-control" name="phone" id="studentPhone" placeholder="Mobile Number" required>
+                <input type="tel" class="form-control" name="phone" id="studentPhone" placeholder="Mobile Number"
+                  required>
               </div>
               <div class="form-group col-md-6">
                 <label for="studentEmail">Email / ഇമെയിൽ</label>
-                <input type="email" class="form-control" name="email" id="studentEmail" placeholder="Email Address (Optional)">
+                <input type="email" class="form-control" name="email" id="studentEmail"
+                  placeholder="Email Address (Optional)">
               </div>
             </div>
 
@@ -186,16 +207,19 @@
             </div>
 
             <!-- SECTION 2: ADDRESS -->
-            <h5 class="text-success border-bottom pb-2 mb-4 mt-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-home mr-2"></i> Address Details / വിലാസം</h5>
+            <h5 class="text-success border-bottom pb-2 mb-4 mt-4 font-weight-bold"
+              style="font-family: 'Outfit', sans-serif;"><i class="fa fa-home mr-2"></i> Address Details / വിലാസം</h5>
 
             <div class="form-row">
               <div class="form-group col-md-8">
                 <label for="houseName">House Name / വീട്ടു പേര് <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="houseName" id="houseName" placeholder="House Name" required>
+                <input type="text" class="form-control" name="houseName" id="houseName" placeholder="House Name"
+                  required>
               </div>
               <div class="form-group col-md-4">
                 <label for="homePhone">Home Phone / വീട്ടിലെ ഫോൺ നമ്പർ</label>
-                <input type="tel" class="form-control" name="homePhone" id="homePhone" placeholder="Landline or Alternate">
+                <input type="tel" class="form-control" name="homePhone" id="homePhone"
+                  placeholder="Landline or Alternate">
               </div>
             </div>
 
@@ -206,54 +230,68 @@
               </div>
               <div class="form-group col-md-6">
                 <label for="postOffice">Post Office / പോസ്റ്റ്</label>
-                <input type="text" class="form-control" name="postOffice" id="postOffice" placeholder="Post Office Name (Optional)">
+                <input type="text" class="form-control" name="postOffice" id="postOffice"
+                  placeholder="Post Office Name (Optional)">
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="district">District / ജില്ല</label>
-                <input type="text" class="form-control" name="district" id="district" placeholder="District Name (Optional)">
+                <input type="text" class="form-control" name="district" id="district"
+                  placeholder="District Name (Optional)">
               </div>
               <div class="form-group col-md-6">
                 <label for="pincode">Pincode / പിൻകോഡ്</label>
-                <input type="text" class="form-control" name="pincode" id="pincode" placeholder="6-Digit Postal Code (Optional)">
+                <input type="text" class="form-control" name="pincode" id="pincode"
+                  placeholder="6-Digit Postal Code (Optional)">
               </div>
             </div>
 
             <!-- SECTION 3: EDUCATION & GUARDIAN -->
-            <h5 class="text-success border-bottom pb-2 mb-4 mt-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-graduation-cap mr-2"></i> Education &amp; Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ്</h5>
+            <h5 class="text-success border-bottom pb-2 mb-4 mt-4 font-weight-bold"
+              style="font-family: 'Outfit', sans-serif;"><i class="fa fa-graduation-cap mr-2"></i> Education &amp;
+              Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ്</h5>
 
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="eduReligious">Religious Education / വിദ്യാഭ്യാസം: മതം <span class="text-danger">*</span></label>
+                <label for="eduReligious">Religious Education / വിദ്യാഭ്യാസം: മതം <span
+                    class="text-danger">*</span></label>
                 <p class="small text-muted mb-1">e.g., Madrassa 5 class passed (മദ്രസ 5 ക്ലാസ്സ് പാസായവർ)</p>
-                <input type="text" class="form-control" name="educationReligious" id="eduReligious" placeholder="Madrassa / Dars Qualification" required>
+                <input type="text" class="form-control" name="educationReligious" id="eduReligious"
+                  placeholder="Madrassa / Dars Qualification" required>
               </div>
               <div class="form-group col-md-6">
-                <label for="eduSecular">Secular Education / വിദ്യാഭ്യാസം: ഭൗതികം <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="educationSecular" id="eduSecular" placeholder="School / College Qualification" required>
+                <label for="eduSecular">Secular Education / വിദ്യാഭ്യാസം: ഭൗതികം <span
+                    class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="educationSecular" id="eduSecular"
+                  placeholder="School / College Qualification" required>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group col-md-4">
                 <label for="guardianName">Guardian Name / രക്ഷിതാവിന്റെ പേര് <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="guardianName" id="guardianName" placeholder="Guardian's Full Name" required>
+                <input type="text" class="form-control" name="guardianName" id="guardianName"
+                  placeholder="Guardian's Full Name" required>
               </div>
               <div class="form-group col-md-4">
-                <label for="relationship">Relationship / കുട്ടിയുമായുള്ള ബന്ധം <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="relationship" id="relationship" placeholder="Father/Uncle/Brother etc." required>
+                <label for="relationship">Relationship / കുട്ടിയുമായുള്ള ബന്ധം <span
+                    class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="relationship" id="relationship"
+                  placeholder="Father/Uncle/Brother etc." required>
               </div>
               <div class="form-group col-md-4">
                 <label for="guardianPhone">Guardian Phone / ഫോൺ നമ്പർ <span class="text-danger">*</span></label>
-                <input type="tel" class="form-control" name="guardianPhone" id="guardianPhone" placeholder="Guardian Phone" required>
+                <input type="tel" class="form-control" name="guardianPhone" id="guardianPhone"
+                  placeholder="Guardian Phone" required>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group col-md-12">
-                <label for="photoFile">Upload Photo / ഫോട്ടോ <span class="text-muted">(Passport size image)</span></label>
+                <label for="photoFile">Upload Photo / ഫോട്ടോ <span class="text-muted">(Passport size
+                    image)</span></label>
                 <div class="custom-file">
                   <input type="file" class="custom-file-input" name="photo" id="photoFile" accept="image/*">
                   <label class="custom-file-label" for="photoFile">Choose image file...</label>
@@ -266,13 +304,15 @@
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="declarationCheck" required>
                 <label class="custom-control-label small text-muted" for="declarationCheck" style="line-height: 1.5;">
-                  മേൽ വിവരങ്ങൾ എനിക്ക് ബോധ്യമുള്ളതും സത്യസന്ധവുമാണെന്ന് ബോധ്യപ്പെടുത്തുന്നു. (I hereby declare that the above information is true and correct to the best of my knowledge.)
+                  മേൽ വിവരങ്ങൾ എനിക്ക് ബോധ്യമുള്ളതും സത്യസന്ധവുമാണെന്ന് ബോധ്യപ്പെടുത്തുന്നു. (I hereby declare that the
+                  above information is true and correct to the best of my knowledge.)
                 </label>
               </div>
             </div>
 
             <div class="text-center mt-4">
-              <button type="submit" class="btn btn-success btn-lg px-5 py-3 font-weight-bold" id="admissionSubmitBtn" style="border-radius: 50px;">
+              <button type="submit" class="btn btn-success btn-lg px-5 py-3 font-weight-bold" id="admissionSubmitBtn"
+                style="border-radius: 50px;">
                 <i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക
               </button>
             </div>
@@ -291,7 +331,9 @@
         <div class="row">
           <div class="col-lg-4 col-md-6 footer-info">
             <h3>BAYANUL ULOOM DARS</h3>
-            <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students.</p>
+            <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students.
+              All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya
+              Samajam. It aims the Islamic literary and artistic development of the students.</p>
           </div>
 
           <div class="col-lg-3 col-md-6 footer-contact">
@@ -307,15 +349,20 @@
               <a href="https://wa.me/+919526919218/" class="twitter"><i class="fa fa-whatsapp"></i></a>
               <a href="https://www.facebook.com/muttichiradars/" class="facebook"><i class="fa fa-facebook"></i></a>
               <a href="https://www.instagram.com/muttichira_dars/" class="instagram"><i class="fa fa-instagram"></i></a>
-              <a href="https://www.youtube.com/channel/UCnfgm7rNEqGDN68loux5-JQ" class="google-plus"><i class="fa fa-youtube"></i></a>
+              <a href="https://www.youtube.com/channel/UCnfgm7rNEqGDN68loux5-JQ" class="google-plus"><i
+                  class="fa fa-youtube"></i></a>
               <a href="tel:+919526919218" class="linkedin"><i class="fa fa-phone"></i></a>
             </div>
           </div>
 
           <div class="col-lg-5 col-md-12 footer-mudarris">
             <h4>PRINCIPAL MUDARRIS:</h4>
-            <p style="margin-bottom: 8px;"><strong><span style="font-size: 15px;">Sheikhuna Ibrahim Baqavi Al Haithami </span></strong><br><span style="color:#d4af37; font-weight:600; font-size:0.8rem;">ASSISTANT MUDARRIS:</span></p>
-            <p><strong>Usthad Mansoor Faizy<br> Usthad Musthafa Baqavi<br> Usthad Jahfar Jalali<br> Usthad Abdulla Faizy<br> Usthad Shameem Jalali<br>Usthad Rashid Baqavi<br> Usthad Shan Baqavi<br> Usthad Shafeeq Jalali</strong></p>
+            <p style="margin-bottom: 8px;"><strong><span style="font-size: 15px;">Sheikhuna Ibrahim Baqavi Al Haithami
+                </span></strong><br><span style="color:#d4af37; font-weight:600; font-size:0.8rem;">ASSISTANT
+                MUDARRIS:</span></p>
+            <p><strong>Usthad Mansoor Faizy<br> Usthad Musthafa Baqavi<br> Usthad Jahfar Jalali<br> Usthad Abdulla
+                Faizy<br> Usthad Shameem Jalali<br>Usthad Rashid Baqavi<br> Usthad Shan Baqavi<br> Usthad Shafeeq
+                Jalali</strong></p>
           </div>
         </div>
       </div>
@@ -338,7 +385,7 @@
 
   <script>
     // Show custom file upload name
-    document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
       if (e.target.files && e.target.files[0]) {
         var fileName = e.target.files[0].name;
         var nextSibling = e.target.nextElementSibling;
@@ -375,16 +422,16 @@
       toast.className = 'toast-msg' + (isError ? ' error' : '');
       toast.innerHTML = '<i class="fa ' + (isError ? 'fa-exclamation-circle text-danger' : 'fa-check-circle text-warning') + '"></i> ' + message;
       container.appendChild(toast);
-      setTimeout(function() {
+      setTimeout(function () {
         toast.style.opacity = '0';
         toast.style.transform = 'translateX(100%)';
         toast.style.transition = 'all 0.5s ease';
-        setTimeout(function() { toast.remove(); }, 500);
+        setTimeout(function () { toast.remove(); }, 500);
       }, 4000);
     }
 
     // Admission form submit
-    document.getElementById('admissionForm').addEventListener('submit', function(e) {
+    document.getElementById('admissionForm').addEventListener('submit', function (e) {
       e.preventDefault();
       var submitBtn = document.getElementById('admissionSubmitBtn');
       submitBtn.disabled = true;
@@ -396,53 +443,54 @@
         method: 'POST',
         body: formData
       })
-      .then(function(res) { return res.json(); })
-      .then(function(resData) {
-        if (resData.success) {
-          // Close modal popup
-          $('#admissionModal').modal('hide');
-          
-          // Mark as submitted in localStorage
-          localStorage.setItem('admission_submitted', '1');
-          showToast('Biodata application submitted successfully!', false);
-          
-          // Hide Open details and show success message
-          document.getElementById('admissionOpenDetails').style.display = 'none';
-          document.getElementById('admissionClosedMsg').innerHTML =
-            '<i class="fa fa-check-circle fa-2x mb-3 text-success"></i>' +
-            '<h4>Application Submitted!</h4>' +
-            '<p>Thank you! We have received your biodata. Our team will contact you soon.</p>';
-          document.getElementById('admissionClosedMsg').style.display = 'block';
-        } else if (resData.alreadySubmitted) {
-          // Close modal popup
-          $('#admissionModal').modal('hide');
-          
-          localStorage.setItem('admission_submitted', '1');
-          showToast('An application with this phone number already exists.', true);
-          
-          document.getElementById('admissionOpenDetails').style.display = 'none';
-          document.getElementById('admissionClosedMsg').innerHTML =
-            '<i class="fa fa-info-circle fa-2x mb-3 text-info"></i>' +
-            '<h4>Application Already Submitted</h4>' +
-            '<p>An application with this phone number has already been received. Only one application is allowed per phone number. Please contact the administration if you need assistance.</p>';
-          document.getElementById('admissionClosedMsg').style.display = 'block';
-          
+        .then(function (res) { return res.json(); })
+        .then(function (resData) {
+          if (resData.success) {
+            // Close modal popup
+            $('#admissionModal').modal('hide');
+
+            // Mark as submitted in localStorage
+            localStorage.setItem('admission_submitted', '1');
+            showToast('Biodata application submitted successfully!', false);
+
+            // Hide Open details and show success message
+            document.getElementById('admissionOpenDetails').style.display = 'none';
+            document.getElementById('admissionClosedMsg').innerHTML =
+              '<i class="fa fa-check-circle fa-2x mb-3 text-success"></i>' +
+              '<h4>Application Submitted!</h4>' +
+              '<p>Thank you! We have received your biodata. Our team will contact you soon.</p>';
+            document.getElementById('admissionClosedMsg').style.display = 'block';
+          } else if (resData.alreadySubmitted) {
+            // Close modal popup
+            $('#admissionModal').modal('hide');
+
+            localStorage.setItem('admission_submitted', '1');
+            showToast('An application with this phone number already exists.', true);
+
+            document.getElementById('admissionOpenDetails').style.display = 'none';
+            document.getElementById('admissionClosedMsg').innerHTML =
+              '<i class="fa fa-info-circle fa-2x mb-3 text-info"></i>' +
+              '<h4>Application Already Submitted</h4>' +
+              '<p>An application with this phone number has already been received. Only one application is allowed per phone number. Please contact the administration if you need assistance.</p>';
+            document.getElementById('admissionClosedMsg').style.display = 'block';
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
+          } else {
+            showToast(resData.message || 'Failed to submit application.', true);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
+          }
+        })
+        .catch(function (err) {
+          console.error(err);
+          showToast('Error connecting to server. Please try again.', true);
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
-        } else {
-          showToast(resData.message || 'Failed to submit application.', true);
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
-        }
-      })
-      .catch(function(err) {
-        console.error(err);
-        showToast('Error connecting to server. Please try again.', true);
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
-      });
+        });
     });
   </script>
 
 </body>
+
 </html>

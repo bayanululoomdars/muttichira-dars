@@ -766,7 +766,7 @@
         <li><a href="/admission">Admission</a></li>
         <li><a href="/about">About Us</a></li>
         <li><a href="/contact">Contact Us</a></li>
-        <li><a href="/login" class="active nav-btn-portal"><i class="fa fa-user-circle"></i> Portal / പ്രവേശനം</a></li>
+        <li><a href="/login" class="active"><i class="fa fa-user-circle mr-1"></i> Portal</a></li>
       </ul>
     </div>
   </header>
@@ -1559,6 +1559,8 @@
         .then(cardData => {
           const resultsBox = document.getElementById('studentResultsContainer');
           if (cardData.success && cardData.results && cardData.results.length > 0) {
+            // Sort published results newest first
+            cardData.results.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
             let html = '';
             cardData.results.forEach(res => {
               const subList = res.subjectMarks || [];
@@ -3164,6 +3166,10 @@ function ensureThirtyStudentsInBatch(batchName) {
     function handlePostNotifSubmit(e) {
       e.preventDefault();
       if (!currentUserSession) return;
+      const subjEl = document.getElementById('notifTitle') || document.getElementById('postNotifSubject');
+      const msgEl = document.getElementById('notifMessage') || document.getElementById('postNotifContent');
+      const targetEl = document.getElementById('postNotifTarget');
+
       fetch('/api/portal/usthad/post-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -3171,13 +3177,17 @@ function ensureThirtyStudentsInBatch(batchName) {
           type: 'notification',
           usthadId: currentUserSession.usthadId,
           usthadName: currentUserSession.name,
-          targetStudentNo: document.getElementById('postNotifTarget').value,
-          subject: document.getElementById('postNotifSubject').value,
-          content: document.getElementById('postNotifContent').value
+          targetStudentNo: targetEl ? targetEl.value : 'ALL',
+          subject: subjEl ? subjEl.value : 'Broadcast Notification',
+          content: msgEl ? msgEl.value : ''
         })
       }).then(r => r.json()).then(res => {
-        alert(res.message || 'Notification broadcasted!');
+        showToast(res.message || 'Notification broadcasted!', false);
         $('#modalPostNotif').modal('hide');
+        if (subjEl) subjEl.value = '';
+        if (msgEl) msgEl.value = '';
+      }).catch(err => {
+        showToast(err.message, true);
       });
     }
 
@@ -3554,6 +3564,10 @@ window.addEventListener('DOMContentLoaded', () => {
       const file = fileInput.files[0];
       if (!file.type.startsWith('image/')) {
         alert('ഇമേജ് ഫയലുകൾ മാത്രമേ അപ്‌ലോഡ് ചെയ്യാൻ സാധിക്കൂ!');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert('ഫോട്ടോയുടെ വലുപ്പം 2 MB-യിൽ താഴെയായിരിക്കണം! (Max 2MB allowed)');
         return;
       }
       const title = titleInput.value.trim() || file.name;

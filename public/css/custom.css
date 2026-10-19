@@ -145,40 +145,12 @@
   display: none;
 }
 
-/* Portal Login Button - Shining Green & Gold Highlight */
+/* Portal Nav Link - Simple & Clean */
 .nav-links li .nav-btn-portal,
 .nav-links li .nav-btn-login {
-  background: linear-gradient(135deg, #10b981, #047857);
-  color: #ffffff !important;
-  font-weight: 700;
-  border-radius: 25px;
-  padding: 8px 18px;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  transition: all 0.3s ease;
-  letter-spacing: 0.3px;
-}
-
-.nav-links li .nav-btn-portal:hover,
-.nav-links li .nav-btn-login:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(16, 185, 129, 0.6);
-  background: linear-gradient(135deg, #059669, #064e3b);
-  color: #ffffff !important;
-}
-
-.nav-links li .nav-btn-portal.active,
-.nav-links li .nav-btn-login.active {
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.5), 0 6px 20px rgba(16, 185, 129, 0.5);
-  border-color: #d4af37;
-}
-
-.nav-links li .nav-btn-portal::after,
-.nav-links li .nav-btn-login::after {
-  display: none;
+  gap: 6px;
 }
 
 /* Mobile Menu Toggle */

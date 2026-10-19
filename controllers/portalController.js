@@ -667,7 +667,7 @@ exports.getStudentDashboard = async (req, res) => {
 // ── 9. Usthad Post Mark / Result / Notification / Message ──
 exports.postUsthadData = async (req, res) => {
   try {
-    const { type, usthadId, usthadName, targetStudentNo, subject, content, marksData } = req.body;
+    const { type, usthadId, usthadName, targetStudentNo, studentAdmNo, subject, content, marksData } = req.body;
     if (!content && type !== 'mark') {
       return res.status(400).json({ success: false, message: 'Content required' });
     }
@@ -677,7 +677,7 @@ exports.postUsthadData = async (req, res) => {
       senderRole: 'usthad',
       senderId: usthadId || 'UST101',
       senderName: usthadName || 'Usthad',
-      targetStudentNo: targetStudentNo || 'ALL',
+      targetStudentNo: targetStudentNo || studentAdmNo || 'ALL',
       subject: subject || '',
       content: content || 'Exam result posted',
       marksData: marksData || {},
@@ -702,39 +702,47 @@ exports.postUsthadData = async (req, res) => {
 
 exports.getUsthadMessages = async (req, res) => {
   try {
+    const usthadId = req.query.usthadId;
     let messages = [];
     try {
-      messages = await PortalMessage.find({
-        $or: [
-          { targetStudentNo: { $exists: false } },
-          { senderId: { $exists: true } } 
-        ]
-      }).sort({ createdAt: -1 });
+      const allMsgs = await PortalMessage.find({});
+      messages = (allMsgs && allMsgs.data ? allMsgs.data : allMsgs) || [];
     } catch (e) {
-      // Mock error fallback
+      console.error('PortalMessage find error in getUsthadMessages:', e);
     }
 
-    if (messages.length === 0) {
-      const memoryMessages = [
-        {
-          _id: 'mem_msg_901',
-          type: 'message',
-          subject: 'Leave Request',
-          content: 'Usthad, I need 2 days leave for family function.',
-          senderId: '101',
-          senderName: 'Sayyid Zainul Abid',
-          createdAt: new Date().toISOString()
-        }
-      ];
-      messages = memoryMessages;
+    if (!Array.isArray(messages)) messages = [];
+
+    // Fallback/memory messages
+    if (typeof memoryMessages !== 'undefined' && Array.isArray(memoryMessages)) {
+      messages = messages.concat(memoryMessages);
     }
 
-    const msgList = messages.filter(m => m.type === 'message');
+    // Filter messages for Usthad Inbox
+    const msgList = messages.filter(m => {
+      if (m.type !== 'message') return false;
+      if (m.senderRole === 'student') return true;
+      if (usthadId && (m.targetStudentNo === usthadId || m.senderId === usthadId)) return true;
+      return true;
+    });
+
+    // Unique by _id
+    const seen = new Set();
+    const uniqueMsgs = [];
+    for (let m of msgList) {
+      const id = String(m._id || m.createdAt);
+      if (!seen.has(id)) {
+        seen.add(id);
+        uniqueMsgs.push(m);
+      }
+    }
+    uniqueMsgs.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
     res.json({
       success: true,
-      messages: msgList,
+      messages: uniqueMsgs,
       data: {
-        messages: msgList
+        messages: uniqueMsgs
       }
     });
   } catch (err) {
@@ -1462,6 +1470,9 @@ exports.deleteExamClassMark = async (req, res) => {
 exports.uploadMyData = async (req, res) => {
   try {
     const { userId, role, title, base64Image } = req.body;
+    if (base64Image && base64Image.length > 6 * 1024 * 1024) {
+      return res.status(400).json({ success: false, message: 'ചിത്രത്തിന്റെ വലുപ്പം 2 MB-യിൽ താഴെയായിരിക്കണം (Max size: 2MB)' });
+    }
     if (!userId || !base64Image) {
       return res.status(400).json({ success: false, message: 'Missing user ID or image' });
     }

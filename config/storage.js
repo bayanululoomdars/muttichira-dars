@@ -3,7 +3,7 @@ const { uploadToTelegram } = require('./telegramStorage');
 
 // Memory storage for multer to accept file uploads in-memory
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, limits: { fileSize: 15 * 1024 * 1024 } });
 
 /**
  * Custom uploader middleware that intercepts Multer, 
