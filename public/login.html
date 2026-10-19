@@ -3214,7 +3214,27 @@ function ensureThirtyStudentsInBatch(batchName) {
       });
     }
 
-    function openPostNotificationModal() { $('#modalPostNotif').modal('show'); }
+    function openPostNotificationModal() {
+      const targetEl = document.getElementById('postNotifTarget');
+      if (targetEl) {
+        let opts = '<option value="ALL">All Students & Batches (എല്ലാ കുട്ടികൾക്കും)</option>';
+        if (allBatchesCache && allBatchesCache.length > 0) {
+          allBatchesCache.forEach(b => {
+            const bName = typeof b === 'string' ? b : (b.name || ('Batch ' + (b.batchNumber || b.batchYear)));
+            opts += `<option value="${bName}">${bName}</option>`;
+          });
+        }
+        if (directoryStudentsCache && directoryStudentsCache.length > 0) {
+          opts += '<optgroup label="Individual Students">';
+          directoryStudentsCache.forEach(s => {
+            opts += `<option value="${s.admissionNo}">${s.name} (${s.admissionNo})</option>`;
+          });
+          opts += '</optgroup>';
+        }
+        targetEl.innerHTML = opts;
+      }
+      $('#modalPostNotif').modal('show');
+    }
 
     function handleChangePasswordSubmit(e) {
       e.preventDefault();
@@ -3718,6 +3738,9 @@ window.addEventListener('DOMContentLoaded', () => {
           if (res.success) {
             showToast('ഇമേജ് മൈ ഡാറ്റാസിലേക്ക് വിജയകരമായി സൂക്ഷിച്ചു!', false);
             currentUserSession.myDatas = res.myDatas || [];
+            try {
+              localStorage.setItem('bu_user_session', JSON.stringify(currentUserSession));
+            } catch(e) {}
             fileInput.value = '';
             titleInput.value = '';
             renderMyDatasGallery();
@@ -3749,6 +3772,9 @@ window.addEventListener('DOMContentLoaded', () => {
         if (res.success) {
           showToast('ഇമേജ് നീക്കം ചെയ്തു', false);
           currentUserSession.myDatas = res.myDatas || [];
+          try {
+            localStorage.setItem('bu_user_session', JSON.stringify(currentUserSession));
+          } catch(e) {}
           renderMyDatasGallery();
         } else {
           showToast(res.message || 'Delete failed', true);
@@ -3945,6 +3971,12 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="modal-body p-4">
           <form onsubmit="handlePostNotifSubmit(event)">
+            <div class="form-group mb-3">
+              <label class="small font-weight-bold text-muted">Target Recipients / ആർക്കൊക്കെ</label>
+              <select id="postNotifTarget" class="form-control" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);">
+                <option value="ALL">All Students & Batches (എല്ലാ കുട്ടികൾക്കും)</option>
+              </select>
+            </div>
             <div class="form-group mb-3">
               <label class="small font-weight-bold text-muted">Title / Subject</label>
               <input type="text" id="notifTitle" class="form-control" style="background:var(--bg-input); color:var(--text); border:1px solid var(--border-soft);" required placeholder="e.g. Exam Tomorrow">
