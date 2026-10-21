@@ -2672,6 +2672,36 @@
      JAVASCRIPT
 ══════════════════════════════════ -->
 <script>
+  let adminCropperInstance = null;
+  function initAdminCropper(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.getElementById('cropperImage');
+      if (img) img.src = e.target.result;
+      const modal = document.getElementById('cropperModal');
+      if (modal) modal.classList.add('active');
+      if (adminCropperInstance) adminCropperInstance.destroy();
+      if (typeof Cropper !== 'undefined' && img) {
+        adminCropperInstance = new Cropper(img, {
+          aspectRatio: 1,
+          viewMode: 1
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function closeCropperModal() {
+    const modal = document.getElementById('cropperModal');
+    if (modal) modal.classList.remove('active');
+    if (adminCropperInstance) {
+      adminCropperInstance.destroy();
+      adminCropperInstance = null;
+    }
+  }
+
   /* 
 ═══════════════════════════════════════
      SAFE DOM HELPERS

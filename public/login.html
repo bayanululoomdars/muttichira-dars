@@ -1409,6 +1409,83 @@
       handleLiveLookup();
     }
 
+    function handleManualLookup() {
+      handleLiveLookup();
+      setTimeout(() => {
+        if (currentMatchesList && currentMatchesList.length === 1) {
+          selectUserFromList(0, true);
+        } else if (currentMatchesList && currentMatchesList.length > 1) {
+          const selectBox = document.getElementById('liveSearchResultsSelect');
+          if (selectBox) selectBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          showToast('No user profile found matching search query', true);
+        }
+      }, 350);
+    }
+
+    function publishEntireBatch(batchName) {
+      if (!currentActiveExamForUsthad || !batchName) return;
+      const examId = currentActiveExamForUsthad._id;
+      const rosterData = usthadBatchRosterCache[batchName];
+      if (!rosterData) return;
+
+      const students = rosterData.students || [];
+      const subjects = rosterData.subjects || [];
+
+      if (students.length === 0) {
+        showToast('No students in this batch', true);
+        return;
+      }
+
+      if (!confirm(`Publish all entered marks for batch ${batchName}?`)) return;
+
+      const existingResults = rosterData.existingResults || [];
+      const marksData = [];
+
+      students.forEach(s => {
+        const exist = existingResults.find(r => r.admissionNo === s.admissionNo);
+        if (exist && exist.subjectMarks) {
+          marksData.push({
+            admissionNo: s.admissionNo,
+            studentName: s.name,
+            subjectsConfig: subjects,
+            subjectMarks: exist.subjectMarks,
+            isPublished: true,
+            attendancePresentDays: 100,
+            attendanceTotalDays: 100,
+            usthadRemarks: 'Batch Published'
+          });
+        }
+      });
+
+      if (marksData.length === 0) {
+        showToast('No marks entered yet to publish for this batch. Please enter marks for students first.', true);
+        return;
+      }
+
+      fetch('/api/portal/exam/save-marks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          examId,
+          examName: currentActiveExamForUsthad.examName,
+          className: batchName,
+          isPublished: true,
+          marksData
+        })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          showToast(`Marks for batch ${batchName} published successfully!`, false);
+          loadBatchRosterForSplitLayout(batchName);
+        } else {
+          showToast(res.message || 'Error publishing batch marks', true);
+        }
+      })
+      .catch(err => showToast(err.message, true));
+    }
+
     let currentMatchesList = [];
 
     // Live Lookup preview on typing (Name, Place, Father ONLY)
@@ -1687,14 +1764,15 @@
 
       if (user.role === 'usthad') {
         document.getElementById('dashUserRole').textContent = 'Usthad • ' + (user.designation || 'Faculty') + ' (' + (user.subject || 'Dars') + ')';
-        document.getElementById('dashUserStatus').textContent = 'Respected Usthad';
+        const stEl = document.getElementById('dashUserStatus');
+        if (stEl) stEl.textContent = 'Respected Usthad';
         document.getElementById('studentDashContent').style.display = 'none';
         document.getElementById('usthadDashContent').style.display = 'block';
         loadUsthadDashboardData();
-        loadExamsUsthad();
       } else {
         document.getElementById('dashUserRole').textContent = 'Student • ' + (('Batch ' + (user.batchNumber || '1'))) + ' (' + (user.admissionNo) + ')';
-        document.getElementById('dashUserStatus').textContent = user.status || (user.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student');
+        const stEl = document.getElementById('dashUserStatus');
+        if (stEl) stEl.textContent = user.status || (user.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student');
         document.getElementById('studentDashContent').style.display = 'block';
         document.getElementById('usthadDashContent').style.display = 'none';
         loadStudentDashboardData();
