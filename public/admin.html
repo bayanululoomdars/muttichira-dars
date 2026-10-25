@@ -2002,7 +2002,7 @@
         <div class="unified-modal" id="unifiedAddUserModal">
           <div class="unified-modal-content">
             <div class="unified-modal-header">
-              <h3>Add New User</h3>
+              <h3 id="unifiedModalTitle">Add New User</h3>
               <button class="unified-modal-close" onclick="closeAddUserModal()">&times;</button>
             </div>
             
@@ -2019,8 +2019,8 @@
                   <input type="text" id="adminStudentName" class="form-control" placeholder="e.g. Muhammad Rashid" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Son of (Father's Name) *</label>
-                  <input type="text" id="adminStudentFather" class="form-control" placeholder="e.g. Abdulla" required>
+                  <label class="form-label">Son of (Father's Name)</label>
+                  <input type="text" id="adminStudentFather" class="form-control" placeholder="e.g. Abdulla">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Phone Number *</label>
@@ -2057,14 +2057,14 @@
                   <input type="text" id="adminStudentPlace" class="form-control" placeholder="e.g. Muttichira">
                 </div>
                 <div class="form-group">
-  <label class="form-label">Profile Photo</label>
-  <div style="display:flex; align-items:center; gap:10px;">
-    <img id="previewStudentPhoto" src="img/new_logo.png" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); background:white;">
-    <input type="hidden" id="adminStudentPhoto">
-    <input type="file" id="fileStudentPhoto" accept="image/*" style="display:none;" onchange="initAdminCropper(event)">
-    <button type="button" class="btn btn-sm btn-outline-warning" onclick="document.getElementById('TARGET_FILE_ID').click()">Upload Photo</button>
-  </div>
-</div>
+                  <label class="form-label">Profile Photo</label>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <img id="previewStudentPhoto" src="img/new_logo.png" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); background:white;">
+                    <input type="hidden" id="adminStudentPhoto">
+                    <input type="file" id="fileStudentPhoto" accept="image/*" style="display:none;" onchange="initAdminCropper(event, 'student')">
+                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="document.getElementById('fileStudentPhoto').click()">Upload Photo</button>
+                  </div>
+                </div>
               </div>
               <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-plus-circle"></i> Add Student Record</button>
             </form>
@@ -2099,6 +2099,15 @@
                 <div class="form-group">
                   <label class="form-label">Place</label>
                   <input type="text" id="adminUsthadPlace" class="form-control" placeholder="e.g. Muttichira">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Profile Photo</label>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <img id="previewUsthadPhoto" src="img/new_logo.png" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); background:white;">
+                    <input type="hidden" id="adminUsthadPhoto">
+                    <input type="file" id="fileUsthadPhoto" accept="image/*" style="display:none;" onchange="initAdminCropper(event, 'usthad')">
+                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="document.getElementById('fileUsthadPhoto').click()">Upload Photo</button>
+                  </div>
                 </div>
               </div>
               <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
@@ -2662,7 +2671,7 @@
     </div>
     <div style="display:flex; justify-content:flex-end; gap:10px;">
       <button type="button" class="btn btn-secondary" onclick="closeCropperModal()">Cancel</button>
-      <button type="button" class="btn btn-accent" id="btnCropSaveAdmin"><i class="fa fa-upload"></i> Upload & Save</button>
+      <button type="button" class="btn btn-accent" id="btnCropSaveAdmin" onclick="saveCroppedPhotoAdmin()"><i class="fa fa-upload"></i> Upload & Save</button>
     </div>
   </div>
 </div>
@@ -2673,7 +2682,10 @@
 ══════════════════════════════════ -->
 <script>
   let adminCropperInstance = null;
-  function initAdminCropper(event) {
+  let currentCropTarget = 'student';
+
+  function initAdminCropper(event, targetRole) {
+    currentCropTarget = targetRole || (event.target.id && event.target.id.includes('Usthad') ? 'usthad' : 'student');
     const file = event.target.files && event.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -2681,13 +2693,19 @@
       const img = document.getElementById('cropperImage');
       if (img) img.src = e.target.result;
       const modal = document.getElementById('cropperModal');
-      if (modal) modal.classList.add('active');
-      if (adminCropperInstance) adminCropperInstance.destroy();
+      if (modal) modal.classList.add('show');
+      if (adminCropperInstance) {
+        adminCropperInstance.destroy();
+        adminCropperInstance = null;
+      }
       if (typeof Cropper !== 'undefined' && img) {
-        adminCropperInstance = new Cropper(img, {
-          aspectRatio: 1,
-          viewMode: 1
-        });
+        setTimeout(() => {
+          adminCropperInstance = new Cropper(img, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 1
+          });
+        }, 100);
       }
     };
     reader.readAsDataURL(file);
@@ -2695,11 +2713,31 @@
 
   function closeCropperModal() {
     const modal = document.getElementById('cropperModal');
-    if (modal) modal.classList.remove('active');
+    if (modal) modal.classList.remove('show');
     if (adminCropperInstance) {
       adminCropperInstance.destroy();
       adminCropperInstance = null;
     }
+  }
+
+  function saveCroppedPhotoAdmin() {
+    if (!adminCropperInstance) {
+      closeCropperModal();
+      return;
+    }
+    const canvas = adminCropperInstance.getCroppedCanvas({ width: 400, height: 400 });
+    const base64Image = canvas.toDataURL('image/jpeg', 0.85);
+
+    const previewId = currentCropTarget === 'usthad' ? 'previewUsthadPhoto' : 'previewStudentPhoto';
+    const hiddenId = currentCropTarget === 'usthad' ? 'adminUsthadPhoto' : 'adminStudentPhoto';
+
+    const previewEl = document.getElementById(previewId);
+    if (previewEl) previewEl.src = base64Image;
+
+    const hiddenEl = document.getElementById(hiddenId);
+    if (hiddenEl) hiddenEl.value = base64Image;
+
+    closeCropperModal();
   }
 
   /* 
@@ -2875,18 +2913,38 @@ let editingUserRole = null;
 
 function openAddUserModal() {
   try {
-    console.log('Opening Add User Modal...');
-  editingUserId = null;
-  editingUserRole = null;
-  loadPortalBatches();
-  document.getElementById('formAddStudentAdmin').reset();
-  document.getElementById('previewStudentPhoto').src = 'img/new_logo.png';
-  document.getElementById('formAddUsthadAdmin').reset();
-  document.getElementById('previewUsthadPhoto').src = 'img/new_logo.png';
-  document.querySelector('#formAddStudentAdmin button[type="submit"]').innerHTML = 'Save Student Record';
-  document.querySelector('#formAddUsthadAdmin button[type="submit"]').innerHTML = 'Save Usthad Record';
-  document.getElementById('unifiedAddUserModal').classList.add('show');
+    editingUserId = null;
+    editingUserRole = null;
+    loadPortalBatches();
+
+    const titleEl = document.getElementById('unifiedModalTitle');
+    if (titleEl) titleEl.textContent = 'Add New User';
+
+    const sForm = document.getElementById('formAddStudentAdmin');
+    if (sForm) sForm.reset();
+    const uForm = document.getElementById('formAddUsthadAdmin');
+    if (uForm) uForm.reset();
+
+    const pStudent = document.getElementById('previewStudentPhoto');
+    if (pStudent) pStudent.src = 'img/new_logo.png';
+    const pUsthad = document.getElementById('previewUsthadPhoto');
+    if (pUsthad) pUsthad.src = 'img/new_logo.png';
+
+    const hStudent = document.getElementById('adminStudentPhoto');
+    if (hStudent) hStudent.value = '';
+    const hUsthad = document.getElementById('adminUsthadPhoto');
+    if (hUsthad) hUsthad.value = '';
+
+    const btnStudent = document.querySelector('#formAddStudentAdmin button[type="submit"]');
+    if (btnStudent) btnStudent.innerHTML = '<i class="fa fa-plus-circle"></i> Add Student Record';
+    const btnUsthad = document.querySelector('#formAddUsthadAdmin button[type="submit"]');
+    if (btnUsthad) btnUsthad.innerHTML = '<i class="fa fa-user-plus"></i> Add Usthad Record';
+
+    switchUnifiedRole('student');
+    const modal = document.getElementById('unifiedAddUserModal');
+    if (modal) modal.classList.add('show');
   } catch(e) {
+    console.error('Error opening modal:', e);
     alert('Error opening modal: ' + e.message);
   }
 }
@@ -2901,32 +2959,55 @@ function editUserAdmin(id, role) {
     });
     if (!user) { alert("User not found! ID: " + id); return; }
     editingUserId = user._id || id;
-    editingUserRole = role;
+    editingUserRole = role || user.role || (user.usthadId ? 'usthad' : 'student');
 
-    document.getElementById('unifiedAddUserModal').classList.add('show');
-    switchUnifiedRole(role);
+    const titleEl = document.getElementById('unifiedModalTitle');
+    if (titleEl) titleEl.textContent = (editingUserRole === 'usthad') ? 'Edit Usthad Record' : 'Edit Student Record';
+
+    const modal = document.getElementById('unifiedAddUserModal');
+    if (modal) modal.classList.add('show');
+    switchUnifiedRole(editingUserRole);
     
-    if (role === 'student') {
+    if (editingUserRole === 'student') {
       safeSetVal('adminStudentName', user.name);
       safeSetVal('adminStudentFather', user.fatherName || '');
       safeSetVal('adminStudentPhone', user.phone);
       safeSetVal('adminStudentPassword', user.password);
       safeSetVal('adminStudentAdmNo', user.admissionNo);
-      safeSetVal('adminStudentStatus', user.status);
-      populateBatchDropdowns(user.batchNumber || user.batchYear);
-      safeSetVal('adminStudentBatchNo', user.batchNumber || user.batchYear);
-      if(user.photoUrl) document.getElementById('previewStudentPhoto').src = user.photoUrl;
+      safeSetVal('adminStudentStatus', user.status || 'Current Student');
+      
+      const bVal = user.batchNumber || user.batchYear || '';
+      if (allBatchesCache && allBatchesCache.length > 0) {
+        populateBatchDropdowns(bVal);
+      } else {
+        loadPortalBatches(bVal);
+      }
+
+      const pStudent = document.getElementById('previewStudentPhoto');
+      if (pStudent) pStudent.src = user.photoUrl || 'img/new_logo.png';
+      const hStudent = document.getElementById('adminStudentPhoto');
+      if (hStudent) hStudent.value = user.photoUrl || '';
+
       safeSetVal('adminStudentPlace', user.place);
-      document.querySelector('#formAddStudentAdmin button[type="submit"]').innerHTML = '<i class="fa fa-save"></i> Update Student';
+      const submitBtn = document.querySelector('#formAddStudentAdmin button[type="submit"]');
+      if (submitBtn) submitBtn.innerHTML = '<i class="fa fa-save"></i> Update Student';
     } else {
       safeSetVal('adminUsthadName', user.name);
       safeSetVal('adminUsthadPhone', user.phone);
       safeSetVal('adminUsthadPassword', user.password);
+      safeSetVal('adminUsthadId', user.usthadId || '');
       safeSetVal('adminUsthadStatus', user.status || 'Active');
-      if(user.photoUrl) document.getElementById('previewUsthadPhoto').src = user.photoUrl;
       safeSetVal('adminUsthadDesignation', user.designation);
+      safeSetVal('adminUsthadSubject', user.subject || '');
       safeSetVal('adminUsthadPlace', user.place);
-      document.querySelector('#formAddUsthadAdmin button[type="submit"]').innerHTML = '<i class="fa fa-save"></i> Update Usthad';
+
+      const pUsthad = document.getElementById('previewUsthadPhoto');
+      if (pUsthad) pUsthad.src = user.photoUrl || 'img/new_logo.png';
+      const hUsthad = document.getElementById('adminUsthadPhoto');
+      if (hUsthad) hUsthad.value = user.photoUrl || '';
+
+      const submitBtn = document.querySelector('#formAddUsthadAdmin button[type="submit"]');
+      if (submitBtn) submitBtn.innerHTML = '<i class="fa fa-save"></i> Update Usthad';
     }
   } catch(e) {
     console.error(e);
@@ -2935,7 +3016,10 @@ function editUserAdmin(id, role) {
 }
 
 function closeAddUserModal() {
-  document.getElementById('unifiedAddUserModal').classList.remove('show');
+  const modal = document.getElementById('unifiedAddUserModal');
+  if (modal) modal.classList.remove('show');
+  editingUserId = null;
+  editingUserRole = null;
 }
 
 function switchUnifiedRole(role) {
@@ -2958,8 +3042,9 @@ function safeSetVal(id, val) {
 
 function submitAddStudentAdmin(e) {
   e.preventDefault();
-  const photoInput = document.getElementById('adminStudentPhoto');
-  const photoFile = photoInput && photoInput.files ? photoInput.files[0] : null;
+  const fileInput = document.getElementById('fileStudentPhoto');
+  const photoFile = fileInput && fileInput.files ? fileInput.files[0] : null;
+  const photoVal = safeGetValue('adminStudentPhoto');
 
   let fd = new FormData();
   fd.append('name', safeGetValue('adminStudentName'));
@@ -2971,6 +3056,7 @@ function submitAddStudentAdmin(e) {
   fd.append('batchNumber', safeGetValue('adminStudentBatchNo'));
   fd.append('place', safeGetValue('adminStudentPlace'));
   if (photoFile) fd.append('photo', photoFile);
+  if (photoVal) fd.append('photoUrl', photoVal);
 
   const url = editingUserId ? '/api/portal/student/' + editingUserId : '/api/portal/student';
   const method = editingUserId ? 'PUT' : 'POST';
@@ -2979,13 +3065,15 @@ function submitAddStudentAdmin(e) {
     method: method,
     body: fd
   }).then(r => r.json()).then(res => {
-    showToast(res.message || 'Student record saved!', !res.success);
+    showToast(res.message || (editingUserId ? 'Student record updated!' : 'Student record saved!'), !res.success);
     if (res.success) {
-      document.getElementById('formAddStudentAdmin').reset();
       closeAddUserModal();
       loadPortalUsersAdmin();
     }
-  }).catch(() => showToast('Error saving student record', true));
+  }).catch((err) => {
+    console.error(err);
+    showToast('Error saving student record', true);
+  });
 }
 
 function deleteStudentAdmin(id) {
@@ -3004,17 +3092,20 @@ function deleteStudentAdmin(id) {
 
 function submitAddUsthadAdmin(e) {
   e.preventDefault();
-  const photoInput = document.getElementById('adminUsthadPhoto');
-  const photoFile = photoInput && photoInput.files ? photoInput.files[0] : null;
+  const fileInput = document.getElementById('fileUsthadPhoto');
+  const photoFile = fileInput && fileInput.files ? fileInput.files[0] : null;
+  const photoVal = safeGetValue('adminUsthadPhoto');
 
   let fd = new FormData();
   fd.append('name', safeGetValue('adminUsthadName'));
   fd.append('phone', safeGetValue('adminUsthadPhone'));
   fd.append('password', safeGetValue('adminUsthadPassword'));
-  
+  fd.append('usthadId', safeGetValue('adminUsthadId'));
   fd.append('designation', safeGetValue('adminUsthadDesignation'));
+  fd.append('subject', safeGetValue('adminUsthadSubject'));
   fd.append('place', safeGetValue('adminUsthadPlace'));
   if (photoFile) fd.append('photo', photoFile);
+  if (photoVal) fd.append('photoUrl', photoVal);
 
   const url = editingUserId ? '/api/portal/usthad/' + editingUserId : '/api/portal/usthad';
   const method = editingUserId ? 'PUT' : 'POST';
@@ -3023,13 +3114,15 @@ function submitAddUsthadAdmin(e) {
     method: method,
     body: fd
   }).then(r => r.json()).then(res => {
-    showToast(res.message || 'Usthad record saved!', !res.success);
+    showToast(res.message || (editingUserId ? 'Usthad record updated!' : 'Usthad record saved!'), !res.success);
     if (res.success) {
-      document.getElementById('formAddUsthadAdmin').reset();
       closeAddUserModal();
       loadPortalUsersAdmin();
     }
-  }).catch(() => showToast('Error saving usthad record', true));
+  }).catch((err) => {
+    console.error(err);
+    showToast('Error saving usthad record', true);
+  });
 }
 
 function deleteUsthadAdmin(id) {

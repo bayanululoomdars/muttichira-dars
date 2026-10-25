@@ -517,7 +517,14 @@ exports.addStudentAdmin = async (req, res) => {
     }
 
     const autoAdmNo = admissionNo || ('ADM' + Math.floor(100 + Math.random() * 900));
-    const autoPassword = password || phone; // Default password is phone number!
+    const autoPassword = password || phone;
+
+    let finalPhotoUrl = photoUrl || '';
+    if (req.file && req.file.path) {
+      finalPhotoUrl = req.file.path;
+    } else if (finalPhotoUrl && finalPhotoUrl.startsWith('data:image')) {
+      finalPhotoUrl = processBase64ImageSync(finalPhotoUrl, autoAdmNo);
+    }
 
     const newStudentData = {
       admissionNo: autoAdmNo,
@@ -528,7 +535,7 @@ exports.addStudentAdmin = async (req, res) => {
       isAlumni: Boolean(isAlumni === true || isAlumni === 'true' || status === 'Biruthadhari / Alumni'),
       status: status || (isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
       batchNumber: batchNumber || '1',
-      photoUrl: photoUrl || '',
+      photoUrl: finalPhotoUrl || '',
       place: place || '',
       fatherName: fatherName || ''
     };
@@ -556,7 +563,11 @@ exports.updateStudentAdmin = async (req, res) => {
     if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
 
     const updates = req.body;
-    if (req.file) updates.photoUrl = req.file.path;
+    if (req.file && req.file.path) {
+      updates.photoUrl = req.file.path;
+    } else if (updates.photoUrl && updates.photoUrl.startsWith('data:image')) {
+      updates.photoUrl = processBase64ImageSync(updates.photoUrl, id);
+    }
     if (updates.isAlumni !== undefined) updates.isAlumni = Boolean(updates.isAlumni === true || updates.isAlumni === 'true' || updates.status === 'Biruthadhari / Alumni');
 
     Object.assign(student, updates);
@@ -603,7 +614,14 @@ exports.addUsthadAdmin = async (req, res) => {
     }
 
     const autoId = usthadId || ('UST' + Math.floor(100 + Math.random() * 900));
-    const autoPassword = password || phone; // Default password = phone
+    const autoPassword = password || phone;
+
+    let finalPhotoUrl = photoUrl || '';
+    if (req.file && req.file.path) {
+      finalPhotoUrl = req.file.path;
+    } else if (finalPhotoUrl && finalPhotoUrl.startsWith('data:image')) {
+      finalPhotoUrl = processBase64ImageSync(finalPhotoUrl, autoId);
+    }
 
     const newUsthadData = {
       usthadId: autoId,
@@ -614,7 +632,7 @@ exports.addUsthadAdmin = async (req, res) => {
       designation: designation || 'Usthad',
       subject: subject || 'Islamic Studies',
       place: place || '',
-      photoUrl: photoUrl || '',
+      photoUrl: finalPhotoUrl || '',
       bio: bio || ''
     };
 
@@ -640,8 +658,11 @@ exports.updateUsthadAdmin = async (req, res) => {
     if (!usthad) return res.status(404).json({ success: false, message: 'Usthad not found' });
 
     const updates = req.body;
-    if (req.file) updates.photoUrl = req.file.path;
-
+    if (req.file && req.file.path) {
+      updates.photoUrl = req.file.path;
+    } else if (updates.photoUrl && updates.photoUrl.startsWith('data:image')) {
+      updates.photoUrl = processBase64ImageSync(updates.photoUrl, id);
+    }
     Object.assign(usthad, updates);
     if (!isMemory && usthad.save) await usthad.save();
     res.json({ success: true, message: 'Usthad updated successfully!', usthad });
