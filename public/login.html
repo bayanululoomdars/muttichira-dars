@@ -976,85 +976,130 @@
           <!-- STUDENT DASHBOARD CONTENT -->
           
 <div id="studentDashContent" style="display: none; width:100%;">
-  <div class="row">
-    <!-- LEFT PANEL: ID CARD -->
-    <div class="col-lg-3 mb-4">
-      <div class="card shadow-sm border-0 rounded-4" style="background:var(--bg-card); color:var(--text);">
-        <div class="card-body text-center p-3">
-          <div id="studentIdCard" style="border:2px solid var(--accent); border-radius:10px; padding:15px; background: #fff; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-            <img src="img/new_logo.png" style="width:40px; margin-bottom:5px;">
-            <h6 style="color:var(--accent); font-weight:800; font-size:11px; margin-bottom:10px;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
-            
-            <div class="d-flex justify-content-center align-items-center flex-column mb-2">
-              <img id="sIdPhoto" src="img/new_logo.png" style="width:75px; height:75px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft);">
-              <button class="btn btn-warning btn-sm mt-2 font-weight-bold" style="font-size:11px; border-radius:20px; padding: 4px 12px; box-shadow:0 2px 5px rgba(0,0,0,0.2);" onclick="openStudentFullProfileModal()">
-                <i class="fa fa-edit"></i> Edit Your Profile
-              </button>
-            </div>
-            
-            <h5 id="sIdName" style="font-weight:700; margin-bottom:3px; color:#1e293b; font-size:15px; line-height:1.2;">Name</h5>
-            <p id="sIdFather" style="font-size:11px; color:#64748b; margin-bottom:5px; font-weight:600;">S/O -</p>
-            <p id="sIdBatch" style="font-size:12px; color:var(--primary); font-weight:700; margin-bottom:8px;">Batch</p>
-            <div style="background:var(--bg-card-2); border-radius:6px; padding:6px; margin-top:5px;">
-              <p id="sIdNo" style="font-weight:800; color:var(--accent); margin-bottom:1px; font-size:13px;">Adm No: -</p>
-              <p id="sIdBlood" style="font-size:11px; color:#dc3545; margin-bottom:1px; font-weight:700;"><i class="fa fa-tint"></i> Blood: -</p>
-              <p id="sIdPhone" style="font-size:10px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
-            </div>
+
+  <!-- STUDENT QUICK ACTIONS ROW -->
+  <div class="row mb-4">
+    <!-- Key Stats Cards -->
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card border-0 rounded-4 shadow-sm h-100" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%); color:#fff;">
+        <div class="card-body p-3 d-flex align-items-center gap-3">
+          <div style="width:48px; height:48px; border-radius:12px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
+            <i class="fa fa-trophy"></i>
           </div>
-          <div class="d-flex justify-content-center gap-2 mt-3" style="gap:10px;">
-            <button class="btn btn-outline-info btn-sm font-weight-bold" onclick="viewIdCard('studentIdCard')">
-              <i class="fa fa-eye"></i> View
-            </button>
-            <button class="btn btn-outline-accent btn-sm font-weight-bold" onclick="downloadIdCard('studentIdCard', 'Student_ID')">
-              <i class="fa fa-download"></i> Download
-            </button>
+          <div>
+            <div class="small font-weight-bold opacity-75" style="font-size:11px;">CLASS RANK</div>
+            <div class="h4 font-weight-bold mb-0" id="studentStatRank">—</div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- RIGHT PANEL: EXAMS & MESSAGES (LARGE BOXES) -->
-    <div class="col-lg-9 mb-4">
-      <div class="row">
-        
-        <!-- EXAM RESULTS BOX -->
-        <div class="col-md-6 mb-4">
-          <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
-            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
-              <h5 class="font-weight-bold text-warning mb-0"><i class="fa fa-trophy"></i> Exam Results</h5>
-              <p class="small text-muted mt-1">Your official marks and progress reports.</p>
-            </div>
-            <div class="card-body p-4" style="overflow-y:auto; max-height:550px;">
-              <div id="studentResultsContainer">
-                <div class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Loading results...</div>
-              </div>
-            </div>
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card border-0 rounded-4 shadow-sm h-100" style="background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color:#fff;">
+        <div class="card-body p-3 d-flex align-items-center gap-3">
+          <div style="width:48px; height:48px; border-radius:12px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
+            <i class="fa fa-graduation-cap"></i>
+          </div>
+          <div>
+            <div class="small font-weight-bold opacity-75" style="font-size:11px;">COMPLETED EXAMS</div>
+            <div class="h4 font-weight-bold mb-0" id="studentStatExams">0</div>
           </div>
         </div>
-        
-        <!-- MESSAGES BOX -->
-        <div class="col-md-6 mb-4">
-          <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
-            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
-              <div>
-                <h5 class="font-weight-bold text-info mb-0"><i class="fa fa-envelope"></i> Messages</h5>
-                <p class="small text-muted mt-1">Notices from Usthads and Admin.</p>
-              </div>
-              <button class="btn btn-sm btn-info font-weight-bold rounded-pill shadow-sm" onclick="$('#modalStudentMsg').modal('show')">
-                <i class="fa fa-paper-plane"></i> Send
-              </button>
-            </div>
-            <div class="card-body p-4" style="overflow-y:auto; max-height:550px;">
-              <div id="studentNotificationsContainer">
-                <div class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Loading messages...</div>
-              </div>
-            </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card border-0 rounded-4 shadow-sm h-100" style="background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color:#fff;">
+        <div class="card-body p-3 d-flex align-items-center gap-3">
+          <div style="width:48px; height:48px; border-radius:12px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
+            <i class="fa fa-percent"></i>
+          </div>
+          <div>
+            <div class="small font-weight-bold opacity-75" style="font-size:11px;">AVERAGE SCORE</div>
+            <div class="h4 font-weight-bold mb-0" id="studentStatAvg">—</div>
           </div>
         </div>
-
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card border-0 rounded-4 shadow-sm h-100" style="background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color:#fff;">
+        <div class="card-body p-3 d-flex align-items-center gap-3">
+          <div style="width:48px; height:48px; border-radius:12px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
+            <i class="fa fa-bell"></i>
+          </div>
+          <div>
+            <div class="small font-weight-bold opacity-75" style="font-size:11px;">NOTICES</div>
+            <div class="h4 font-weight-bold mb-0" id="studentStatNotices">0</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Hidden ID Card for download/view only -->
+  <div class="d-none">
+    <div id="studentIdCard" style="border:2px solid var(--accent); border-radius:10px; padding:15px; background: #fff; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+      <img src="img/new_logo.png" style="width:40px; margin-bottom:5px;">
+      <h6 style="color:var(--accent); font-weight:800; font-size:11px; margin-bottom:10px;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
+      <div class="d-flex justify-content-center align-items-center flex-column mb-2">
+        <img id="sIdPhoto" src="img/new_logo.png" style="width:75px; height:75px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft);">
+      </div>
+      <h5 id="sIdName" style="font-weight:700; margin-bottom:3px; color:#1e293b; font-size:15px; line-height:1.2;">Name</h5>
+      <p id="sIdFather" style="font-size:11px; color:#64748b; margin-bottom:5px; font-weight:600;">S/O -</p>
+      <p id="sIdBatch" style="font-size:12px; color:var(--primary); font-weight:700; margin-bottom:8px;">Batch</p>
+      <div style="background:var(--bg-card-2); border-radius:6px; padding:6px; margin-top:5px;">
+        <p id="sIdNo" style="font-weight:800; color:var(--accent); margin-bottom:1px; font-size:13px;">Adm No: -</p>
+        <p id="sIdBlood" style="font-size:11px; color:#dc3545; margin-bottom:1px; font-weight:700;"><i class="fa fa-tint"></i> Blood: -</p>
+        <p id="sIdPhone" style="font-size:10px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT: EXAM RESULTS & MESSAGES -->
+  <div class="row">
+    <!-- EXAM RESULTS FULL HISTORY -->
+    <div class="col-lg-7 mb-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-header bg-transparent border-bottom pt-4 pb-3 px-4 d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="font-weight-bold text-dark mb-0" style="font-family:'Outfit',sans-serif;">
+              <i class="fa fa-trophy text-warning mr-2"></i> Examination Results
+            </h5>
+            <small class="text-muted">All past and current exam results with marks breakdown</small>
+          </div>
+          <span class="badge badge-success px-3 py-1 font-weight-bold" style="border-radius:20px; font-size:11px;">
+            <i class="fa fa-check-circle mr-1"></i> Academic Record
+          </span>
+        </div>
+        <div class="card-body p-4" style="overflow-y:auto; max-height:600px;">
+          <div id="studentResultsContainer">
+            <div class="text-center text-muted py-4"><i class="fa fa-spinner fa-spin mr-1"></i> Loading results...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES & SEND TO USTHAD -->
+    <div class="col-lg-5 mb-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
+        <div class="card-header bg-transparent border-bottom pt-4 pb-3 px-4 d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="font-weight-bold text-dark mb-0" style="font-family:'Outfit',sans-serif;">
+              <i class="fa fa-envelope text-info mr-2"></i> Messages & Notices
+            </h5>
+            <small class="text-muted">From Usthads and Admin</small>
+          </div>
+          <button class="btn btn-sm btn-info font-weight-bold rounded-pill shadow-sm px-3" onclick="$('#modalStudentMsg').modal('show')">
+            <i class="fa fa-paper-plane mr-1"></i> Send to Usthad
+          </button>
+        </div>
+        <div class="card-body p-4" style="overflow-y:auto; max-height:600px;">
+          <div id="studentNotificationsContainer">
+            <div class="text-center text-muted py-4"><i class="fa fa-spinner fa-spin mr-1"></i> Loading messages...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div id="usthadDashContent" style="display: none; width:100%;">
@@ -1805,6 +1850,19 @@
           if (cardData.success && cardData.results && cardData.results.length > 0) {
             // Sort published results newest first
             cardData.results.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+            // Update stat cards
+            const examCount = cardData.results.length;
+            const avgPct = cardData.results.reduce((sum, r) => sum + (r.percentage || 0), 0) / examCount;
+            const el = document.getElementById('studentStatExams');
+            if (el) el.textContent = examCount;
+            const elAvg = document.getElementById('studentStatAvg');
+            if (elAvg) elAvg.textContent = avgPct.toFixed(1) + '%';
+            // Best rank from results
+            const bestRank = cardData.results[0] ? (cardData.results[0].rank || 'Pass') : '—';
+            const elRank = document.getElementById('studentStatRank');
+            if (elRank) elRank.textContent = bestRank;
+
             let html = '';
             cardData.results.forEach(res => {
               const subList = res.subjectMarks || [];
@@ -1954,6 +2012,11 @@
         .then(r => r.json())
         .then(data => {
           if (data.success) {
+            // Update notices count stat card
+            const totalNotices = ((data.notifications || []).length) + ((data.messages || []).length);
+            const noticesEl = document.getElementById('studentStatNotices');
+            if (noticesEl) noticesEl.textContent = totalNotices || 0;
+
             // Render Notifications
             
             const notifBox = document.getElementById('studentNotificationsContainer');
