@@ -1553,9 +1553,27 @@ exports.uploadMyData = async (req, res) => {
     let user;
     if (role === 'usthad') {
       try { user = await Usthad.findById(userId); } catch(e){}
+      if (!user) {
+        try {
+          const uList = await Usthad.find({ $or: [{ usthadId: userId }, { phone: userId }] });
+          if (uList && uList.length > 0) user = uList[0];
+        } catch(e){}
+      }
+      if (!user && dbState && dbState.Usthad) {
+        user = dbState.Usthad.find(u => String(u._id) === String(userId) || String(u.usthadId) === String(userId));
+      }
       if (!user) user = memoryUsthads.find(u => String(u._id) === String(userId) || String(u.usthadId) === String(userId));
     } else {
       try { user = await Student.findById(userId); } catch(e){}
+      if (!user) {
+        try {
+          const sList = await Student.find({ $or: [{ admissionNo: userId }, { phone: userId }] });
+          if (sList && sList.length > 0) user = sList[0];
+        } catch(e){}
+      }
+      if (!user && dbState && dbState.Student) {
+        user = dbState.Student.find(s => String(s._id) === String(userId) || String(s.admissionNo) === String(userId));
+      }
       if (!user) user = memoryStudents.find(s => String(s._id) === String(userId) || String(s.admissionNo) === String(userId));
     }
 
@@ -1598,9 +1616,27 @@ exports.deleteMyData = async (req, res) => {
     let user;
     if (role === 'usthad') {
       try { user = await Usthad.findById(userId); } catch(e){}
+      if (!user) {
+        try {
+          const uList = await Usthad.find({ $or: [{ usthadId: userId }, { phone: userId }] });
+          if (uList && uList.length > 0) user = uList[0];
+        } catch(e){}
+      }
+      if (!user && dbState && dbState.Usthad) {
+        user = dbState.Usthad.find(u => String(u._id) === String(userId) || String(u.usthadId) === String(userId));
+      }
       if (!user) user = memoryUsthads.find(u => String(u._id) === String(userId) || String(u.usthadId) === String(userId));
     } else {
       try { user = await Student.findById(userId); } catch(e){}
+      if (!user) {
+        try {
+          const sList = await Student.find({ $or: [{ admissionNo: userId }, { phone: userId }] });
+          if (sList && sList.length > 0) user = sList[0];
+        } catch(e){}
+      }
+      if (!user && dbState && dbState.Student) {
+        user = dbState.Student.find(s => String(s._id) === String(userId) || String(s.admissionNo) === String(userId));
+      }
       if (!user) user = memoryStudents.find(s => String(s._id) === String(userId) || String(s.admissionNo) === String(userId));
     }
 
