@@ -1103,39 +1103,36 @@
 </div>
 
 <div id="usthadDashContent" style="display: none; width:100%;">
-  <!-- TOP ROW: PROFILE & QUICK ACTIONS -->
+  <!-- TOP ROW: FACULTY STATS & COMMUNICATION (BOXED ID CARD REMOVED AS REQUESTED) -->
   <div class="row mb-4">
-    <!-- LEFT: USTHAD ID CARD & PROFILE -->
+    <!-- FACULTY OVERVIEW SUMMARY -->
     <div class="col-lg-4 mb-3 mb-lg-0">
       <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
-        <div class="card-body text-center p-3 d-flex flex-column justify-content-between">
+        <div class="card-body p-4 d-flex flex-column justify-content-between">
           <div>
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <span class="badge badge-success px-3 py-1 font-weight-bold" style="border-radius:20px;"><i class="fa fa-check-circle"></i> Faculty Portal</span>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge badge-success px-3 py-1 font-weight-bold" style="border-radius:20px;"><i class="fa fa-graduation-cap"></i> Faculty Portal</span>
               <button class="btn btn-sm btn-outline-primary font-weight-bold rounded-pill px-3 py-1" onclick="openEditProfileModal()">
                 <i class="fa fa-edit"></i> Edit Profile
               </button>
             </div>
             
-            <div id="usthadIdCard" style="border:2px solid var(--accent); border-radius:12px; padding:14px; background:#fff; max-width:260px; margin:0 auto; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.08);">
-              <img src="img/new_logo.png" style="width:38px; margin-bottom:4px;">
-              <h6 style="color:var(--accent); font-weight:800; font-size:10px; margin-bottom:8px; line-height:1.2;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
-              <div class="d-flex justify-content-center align-items-center flex-column mb-2">
-                <img id="uIdPhoto" src="img/new_logo.png" style="width:68px; height:68px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft);">
-              </div>
-              <h5 id="uIdName" style="font-weight:700; margin-bottom:2px; color:#1e293b; font-size:14px; line-height:1.2;">Name</h5>
-              <p id="uIdRole" style="font-size:11px; color:#64748b; margin-bottom:6px; font-weight:600;">Mudarris</p>
-              <div style="background:var(--bg-card-2); border-radius:6px; padding:5px;">
-                <p id="uIdNo" style="font-weight:800; color:var(--accent); margin-bottom:1px; font-size:12px;">ID: -</p>
-                <p id="uIdPhone" style="font-size:10px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
-              </div>
+            <div class="p-3 rounded-4 mb-3" style="background:var(--bg-card-2); border:1px solid var(--border-soft);">
+              <div class="text-muted small font-weight-bold text-uppercase mb-1" style="font-size:11px;">Enrolled Students</div>
+              <div class="h2 font-weight-bold text-primary mb-0" id="dashTotalStudents">0</div>
+              <small class="text-success font-weight-bold"><i class="fa fa-check-circle"></i> Active in Academic Batches</small>
+            </div>
+
+            <div class="p-3 rounded-3" style="background:var(--bg-card-2); border:1px solid var(--border-soft); font-size:12px; line-height:1.5;">
+              <i class="fa fa-info-circle text-info mr-1"></i> <strong>Quick Tip:</strong> Select an exam notification bar below, click on a batch, and enter marks for students. Total marks are set by Admin.
             </div>
           </div>
-          <div class="d-flex justify-content-center gap-2 mt-3" style="gap:8px;">
-            <button class="btn btn-outline-info btn-sm font-weight-bold rounded-pill px-3" onclick="viewIdCard('usthadIdCard')">
+
+          <div class="d-flex justify-content-between gap-2 mt-3 pt-3 border-top" style="gap:8px;">
+            <button class="btn btn-outline-info btn-sm font-weight-bold rounded-pill px-3 flex-fill" onclick="viewIdCard('usthadIdCard')">
               <i class="fa fa-eye"></i> View Card
             </button>
-            <button class="btn btn-outline-accent btn-sm font-weight-bold rounded-pill px-3" onclick="downloadIdCard('usthadIdCard', 'Usthad_ID')">
+            <button class="btn btn-outline-accent btn-sm font-weight-bold rounded-pill px-3 flex-fill" onclick="downloadIdCard('usthadIdCard', 'Usthad_ID')">
               <i class="fa fa-download"></i> Download
             </button>
           </div>
@@ -1143,13 +1140,30 @@
       </div>
     </div>
 
-    <!-- RIGHT: COMMUNICATION & MESSAGING OPTIONS (STRICTLY PRESERVED) -->
+    <!-- Hidden ID card for View / Download modal functionality -->
+    <div class="d-none">
+      <div id="usthadIdCard" style="border:2px solid var(--accent); border-radius:12px; padding:14px; background:#fff; max-width:260px; margin:0 auto; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+        <img src="img/new_logo.png" style="width:38px; margin-bottom:4px;">
+        <h6 style="color:var(--accent); font-weight:800; font-size:10px; margin-bottom:8px; line-height:1.2;">BAYANUL ULOOM DARS<br>MUTTICHIRA</h6>
+        <div class="d-flex justify-content-center align-items-center flex-column mb-2">
+          <img id="uIdPhoto" src="img/new_logo.png" style="width:68px; height:68px; object-fit:cover; border-radius:50%; border:3px solid var(--border-soft);">
+        </div>
+        <h5 id="uIdName" style="font-weight:700; margin-bottom:2px; color:#1e293b; font-size:14px; line-height:1.2;">Name</h5>
+        <p id="uIdRole" style="font-size:11px; color:#64748b; margin-bottom:6px; font-weight:600;">Mudarris</p>
+        <div style="background:var(--bg-card-2); border-radius:6px; padding:5px;">
+          <p id="uIdNo" style="font-weight:800; color:var(--accent); margin-bottom:1px; font-size:12px;">ID: -</p>
+          <p id="uIdPhone" style="font-size:10px; color:#475569; margin-bottom:0; font-weight:600;"><i class="fa fa-phone"></i> -</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: COMMUNICATION & MESSAGING OPTIONS -->
     <div class="col-lg-8">
       <div class="card shadow-sm border-0 rounded-4 h-100" style="background:var(--bg-card); color:var(--text);">
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="font-weight-bold text-info mb-0"><i class="fa fa-comments"></i> Usthad Communication & Controls</h5>
-            <span class="badge badge-pill badge-primary px-3 py-1 font-weight-bold">Active Students: <span id="dashTotalStudents">0</span></span>
+            <span class="badge badge-pill badge-primary px-3 py-1 font-weight-bold">Active Communication</span>
           </div>
           
           <div class="row g-3">
