@@ -534,10 +534,11 @@ exports.addStudentAdmin = async (req, res) => {
       role: 'student',
       isAlumni: Boolean(isAlumni === true || isAlumni === 'true' || status === 'Biruthadhari / Alumni'),
       status: status || (isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
-      batchNumber: batchNumber || '1',
+      batchNumber: String(batchNumber || '1').replace(/^batch\s*/i, '').trim() || '1',
       photoUrl: finalPhotoUrl || '',
       place: place || '',
-      fatherName: fatherName || ''
+      fatherName: fatherName || '',
+      createdAt: new Date()
     };
 
     try {
@@ -696,15 +697,42 @@ exports.getStudentDashboard = async (req, res) => {
 
     let messages = [];
     try {
-      messages = await PortalMessage.find({
-        $or: [{ targetStudentNo: admNo }, { targetStudentNo: 'ALL' }, { senderId: admNo }]
-      }).sort({ createdAt: -1 });
-    } catch (e) {}
+      const allMsgs = await PortalMessage.find({});
+      const list = (allMsgs && allMsgs.data ? allMsgs.data : allMsgs) || [];
+      const studentBatch = student.batchNumber || student.className || student.batchYear || '';
+      const bStr = String(studentBatch).replace(/\D/g, '');
 
-    if (messages.length === 0) {
-      messages = memoryMessages.filter(m => 
-        m.targetStudentNo === admNo || m.targetStudentNo === 'ALL' || m.senderId === admNo
-      );
+      messages = list.filter(m => {
+        if (!m) return false;
+        const target = String(m.targetStudentNo || '').trim();
+        if (target === 'ALL') return true;
+        if (target.toLowerCase() === 'all') return true;
+        if (target === String(admNo)) return true;
+        if (student._id && target === String(student._id)) return true;
+        if (m.senderId === String(admNo)) return true;
+        // Batch match
+        if (target.toLowerCase().includes('batch') && bStr) {
+          const mBNum = target.replace(/\D/g, '');
+          if (mBNum === bStr) return true;
+        }
+        return false;
+      });
+      messages.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    } catch (e) {
+      console.error('PortalMessage find error in getStudentDashboard:', e);
+    }
+
+    if (messages.length === 0 && typeof memoryMessages !== 'undefined') {
+      const studentBatch = student.batchNumber || student.className || student.batchYear || '';
+      const bStr = String(studentBatch).replace(/\D/g, '');
+      messages = memoryMessages.filter(m => {
+        if (!m) return false;
+        const target = String(m.targetStudentNo || '').trim();
+        if (target === 'ALL' || target.toLowerCase() === 'all') return true;
+        if (target === String(admNo) || m.senderId === String(admNo)) return true;
+        if (target.toLowerCase().includes('batch') && bStr && target.replace(/\D/g, '') === bStr) return true;
+        return false;
+      });
     }
 
     res.json({
@@ -742,10 +770,12 @@ exports.postUsthadData = async (req, res) => {
     try {
       const pm = new PortalMessage(payload);
       await pm.save();
+      const memObj = { _id: pm._id || ('mem_msg_' + Date.now()), ...payload };
+      if (typeof memoryMessages !== 'undefined') memoryMessages.unshift(memObj);
       return res.json({ success: true, message: `${type.toUpperCase()} sent successfully!`, data: pm });
     } catch (e) {
       const memObj = { _id: 'mem_msg_' + Date.now(), ...payload };
-      memoryMessages.unshift(memObj);
+      if (typeof memoryMessages !== 'undefined') memoryMessages.unshift(memObj);
       return res.json({ success: true, message: `${type.toUpperCase()} sent to student!`, data: memObj });
     }
   } catch (err) {

@@ -3620,13 +3620,13 @@ function ensureThirtyStudentsInBatch(batchName) {
       const targetEl = document.getElementById('postNotifTarget');
       if (targetEl) {
         let opts = '<option value="ALL">All Students & Batches (എല്ലാ കുട്ടികൾക്കും)</option>';
-        if (allBatchesCache && allBatchesCache.length > 0) {
+        if (typeof allBatchesCache !== 'undefined' && Array.isArray(allBatchesCache) && allBatchesCache.length > 0) {
           allBatchesCache.forEach(b => {
             const bName = typeof b === 'string' ? b : (b.name || ('Batch ' + (b.batchNumber || b.batchYear)));
             opts += `<option value="${bName}">${bName}</option>`;
           });
         }
-        if (directoryStudentsCache && directoryStudentsCache.length > 0) {
+        if (typeof directoryStudentsCache !== 'undefined' && Array.isArray(directoryStudentsCache) && directoryStudentsCache.length > 0) {
           opts += '<optgroup label="Individual Students">';
           directoryStudentsCache.forEach(s => {
             opts += `<option value="${s.admissionNo}">${s.name} (${s.admissionNo})</option>`;

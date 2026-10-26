@@ -313,6 +313,13 @@ class MockQuery {
     this.data.sort((a, b) => {
       let valA = a[key];
       let valB = b[key];
+      if (valA === undefined || valA === null) {
+        if (valB === undefined || valB === null) return 0;
+        return dir === -1 ? 1 : -1;
+      }
+      if (valB === undefined || valB === null) {
+        return dir === -1 ? -1 : 1;
+      }
       if (valA < valB) return -1 * dir;
       if (valA > valB) return 1 * dir;
       return 0;
