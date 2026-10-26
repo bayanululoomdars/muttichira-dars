@@ -2663,6 +2663,47 @@ function loadPortalUsersAdmin() {
       ...stList.map(s => ({ ...s, role: 'student' })),
       ...ustList.map(u => ({ ...u, role: 'usthad' }))
     ];
+
+    // Helper functions for sorting:
+    // 1. Usthad (Rank 1)
+    // 2. Biruthadhari / Alumni (Rank 2) -> batch-wise
+    // 3. Current Student (Rank 3) -> batch-wise
+    function getCategoryRank(u) {
+      if (u.role === 'usthad') return 1;
+      var isAlum = u.isAlumni || (u.status || '').toLowerCase().includes('alumni') || (u.status || '').toLowerCase().includes('biruthadhari');
+      return isAlum ? 2 : 3;
+    }
+
+    function parseBatchNum(b) {
+      var match = String(b || '').match(/\d+/);
+      return match ? parseInt(match[0], 10) : 999999;
+    }
+
+    users.sort(function(a, b) {
+      var rankA = getCategoryRank(a);
+      var rankB = getCategoryRank(b);
+      if (rankA !== rankB) return rankA - rankB;
+
+      // Both are Usthad
+      if (rankA === 1) {
+        var idA = parseInt(String(a.usthadId || '').replace(/\D/g, '') || '0', 10);
+        var idB = parseInt(String(b.usthadId || '').replace(/\D/g, '') || '0', 10);
+        if (idA && idB && idA !== idB) return idA - idB;
+        return (a.name || '').localeCompare(b.name || '');
+      }
+
+      // Both are Alumni or both are Current Students -> Sort batch-wise ascending (Batch 1, 2... or 14, 15...)
+      var batchA = parseBatchNum(a.batchNumber);
+      var batchB = parseBatchNum(b.batchNumber);
+      if (batchA !== batchB) return batchA - batchB;
+
+      // Within same batch: sort by admissionNo or name
+      var admA = parseInt(String(a.admissionNo || '').replace(/\D/g, '') || '0', 10);
+      var admB = parseInt(String(b.admissionNo || '').replace(/\D/g, '') || '0', 10);
+      if (admA && admB && admA !== admB) return admA - admB;
+
+      return (a.name || '').localeCompare(b.name || '');
+    });
     
     allPortalUsersCache = users;
     
@@ -2726,6 +2767,7 @@ function filterPortalUsersAdmin() {
 
 function renderPortalUsersAdmin() {
   var query = (safeGetValue('portalSearchInput') || '').toLowerCase().trim();
+  var selectedBatch = (safeGetValue('portalBatchFilter') || 'all').toString().trim();
   var filtered = allPortalUsersCache.filter(u => {
     if (currentPortalFilter !== 'all') {
       if (currentPortalFilter === 'student' && u.role !== 'student') return false;
@@ -2734,6 +2776,11 @@ function renderPortalUsersAdmin() {
         var isAlum = u.isAlumni || (u.status || '').toLowerCase().includes('alumni') || (u.status || '').toLowerCase().includes('biruthadhari');
         if (!isAlum) return false;
       }
+    }
+    if (selectedBatch && selectedBatch !== 'all' && u.role === 'student') {
+      var uBatch = String(u.batchNumber || '').replace(/^batch\s*/i, '').trim();
+      var fBatch = selectedBatch.replace(/^batch\s*/i, '').trim();
+      if (uBatch !== fBatch) return false;
     }
     if (query) {
       var nameMatch = (u.name || '').toLowerCase().includes(query);
@@ -2910,14 +2957,17 @@ function submitAddStudentAdmin(e) {
   const photoFile = fileInput && fileInput.files ? fileInput.files[0] : null;
   const photoVal = safeGetValue('adminStudentPhoto');
 
+  let rawBatch = safeGetValue('adminStudentBatchNo');
+  let cleanBatch = rawBatch.replace(/^batch\s*/i, '').trim();
+
   let fd = new FormData();
   fd.append('name', safeGetValue('adminStudentName'));
   fd.append('fatherName', safeGetValue('adminStudentFather'));
   fd.append('phone', safeGetValue('adminStudentPhone'));
   fd.append('password', safeGetValue('adminStudentPassword'));
   fd.append('admissionNo', safeGetValue('adminStudentAdmNo'));
-  fd.append('status', safeGetValue('adminStudentStatus'));
-  fd.append('batchNumber', safeGetValue('adminStudentBatchNo'));
+  fd.append('status', safeGetValue('adminStudentStatus') || 'Current Student');
+  fd.append('batchNumber', cleanBatch);
   fd.append('place', safeGetValue('adminStudentPlace'));
   if (photoFile) fd.append('photo', photoFile);
   if (photoVal) fd.append('photoUrl', photoVal);
