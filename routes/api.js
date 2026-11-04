@@ -85,7 +85,16 @@ router.get('/media/tg/:fileId', async (req, res) => {
     }
 
     // Set response headers
-    const contentType = mediaRes.headers.get('content-type');
+    let contentType = mediaRes.headers.get('content-type');
+    if (!contentType || contentType === 'application/octet-stream') {
+      const ext = filePath.split('.').pop().toLowerCase();
+      if (ext === 'jpg' || ext === 'jpeg') contentType = 'image/jpeg';
+      else if (ext === 'png') contentType = 'image/png';
+      else if (ext === 'webp') contentType = 'image/webp';
+      else if (ext === 'gif') contentType = 'image/gif';
+      else if (ext === 'svg') contentType = 'image/svg+xml';
+      else if (ext === 'mp4') contentType = 'video/mp4';
+    }
     if (contentType) res.setHeader('Content-Type', contentType);
 
     const contentLength = mediaRes.headers.get('content-length');

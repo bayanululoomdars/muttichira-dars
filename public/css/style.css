@@ -1573,7 +1573,7 @@ h6 {
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(10, 77, 46, 0.12);
+  border: 1px solid rgba(13, 71, 161, 0.12);
   transition: all 0.3s ease;
   overflow: hidden;
   margin-bottom: 20px;
@@ -1581,7 +1581,7 @@ h6 {
 
 .news-bar-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 35px rgba(10, 77, 46, 0.14);
+  box-shadow: 0 12px 35px rgba(13, 71, 161, 0.18);
   border-color: rgba(212, 175, 55, 0.4);
 }
 
@@ -1594,7 +1594,7 @@ h6 {
   position: relative;
   border-radius: 12px;
   margin: 15px;
-  background: #f4f7f5;
+  background: #f0f5fc;
 }
 
 .news-bar-img-wrapper img {

@@ -16,9 +16,9 @@
        DESIGN TOKENS
     ═══════════════════════════════════════════════ */
     :root {
-      --primary: #0a4d2e;
-      --primary-light: #0f6b3f;
-      --primary-dark: #063a22;
+      --primary: #0d47a1;
+      --primary-light: #1e88e5;
+      --primary-dark: #071f3d;
       --accent: #d4af37;
       --accent-light: #e8c84a;
       --accent-dim: rgba(212,175,55,0.12);
@@ -105,7 +105,7 @@
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: radial-gradient(ellipse at 30% 50%, rgba(10,77,46,0.35) 0%, transparent 60%),
+      background: radial-gradient(ellipse at 30% 50%, rgba(13,71,161,0.35) 0%, transparent 60%),
                   radial-gradient(ellipse at 70% 20%, rgba(212,175,55,0.08) 0%, transparent 50%),
                   var(--bg);
     }
@@ -1216,7 +1216,7 @@
 }
 
 .add-btn {
-    background-color: #0a4d2e;
+    background: linear-gradient(135deg, #0d47a1, #1e88e5);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -1227,7 +1227,7 @@
 }
 
 .add-btn:hover {
-    background-color: #083b23;
+    background: #0d47a1;
 }
 
 .table-container {
@@ -1285,7 +1285,7 @@
 }
 
 .badge-primary {
-    background: rgba(10, 77, 46, 0.3);
+    background: rgba(13, 71, 161, 0.25);
     color: #4ade80;
     border: 1px solid rgba(34, 197, 94, 0.3);
 }
@@ -1337,14 +1337,14 @@
   
     /* MODERN THEME UPGRADE */
     :root {
-      --primary: #043d21;
-      --primary-light: #0a5c34;
-      --primary-dark: #022413;
+      --primary: #0d47a1;
+      --primary-light: #1e88e5;
+      --primary-dark: #071f3d;
       --accent: #d4af37;
       --accent-light: #f5d66c;
-      --bg: #09101a;
-      --bg-card: rgba(20, 31, 46, 0.7);
-      --bg-card-2: rgba(30, 45, 65, 0.6);
+      --bg: #061121;
+      --bg-card: rgba(13, 27, 49, 0.75);
+      --bg-card-2: rgba(20, 42, 74, 0.65);
       --text: #f0f4f8;
       --text-soft: #a0aec0;
       --border: rgba(255, 255, 255, 0.08);
@@ -1354,7 +1354,7 @@
       --radius: 16px;
     }
     body {
-      background: linear-gradient(135deg, var(--bg), #061517);
+      background: linear-gradient(135deg, var(--bg), #081d3a);
       color: var(--text);
       font-family: 'Inter', sans-serif;
     }
@@ -1792,7 +1792,7 @@
           <div class="admin-user-management">
             <div class="header-section" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
                 <div>
-                  <h2 style="font-family: 'Segoe UI', sans-serif; color: #0a4d2e; margin:0;"><i class="fa fa-users-cog"></i> Management Portal</h2>
+                  <h2 style="font-family: 'Segoe UI', sans-serif; color: #0d47a1; margin:0;"><i class="fa fa-users-cog"></i> Management Portal</h2>
                     <small style="color: var(--text-soft);">Manage Students, Alumni and Usthads</small>
                 </div>
                 <button class="add-btn" onclick="openAddUserModal()">+ Add New User</button>
@@ -1805,8 +1805,8 @@
                 <option value="all">All Batches</option>
               </select>
               <div style="display:flex; gap:6px; flex-wrap:wrap; width:100%;">
-                  <button class="btn btn-outline-secondary btn-sm portal-filter-btn active" id="pfilter-student" onclick="setPortalFilter('student')" style="font-weight:bold; padding:8px 16px;">Manage Students & Alumni <span id="badge-students" style="background:#0a4d2e;color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>
-                  <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter('usthad')" style="font-weight:bold; padding:8px 16px;">Manage Usthads <span id="badge-usthads" style="background:#0a4d2e;color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>
+                  <button class="btn btn-outline-secondary btn-sm portal-filter-btn active" id="pfilter-student" onclick="setPortalFilter('student')" style="font-weight:bold; padding:8px 16px;">Manage Students & Alumni <span id="badge-students" style="background:linear-gradient(135deg, #0d47a1, #1e88e5);color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>
+                  <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-usthad" onclick="setPortalFilter('usthad')" style="font-weight:bold; padding:8px 16px;">Manage Usthads <span id="badge-usthads" style="background:linear-gradient(135deg, #0d47a1, #1e88e5);color:white;border-radius:12px;padding:2px 8px;font-size:12px;margin-left:5px;">0</span></button>
                   <button class="btn btn-outline-secondary btn-sm portal-filter-btn" id="pfilter-all" onclick="setPortalFilter('all')" style="display:none;">All</button>
                 </div>
               </div>
@@ -3784,7 +3784,7 @@ function loadNewsAdmin() {
       var html = '';
       data.forEach(function(item) {
         var d = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN') : '—';
-        var catBadge = item.category ? '<span style="background:rgba(10,77,46,0.12); color:#0a4d2e; font-weight:700; padding:3px 8px; border-radius:4px; font-size:0.75rem; text-transform:uppercase;">' + item.category + '</span>' : '<span style="color:var(--text-muted);">News</span>';
+        var catBadge = item.category ? '<span style="background:rgba(13,71,161,0.12); color:#0d47a1; font-weight:700; padding:3px 8px; border-radius:4px; font-size:0.75rem; text-transform:uppercase;">' + item.category + '</span>' : '<span style="color:var(--text-muted);">News</span>';
         var linkIcon = item.link ? ' <a href="' + item.link + '" target="_blank" title="Open Link" style="color:var(--accent); margin-left:4px;"><i class="fa fa-external-link"></i></a>' : '';
 
         var safeImgTitle = (item.title || '').replace(/'/g, "\\'");

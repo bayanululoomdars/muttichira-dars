@@ -3,14 +3,14 @@ const fs = require('fs');
 const themeCSS = `
     /* MODERN THEME UPGRADE */
     :root {
-      --primary: #043d21;
-      --primary-light: #0a5c34;
-      --primary-dark: #022413;
-      --accent: #d4af37;
-      --accent-light: #f5d66c;
-      --bg: #09101a;
-      --bg-card: rgba(20, 31, 46, 0.7);
-      --bg-card-2: rgba(30, 45, 65, 0.6);
+      --primary: #0d47a1;
+      --primary-light: #1e88e5;
+      --primary-dark: #071f3d;
+      --accent: #38bdf8;
+      --accent-light: #7dd3fc;
+      --bg: #061121;
+      --bg-card: rgba(13, 27, 49, 0.75);
+      --bg-card-2: rgba(20, 42, 74, 0.65);
       --text: #f0f4f8;
       --text-soft: #a0aec0;
       --border: rgba(255, 255, 255, 0.08);
@@ -20,7 +20,7 @@ const themeCSS = `
       --radius: 16px;
     }
     body {
-      background: linear-gradient(135deg, var(--bg), #061517);
+      background: linear-gradient(135deg, var(--bg), #081d3a);
       color: var(--text);
       font-family: 'Inter', sans-serif;
     }
@@ -33,17 +33,18 @@ const themeCSS = `
       box-shadow: var(--shadow-lg) !important;
     }
     .btn-accent {
-      background: linear-gradient(135deg, var(--accent), #c29b2b) !important;
-      color: #000 !important;
+      background: linear-gradient(135deg, #0d47a1, #1e88e5) !important;
+      color: #ffffff !important;
       border: none !important;
       border-radius: 50px !important;
       font-weight: 700 !important;
-      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3) !important;
+      box-shadow: 0 4px 15px rgba(13, 71, 161, 0.35) !important;
       transition: all 0.3s ease !important;
     }
     .btn-accent:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4) !important;
+      box-shadow: 0 6px 20px rgba(30, 136, 229, 0.5) !important;
+      background: linear-gradient(135deg, #1e88e5, #0d47a1) !important;
     }
     input.form-control, select.form-control, textarea.form-control {
       background: rgba(0, 0, 0, 0.2) !important;
@@ -52,13 +53,13 @@ const themeCSS = `
       border-radius: 8px !important;
     }
     input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
-      border-color: var(--accent) !important;
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+      border-color: #1e88e5 !important;
+      box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.25) !important;
     }
     .nav-pills .nav-link.active {
-      background: rgba(212, 175, 55, 0.15) !important;
-      border: 1px solid var(--accent) !important;
-      color: var(--accent) !important;
+      background: linear-gradient(135deg, #0d47a1, #1e88e5) !important;
+      border: 1px solid #1e88e5 !important;
+      color: #ffffff !important;
       border-radius: 50px !important;
     }
     .nav-pills .nav-link {

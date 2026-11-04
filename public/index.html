@@ -47,7 +47,7 @@
     }
 
     #footer .copyright {
-      background: #031a0e;
+      background: #030b17;
       color: rgba(255, 255, 255, 0.5);
     }
 
@@ -57,14 +57,14 @@
 
     /* MODERN THEME UPGRADE */
     :root {
-      --primary: #043d21;
-      --primary-light: #0a5c34;
-      --primary-dark: #022413;
+      --primary: #0d47a1;
+      --primary-light: #1e88e5;
+      --primary-dark: #071f3d;
       --accent: #d4af37;
       --accent-light: #f5d66c;
-      --bg: #09101a;
-      --bg-card: rgba(20, 31, 46, 0.7);
-      --bg-card-2: rgba(30, 45, 65, 0.6);
+      --bg: #061121;
+      --bg-card: rgba(13, 27, 49, 0.75);
+      --bg-card-2: rgba(20, 42, 74, 0.65);
       --text: #f0f4f8;
       --text-soft: #a0aec0;
       --border: rgba(255, 255, 255, 0.08);
@@ -75,7 +75,7 @@
     }
 
     body {
-      background: linear-gradient(135deg, var(--bg), #061517);
+      background: linear-gradient(135deg, var(--bg), #081d3a);
       color: var(--text);
       font-family: 'Inter', sans-serif;
     }
@@ -237,10 +237,10 @@
     <section id="services" class="section-bg" style="padding:60px 0;">
       <div class="container">
         <header class="section-header" id="newsSecHeader" style="text-align:center; margin-bottom:30px;">
-          <h3 style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Latest News</h3>
+          <h3 style="font-family:'Outfit',sans-serif; font-weight:700; color:#0d47a1;">Latest News</h3>
           <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">All the news that
             are relevant for our small community</p>
-          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="newsReadMore">Read
+          <a href="#" class="btn btn-outline-primary btn-sm mt-3" style="display:none;" id="newsReadMore">Read
             more...</a>
         </header>
         <!-- Dynamic news from MongoDB -->
@@ -252,10 +252,10 @@
       Gallery Section (Dynamic Intro & Teaser from MongoDB)
     ============================-->
     <section id="portfolio" class="clearfix"
-      style="padding:60px 0; background:linear-gradient(180deg, #ffffff 0%, #f4f8f5 100%);">
+      style="padding:60px 0; background:linear-gradient(180deg, #ffffff 0%, #f0f6ff 100%);">
       <div class="container">
         <header class="section-header" id="gallerySecHeader" style="text-align:center; margin-bottom:30px;">
-          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Gallery
+          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0d47a1;">Gallery
             Highlights</h3>
           <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">
             Explore the memorable moments, academic programs, Sahithya Samajam activities, and student achievements of
@@ -267,7 +267,7 @@
         <div id="homeGalleryCategoriesBar"
           style="display:none; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
           <button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery('all', this)"
-            style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:#0a4d2e; color:#fff;">
+            style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0d47a1; background:linear-gradient(135deg, #0d47a1, #1e88e5); color:#fff;">
             All
           </button>
         </div>
@@ -286,7 +286,7 @@
         <!-- Explore More Button -->
         <div class="text-center" style="margin: 20px 0 30px;">
           <a href="/gallery"
-            style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:linear-gradient(135deg, #0a4d2e, #106b3f); color:#fff; border-radius:30px; font-weight:700; text-decoration:none; box-shadow:0 4px 15px rgba(10,77,46,0.25); transition:transform 0.3s; font-size:1rem;"
+            style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:linear-gradient(135deg, #0d47a1, #1e88e5); color:#fff; border-radius:30px; font-weight:700; text-decoration:none; box-shadow:0 4px 15px rgba(13,71,161,0.35); transition:transform 0.3s; font-size:1rem;"
             onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
             <i class="fa fa-th"></i> Explore Full Gallery
           </a>
@@ -299,14 +299,14 @@
       Digital Manuscript (Kaypusthakam) Launcher Bar
     ============================-->
     <div class="glass-manuscript-section"
-      style="position: relative; margin: 60px auto; max-width: 1000px; padding: 40px; background: linear-gradient(135deg, #ffffff 0%, #f4f8f5 100%); border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 40px; overflow: hidden;">
+      style="position: relative; margin: 60px auto; max-width: 1000px; padding: 40px; background: linear-gradient(135deg, #ffffff 0%, #f0f6ff 100%); border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 40px; overflow: hidden;">
 
       <!-- Decorative Background Glows inside the card -->
       <div
         style="position: absolute; top: -50px; left: -50px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%); pointer-events: none;">
       </div>
       <div
-        style="position: absolute; bottom: -100px; right: -50px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(10,77,46,0.15) 0%, transparent 70%); pointer-events: none;">
+        style="position: absolute; bottom: -100px; right: -50px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(13,71,161,0.15) 0%, transparent 70%); pointer-events: none;">
       </div>
 
       <!-- LEFT: 3D BOOK -->
@@ -325,11 +325,11 @@
           </div>
           <!-- Back -->
           <div
-            style="position: absolute; inset: 0; background: #042515; transform: rotateY(180deg) translateZ(20px); border-radius: 6px 0 0 6px;">
+            style="position: absolute; inset: 0; background: #071f3d; transform: rotateY(180deg) translateZ(20px); border-radius: 6px 0 0 6px;">
           </div>
           <!-- Spine -->
           <div
-            style="position: absolute; width: 40px; height: 100%; left: 0; background: linear-gradient(to right, #021a0e, #0a4d2e); transform: translateX(-20px) rotateY(-90deg);">
+            style="position: absolute; width: 40px; height: 100%; left: 0; background: linear-gradient(to right, #041021, #0d47a1); transform: translateX(-20px) rotateY(-90deg);">
           </div>
           <!-- Pages (Right) -->
           <div
@@ -355,8 +355,8 @@
         </div>
 
         <h2
-          style="color: #0a4d2e; font-size: 2.8rem; font-weight: 800; font-family: 'Outfit', sans-serif; margin: 0; line-height: 1.2;">
-          ഡിജിറ്റൽ<br><span style="color: #063821;">കൈപ്പുസ്തകം</span>
+          style="color: #0d47a1; font-size: 2.8rem; font-weight: 800; font-family: 'Outfit', sans-serif; margin: 0; line-height: 1.2;">
+          ഡിജിറ്റൽ<br><span style="color: #071f3d;">കൈപ്പുസ്തകം</span>
         </h2>
 
         <p
@@ -367,9 +367,9 @@
 
         <div>
           <button onclick="window.location.href='/book.html'"
-            style="background: linear-gradient(90deg, #d4af37 0%, #fff1b8 50%, #d4af37 100%); background-size: 200% auto; color: #042515; border: none; padding: 14px 35px; font-weight: 800; border-radius: 40px; font-size: 1.1rem; cursor: pointer; transition: 0.5s; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(212,175,55,0.4); text-transform: uppercase; letter-spacing: 1px;"
-            onmouseover="this.style.backgroundPosition='right center'; this.style.transform='translateY(-3px)';"
-            onmouseout="this.style.backgroundPosition='left center'; this.style.transform='translateY(0)';">
+            style="background: linear-gradient(135deg, #0d47a1 0%, #1e88e5 100%); color: #ffffff; border: none; padding: 14px 35px; font-weight: 800; border-radius: 40px; font-size: 1.1rem; cursor: pointer; transition: 0.5s; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(13,71,161,0.4); text-transform: uppercase; letter-spacing: 1px;"
+            onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(30,136,229,0.5)';"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(13,71,161,0.4)';">
             <i class="fa fa-book-reader" style="font-size: 1.3rem;"></i> പുസ്തകം (Read Now)
           </button>
         </div>
@@ -435,7 +435,7 @@
         <header class="section-header" id="aboutSecHeader">
           <h3>About Us</h3>
           <p>It helps you to know and understand something about Muttichira Bayanul Uloom Dars</p>
-          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="aboutReadMore">Read
+          <a href="#" class="btn btn-outline-primary btn-sm mt-3" style="display:none;" id="aboutReadMore">Read
             more...</a>
         </header>
         <div class="divider div-transparent div-arrow-down"></div>
@@ -534,15 +534,15 @@
         <div style="
       background:rgba(255,255,255,0.08);
       backdrop-filter:blur(20px);
-      border:1px solid rgba(10,77,46,0.15);
+      border:1px solid rgba(13,71,161,0.15);
       border-radius:30px;
       padding:35px;
       min-height:220px;
       box-shadow:0 10px 30px rgba(0,0,0,0.08);">
 
-          <i class="fa fa-graduation-cap" style="font-size:2rem;color:#0a4d2e;margin-bottom:15px;"></i>
+          <i class="fa fa-graduation-cap" style="font-size:2rem;color:#0d47a1;margin-bottom:15px;"></i>
 
-          <h4 style="font-weight:700;color:#0a3d1f;">
+          <h4 style="font-weight:700;color:#0d47a1;">
             Eligibility
           </h4>
 
@@ -565,7 +565,7 @@
 
           <i class="fa fa-book" style="font-size:2rem;color:#d4af37;margin-bottom:15px;"></i>
 
-          <h4 style="font-weight:700;color:#0a3d1f;">
+          <h4 style="font-weight:700;color:#0d47a1;">
             Curriculum
           </h4>
 
@@ -580,15 +580,15 @@
         <div style="
       background:rgba(255,255,255,0.08);
       backdrop-filter:blur(20px);
-      border:1px solid rgba(10,77,46,0.15);
+      border:1px solid rgba(13,71,161,0.15);
       border-radius:30px;
       padding:35px;
       min-height:220px;
       box-shadow:0 10px 30px rgba(0,0,0,0.08);">
 
-          <i class="fa fa-university" style="font-size:2rem;color:#0a4d2e;margin-bottom:15px;"></i>
+          <i class="fa fa-university" style="font-size:2rem;color:#0d47a1;margin-bottom:15px;"></i>
 
-          <h4 style="font-weight:700;color:#0a3d1f;">
+          <h4 style="font-weight:700;color:#0d47a1;">
             Facilities
           </h4>
 
@@ -611,7 +611,7 @@
 
           <i class="fa fa-phone" style="font-size:2rem;color:#d4af37;margin-bottom:15px;"></i>
 
-          <h4 style="font-weight:700;color:#0a3d1f;">
+          <h4 style="font-weight:700;color:#0d47a1;">
             Enquiry
           </h4>
 
@@ -678,7 +678,7 @@
     </section><!-- #admission -->
     <!-- Stats Counter Section -->
     <section id="stats"
-      style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 60px 0; position: relative; overflow: hidden;">
+      style="background: linear-gradient(135deg, #071f3d 0%, #0d47a1 50%, #1565c0 100%); padding: 60px 0; position: relative; overflow: hidden;">
       <div class="container" style="position:relative;z-index:1;">
         <div class="row text-center counter-row justify-content-center">
           <div class="col-6 col-md-3 mb-3">
@@ -720,7 +720,7 @@
         <div class="section-header" id="contactSecHeader">
           <h3>Contact Us</h3>
           <p style="text-align:center; color:#555;">Get in touch with us for more information</p>
-          <div class="text-center"><a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;"
+          <div class="text-center"><a href="#" class="btn btn-outline-primary btn-sm mt-3" style="display:none;"
               id="contactReadMore">Read more...</a></div>
         </div>
 
@@ -965,7 +965,7 @@
                   '</div>';
               } else {
                 imgHtml = '<div style="flex-shrink:0; width: 140px; height: 140px; padding: 15px;">' +
-                  '<div style="width: 100%; height: 100%; background:linear-gradient(135deg, #0a4d2e 0%, #0f6b3f 100%); display:flex; align-items:center; justify-content:center; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                  '<div style="width: 100%; height: 100%; background:linear-gradient(135deg, #0d47a1 0%, #1e88e5 100%); display:flex; align-items:center; justify-content:center; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
                   '<i class="fa fa-newspaper-o" style="color:#d4af37; font-size:30px;"></i>' +
                   '</div></div>';
               }
@@ -974,7 +974,7 @@
                 '<div style="background:#fff; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.06); display:flex; align-items:center; overflow:hidden; transition:transform 0.3s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'none\'">' +
                 imgHtml +
                 '<div style="padding: 15px 20px; flex: 1;">' +
-                (item.category ? '<span style="display:inline-block; background:rgba(10,77,46,0.1); color:#0a4d2e; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px; margin-bottom:6px; text-transform:uppercase;">' + item.category + '</span>' : '') +
+                (item.category ? '<span style="display:inline-block; background:rgba(13,71,161,0.1); color:#0d47a1; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px; margin-bottom:6px; text-transform:uppercase;">' + item.category + '</span>' : '') +
                 '  <h4 style="font-family:\'Outfit\',sans-serif; color:#000; font-weight:700; font-size:1.5rem; margin:0 0 8px 0;">' + item.title + '</h4>' +
                 '  <p style="color:#0056b3; font-size:1.02rem; line-height:1.5; margin:0 0 8px 0;">' + (item.description || '') + '</p>' +
                 '  <small style="color:#888;"><i class="fa fa-calendar" style="color:#d4af37; margin-right:4px;"></i>' + (item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN') : '') + '</small>' +
@@ -1064,10 +1064,10 @@
         document.querySelectorAll('.home-cat-pill').forEach(function (btn) {
           btn.classList.remove('active');
           btn.style.background = 'transparent';
-          btn.style.color = '#0a4d2e';
+          btn.style.color = '#0d47a1';
         });
         btnElement.classList.add('active');
-        btnElement.style.background = '#0a4d2e';
+        btnElement.style.background = 'linear-gradient(135deg, #0d47a1, #1e88e5)';
         btnElement.style.color = '#fff';
       }
       var container = document.getElementById('homeGalleryRow');
@@ -1118,7 +1118,7 @@
           '<div class="portfolio-wrap" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1); cursor:pointer;" onclick="window.location.href=\'/gallery\';">' +
           mediaHtml +
           '<div class="portfolio-info" style="background:#fff; padding:14px 16px;">' +
-          '<h4 style="font-size:1rem; margin:0 0 4px;"><a href="/gallery" style="color:#0a3d1f;">' + item.title + '</a></h4>' +
+          '<h4 style="font-size:1rem; margin:0 0 4px;"><a href="/gallery" style="color:#071f3d;">' + item.title + '</a></h4>' +
           '<p style="color:#888; font-size:0.8rem; margin:0;">' + (item.category || '') + '</p>' +
           descHtml +
           '</div></div></div>';
@@ -1135,9 +1135,9 @@
           if (data.categories) {
             var bar = document.getElementById('homeGalleryCategoriesBar');
             if (bar) {
-              var html = '<button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery(\'all\', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:#0a4d2e; color:#fff; transition:0.3s; margin:5px;">All (എല്ലാം)</button>';
+              var html = '<button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery(\'all\', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0d47a1; background:linear-gradient(135deg, #0d47a1, #1e88e5); color:#fff; transition:0.3s; margin:5px;">All (എല്ലാം)</button>';
               data.categories.forEach(function (cat) {
-                html += '<button class="btn btn-sm home-cat-pill" onclick="filterHomeGallery(\'' + cat + '\', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:transparent; color:#0a4d2e; transition:0.3s; margin:5px;">' + cat + '</button>';
+                html += '<button class="btn btn-sm home-cat-pill" onclick="filterHomeGallery(\'' + cat + '\', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0d47a1; background:transparent; color:#0d47a1; transition:0.3s; margin:5px;">' + cat + '</button>';
               });
               bar.innerHTML = html;
             }
@@ -1172,10 +1172,10 @@
                   pills.forEach(function (btn) {
                     btn.classList.remove('active');
                     btn.style.background = 'transparent';
-                    btn.style.color = '#0a4d2e';
+                    btn.style.color = '#0d47a1';
                   });
                   p.classList.add('active');
-                  p.style.background = '#0a4d2e';
+                  p.style.background = 'linear-gradient(135deg, #0d47a1, #1e88e5)';
                   p.style.color = '#fff';
                   foundActive = true;
                 }
@@ -1415,7 +1415,7 @@
               html += '<div class="col-lg-3 col-md-4 col-6 text-center mb-4">' +
                 '<div style="background:#fff; border-radius:16px; padding:20px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">' +
                 '<img src="' + (a.imageUrl || 'img/new_logo.png') + '" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:3px solid #d4af37; margin-bottom:10px;">' +
-                '<h6 style="color:#0a3d1f; font-weight:700; margin-bottom:4px;">' + a.name + '</h6>' +
+                '<h6 style="color:#071f3d; font-weight:700; margin-bottom:4px;">' + a.name + '</h6>' +
                 '<small style="color:#888;">' + a.role + '</small>' +
                 '</div></div>';
             });
@@ -1427,8 +1427,8 @@
             var bHtml = '';
             s.branches.forEach(function (b) {
               bHtml += '<div class="col-lg-4 col-md-6 mb-4">' +
-                '<div style="background:#f8f9fa; border-radius:14px; padding:24px; border-left:4px solid #0a4d2e; height:100%;">' +
-                '<h6 style="color:#0a3d1f; font-weight:700;"><i class="fa fa-map-marker" style="color:#d4af37; margin-right:8px;"></i>' + b.name + '</h6>' +
+                '<div style="background:#f8f9fa; border-radius:14px; padding:24px; border-left:4px solid #0d47a1; height:100%;">' +
+                '<h6 style="color:#071f3d; font-weight:700;"><i class="fa fa-map-marker" style="color:#d4af37; margin-right:8px;"></i>' + b.name + '</h6>' +
                 (b.location ? '<p style="color:#666; font-size:0.85rem; margin:0;">' + b.location + '</p>' : '') +
                 (b.description ? '<p style="color:#888; font-size:0.8rem; margin-top:6px;">' + b.description + '</p>' : '') +
                 '</div></div>';
@@ -1534,15 +1534,14 @@
         if (d.posterUrl) {
           renderMedia(d.posterUrl, 'admissionPosterMedia', { alt: 'Admission Poster' });
           if (posterLink) posterLink.style.display = 'inline-block';
-          if (noPoster) noPoster.style.display = 'none';
         } else {
           if (posterLink) posterLink.style.display = 'none';
-          if (noPoster) noPoster.style.display = 'inline-block';
         }
+        if (noPoster) noPoster.style.display = 'block';
       }).catch(() => {
         // On error keep no-poster visible
         var noPoster = document.getElementById('admissionNoPoster');
-        if (noPoster) noPoster.style.display = 'inline-block';
+        if (noPoster) noPoster.style.display = 'block';
       });
 
       // Load admission banner text (title + content)
@@ -1971,7 +1970,7 @@
       <div class="flipbook-controls" style="margin-top: 30px;">
         <button onclick="flipPrev()"><i class="fa fa-chevron-left"></i> മുൻപിലേക്ക്</button>
         <span id="pageIndicator"
-          style="color: #0a4d2e; font-size: 1.15rem; font-weight: 700; min-width: 140px; text-align: center;">തൂവൽ 1 /
+          style="color: #0d47a1; font-size: 1.15rem; font-weight: 700; min-width: 140px; text-align: center;">തൂവൽ 1 /
           28</span>
         <button onclick="flipNext()">തുടരുക <i class="fa fa-chevron-right"></i></button>
 
@@ -2028,7 +2027,7 @@
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
         <span style="color:#d4af37; font-size:1.5rem;">🏆</span>
         <h3 id="newsModalTitle"
-          style="font-family:'Outfit',sans-serif; color:#0a4d2e; margin:0; font-weight:700; font-size:1.4rem;"></h3>
+          style="font-family:'Outfit',sans-serif; color:#0d47a1; margin:0; font-weight:700; font-size:1.4rem;"></h3>
       </div>
 
       <div
