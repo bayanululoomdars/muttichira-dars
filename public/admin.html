@@ -3523,7 +3523,6 @@ function loadAll() {
   }
 
   window.addEventListener('DOMContentLoaded', function() {
-    // Generate login particles
     var pc = document.getElementById('loginParticles');
     if (pc) {
       for (var i = 0; i < 30; i++) {
@@ -3536,9 +3535,16 @@ function loadAll() {
       }
     }
 
-    // Always require fresh login when page is loaded/refreshed or opened in a new tab/window
-    sessionStorage.removeItem('bud_admin_logged_in');
-    try { localStorage.removeItem('bud_admin_logged_in'); } catch(e) {}
+    // Auto-restore admin dashboard if already signed in during this session
+    if (sessionStorage.getItem('bud_admin_logged_in') === 'true') {
+      var loginScreen = document.getElementById('loginScreen');
+      var dashboard = document.getElementById('dashboard');
+      if (loginScreen) loginScreen.style.display = 'none';
+      if (dashboard) dashboard.style.display = 'block';
+      if (pc) pc.style.display = 'none';
+      loadAll();
+      showPage('overview');
+    }
   });
 
 /* ===========================================
