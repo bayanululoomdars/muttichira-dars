@@ -630,16 +630,16 @@
     <div class="story-bar-container" id="storyBar" style="display:none;"></div>
 
     <!-- Instagram Profile Style Filter Tabs -->
-    <div class="ig-tabs" id="igTabs" style="display:none;">
+    <div class="ig-tabs" id="igTabs" style="display:flex;">
       <button class="ig-tab-btn active" id="tab-all" onclick="filterGallery('all')">
         <i class="fa fa-th"></i> All Posts
       </button>
     </div>
 
     <!-- Gallery Grid -->
-    <div class="ig-grid" id="galleryGrid" style="display:none;"></div>
+    <div class="ig-grid" id="galleryGrid" style="display:grid;"></div>
     <!-- Instagram Embed Container -->
-    <div id="igEmbedContainerGallery" style="width:100%; text-align:center; display:block; margin-top:20px;">
+    <div id="igEmbedContainerGallery" style="width:100%; text-align:center; display:none; margin-top:20px;">
       <!-- Elfsight Instagram Feed | Untitled Instagram Feed -->
       <script src="https://elfsightcdn.com/platform.js" async></script>
       <div class="elfsight-app-5ed2095d-749d-42e8-b90c-989c77228f19" data-elfsight-app-lazy></div>
@@ -897,6 +897,12 @@
 
     // Render 3-Column Square Grid based on filter
     function renderGrid() {
+      var grid = document.getElementById('galleryGrid');
+      var igTabs = document.getElementById('igTabs');
+      var igCont = document.getElementById('igEmbedContainerGallery');
+      if (grid) grid.style.display = 'grid';
+      if (igTabs) igTabs.style.display = 'flex';
+      if (igCont) igCont.style.display = 'none';
       var grid = document.getElementById('galleryGrid');
       var filtered = allGalleryItems;
 

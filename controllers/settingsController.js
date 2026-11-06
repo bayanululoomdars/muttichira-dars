@@ -356,7 +356,7 @@ exports.uploadBurda = async (req, res) => {
 // POST /api/admin/reset — Reset database
 exports.adminReset = async (req, res) => {
   const { token } = req.body;
-  const RESET_TOKEN = process.env.ADMIN_PASSWORD || 'admin123';
+  const RESET_TOKEN = process.env.ADMIN_PASSWORD || 'albayan@admin2026';
   if (!token || token !== RESET_TOKEN) {
     return res.status(401).json({ success: false, message: 'Invalid reset token' });
   }

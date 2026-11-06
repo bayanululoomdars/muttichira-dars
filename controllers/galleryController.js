@@ -3,13 +3,91 @@ const Settings = require('../models/Settings');
 const User = require('../models/User');
 const { deleteFile } = require('../config/storage');
 
+const DEFAULT_GALLERY = [
+  {
+    _id: 'def_gal_1',
+    title: 'Muttichira Bayanul Uloom Campus & Shuhada Masjid',
+    category: 'Campus',
+    mediaType: 'image',
+    imageUrl: 'img/banner1.jpg',
+    description: 'Bayanul Uloom Dars campus functioning under historic Shuhada Masjid, Muttichira.',
+    pinned: true,
+    likes: [],
+    comments: [],
+    createdAt: new Date('2025-01-01')
+  },
+  {
+    _id: 'def_gal_2',
+    title: 'Dars Burda Majlis Team',
+    category: 'Programme',
+    mediaType: 'image',
+    imageUrl: 'img/burda team.png',
+    description: 'Annual Burda recitation and spiritual Majlis team of Bayanul Uloom students.',
+    pinned: true,
+    likes: [],
+    comments: [],
+    createdAt: new Date('2025-01-02')
+  },
+  {
+    _id: 'def_gal_3',
+    title: 'Respected Chief Mudarris & Usthads',
+    category: 'Faculty',
+    mediaType: 'image',
+    imageUrl: 'img/AL_USTHAD.jpg',
+    description: 'Under the guidance and mentorship of our respected Usthadhs.',
+    pinned: false,
+    likes: [],
+    comments: [],
+    createdAt: new Date('2025-01-03')
+  },
+  {
+    _id: 'def_gal_4',
+    title: 'Annual Academic Brochure & Study Scheme',
+    category: 'Publications',
+    mediaType: 'image',
+    imageUrl: 'img/dars brousher page 1.jpg',
+    description: 'Comprehensive syllabus and activities schedule of Bayanul Uloom Dars.',
+    pinned: false,
+    likes: [],
+    comments: [],
+    createdAt: new Date('2025-01-04')
+  },
+  {
+    _id: 'def_gal_5',
+    title: 'Student Assembly & Study Circles',
+    category: 'Campus',
+    mediaType: 'image',
+    imageUrl: 'img/banner2.jpg',
+    description: 'Disciplined and spiritual study circles inside Shuhada Masjid.',
+    pinned: false,
+    likes: [],
+    comments: [],
+    createdAt: new Date('2025-01-05')
+  },
+  {
+    _id: 'def_gal_6',
+    title: 'Special Lectures & Friday Talks',
+    category: 'Programme',
+    mediaType: 'image',
+    imageUrl: 'img/banner3.jpg',
+    description: 'Friday talks, Isthifadah workshops, and contemporary enlightenment sessions.',
+    pinned: false,
+    likes: [],
+    comments: [],
+    createdAt: new Date('2025-01-06')
+  }
+];
+
 // GET /api/gallery — Get all gallery items with populated likes & comments
 exports.getAllGalleryItems = async (req, res) => {
   try {
-    const items = await GalleryItem.find()
+    let items = await GalleryItem.find()
       .sort({ createdAt: -1 })
       .populate('likes', 'name email')
       .populate('comments.user', 'name picture');
+    if (!items || items.length === 0) {
+      items = DEFAULT_GALLERY;
+    }
     res.json(items);
   } catch (err) {
     res.status(500).json({ message: err.message });

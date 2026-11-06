@@ -49,9 +49,10 @@ exports.googleAuth = async (req, res) => {
 // POST /api/admin/login
 exports.adminLogin = (req, res) => {
   const { password } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'albayan@admin2026';
   
   if (password === adminPassword) {
+    if (req.session) { req.session.isAdmin = true; }
     res.json({ success: true, message: 'Login successful' });
   } else {
     res.status(401).json({ success: false, message: 'Invalid password' });
