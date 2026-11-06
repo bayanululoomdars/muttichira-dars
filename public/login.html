@@ -3745,20 +3745,12 @@ function ensureThirtyStudentsInBatch(batchName) {
 
     // Init on page load
     document.addEventListener('DOMContentLoaded', () => {
-      // Auto-Restore Login Session from LocalStorage
+      // Clear any saved session on page load/refresh or browser open so user must log in again
       try {
-        const savedSession = localStorage.getItem('bu_user_session');
-        if (savedSession) {
-          const user = JSON.parse(savedSession);
-          if (user && (user.admissionNo || user.usthadId)) {
-            currentUserSession = user;
-            currentRole = user.role || (user.usthadId ? 'usthad' : 'student');
-            renderDashboard(user);
-          }
-        }
-      } catch (err) {
-        console.error('Session restore error:', err);
-      }
+        localStorage.removeItem('bu_user_session');
+        sessionStorage.removeItem('bu_user_session');
+      } catch (err) {}
+      currentUserSession = null;
 
       loadCounterStats();
       loadAlumniDirectory();
