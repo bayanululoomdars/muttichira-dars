@@ -1816,6 +1816,7 @@
                 <table class="modern-table">
                     <thead>
                         <tr>
+                            <th style="width:50px;">Photo</th>
                             <th>Name</th>
                             <th>Role / Status</th>
                             <th>ID / Adm No</th>
@@ -1826,7 +1827,7 @@
                         </tr>
                     </thead>
                     <tbody id="userTableBody">
-                        <tr><td colspan="6" class="text-center text-muted">Loading users...</td></tr>
+                        <tr><td colspan="8" class="text-center text-muted">Loading users...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -2038,6 +2039,59 @@
               </div>
               <button type="submit" class="btn btn-accent mt-3" style="width: 100%;"><i class="fa fa-user-plus"></i> Add Usthad Record</button>
             </form>
+          </div>
+        </div>
+
+        <!-- Admin My Datas (Upload-Only) Modal -->
+        <div class="unified-modal" id="adminMyDataModal">
+          <div class="unified-modal-content" style="max-width:700px;">
+            <div class="unified-modal-header">
+              <div>
+                <span class="badge badge-accent" style="font-size:10px; text-transform:uppercase;">Admin Document Vault</span>
+                <h3 id="adminMyDataModalTitle" style="margin-top:4px;"><i class="fa fa-folder-open text-info"></i> User My Datas</h3>
+              </div>
+              <button class="unified-modal-close" onclick="closeAdminMyDataModal()">&times;</button>
+            </div>
+            
+            <div style="padding:10px 0;">
+              <p style="color:var(--text-soft); font-size:0.88rem; margin-bottom:16px;">
+                Secure Document Locker for <strong id="adminMyDataUserName" style="color:var(--text);">User</strong>. 
+                <span style="color:#f59e0b; font-weight:600;"><i class="fa fa-lock"></i> Note: Admin can upload documents &amp; photos here (Upload Only - Admin cannot delete user documents).</span>
+              </p>
+
+              <!-- EXISTING USER IMAGES (TOP) -->
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h5 style="margin:0; font-size:0.95rem; font-weight:700; color:var(--text);"><i class="fa fa-images text-primary"></i> Saved Documents &amp; Photos:</h5>
+                <span id="adminMyDataCountBadge" class="badge badge-info" style="font-size:11px;">0 Documents</span>
+              </div>
+              <div id="adminMyDataGallery" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:12px; margin-bottom:20px; max-height:260px; overflow-y:auto; padding:10px; background:var(--bg-input); border-radius:12px; border:1px solid var(--border-soft);">
+                <div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:20px; font-size:12px;">ഇതുവരെ ഇമേജുകൾ ഒന്നും അപ്‌ലോഡ് ചെയ്തിട്ടില്ല.</div>
+              </div>
+
+              <!-- UPLOAD CARD (BELOW GALLERY - DRAG & DROP + BROWSE) -->
+              <div id="adminMyDataDropZone" style="background:rgba(14,165,233,0.06); border:2px dashed #0ea5e9; border-radius:12px; padding:16px; transition:all 0.2s;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <h6 style="margin:0; font-size:0.88rem; font-weight:700; color:var(--accent);">
+                    <i class="fa fa-cloud-upload-alt"></i> Upload New Document / ഫോട്ടോ ചേർക്കുക:
+                  </h6>
+                  <small style="color:var(--text-soft); font-size:11px;"><i class="fa fa-mouse-pointer"></i> Drag &amp; Drop or Choose File</small>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:center;">
+                  <input type="text" id="adminMyDataTitle" class="form-control form-control-sm" placeholder="Title (e.g. Aadhaar, SSLC, Photo)..." style="font-size:12px;">
+                  <input type="file" id="adminMyDataFile" accept="image/*" class="form-control form-control-sm" style="font-size:12px;">
+                  <button type="button" id="adminMyDataUploadBtn" class="btn btn-sm btn-accent font-weight-bold" onclick="handleAdminUploadMyData()" style="white-space:nowrap; padding:6px 16px;">
+                    <i class="fa fa-upload"></i> Upload &amp; Save
+                  </button>
+                </div>
+                <div id="adminMyDataSelectedName" style="display:none; font-size:11px; color:#10b981; margin-top:8px; font-weight:600;">
+                  <i class="fa fa-check-circle"></i> <span id="adminMyDataSelectedText"></span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; margin-top:16px; border-top:1px solid var(--border-soft); padding-top:12px;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="closeAdminMyDataModal()" style="padding:6px 20px;">Close</button>
+            </div>
           </div>
         </div>
 
@@ -2816,8 +2870,18 @@ function renderPortalUsersAdmin() {
     var phoneVal = u.phone || '—';
     var rawPwd = String(u.password || phoneVal);
     var safePwdEsc = rawPwd.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    var photoUrl = u.photo || 'img/new_logo.png';
+    var myDataCount = Array.isArray(u.myDatas) ? u.myDatas.length : 0;
+    var userUid = u._id || idVal;
+    var safeNameEsc = (u.name || 'User').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
     html += '<tr>' +
+      '<td>' +
+        '<img src="' + photoUrl + '" alt="' + safeNameEsc + '" ' +
+          'style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); background:#fff; cursor:zoom-in; display:block;" ' +
+          'onclick="zoomNewsImage(\'' + photoUrl + '\', \'' + safeNameEsc + ' (' + statusText + ')\')" ' +
+          'onerror="this.onerror=null;this.src=\'img/new_logo.png\';">' +
+      '</td>' +
       '<td><strong style="color:var(--text); font-weight:600;">' + (u.name || '—') + '</strong></td>' +
       '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>' +
       '<td><code style="font-weight:700;color:var(--accent);">' + idVal + '</code></td>' +
@@ -2833,13 +2897,14 @@ function renderPortalUsersAdmin() {
         '</button>' +
       '</td>' +
       '<td><div class="action-buttons">' +
+        '<button class="btn btn-sm btn-info" onclick="openAdminMyDataModal(\'' + userUid + '\', \'' + u.role + '\', \'' + safeNameEsc + '\', \'' + idVal + '\')" title="Add Image to My Datas (Admin upload only)"><i class="fa fa-folder-open"></i> My Datas' + (myDataCount > 0 ? ' <span class="badge badge-light" style="font-size:9px; padding:2px 5px; color:#0284c7; background:#fff; border-radius:10px;">' + myDataCount + '</span>' : '') + '</button>' +
         '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')"><i class="fa fa-edit"></i> Edit</button>' +
         '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')"><i class="fa fa-trash"></i> Delete</button>' +
       '</div></td>' +
     '</tr>';
   });
 
-  safeSetHtml('userTableBody', html || '<tr><td colspan="7" class="text-center text-muted py-4">No matching records found.</td></tr>');
+  safeSetHtml('userTableBody', html || '<tr><td colspan="8" class="text-center text-muted py-4">No matching records found.</td></tr>');
 }
 
 // Password toggle & copy helpers for Management Portal table and modals
@@ -2901,6 +2966,227 @@ function toggleAdminUsthadPwd() {
     inp.type = 'password';
     if (eye) eye.className = 'fa fa-eye';
   }
+}
+
+// Admin My Datas Modal (Upload-Only - No Delete Option)
+let currentAdminMyDataUser = null;
+
+function openAdminMyDataModal(userId, role, name, idVal) {
+  currentAdminMyDataUser = { userId: userId, role: role, name: name, idVal: idVal };
+  const modal = document.getElementById('adminMyDataModal');
+  const title = document.getElementById('adminMyDataModalTitle');
+  const userLabel = document.getElementById('adminMyDataUserName');
+  const fileInp = document.getElementById('adminMyDataFile');
+  const titleInp = document.getElementById('adminMyDataTitle');
+  const selWrap = document.getElementById('adminMyDataSelectedName');
+
+  if (title) title.innerHTML = '<i class="fa fa-folder-open text-info"></i> ' + (name || 'User') + ' — My Datas';
+  if (userLabel) userLabel.textContent = (name || 'User') + ' (' + (idVal || '') + ')';
+  if (fileInp) { fileInp.value = ''; fileInp._droppedFile = null; }
+  if (titleInp) titleInp.value = '';
+  if (selWrap) selWrap.style.display = 'none';
+
+  initAdminMyDataDropZone();
+  renderAdminMyDataGallery();
+  if (modal) modal.classList.add('show');
+}
+
+function closeAdminMyDataModal() {
+  const modal = document.getElementById('adminMyDataModal');
+  if (modal) modal.classList.remove('show');
+  currentAdminMyDataUser = null;
+}
+
+function initAdminMyDataDropZone() {
+  const dropZone = document.getElementById('adminMyDataDropZone');
+  const fileInp = document.getElementById('adminMyDataFile');
+  if (!dropZone || dropZone.dataset.dndInit === 'true') return;
+  dropZone.dataset.dndInit = 'true';
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.style.background = 'rgba(14,165,233,0.18)';
+      dropZone.style.borderColor = '#0284c7';
+    }, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.style.background = 'rgba(14,165,233,0.06)';
+      dropZone.style.borderColor = '#0ea5e9';
+    }, false);
+  });
+
+  dropZone.addEventListener('drop', function(e) {
+    const dt = e.dataTransfer;
+    const files = dt ? dt.files : null;
+    if (files && files.length > 0) {
+      const f = files[0];
+      if (!f.type.startsWith('image/')) {
+        alert('ഇമേജ് ഫയലുകൾ മാത്രമേ സ്വീകരിക്കുകയുള്ളൂ! (JPG, PNG, WebP)');
+        return;
+      }
+      try {
+        const dtObj = new DataTransfer();
+        dtObj.items.add(f);
+        fileInp.files = dtObj.files;
+      } catch(err) {
+        fileInp._droppedFile = f;
+      }
+      setAdminMyDataSelected(f.name);
+      const titleInp = document.getElementById('adminMyDataTitle');
+      if (titleInp && !titleInp.value.trim()) {
+        titleInp.value = f.name.replace(/\.[^/.]+$/, '');
+      }
+    }
+  }, false);
+
+  if (fileInp) {
+    fileInp.addEventListener('change', function() {
+      if (fileInp.files && fileInp.files[0]) {
+        const f = fileInp.files[0];
+        setAdminMyDataSelected(f.name);
+        const titleInp = document.getElementById('adminMyDataTitle');
+        if (titleInp && !titleInp.value.trim()) {
+          titleInp.value = f.name.replace(/\.[^/.]+$/, '');
+        }
+      } else {
+        const selWrap = document.getElementById('adminMyDataSelectedName');
+        if (selWrap) selWrap.style.display = 'none';
+      }
+    });
+  }
+}
+
+function setAdminMyDataSelected(name) {
+  const selWrap = document.getElementById('adminMyDataSelectedName');
+  const selText = document.getElementById('adminMyDataSelectedText');
+  if (selWrap && selText) {
+    selText.textContent = 'Selected: ' + name;
+    selWrap.style.display = 'block';
+  }
+}
+
+function renderAdminMyDataGallery() {
+  if (!currentAdminMyDataUser) return;
+  const targetUser = allPortalUsersCache.find(u => (u._id || u.admissionNo || u.usthadId) === currentAdminMyDataUser.userId);
+  const gallery = document.getElementById('adminMyDataGallery');
+  const countBadge = document.getElementById('adminMyDataCountBadge');
+  if (!gallery) return;
+
+  const docs = (targetUser && Array.isArray(targetUser.myDatas)) ? targetUser.myDatas : [];
+  if (countBadge) countBadge.textContent = docs.length + ' Documents';
+
+  if (!docs || docs.length === 0) {
+    gallery.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:24px 10px; font-size:12px;">ഇതുവരെ ഇമേജുകൾ ഒന്നും അപ്‌ലോഡ് ചെയ്തിട്ടില്ല.</div>';
+    return;
+  }
+
+  let html = '';
+  docs.forEach((doc, idx) => {
+    const docTitle = (doc.title || 'Document ' + (idx + 1)).replace(/"/g, '&quot;');
+    const docUrl = doc.url || '#';
+    const dateStr = doc.createdAt ? new Date(doc.createdAt).toLocaleDateString() : '';
+    html += '<div style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 2px 6px rgba(0,0,0,0.15);">' +
+      '<div style="height:90px; background:#000; overflow:hidden; position:relative; cursor:zoom-in;" onclick="zoomNewsImage(\'' + docUrl + '\', \'' + docTitle + '\')">' +
+        '<img src="' + docUrl + '" alt="' + docTitle + '" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null;this.src=\'img/new_logo.png\';">' +
+      '</div>' +
+      '<div style="padding:6px 8px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">' +
+        '<div style="font-size:11px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + docTitle + '">' + docTitle + '</div>' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; font-size:10px; color:var(--text-muted);">' +
+          '<span>' + (doc.size || '') + '</span>' +
+          '<span>' + dateStr + '</span>' +
+        '</div>' +
+        '<div style="margin-top:6px; display:flex; gap:4px;">' +
+          '<a href="' + docUrl + '" target="_blank" class="btn btn-xs btn-outline-info" style="font-size:10px; padding:2px 6px; flex:1; text-align:center; border-radius:4px;"><i class="fa fa-external-link"></i> View</a>' +
+          '<a href="' + docUrl + '" download="' + docTitle + '" class="btn btn-xs btn-outline-secondary" style="font-size:10px; padding:2px 6px; flex:1; text-align:center; border-radius:4px;"><i class="fa fa-download"></i> Save</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  gallery.innerHTML = html;
+}
+
+function handleAdminUploadMyData() {
+  if (!currentAdminMyDataUser) return;
+  const fileInp = document.getElementById('adminMyDataFile');
+  const titleInp = document.getElementById('adminMyDataTitle');
+  const file = (fileInp.files && fileInp.files[0]) || fileInp._droppedFile;
+  if (!file) {
+    alert('ദയവായി ഒരു ഇമേജ് ഫയൽ തെരഞ്ഞെടുക്കുക (JPG, PNG, WebP)');
+    return;
+  }
+  if (!file.type.startsWith('image/')) {
+    alert('ഇമേജ് ഫയലുകൾ മാത്രമേ അപ്‌ലോഡ് ചെയ്യാൻ സാധിക്കൂ!');
+    return;
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    alert('ഫോട്ടോയുടെ വലുപ്പം 2 MB-യിൽ താഴെയായിരിക്കണം! (Max 2MB allowed)');
+    return;
+  }
+  const title = (titleInp && titleInp.value.trim()) || file.name;
+  const uploadBtn = document.getElementById('adminMyDataUploadBtn');
+  const oldBtnHtml = uploadBtn ? uploadBtn.innerHTML : '';
+  if (uploadBtn) {
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64Image = e.target.result;
+    const payload = {
+      userId: currentAdminMyDataUser.userId,
+      role: currentAdminMyDataUser.role,
+      title: title,
+      base64Image: base64Image
+    };
+
+    fetch('/api/portal/my-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (uploadBtn) {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = oldBtnHtml;
+      }
+      if (res.success) {
+        if (typeof showToast === 'function') {
+          showToast('Image successfully added to user My Datas!', false);
+        } else {
+          alert('Image successfully added to user My Datas!');
+        }
+        const targetUser = allPortalUsersCache.find(u => (u._id || u.admissionNo || u.usthadId) === currentAdminMyDataUser.userId);
+        if (targetUser) {
+          targetUser.myDatas = res.myDatas || [];
+        }
+        if (fileInp) { fileInp.value = ''; fileInp._droppedFile = null; }
+        if (titleInp) titleInp.value = '';
+        const selWrap = document.getElementById('adminMyDataSelectedName');
+        if (selWrap) selWrap.style.display = 'none';
+
+        renderAdminMyDataGallery();
+        renderPortalUsersAdmin();
+      } else {
+        alert(res.message || 'Upload failed');
+      }
+    })
+    .catch(err => {
+      if (uploadBtn) {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = oldBtnHtml;
+      }
+      alert('Error saving image: ' + err.message);
+    });
+  };
+  reader.readAsDataURL(file);
 }
 
 let editingUserId = null;
