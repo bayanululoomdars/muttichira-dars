@@ -1554,7 +1554,7 @@ exports.deleteExamClassMark = async (req, res) => {
 // ── 12. My Datas (Document / Image Vault) ──
 exports.uploadMyData = async (req, res) => {
   try {
-    const { userId, role, title, base64Image } = req.body;
+    const { userId, role, title, base64Image, uploadedByAdmin } = req.body;
     if (base64Image && base64Image.length > 6 * 1024 * 1024) {
       return res.status(400).json({ success: false, message: 'ചിത്രത്തിന്റെ വലുപ്പം 2 MB-യിൽ താഴെയായിരിക്കണം (Max size: 2MB)' });
     }
@@ -1620,6 +1620,7 @@ exports.uploadMyData = async (req, res) => {
       title: title || 'Document Image',
       url: docUrl,
       size: (buffer.length / 1024).toFixed(1) + ' KB',
+      uploadedByAdmin: uploadedByAdmin === true || uploadedByAdmin === 'true',
       createdAt: new Date().toISOString()
     };
 
