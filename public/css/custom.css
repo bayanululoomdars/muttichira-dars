@@ -1541,3 +1541,134 @@ iframe[src*='google.com'], #loginPopupModal, .ig-detail-modal { z-index: 2147483
     font-size: 0.72rem !important;
   }
 }
+
+
+/* ── ABOUT SECTION VISIBILITY & CONTRAST FIX ─────────── */
+#about {
+  background: #ffffff !important;
+  color: #334155 !important;
+  padding: 80px 0 60px;
+}
+
+#about .section-header h3 {
+  color: #071f3d !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700;
+}
+
+#about .section-header p {
+  color: #64748b !important;
+}
+
+#about .about-container p {
+  color: #334155 !important;
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+#about .about-container p strong {
+  color: #071f3d !important;
+}
+
+#about .icon-box {
+  background: #ffffff !important;
+  border: 1px solid rgba(13, 71, 161, 0.1) !important;
+  border-radius: 16px !important;
+  padding: 24px 22px !important;
+  margin-bottom: 24px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.3s ease !important;
+  height: 100%;
+}
+
+#about .icon-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(13, 71, 161, 0.1) !important;
+  border-color: rgba(13, 71, 161, 0.25) !important;
+}
+
+#about .icon-box .icon {
+  background: linear-gradient(135deg, rgba(13, 71, 161, 0.1), rgba(30, 136, 229, 0.15)) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(13, 71, 161, 0.15) !important;
+  width: 52px !important;
+  height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 15px;
+}
+
+#about .icon-box .icon i {
+  color: #0d47a1 !important;
+  font-size: 22px !important;
+}
+
+#about .icon-box .title a {
+  color: #071f3d !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.18rem !important;
+  text-decoration: none !important;
+}
+
+#about .icon-box .description {
+  color: #475569 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
+
+#about .icon-box .description strong {
+  color: #0d47a1 !important;
+  font-weight: 700 !important;
+}
+
+/* ── WHY US SECTION VISIBILITY & HIGH CONTRAST ──────── */
+#why-us {
+  background: linear-gradient(180deg, #f0f6ff 0%, #ffffff 100%) !important;
+  padding: 70px 0 50px !important;
+}
+
+#why-us .section-header h3 {
+  color: #071f3d !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700;
+}
+
+#why-us .section-header p {
+  color: #475569 !important;
+}
+
+.why-us-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: 32px 28px !important;
+  min-height: 220px !important;
+  box-shadow: 0 8px 25px rgba(13, 71, 161, 0.08) !important;
+  border: 1.5px solid rgba(13, 71, 161, 0.12) !important;
+  transition: all 0.3s ease !important;
+}
+
+.why-us-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 35px rgba(13, 71, 161, 0.15) !important;
+  border-color: rgba(30, 136, 229, 0.35) !important;
+}
+
+.why-us-card h4 {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  color: #071f3d !important;
+  font-size: 1.3rem !important;
+  margin-bottom: 10px !important;
+}
+
+.why-us-card p {
+  color: #334155 !important;
+  line-height: 1.75 !important;
+  font-size: 0.98rem !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
