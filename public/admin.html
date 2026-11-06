@@ -2976,59 +2976,6 @@ function toggleAdminUsthadPwd() {
   }
 }
 
-// Admin My Datas Modal (Upload-Only - No Delete Option)
-let currentAdminMyDataUser = null;
-
-function openAdminMyDataModal(userId, role, name, idVal) {
-  currentAdminMyDataUser = { userId: userId, role: role, name: name, idVal: idVal };
-  const modal = document.getElementById('adminMyDataModal');
-  const title = document.getElementById('adminMyDataModalTitle');
-  const userLabel = document.getElementById('adminMyDataUserName');
-  const fileInp = document.getElementById('adminMyDataFile');
-  const titleInp = document.getElementById('adminMyDataTitle');
-  const selWrap = document.getElementById('adminMyDataSelectedName');
-
-  if (title) title.innerHTML = '<i class="fa fa-folder-open text-info"></i> ' + (name || 'User') + ' — My Datas';
-  if (userLabel) userLabel.textContent = (name || 'User') + ' (' + (idVal || '') + ')';
-  if (fileInp) { fileInp.value = ''; fileInp._droppedFile = null; }
-  if (titleInp) titleInp.value = '';
-  if (selWrap) selWrap.style.display = 'none';
-
-  initAdminMyDataDropZone();
-  renderAdminMyDataGallery();
-  if (modal) modal.classList.add('show');
-}
-
-function closeAdminMyDataModal() {
-  const modal = document.getElementById('adminMyDataModal');
-  if (modal) modal.classList.remove('show');
-  currentAdminMyDataUser = null;
-}
-
-function initAdminMyDataDropZone() {
-  const dropZone = document.getElementById('adminMyDataDropZone');
-  const fileInp = document.getElementById('adminMyDataFile');
-  if (!dropZone || dropZone.dataset.dndInit === 'true') return;
-  dropZone.dataset.dndInit = 'true';
-
-  ['dragenter', 'dragover'].forEach(eventName => {
-    dropZone.addEventListener(eventName, function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      dropZone.style.background = 'rgba(14,165,233,0.18)';
-      dropZone.style.borderColor = '#0284c7';
-    }, false);
-  });
-
-  ['dragleave', 'drop'].forEach(eventName => {
-    dropZone.addEventListener(eventName, function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      dropZone.style.background = 'rgba(14,165,233,0.06)';
-      dropZone.style.borderColor = '#0ea5e9';
-    }, false);
-  });
-
 // Admin Send Document to User My Datas Modal (Upload-Only, Privacy Protected)
 let currentAdminMyDataUser = null;
 
@@ -5062,7 +5009,6 @@ function executeReset() {
     }).catch(function() {
       safeSetHtml('resetStatus', '<span style="color:var(--danger);">Server error. Try again.</span>');
     });
-}
 }
 </script>
 
