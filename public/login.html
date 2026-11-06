@@ -3943,6 +3943,19 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================== EDIT PROFILE MODAL ====================
+    function toggleEpPasswordVis() {
+      var inp = document.getElementById('epPassword');
+      var eye = document.getElementById('eyeEpPassword');
+      if (!inp) return;
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        if (eye) eye.className = 'fa fa-eye-slash';
+      } else {
+        inp.type = 'password';
+        if (eye) eye.className = 'fa fa-eye';
+      }
+    }
+
     function openEditProfileModal() {
       const user = currentUserSession;
       if (!user) return;
@@ -4951,7 +4964,14 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="form-row">
               <div class="form-group col-md-6 mb-3">
                 <label for="epPassword" class="small font-weight-bold text-dark">Login Password / ലോഗിൻ പാസ്‌വേഡ്</label>
-                <input type="text" class="form-control" name="password" id="epPassword" placeholder="Enter new password to change">
+                <div class="input-group">
+                  <input type="password" class="form-control" name="password" id="epPassword" placeholder="Enter new password to change">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="toggleEpPasswordVis()" title="Show/Hide Password" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                      <i id="eyeEpPassword" class="fa fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
                 <small class="text-muted">മാറ്റം വരുത്താൻ പുതിയ പാസ്‌വേഡ് നൽകുക (ഓപ്ഷണൽ)</small>
               </div>
               <div class="form-group col-md-6 mb-3">
@@ -4990,27 +5010,30 @@ window.addEventListener('DOMContentLoaded', () => {
             Securely store and manage your passport photo, ID cards, and academic certificates (Images only).
           </p>
 
-          <!-- UPLOAD CARD -->
-          <div class="p-3 mb-4 rounded-4" style="background:#f0f9ff; border:2px dashed #0ea5e9; text-align:center;">
+          <!-- GALLERY (DISPLAYED AT TOP) -->
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h6 class="font-weight-bold text-dark mb-0"><i class="fa fa-images text-primary mr-1"></i> Saved Documents &amp; Photos / സംരക്ഷിച്ച ഫോട്ടോകൾ:</h6>
+          </div>
+          <div class="mydatas-grid mb-4" id="myDatasGalleryContainer">
+            <div class="text-muted small py-4 text-center col-12">ഇതുവരെ ഇമേജുകൾ ഒന്നും അപ്‌ലോഡ് ചെയ്തിട്ടില്ല.</div>
+          </div>
+
+          <!-- UPLOAD CARD (BELOW GALLERY) -->
+          <div class="p-3 rounded-4" style="background:#f0f9ff; border:2px dashed #0ea5e9; text-align:left;">
+            <h6 class="font-weight-bold text-info mb-2" style="font-size:13px;"><i class="fa fa-plus-circle mr-1"></i> Add New Data / പുതിയ ഫോട്ടോ ചേർക്കുക:</h6>
             <div class="row align-items-center justify-content-center">
-              <div class="col-md-6 mb-2 mb-md-0">
+              <div class="col-md-5 mb-2 mb-md-0">
                 <input type="text" id="myDataTitle" class="form-control form-control-sm" placeholder="Document Title (e.g., Aadhaar Card, Passport Photo)..." style="background:#fff !important;">
               </div>
               <div class="col-md-4 mb-2 mb-md-0">
                 <input type="file" id="myDataFileInput" accept="image/*" class="form-control form-control-sm" style="background:#fff !important; padding-bottom:30px;">
               </div>
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <button type="button" class="btn btn-sm btn-info font-weight-bold btn-block rounded-pill py-2" onclick="handleUploadMyData()">
-                  <i class="fa fa-upload"></i> Upload & Save
+                  <i class="fa fa-upload mr-1"></i> Upload &amp; Save
                 </button>
               </div>
             </div>
-          </div>
-
-          <!-- GALLERY -->
-          <h6 class="font-weight-bold text-dark mb-3"><i class="fa fa-images text-primary"></i> Saved Documents & Photos:</h6>
-          <div class="mydatas-grid" id="myDatasGalleryContainer">
-            <div class="text-muted small py-4 text-center col-12">ഇതുവരെ ഇമേജുകൾ ഒന്നും അപ്‌ലോഡ് ചെയ്തിട്ടില്ല.</div>
           </div>
         </div>
         <div class="modal-footer border-top-0 pt-0">

@@ -1940,7 +1940,14 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Login Password</label>
-                  <input type="text" id="adminStudentPassword" class="form-control" placeholder="Auto-generated if empty">
+                  <div class="input-group">
+                    <input type="password" id="adminStudentPassword" class="form-control" placeholder="Auto-generated if empty">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button" onclick="toggleAdminStudentPwd()" title="Show/Hide Password" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                        <i id="eyeAdminStudentPwd" class="fa fa-eye"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Admission No (Optional)</label>
@@ -1994,7 +2001,14 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Login Password</label>
-                  <input type="text" id="adminUsthadPassword" class="form-control" placeholder="Auto-generated if empty">
+                  <div class="input-group">
+                    <input type="password" id="adminUsthadPassword" class="form-control" placeholder="Auto-generated if empty">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button" onclick="toggleAdminUsthadPwd()" title="Show/Hide Password" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                        <i id="eyeAdminUsthadPwd" class="fa fa-eye"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Usthad ID (Optional)</label>
@@ -2793,13 +2807,15 @@ function renderPortalUsersAdmin() {
   });
 
   let html = '';
-  filtered.forEach(u => {
+  filtered.forEach((u, uIdx) => {
     var idVal = u.admissionNo || u.usthadId || '—';
     var statusText = u.role === 'usthad' ? (u.designation || 'Usthad') : (u.status || 'Student');
     var isAlumniUser = u.isAlumni || (u.status || '').toLowerCase().includes('alumni') || (u.status || '').toLowerCase().includes('biruthadhari');
     var badgeClass = u.role === 'usthad' ? 'badge-accent' : (isAlumniUser ? 'badge-info' : 'badge-success');
     var details = u.role === 'usthad' ? (u.subject || '—') : ('Batch ' + (u.batchNumber || '—'));
     var phoneVal = u.phone || '—';
+    var rawPwd = String(u.password || phoneVal);
+    var safePwdEsc = rawPwd.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
     html += '<tr>' +
       '<td><strong style="color:var(--text); font-weight:600;">' + (u.name || '—') + '</strong></td>' +
@@ -2807,8 +2823,15 @@ function renderPortalUsersAdmin() {
       '<td><code style="font-weight:700;color:var(--accent);">' + idVal + '</code></td>' +
       '<td>' + details + (u.place ? ' <small style="color:var(--text-soft);">(' + u.place + ')</small>' : '') + '</td>' +
       '<td><code style="color:var(--text-soft);">' + phoneVal + '</code></td>' +
-      '<td><code style="color:var(--accent); font-weight:700;">' + (u.password || phoneVal) + '</code> ' +
-        '<button class="btn btn-outline-secondary btn-sm p-1 ml-1" style="font-size:10px; line-height:1; border-radius:4px;" title="Copy Password" onclick="navigator.clipboard.writeText(\'' + (u.password || phoneVal) + '\'); alert(\'Password copied: ' + (u.password || phoneVal) + '\');"><i class="fa fa-copy"></i></button></td>' +
+      '<td>' +
+        '<span id="portalUserPwd_' + uIdx + '" data-pwd="' + safePwdEsc + '" style="font-family:monospace; font-weight:700; letter-spacing:1px; color:var(--accent);">••••••••</span> ' +
+        '<button type="button" class="btn btn-outline-info btn-sm p-1 ml-1" style="font-size:11px; line-height:1; border-radius:4px;" title="View / Hide Password" onclick="togglePortalTablePwd(' + uIdx + ')">' +
+          '<i id="portalUserEye_' + uIdx + '" class="fa fa-eye"></i>' +
+        '</button> ' +
+        '<button type="button" class="btn btn-outline-secondary btn-sm p-1 ml-1" style="font-size:11px; line-height:1; border-radius:4px;" title="Copy Password" onclick="copyPortalUserPwd(\'' + safePwdEsc + '\')">' +
+          '<i class="fa fa-copy"></i>' +
+        '</button>' +
+      '</td>' +
       '<td><div class="action-buttons">' +
         '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')"><i class="fa fa-edit"></i> Edit</button>' +
         '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')"><i class="fa fa-trash"></i> Delete</button>' +
@@ -2816,7 +2839,68 @@ function renderPortalUsersAdmin() {
     '</tr>';
   });
 
-  safeSetHtml('userTableBody', html || '<tr><td colspan="6" class="text-center text-muted py-4">No matching records found.</td></tr>');
+  safeSetHtml('userTableBody', html || '<tr><td colspan="7" class="text-center text-muted py-4">No matching records found.</td></tr>');
+}
+
+// Password toggle & copy helpers for Management Portal table and modals
+function togglePortalTablePwd(idx) {
+  var span = document.getElementById('portalUserPwd_' + idx);
+  var eye = document.getElementById('portalUserEye_' + idx);
+  if (!span) return;
+  var actualPwd = span.getAttribute('data-pwd') || '';
+  if (span.textContent === '••••••••') {
+    span.textContent = actualPwd;
+    if (eye) {
+      eye.className = 'fa fa-eye-slash';
+    }
+  } else {
+    span.textContent = '••••••••';
+    if (eye) {
+      eye.className = 'fa fa-eye';
+    }
+  }
+}
+
+function copyPortalUserPwd(pwd) {
+  if (!navigator.clipboard) {
+    prompt('Copy password:', pwd);
+    return;
+  }
+  navigator.clipboard.writeText(pwd).then(function() {
+    if (typeof showToast === 'function') {
+      showToast('Password copied to clipboard!', false);
+    } else {
+      alert('Password copied: ' + pwd);
+    }
+  }).catch(function() {
+    prompt('Copy password:', pwd);
+  });
+}
+
+function toggleAdminStudentPwd() {
+  var inp = document.getElementById('adminStudentPassword');
+  var eye = document.getElementById('eyeAdminStudentPwd');
+  if (!inp) return;
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    if (eye) eye.className = 'fa fa-eye-slash';
+  } else {
+    inp.type = 'password';
+    if (eye) eye.className = 'fa fa-eye';
+  }
+}
+
+function toggleAdminUsthadPwd() {
+  var inp = document.getElementById('adminUsthadPassword');
+  var eye = document.getElementById('eyeAdminUsthadPwd');
+  if (!inp) return;
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    if (eye) eye.className = 'fa fa-eye-slash';
+  } else {
+    inp.type = 'password';
+    if (eye) eye.className = 'fa fa-eye';
+  }
 }
 
 let editingUserId = null;
