@@ -1645,8 +1645,8 @@
         </button>
 
         <button class="nav-item" id="nav-gallery" onclick="showPage('gallery')">
-          <i class="fa fa-image"></i> Gallery Page Panel
-          <span class="nav-badge" id="badge-gallery">0</span>
+          <i class="fa fa-instagram" style="color: #e1306c;"></i> Gallery (Instagram)
+          <span class="nav-badge" id="badge-gallery" style="background:#10b981; color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px;">Live</span>
         </button>
 
         <button class="nav-item" id="nav-messages" onclick="showPage('messages')">
@@ -1733,10 +1733,12 @@
               <div class="stat-num" id="statNews">0</div>
               <div class="stat-label">News & Updates</div>
             </div>
-            <div class="stat-card blue" style="cursor:pointer;" onclick="showPage('gallery')">
-              <div class="stat-icon"><i class="fa fa-image"></i></div>
-              <div class="stat-num" id="statGallery">0</div>
-              <div class="stat-label">Gallery Items</div>
+            <div class="stat-card" style="cursor:pointer; background: linear-gradient(135deg, rgba(225,48,108,0.12), rgba(131,58,180,0.12)); border: 1px solid rgba(225,48,108,0.35);" onclick="showPage('gallery')">
+              <div class="stat-icon" style="color: #e1306c; background: rgba(225,48,108,0.15);"><i class="fa fa-instagram"></i></div>
+              <div class="stat-num" id="statGallery" style="color:#10b981; font-size:1.35rem; display:flex; align-items:center;">
+                <span style="width:10px; height:10px; background:#10b981; border-radius:50%; display:inline-block; box-shadow:0 0 8px #10b981; margin-right:6px;"></span>Active
+              </div>
+              <div class="stat-label" style="color:#e1306c; font-weight:700;">Instagram Feed</div>
             </div>
             <div class="stat-card purple" style="cursor:pointer;" onclick="showPage('messages')">
               <div class="stat-icon"><i class="fa fa-envelope"></i></div>
@@ -2996,9 +2998,17 @@ function loadOverview() {
   fetch('/api/news').then(r => r.json()).then(d => {
     safeSetText('statNews', Array.isArray(d) ? d.length : 0);
   }).catch(() => {});
-  fetch('/api/gallery').then(r => r.json()).then(d => {
-    safeSetText('statGallery', Array.isArray(d) ? d.length : 0);
-  }).catch(() => {});
+  var statGalleryEl = document.getElementById('statGallery');
+  if (statGalleryEl) {
+    statGalleryEl.innerHTML = '<span style="width:10px; height:10px; background:#10b981; border-radius:50%; display:inline-block; box-shadow:0 0 8px #10b981; margin-right:6px;"></span>Active';
+  }
+  var badgeGalleryEl = document.getElementById('badge-gallery');
+  if (badgeGalleryEl) {
+    badgeGalleryEl.textContent = 'Live';
+    badgeGalleryEl.style.background = '#10b981';
+    badgeGalleryEl.style.color = '#fff';
+    badgeGalleryEl.style.fontWeight = '700';
+  }
   fetch('/api/contacts').then(r => r.json()).then(d => {
     safeSetText('statContacts', Array.isArray(d) ? d.length : 0);
   }).catch(() => {});
@@ -4486,8 +4496,17 @@ var currentGalleryItems = [];
 function loadGalleryAdmin() {
   fetch('/api/gallery').then(function(r) { return r.json(); }).then(function(data) {
     currentGalleryItems = data;
-    safeSetText('statGallery', data.length);
-    safeSetText('badge-gallery', data.length);
+    var statGalleryEl = document.getElementById('statGallery');
+    if (statGalleryEl) {
+      statGalleryEl.innerHTML = '<span style="width:10px; height:10px; background:#10b981; border-radius:50%; display:inline-block; box-shadow:0 0 8px #10b981; margin-right:6px;"></span>Active';
+    }
+    var badgeGalleryEl = document.getElementById('badge-gallery');
+    if (badgeGalleryEl) {
+      badgeGalleryEl.textContent = 'Live';
+      badgeGalleryEl.style.background = '#10b981';
+      badgeGalleryEl.style.color = '#fff';
+      badgeGalleryEl.style.fontWeight = '700';
+    }
     var html = '';
     data.forEach(function(item) {
       var d = new Date(item.createdAt).toLocaleDateString('en-IN');
