@@ -422,11 +422,16 @@
       flex-direction: column;
       min-height: 100vh;
       min-width: 0;
-      overflow-x: hidden;
+      padding-top: var(--header-h);
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Top bar */
+    /* Top bar - 100% FIXED at top of viewport */
     .topbar {
+      position: fixed !important;
+      top: 0 !important;
+      left: var(--sidebar-w);
+      right: 0 !important;
       height: var(--header-h);
       background: rgba(7, 31, 61, 0.98);
       backdrop-filter: blur(16px);
@@ -435,10 +440,9 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 28px;
-      position: sticky;
-      top: 0;
       z-index: 100050;
       box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .topbar-left {
@@ -484,9 +488,9 @@
 
     .topbar-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 
-    /* Hamburger on Topbar Right */
+    /* Hamburger on Topbar Right - Always visible on all screens */
     .hamburger {
-      display: none;
+      display: flex !important;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -500,6 +504,7 @@
       border: 1px solid rgba(212, 175, 55, 0.3);
       transition: var(--transition);
       margin-left: 8px;
+      flex-shrink: 0;
     }
     .hamburger:hover {
       background: rgba(212, 175, 55, 0.22);
@@ -512,6 +517,29 @@
       border-radius: 2px;
       transition: var(--transition);
       display: block;
+    }
+
+    /* Sidebar Close Button */
+    .sidebar-close-btn {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-soft);
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: var(--transition);
+    }
+    .sidebar-close-btn:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
     }
 
     /* Page content */
@@ -1075,16 +1103,29 @@
       .sidebar {
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 100060 !important;
       }
       .sidebar.open {
         transform: translateX(0);
         box-shadow: var(--shadow-lg);
       }
+      .sidebar-overlay {
+        z-index: 100055 !important;
+      }
+      .sidebar-overlay.open {
+        display: block !important;
+      }
       .main-content {
         margin-left: 0 !important;
         width: 100% !important;
       }
+      .topbar {
+        left: 0 !important;
+      }
       .hamburger {
+        display: flex !important;
+      }
+      .sidebar-close-btn {
         display: flex !important;
       }
       .form-grid-2 { grid-template-columns: 1fr; }
@@ -1528,6 +1569,17 @@
     }
 
     @media (min-width: 1025px) {
+      /* Desktop Collapsed Sidebar State */
+      body.sidebar-collapsed .sidebar {
+        transform: translateX(-100%) !important;
+      }
+      body.sidebar-collapsed .main-content {
+        margin-left: 0 !important;
+      }
+      body.sidebar-collapsed .topbar {
+        left: 0 !important;
+      }
+
       /* Desktop Displays */
       .unified-modal,
       .modal-overlay {
@@ -1668,7 +1720,7 @@
             <div class="sub">Bayanul Uloom Dars</div>
           </div>
         </div>
-        <button type="button" class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close Sidebar" style="display:none; background:none; border:none; color:var(--text-muted); font-size:1.6rem; cursor:pointer; line-height:1; padding:4px 8px;">&times;</button>
+        <button type="button" class="sidebar-close-btn" onclick="handleSidebarCloseBtn()" aria-label="Close Sidebar" title="Close Sidebar">&times;</button>
       </div>
 
       <div class="sidebar-nav">
@@ -3780,6 +3832,12 @@ function loadAll() {
       }
     }
 
+    try {
+      if (window.innerWidth > 1024 && localStorage.getItem('admin_sidebar_collapsed') === '1') {
+        document.body.classList.add('sidebar-collapsed');
+      }
+    } catch(e) {}
+
     // Auto-restore admin dashboard if already signed in during this session
     if (sessionStorage.getItem('bud_admin_logged_in') === 'true') {
       var loginScreen = document.getElementById('loginScreen');
@@ -3844,19 +3902,38 @@ function showPage(page) {
 }
 
 /* ===========================================
-   SIDEBAR TOGGLE (mobile)
+   SIDEBAR TOGGLE (Universal: Desktop & Mobile)
 =========================================== */
 function toggleSidebar() {
-  var sidebar  = document.getElementById('sidebar');
-  var overlay  = document.getElementById('sidebarOverlay');
-  if (sidebar)  sidebar.classList.toggle('open');
-  if (overlay)  overlay.classList.toggle('open');
+  if (window.innerWidth <= 1024) {
+    var sidebar  = document.getElementById('sidebar');
+    var overlay  = document.getElementById('sidebarOverlay');
+    if (sidebar)  sidebar.classList.toggle('open');
+    if (overlay)  overlay.classList.toggle('open');
+  } else {
+    document.body.classList.toggle('sidebar-collapsed');
+    try {
+      localStorage.setItem('admin_sidebar_collapsed', document.body.classList.contains('sidebar-collapsed') ? '1' : '0');
+    } catch(e) {}
+  }
 }
+
 function closeSidebar() {
   var sidebar  = document.getElementById('sidebar');
   var overlay  = document.getElementById('sidebarOverlay');
   if (sidebar)  sidebar.classList.remove('open');
   if (overlay)  overlay.classList.remove('open');
+}
+
+function handleSidebarCloseBtn() {
+  if (window.innerWidth <= 1024) {
+    closeSidebar();
+  } else {
+    document.body.classList.add('sidebar-collapsed');
+    try {
+      localStorage.setItem('admin_sidebar_collapsed', '1');
+    } catch(e) {}
+  }
 }
 
 /* ===========================================
