@@ -421,6 +421,8 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      min-width: 0;
+      overflow-x: hidden;
     }
 
     /* Top bar */
@@ -435,7 +437,7 @@
       padding: 0 28px;
       position: sticky;
       top: 0;
-      z-index: 10050;
+      z-index: 100050;
       box-shadow: 0 2px 15px rgba(0,0,0,0.3);
     }
 
@@ -505,7 +507,7 @@
     .page-area {
       padding: 28px;
       flex: 1;
-      animation: fadeUp 0.35s ease both;
+      min-width: 0;
     }
 
     .page { display: none; }
@@ -1058,7 +1060,7 @@
     /* ═══════════════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════════════ */
-    @media (max-width: 900px) {
+    @media (max-width: 1024px) {
       .sidebar { transform: translateX(-100%); }
       .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
       .main-content { margin-left: 0; }
@@ -1081,7 +1083,7 @@
       z-index: 199;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1024px) {
       .sidebar-overlay.open { display: block; }
     }
 
@@ -1201,11 +1203,12 @@
 
 /* Admin Section Clean & Modern Styling */
 .admin-user-management {
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    padding: 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    font-family: 'Inter', sans-serif;
     margin: 20px 0;
 }
 
@@ -1213,22 +1216,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
     margin-bottom: 20px;
 }
 
 .add-btn {
-    background: linear-gradient(135deg, #0d47a1, #1e88e5);
-    color: white;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light, #f59e0b));
+    color: #061121;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 10px 22px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.25);
+    transition: all 0.25s ease;
+    font-size: 0.92rem;
 }
 
 .add-btn:hover {
-    background: #0d47a1;
+    background: linear-gradient(135deg, var(--accent-light, #f59e0b), var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212,175,55,0.4);
 }
 
 .table-container {
@@ -1324,24 +1336,25 @@
     .delete-btn { background: #fef2f2; color: #dc2626; }
     .delete-btn:hover { background: #fee2e2; }
 
-    /* Unified User Modal & All Overlays — Fixed right below Navbar */
+    /* Unified User Modal & All Overlays — Fixed right below Navbar in Viewport */
     .unified-modal,
     .modal-overlay {
       display: none;
-      position: fixed;
+      position: fixed !important;
       top: var(--header-h, 64px) !important;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
       height: calc(100vh - var(--header-h, 64px)) !important;
-      background: rgba(4, 12, 24, 0.78);
+      background: rgba(4, 12, 24, 0.82) !important;
       backdrop-filter: blur(8px);
-      z-index: 10000;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 20px 16px;
-      overflow-y: auto;
+      z-index: 100000 !important;
+      align-items: flex-start !important;
+      justify-content: center !important;
+      padding: 20px 16px !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
     }
     .unified-modal.show,
     .modal-overlay.open {
@@ -1349,22 +1362,25 @@
     }
     .unified-modal-content,
     .modal-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      width: 90%;
-      max-width: 600px;
-      border-radius: 18px;
-      padding: 26px;
-      box-shadow: var(--shadow-lg);
-      max-height: calc(100vh - var(--header-h, 64px) - 40px);
-      overflow-y: auto;
-      color: var(--text);
-      margin-top: 10px;
-      animation: modalSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      background: var(--bg-card) !important;
+      border: 1px solid var(--border) !important;
+      width: 92% !important;
+      max-width: 620px !important;
+      border-radius: 18px !important;
+      padding: 26px !important;
+      box-shadow: var(--shadow-lg) !important;
+      max-height: calc(100vh - var(--header-h, 64px) - 36px) !important;
+      overflow-y: auto !important;
+      color: var(--text) !important;
+      margin: 10px auto !important;
+      animation: modalSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     @keyframes modalSlideDown {
       from { transform: translateY(-16px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
+    }
+    body.modal-open {
+      overflow: hidden !important;
     }
     .unified-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-soft); padding-bottom: 15px; }
     .unified-modal-header h3 { margin: 0; color: var(--accent); font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; }
@@ -1379,7 +1395,7 @@
     ═══════════════════════════════════════════════ */
     @media (max-width: 600px) {
       .topbar { padding: 0 16px !important; }
-      .page-area { padding: 12px 10px !important; }
+      .page-area { padding: 14px 10px !important; }
       .header-section { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; }
       .header-section .add-btn { width: 100% !important; justify-content: center !important; text-align: center !important; padding: 12px !important; }
       
@@ -1402,7 +1418,7 @@
         max-width: 100% !important;
         border-radius: 16px !important;
         padding: 18px 14px 26px !important;
-        max-height: calc(100vh - var(--header-h, 64px) - 24px) !important;
+        max-height: calc(100vh - var(--header-h, 64px) - 20px) !important;
         margin: 4px 0 0 0 !important;
       }
       .unified-modal-header { margin-bottom: 14px !important; padding-bottom: 10px !important; }
@@ -1429,6 +1445,22 @@
     @media (min-width: 601px) and (max-width: 1024px) {
       /* Tablet Devices */
       .page-area { padding: 20px 16px !important; }
+      .header-section {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 14px !important;
+      }
+      .header-section .add-btn {
+        width: auto !important;
+        flex-shrink: 0 !important;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
+      }
       .unified-modal,
       .modal-overlay {
         top: var(--header-h, 64px) !important;
@@ -1438,14 +1470,19 @@
       }
       .unified-modal-content,
       .modal-box {
-        width: 88% !important;
-        max-width: 580px !important;
+        width: 90% !important;
+        max-width: 600px !important;
         padding: 24px 20px !important;
         max-height: calc(100vh - var(--header-h, 64px) - 36px) !important;
         margin-top: 8px !important;
       }
       .form-grid-2 { grid-template-columns: 1fr 1fr !important; gap: 14px !important; }
-      .table-container { overflow-x: auto !important; }
+      .table-container {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 12px !important;
+      }
     }
 
     @media (min-width: 1025px) {
@@ -1923,12 +1960,12 @@
         ════════════════════════════════ -->
         <div class="page" id="page-portal-users">
           <div class="admin-user-management">
-            <div class="header-section" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+            <div class="header-section">
                 <div>
-                  <h2 style="font-family: 'Segoe UI', sans-serif; color: #0d47a1; margin:0;"><i class="fa fa-users-cog"></i> Management Portal</h2>
+                  <h2 style="font-family: 'Outfit', sans-serif; color: var(--accent); margin:0; display:flex; align-items:center; gap:10px;"><i class="fa fa-users-cog"></i> Management Portal</h2>
                     <small style="color: var(--text-soft);">Manage Students, Alumni and Usthads</small>
                 </div>
-                <button class="add-btn" onclick="openAddUserModal()">+ Add New User</button>
+                <button class="add-btn" onclick="openAddUserModal()"><i class="fa fa-plus-circle"></i> Add New User</button>
             </div>
 
             <!-- Search & Filter Bar -->
@@ -2045,6 +2082,14 @@
           </div>
         </div> <!-- /#page-exams -->
 
+      </div> <!-- /#page-area -->
+    </div> <!-- /.main-content -->
+  </div> <!-- /.app-layout -->
+</div> <!-- /#dashboard -->
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     ALL MODALS & FLOATING OVERLAYS (Root Body Level - 100% Viewport Fixed)
+══════════════════════════════════════════════════════════════════════════ -->
         <!-- Unified Add User Modal -->
         <div class="unified-modal" id="unifiedAddUserModal" onclick="if(event.target===this)closeAddUserModal()">
           <div class="unified-modal-content">
@@ -2750,11 +2795,6 @@
   </div>
 </div> <!-- /#cropperModal -->
 
-      </div> <!-- /#page-area -->
-    </div> <!-- /.main-content -->
-  </div> <!-- /.app-layout -->
-</div> <!-- /#dashboard -->
-
 
 <!-- ══════════════════════════════════
      JAVASCRIPT
@@ -3143,6 +3183,9 @@ function closeAdminMyDataModal() {
   const modal = document.getElementById('adminMyDataModal');
   if (modal) modal.classList.remove('show');
   currentAdminMyDataUser = null;
+  if (!document.querySelector('.modal-overlay.open, .unified-modal.show')) {
+    document.body.classList.remove('modal-open');
+  }
 }
 
 function initAdminMyDataDropZone() {
@@ -3352,7 +3395,10 @@ function openAddUserModal() {
 
     switchUnifiedRole('student');
     const modal = document.getElementById('unifiedAddUserModal');
-    if (modal) modal.classList.add('show');
+    if (modal) {
+      modal.classList.add('show');
+      document.body.classList.add('modal-open');
+    }
   } catch(e) {
     console.error('Error opening modal:', e);
     alert('Error opening modal: ' + e.message);
@@ -3375,7 +3421,10 @@ function editUserAdmin(id, role) {
     if (titleEl) titleEl.textContent = (editingUserRole === 'usthad') ? 'Edit Usthad Record' : 'Edit Student Record';
 
     const modal = document.getElementById('unifiedAddUserModal');
-    if (modal) modal.classList.add('show');
+    if (modal) {
+      modal.classList.add('show');
+      document.body.classList.add('modal-open');
+    }
     switchUnifiedRole(editingUserRole);
     
     if (editingUserRole === 'student') {
@@ -3430,6 +3479,9 @@ function closeAddUserModal() {
   if (modal) modal.classList.remove('show');
   editingUserId = null;
   editingUserRole = null;
+  if (!document.querySelector('.modal-overlay.open, .unified-modal.show')) {
+    document.body.classList.remove('modal-open');
+  }
 }
 
 function switchUnifiedRole(role) {
@@ -3722,11 +3774,19 @@ function showToast(msg, isError) {
 =========================================== */
 function openModal(id) {
   var el = document.getElementById(id);
-  if (el) el.classList.add('open');
+  if (el) {
+    el.classList.add('open');
+    document.body.classList.add('modal-open');
+  }
 }
 function closeModal(id) {
   var el = document.getElementById(id);
-  if (el) el.classList.remove('open');
+  if (el) {
+    el.classList.remove('open');
+    if (!document.querySelector('.modal-overlay.open, .unified-modal.show')) {
+      document.body.classList.remove('modal-open');
+    }
+  }
 }
 
 /* ===========================================
@@ -5397,6 +5457,9 @@ function openCreateExamModal() {
 
 function closeCreateExamModal() {
   document.getElementById('modalCreateExam').classList.remove('show');
+  if (!document.querySelector('.modal-overlay.open, .unified-modal.show')) {
+    document.body.classList.remove('modal-open');
+  }
 }
 
 function initExamBatchConfig(selectBatch = null) {
