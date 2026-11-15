@@ -1910,9 +1910,10 @@
               </table>
             </div>
           </div>
+        </div> <!-- /#page-exams -->
 
-                <!-- Unified Add User Modal -->
-        <div class="unified-modal" id="unifiedAddUserModal">
+        <!-- Unified Add User Modal -->
+        <div class="unified-modal" id="unifiedAddUserModal" onclick="if(event.target===this)closeAddUserModal()">
           <div class="unified-modal-content">
             <div class="unified-modal-header">
               <h3 id="unifiedModalTitle">Add New User</h3>
@@ -2614,7 +2615,12 @@
       <button type="button" class="btn btn-accent" id="btnCropSaveAdmin" onclick="saveCroppedPhotoAdmin()"><i class="fa fa-upload"></i> Upload & Save</button>
     </div>
   </div>
-</div>
+</div> <!-- /#cropperModal -->
+
+      </div> <!-- /#page-area -->
+    </div> <!-- /.main-content -->
+  </div> <!-- /.app-layout -->
+</div> <!-- /#dashboard -->
 
 
 <!-- ══════════════════════════════════
