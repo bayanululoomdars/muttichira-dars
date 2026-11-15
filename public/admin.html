@@ -2034,17 +2034,13 @@
                     <thead>
                         <tr>
                             <th style="width:50px;">Photo</th>
-                            <th>Name</th>
-                            <th>Role / Status</th>
-                            <th>ID / Adm No</th>
-                            <th>Batch / Details</th>
-                            <th>Phone</th>
-                            <th>Password</th>
-                            <th>Actions</th>
+                            <th>Student / Usthad</th>
+                            <th>Status &amp; Credentials</th>
+                            <th style="text-align:right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="userTableBody">
-                        <tr><td colspan="8" class="text-center text-muted">Loading users...</td></tr>
+                        <tr><td colspan="4" class="text-center text-muted py-4">Loading users...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -3117,36 +3113,92 @@ function renderPortalUsersAdmin() {
     var userUid = u._id || idVal;
     var safeNameEsc = (u.name || 'User').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
-    html += '<tr>' +
-      '<td>' +
+    html += '<tr class="portal-user-row" id="portalUserRow_' + uIdx + '">' +
+      '<td style="vertical-align:middle;">' +
         '<img src="' + photoUrl + '" alt="' + safeNameEsc + '" ' +
           'style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); background:#fff; cursor:zoom-in; display:block;" ' +
           'onclick="zoomNewsImage(\'' + photoUrl + '\', \'' + safeNameEsc + ' (' + statusText + ')\')" ' +
           'onerror="this.onerror=null;this.src=\'img/new_logo.png\';">' +
       '</td>' +
-      '<td><strong style="color:var(--text); font-weight:600;">' + (u.name || '—') + '</strong></td>' +
-      '<td><span class="badge ' + badgeClass + '">' + statusText + '</span></td>' +
-      '<td><code style="font-weight:700;color:var(--accent);">' + idVal + '</code></td>' +
-      '<td>' + details + (u.place ? ' <small style="color:var(--text-soft);">(' + u.place + ')</small>' : '') + '</td>' +
-      '<td><code style="color:var(--text-soft);">' + phoneVal + '</code></td>' +
-      '<td>' +
-        '<span id="portalUserPwd_' + uIdx + '" data-pwd="' + safePwdEsc + '" style="font-family:monospace; font-weight:700; letter-spacing:1px; color:var(--accent);">••••••••</span> ' +
-        '<button type="button" class="btn btn-outline-info btn-sm p-1 ml-1" style="font-size:11px; line-height:1; border-radius:4px;" title="View / Hide Password" onclick="togglePortalTablePwd(' + uIdx + ')">' +
-          '<i id="portalUserEye_' + uIdx + '" class="fa fa-eye"></i>' +
-        '</button> ' +
-        '<button type="button" class="btn btn-outline-secondary btn-sm p-1 ml-1" style="font-size:11px; line-height:1; border-radius:4px;" title="Copy Password" onclick="copyPortalUserPwd(\'' + safePwdEsc + '\')">' +
-          '<i class="fa fa-copy"></i>' +
+      '<td style="vertical-align:middle;">' +
+        '<div style="font-weight:700; color:var(--text); font-size:0.95rem; line-height:1.2;">' + (u.name || '—') + '</div>' +
+        '<div style="font-size:0.8rem; color:var(--text-soft); margin-top:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+          '<code style="font-weight:700; color:var(--accent); background:rgba(212,175,55,0.1); padding:1px 6px; border-radius:4px;">ID: ' + idVal + '</code>' +
+          '<span>' + details + '</span>' +
+          (u.place ? '<span style="color:var(--text-muted);"><i class="fa fa-map-marker text-danger" style="font-size:10px;"></i> ' + u.place + '</span>' : '') +
+        '</div>' +
+      '</td>' +
+      '<td style="vertical-align:middle;">' +
+        '<button type="button" class="btn btn-sm" id="btnToggleDetails_' + uIdx + '" onclick="togglePortalUserDetails(' + uIdx + ')" ' +
+          'title="Click to view Password, Phone, Status" ' +
+          'style="background:rgba(255,255,255,0.05); border:1px solid var(--border-soft); color:var(--text); padding:5px 12px; border-radius:20px; font-size:0.82rem; display:inline-flex; align-items:center; gap:7px; cursor:pointer; transition:all 0.2s;">' +
+          '<span class="badge ' + badgeClass + '" style="font-size:11px; padding:3px 8px;">' + statusText + '</span>' +
+          '<i class="fa fa-key" style="color:var(--accent); font-size:11px;" title="View Password & Phone"></i>' +
+          '<i class="fa fa-chevron-down" id="chevronDetails_' + uIdx + '" style="font-size:10px; color:var(--text-muted); transition:transform 0.2s;"></i>' +
         '</button>' +
       '</td>' +
-      '<td><div class="action-buttons">' +
+      '<td style="vertical-align:middle; text-align:right;"><div class="action-buttons" style="justify-content:flex-end;">' +
         '<button class="btn btn-sm btn-info" onclick="openAdminMyDataModal(\'' + userUid + '\', \'' + u.role + '\', \'' + safeNameEsc + '\', \'' + idVal + '\')" title="Send Document / My Data to ' + safeNameEsc + '"><i class="fa fa-paper-plane"></i><span class="btn-text"> Send</span></button>' +
         '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')" title="Edit ' + safeNameEsc + '"><i class="fa fa-edit"></i><span class="btn-text"> Edit</span></button>' +
         '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')" title="Delete ' + safeNameEsc + '"><i class="fa fa-trash"></i><span class="btn-text"> Delete</span></button>' +
       '</div></td>' +
+    '</tr>' +
+    '<tr id="portalUserDetailsRow_' + uIdx + '" class="portal-user-detail-row" style="display:none;">' +
+      '<td colspan="4" style="background: rgba(7, 24, 48, 0.95); padding: 14px 18px; border-bottom: 2px solid var(--border-soft); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);">' +
+        '<div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">' +
+          '<div style="display:flex; flex-wrap:wrap; gap:20px; align-items:center;">' +
+            '<div style="display:flex; flex-direction:column; gap:2px;">' +
+              '<small style="color:var(--text-soft); font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">Status / Role</small>' +
+              '<div><span class="badge ' + badgeClass + '" style="font-size:12px; padding:3px 9px;">' + statusText + '</span></div>' +
+            '</div>' +
+            '<div style="display:flex; flex-direction:column; gap:2px;">' +
+              '<small style="color:var(--text-soft); font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">Phone Number</small>' +
+              '<div style="display:flex; align-items:center; gap:6px;">' +
+                '<a href="tel:' + phoneVal + '" style="color:var(--accent); font-weight:700; text-decoration:none; font-family:monospace; font-size:0.92rem;"><i class="fa fa-phone" style="margin-right:4px;"></i>' + phoneVal + '</a>' +
+                (phoneVal !== '—' ? '<button type="button" class="btn btn-outline-secondary btn-sm p-1" style="font-size:10px; line-height:1; border-radius:4px;" title="Copy Phone" onclick="navigator.clipboard.writeText(\'' + phoneVal + '\');showToast(\'Phone copied!\', false);"><i class="fa fa-copy"></i></button>' : '') +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex; flex-direction:column; gap:2px;">' +
+              '<small style="color:var(--text-soft); font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">Login Password</small>' +
+              '<div style="display:flex; align-items:center; gap:4px;">' +
+                '<span id="portalUserPwd_' + uIdx + '" data-pwd="' + safePwdEsc + '" style="font-family:monospace; font-weight:700; letter-spacing:1.5px; color:#4ade80; background:rgba(0,0,0,0.3); padding:3px 8px; border-radius:4px;">••••••••</span>' +
+                '<button type="button" class="btn btn-outline-info btn-sm p-1 ml-1" style="font-size:11px; line-height:1; border-radius:4px;" title="View / Hide Password" onclick="togglePortalTablePwd(' + uIdx + ')">' +
+                  '<i id="portalUserEye_' + uIdx + '" class="fa fa-eye"></i>' +
+                '</button>' +
+                '<button type="button" class="btn btn-outline-secondary btn-sm p-1 ml-1" style="font-size:11px; line-height:1; border-radius:4px;" title="Copy Password" onclick="copyPortalUserPwd(\'' + safePwdEsc + '\')">' +
+                  '<i class="fa fa-copy"></i>' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+            (u.place ? '<div style="display:flex; flex-direction:column; gap:2px;"><small style="color:var(--text-soft); font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">Place</small><div style="color:var(--text); font-size:0.85rem;"><i class="fa fa-map-marker text-danger" style="margin-right:4px;"></i>' + u.place + '</div></div>' : '') +
+          '</div>' +
+          '<div>' +
+            '<button type="button" class="btn btn-sm btn-ghost" onclick="togglePortalUserDetails(' + uIdx + ')" style="font-size:11px; color:var(--text-muted); padding:3px 8px; border:1px solid var(--border-soft); border-radius:12px;">' +
+              '<i class="fa fa-chevron-up mr-1"></i> Hide' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+      '</td>' +
     '</tr>';
   });
 
-  safeSetHtml('userTableBody', html || '<tr><td colspan="8" class="text-center text-muted py-4">No matching records found.</td></tr>');
+  safeSetHtml('userTableBody', html || '<tr><td colspan="4" class="text-center text-muted py-4">No matching records found.</td></tr>');
+}
+
+function togglePortalUserDetails(idx) {
+  var row = document.getElementById('portalUserDetailsRow_' + idx);
+  var btn = document.getElementById('btnToggleDetails_' + idx);
+  var chev = document.getElementById('chevronDetails_' + idx);
+  if (!row) return;
+  if (row.style.display === 'none' || !row.style.display) {
+    row.style.display = 'table-row';
+    if (btn) btn.style.borderColor = 'var(--accent)';
+    if (chev) chev.style.transform = 'rotate(180deg)';
+  } else {
+    row.style.display = 'none';
+    if (btn) btn.style.borderColor = 'var(--border-soft)';
+    if (chev) chev.style.transform = 'rotate(0deg)';
+  }
 }
 
 // Password toggle & copy helpers for Management Portal table and modals
