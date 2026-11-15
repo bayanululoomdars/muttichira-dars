@@ -1334,6 +1334,72 @@
     .unified-role-selector { display: flex; gap: 10px; margin-bottom: 20px; }
     .unified-role-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border-soft); border-radius: 8px; background: var(--bg-input); color: var(--text-soft); font-weight: 600; cursor: pointer; transition: 0.2s; }
     .unified-role-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    /* ═══════════════════════════════════════════════
+       COMPREHENSIVE RESPONSIVE DESIGN (Phone, Tablet, Desktop)
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      .page-area { padding: 12px 10px !important; }
+      .header-section { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; }
+      .header-section .add-btn { width: 100% !important; justify-content: center !important; text-align: center !important; padding: 12px !important; }
+      
+      /* Search & Filter Bar on Mobile */
+      #portalSearchInput { min-width: 100% !important; width: 100% !important; margin-bottom: 4px; }
+      #portalBatchFilter { width: 100% !important; }
+      .portal-filter-btn { flex: 1 1 45% !important; font-size: 0.8rem !important; padding: 8px 10px !important; text-align: center !important; justify-content: center !important; }
+
+      /* Modals on Mobile Phones */
+      .unified-modal { padding: 8px !important; align-items: flex-end !important; }
+      .unified-modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 20px 20px 14px 14px !important;
+        padding: 20px 14px 28px !important;
+        max-height: 92vh !important;
+        margin: 0 !important;
+      }
+      .unified-modal-header { margin-bottom: 14px !important; padding-bottom: 10px !important; }
+      .unified-modal-header h3 { font-size: 1.15rem !important; }
+      .unified-role-selector { gap: 6px !important; margin-bottom: 14px !important; }
+      .unified-role-btn { padding: 8px 10px !important; font-size: 0.85rem !important; }
+      .form-grid-2 { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .unified-form button[type="submit"] { width: 100% !important; padding: 12px !important; font-size: 0.95rem !important; }
+
+      /* Table Container on Mobile */
+      .table-container {
+        border-radius: 12px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.2) !important;
+      }
+      .modern-table th, .modern-table td { padding: 10px 8px !important; font-size: 0.82rem !important; }
+      .modern-table .btn, .modern-table .edit-btn, .modern-table .delete-btn, .modern-table .view-btn {
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 1024px) {
+      /* Tablet Devices */
+      .page-area { padding: 20px 16px !important; }
+      .unified-modal-content {
+        width: 88% !important;
+        max-width: 580px !important;
+        padding: 24px 20px !important;
+      }
+      .form-grid-2 { grid-template-columns: 1fr 1fr !important; gap: 14px !important; }
+      .table-container { overflow-x: auto !important; }
+    }
+
+    @media (min-width: 1025px) {
+      /* Desktop Displays */
+      .unified-modal-content {
+        max-width: 640px !important;
+        padding: 30px !important;
+      }
+      .form-grid-2 { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+    }
+
   
     /* MODERN THEME UPGRADE */
     :root {
