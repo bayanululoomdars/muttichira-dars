@@ -484,20 +484,31 @@
 
     .topbar-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 
-    /* Hamburger */
+    /* Hamburger on Topbar Right */
     .hamburger {
       display: none;
       flex-direction: column;
-      gap: 5px;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
       cursor: pointer;
-      padding: 6px;
+      width: 38px;
+      height: 38px;
+      padding: 7px;
       border-radius: 8px;
-      background: var(--bg-input);
-      border: none;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      transition: var(--transition);
+      margin-left: 8px;
+    }
+    .hamburger:hover {
+      background: rgba(212, 175, 55, 0.22);
+      border-color: var(--accent);
     }
     .hamburger span {
-      width: 20px; height: 2px;
-      background: var(--text);
+      width: 20px;
+      height: 2px;
+      background: var(--accent);
       border-radius: 2px;
       transition: var(--transition);
       display: block;
@@ -1061,12 +1072,43 @@
        RESPONSIVE
     ═══════════════════════════════════════════════ */
     @media (max-width: 1024px) {
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
-      .main-content { margin-left: 0; }
-      .hamburger { display: flex; }
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+        box-shadow: var(--shadow-lg);
+      }
+      .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+      .hamburger {
+        display: flex !important;
+      }
       .form-grid-2 { grid-template-columns: 1fr; }
       .form-grid-3 { grid-template-columns: 1fr; }
+      .action-buttons .btn-text {
+        display: none !important;
+      }
+      .action-buttons .btn,
+      .action-buttons button {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 6px !important;
+      }
+      .action-buttons .btn i,
+      .action-buttons button i {
+        margin: 0 !important;
+        font-size: 0.88rem !important;
+      }
+      .sidebar-close-btn { display: block !important; }
     }
 
     @media (max-width: 600px) {
@@ -1618,12 +1660,15 @@
 
     <!-- ── SIDEBAR ───────────────────── -->
     <aside class="sidebar" id="sidebar">
-      <div class="sidebar-brand">
-        <img src="img/new_logo.png" alt="Logo">
-        <div class="sidebar-brand-text">
-          <div class="title">AL BAYAN Admin</div>
-          <div class="sub">Bayanul Uloom Dars</div>
+      <div class="sidebar-brand" style="display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <img src="img/new_logo.png" alt="Logo">
+          <div class="sidebar-brand-text">
+            <div class="title">AL BAYAN Admin</div>
+            <div class="sub">Bayanul Uloom Dars</div>
+          </div>
         </div>
+        <button type="button" class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close Sidebar" style="display:none; background:none; border:none; color:var(--text-muted); font-size:1.6rem; cursor:pointer; line-height:1; padding:4px 8px;">&times;</button>
       </div>
 
       <div class="sidebar-nav">
@@ -1700,18 +1745,18 @@
       <!-- Top bar -->
       <div class="topbar">
         <div class="topbar-left">
-          <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
-            <span></span><span></span><span></span>
-          </button>
           <div>
             <div class="topbar-page-title" id="topbarTitle">Dashboard</div>
             <div class="topbar-breadcrumb">AL BAYAN Admin Panel</div>
           </div>
         </div>
-        <div class="topbar-right">
-          <a href="/" class="topbar-btn" target="_blank">
-            <i class="fa fa-external-link"></i> View Site
+        <div class="topbar-right" style="display:flex; align-items:center; gap:10px;">
+          <a href="/" class="topbar-btn" target="_blank" title="View Public Website">
+            <i class="fa fa-external-link"></i> <span class="topbar-btn-text">View Site</span>
           </a>
+          <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle Navigation" title="Navigation Menu">
+            <span></span><span></span><span></span>
+          </button>
         </div>
       </div>
 
@@ -3094,9 +3139,9 @@ function renderPortalUsersAdmin() {
         '</button>' +
       '</td>' +
       '<td><div class="action-buttons">' +
-        '<button class="btn btn-sm btn-info" onclick="openAdminMyDataModal(\'' + userUid + '\', \'' + u.role + '\', \'' + safeNameEsc + '\', \'' + idVal + '\')" title="Send document to user My Datas"><i class="fa fa-paper-plane"></i> Send Data</button>' +
-        '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')"><i class="fa fa-edit"></i> Edit</button>' +
-        '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')"><i class="fa fa-trash"></i> Delete</button>' +
+        '<button class="btn btn-sm btn-info" onclick="openAdminMyDataModal(\'' + userUid + '\', \'' + u.role + '\', \'' + safeNameEsc + '\', \'' + idVal + '\')" title="Send Document / My Data to ' + safeNameEsc + '"><i class="fa fa-paper-plane"></i><span class="btn-text"> Send</span></button>' +
+        '<button class="btn btn-primary btn-sm" onclick="editUserAdmin(\'' + (u._id || idVal) + '\', \'' + u.role + '\')" title="Edit ' + safeNameEsc + '"><i class="fa fa-edit"></i><span class="btn-text"> Edit</span></button>' +
+        '<button class="btn btn-danger btn-sm" onclick="' + (u.role === 'usthad' ? 'deleteUsthadAdmin' : 'deleteStudentAdmin') + '(\'' + (u._id || idVal) + '\')" title="Delete ' + safeNameEsc + '"><i class="fa fa-trash"></i><span class="btn-text"> Delete</span></button>' +
       '</div></td>' +
     '</tr>';
   });
