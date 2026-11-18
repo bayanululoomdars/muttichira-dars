@@ -5218,19 +5218,62 @@ function downloadIDCard() {
     function openLandscapeIdCardModal() {
       const user = currentUserSession;
       if (!user) return;
+      const isUsthad = (user.role === 'usthad');
+
       document.getElementById('licPhoto').src = user.photoUrl || 'img/new_logo.png';
-      document.getElementById('licName').textContent = user.name || '-';
-      document.getElementById('licFather').textContent = user.fatherName || user.guardianName || '-';
+      
+      const licNameEl = document.getElementById('licName');
+      if (licNameEl) {
+        licNameEl.textContent = user.name || '-';
+        if (user.name && user.name.length > 22) {
+          licNameEl.style.fontSize = '0.98rem';
+        } else {
+          licNameEl.style.fontSize = '1.12rem';
+        }
+      }
+
+      const licFatherLabel = document.getElementById('licFatherLabel');
+      const licFatherEl = document.getElementById('licFather');
+      const licIdLabel = document.getElementById('licIdLabel');
+      const licIdEl = document.getElementById('licId');
+      const licBatchLabel = document.getElementById('licBatchLabel');
+      const licBatchEl = document.getElementById('licBatch');
+      const licBadgeEl = document.getElementById('licFrontBadge');
+
+      if (isUsthad) {
+        if (licFatherLabel) licFatherLabel.textContent = 'Designation:';
+        if (licFatherEl) licFatherEl.textContent = user.designation || user.subject || 'Mudarris';
+        if (licIdLabel) licIdLabel.textContent = 'Usthad ID:';
+        if (licIdEl) licIdEl.textContent = String(user.usthadId || user.admissionNo || '1').replace(/^ust-?/i, 'UST-');
+        if (licBatchLabel) licBatchLabel.textContent = 'Dept:';
+        if (licBatchEl) licBatchEl.textContent = user.subject || 'Dars Faculty';
+        if (licBadgeEl) licBadgeEl.textContent = 'FACULTY / USTHAD';
+      } else {
+        if (licFatherLabel) licFatherLabel.textContent = 'S/O:';
+        if (licFatherEl) licFatherEl.textContent = user.fatherName || user.guardianName || '-';
+        if (licIdLabel) licIdLabel.textContent = 'ID/Adm No:';
+        if (licIdEl) licIdEl.textContent = user.admissionNo || '-';
+        if (licBatchLabel) licBatchLabel.textContent = 'Batch:';
+        if (licBatchEl) licBatchEl.textContent = 'Batch ' + (user.batchNumber || '1');
+        if (licBadgeEl) licBadgeEl.textContent = 'STUDENT ID';
+      }
+
       document.getElementById('licPlace').textContent = user.place || 'Muttichira';
-      document.getElementById('licId').textContent = user.admissionNo || user.usthadId || '-';
-      document.getElementById('licBatch').textContent = user.role === 'usthad' ? (user.designation || 'Usthad') : ('Batch ' + (user.batchNumber || '1'));
-      document.getElementById('licFrontBadge').textContent = user.role === 'usthad' ? 'USTHAD ID' : 'STUDENT ID';
 
       // Dynamic QR Code pointing to this user's pre-password login preview (?STD=101 or ?UST=1)
       const qrBox = document.getElementById('landscapeQrBox');
+      const qrWrapper = document.getElementById('landscapeQrWrapper');
       if (qrBox) {
         qrBox.innerHTML = '';
-        const isUsthad = (user.role === 'usthad');
+        // Usthad QR code is made compact (68px) so Usthad's honorary name & title have generous breathing space
+        const qrSize = isUsthad ? 68 : 78;
+        if (qrWrapper) {
+          qrWrapper.style.padding = isUsthad ? '3px' : '4px';
+          qrWrapper.style.borderRadius = isUsthad ? '11px' : '13px';
+        }
+        qrBox.style.width = qrSize + 'px';
+        qrBox.style.height = qrSize + 'px';
+
         let scanTargetUrl = window.location.origin + '/login.html';
         let cleanU = '';
         let cleanS = '';
@@ -5251,12 +5294,12 @@ function downloadIDCard() {
 
         // If default master profile or QRCodeStyling unavailable, use pristine 1000x1000 HD QR image
         if (isMasterUsthad || isMasterStudent || typeof QRCodeStyling === 'undefined') {
-          qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:84px; height:84px; object-fit:contain; border-radius:8px;">';
+          qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:' + qrSize + 'px; height:' + qrSize + 'px; object-fit:contain; border-radius:' + (isUsthad ? '6px' : '8px') + ';">';
         } else {
           try {
             const qrCodeObj = new QRCodeStyling({
-              width: 280,
-              height: 280,
+              width: isUsthad ? 240 : 280,
+              height: isUsthad ? 240 : 280,
               type: "canvas",
               data: scanTargetUrl,
               image: "img/new_logo.png",
@@ -5290,15 +5333,15 @@ function downloadIDCard() {
             setTimeout(() => {
               const cv = qrBox.querySelector('canvas');
               if (cv) {
-                cv.style.width = '84px';
-                cv.style.height = '84px';
+                cv.style.width = qrSize + 'px';
+                cv.style.height = qrSize + 'px';
                 cv.style.objectFit = 'contain';
-                cv.style.borderRadius = '8px';
+                cv.style.borderRadius = (isUsthad ? '6px' : '8px');
               }
             }, 60);
           } catch(err) {
             console.error('Error rendering styled QR:', err);
-            qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:84px; height:84px; object-fit:contain; border-radius:8px;">';
+            qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:' + qrSize + 'px; height:' + qrSize + 'px; object-fit:contain; border-radius:' + (isUsthad ? '6px' : '8px') + ';">';
           }
         }
       }
@@ -5381,9 +5424,17 @@ function downloadIDCard() {
             const origCanvas = sourceElem.querySelector('#landscapeQrBox canvas');
             const origImg = sourceElem.querySelector('#landscapeQrBox img');
             const cloneQrBox = clone.querySelector('#landscapeQrBox');
+            const cloneQrWrapper = clone.querySelector('#landscapeQrWrapper');
+            const isUsthad = currentUserSession && currentUserSession.role === 'usthad';
+            const pdfQrSize = isUsthad ? 80 : 94; // Usthad QR reduced (80px vs 106px) for spacious typography
+
+            if (cloneQrWrapper) {
+              cloneQrWrapper.style.padding = isUsthad ? '3px' : '4px';
+              cloneQrWrapper.style.borderRadius = isUsthad ? '11px' : '13px';
+            }
             if (cloneQrBox) {
-              cloneQrBox.style.width = '106px';
-              cloneQrBox.style.height = '106px';
+              cloneQrBox.style.width = pdfQrSize + 'px';
+              cloneQrBox.style.height = pdfQrSize + 'px';
               let qrSrc = '';
               if (origImg && origImg.src) {
                 qrSrc = origImg.src;
@@ -5391,7 +5442,7 @@ function downloadIDCard() {
                 try { qrSrc = origCanvas.toDataURL(); } catch(e){}
               }
               if (qrSrc) {
-                cloneQrBox.innerHTML = '<img src="' + qrSrc + '" style="width:100%; height:100%; object-fit:contain; border-radius:10px;">';
+                cloneQrBox.innerHTML = '<img src="' + qrSrc + '" style="width:100%; height:100%; object-fit:contain; border-radius:' + (isUsthad ? '7px' : '9px') + ';">';
               }
             }
           }
@@ -6487,21 +6538,21 @@ function downloadIDCard() {
                 </div>
 
                 <!-- Middle Content -->
-                <div class="d-flex align-items-center justify-content-between my-auto gap-3">
+                <div class="d-flex align-items-center justify-content-between my-auto gap-3" style="min-width:0;">
                   <img id="licPhoto" src="img/new_logo.png" style="width:72px; height:96px; border-radius:12px; object-fit:cover; aspect-ratio:3/4; border:2px solid #d4af37; box-shadow:0 4px 10px rgba(0,0,0,0.3); flex-shrink:0;">
                   
-                  <div class="text-left flex-grow-1 pl-2">
-                    <h5 id="licName" class="font-weight-bold mb-1 text-white" style="font-size:1.15rem; line-height:1.2;">-</h5>
-                    <div style="font-size:0.8rem; color:#cbd5e1; line-height:1.4;">
-                      <div><span style="color:#94a3b8;">S/O:</span> <strong id="licFather" class="text-white">-</strong></div>
+                  <div class="text-left flex-grow-1 pl-2" style="min-width:0; overflow:hidden;">
+                    <h5 id="licName" class="font-weight-bold mb-1 text-white text-truncate" style="font-size:1.12rem; line-height:1.2;">-</h5>
+                    <div style="font-size:0.78rem; color:#cbd5e1; line-height:1.45;">
+                      <div><span id="licFatherLabel" style="color:#94a3b8;">S/O:</span> <strong id="licFather" class="text-white">-</strong></div>
                       <div><span style="color:#94a3b8;">Place:</span> <strong id="licPlace" class="text-white">-</strong></div>
-                      <div><span style="color:#94a3b8;">ID/Adm No:</span> <strong id="licId" style="color:#d4af37;" class="font-mono">-</strong> &nbsp;|&nbsp; <span style="color:#94a3b8;">Batch:</span> <strong id="licBatch" class="text-white">-</strong></div>
+                      <div><span id="licIdLabel" style="color:#94a3b8;">ID/Adm No:</span> <strong id="licId" style="color:#d4af37;" class="font-mono">-</strong> &nbsp;|&nbsp; <span id="licBatchLabel" style="color:#94a3b8;">Batch:</span> <strong id="licBatch" class="text-white">-</strong></div>
                     </div>
                   </div>
 
-                  <!-- QR CODE (First QR Model - Maximum Size Curved Box, No 'Scan to Login' text) -->
-                  <div class="text-center bg-white" style="padding:4px; border-radius:14px; border:2px solid rgba(212,175,55,0.6); box-shadow:0 4px 14px rgba(0,0,0,0.3); flex-shrink:0; display:inline-flex; align-items:center; justify-content:center;">
-                    <div id="landscapeQrBox" style="width:84px; height:84px; display:flex; align-items:center; justify-content:center; overflow:hidden;"></div>
+                  <!-- QR CODE (First QR Model - Curved Box, Scaled Proportionally) -->
+                  <div id="landscapeQrWrapper" class="text-center bg-white" style="padding:3px; border-radius:12px; border:2px solid rgba(212,175,55,0.6); box-shadow:0 4px 14px rgba(0,0,0,0.3); flex-shrink:0; display:inline-flex; align-items:center; justify-content:center;">
+                    <div id="landscapeQrBox" style="width:68px; height:68px; display:flex; align-items:center; justify-content:center; overflow:hidden;"></div>
                   </div>
                 </div>
 
