@@ -3932,7 +3932,7 @@ function ensureThirtyStudentsInBatch(batchName) {
       <!-- Left: Photo & QR -->
       <div style="display:flex; flex-direction:column; align-items:center; width: 130px;">
         <img id="idCardPhoto" src="img/new_logo.png" style="width:100px; height:120px; object-fit:cover; border-radius:10px; border:3px solid #fff; margin-bottom:10px;">
-        <div id="idCardQR" style="background:#fff; padding:5px; border-radius:5px;"></div>
+        <div id="idCardQR" style="background:#fff; padding:6px; border-radius:14px; border:2px solid rgba(212,175,55,0.45); box-shadow:0 4px 12px rgba(0,0,0,0.15);"></div>
       </div>
       
       <!-- Right: Details -->
@@ -4008,10 +4008,36 @@ function renderQRCodeForUser(user) {
         text: scanUrl,
         width: 80,
         height: 80,
-        colorDark: "#000000",
+        colorDark: "#1e1b4b",
         colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
+        correctLevel: QRCode.CorrectLevel.H
       });
+      setTimeout(() => {
+        const canvas = qrContainerID.querySelector('canvas');
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          const logo = new Image();
+          logo.crossOrigin = 'anonymous';
+          logo.onload = function() {
+            const logoSize = Math.floor(canvas.width * 0.28);
+            const pos = Math.floor((canvas.width - logoSize) / 2);
+            ctx.fillStyle = '#ffffff';
+            if (ctx.roundRect) {
+              ctx.beginPath();
+              ctx.roundRect(pos - 2, pos - 2, logoSize + 4, logoSize + 4, 3);
+              ctx.fill();
+            } else {
+              ctx.fillRect(pos - 2, pos - 2, logoSize + 4, logoSize + 4);
+            }
+            ctx.drawImage(logo, pos, pos, logoSize, logoSize);
+            const imgTag = qrContainerID.querySelector('img');
+            if (imgTag && imgTag.style.display !== 'none') {
+              imgTag.src = canvas.toDataURL();
+            }
+          };
+          logo.src = 'img/new_logo.png';
+        }
+      }, 50);
     } catch (e) {
       console.error('QRCode ID card generation error', e);
     }
@@ -4477,12 +4503,40 @@ function downloadIDCard() {
         try {
           new QRCode(qrBox, {
             text: scanTargetUrl,
-            width: 60,
-            height: 60,
-            colorDark: "#064e3b",
+            width: 70,
+            height: 70,
+            colorDark: "#1e1b4b",
             colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.M
+            correctLevel: QRCode.CorrectLevel.H
           });
+
+          // Embed First QR Model Center Logo
+          setTimeout(() => {
+            const canvas = qrBox.querySelector('canvas');
+            if (canvas) {
+              const ctx = canvas.getContext('2d');
+              const logo = new Image();
+              logo.crossOrigin = 'anonymous';
+              logo.onload = function() {
+                const logoSize = Math.floor(canvas.width * 0.28);
+                const pos = Math.floor((canvas.width - logoSize) / 2);
+                ctx.fillStyle = '#ffffff';
+                if (ctx.roundRect) {
+                  ctx.beginPath();
+                  ctx.roundRect(pos - 2, pos - 2, logoSize + 4, logoSize + 4, 3);
+                  ctx.fill();
+                } else {
+                  ctx.fillRect(pos - 2, pos - 2, logoSize + 4, logoSize + 4);
+                }
+                ctx.drawImage(logo, pos, pos, logoSize, logoSize);
+                const imgTag = qrBox.querySelector('img');
+                if (imgTag && imgTag.style.display !== 'none') {
+                  imgTag.src = canvas.toDataURL();
+                }
+              };
+              logo.src = 'img/new_logo.png';
+            }
+          }, 50);
         } catch(e) {
           console.error('QR code generation error:', e);
         }
@@ -5378,10 +5432,9 @@ function downloadIDCard() {
                     </div>
                   </div>
 
-                  <!-- QR CODE (Dynamic Scanner linking to Login Page) -->
-                  <div class="text-center p-2 rounded-3 bg-white" style="box-shadow:0 4px 12px rgba(0,0,0,0.2); flex-shrink:0;">
-                    <div id="landscapeQrBox" style="width:65px; height:65px; display:flex; align-items:center; justify-content:center;"></div>
-                    <div style="font-size:7px; font-weight:800; color:#0f172a; margin-top:2px; text-transform:uppercase;">Scan to Login</div>
+                  <!-- QR CODE (First QR Model with Curved Box, without 'Scan to Login') -->
+                  <div class="text-center bg-white" style="padding:6px; border-radius:14px; border:2px solid rgba(212,175,55,0.45); box-shadow:0 4px 14px rgba(0,0,0,0.25); flex-shrink:0; display:inline-flex; align-items:center; justify-content:center;">
+                    <div id="landscapeQrBox" style="width:70px; height:70px; display:flex; align-items:center; justify-content:center;"></div>
                   </div>
                 </div>
 
