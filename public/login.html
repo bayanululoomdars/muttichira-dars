@@ -618,13 +618,12 @@
     .landscape-perspective {
       perspective: 1200px;
       width: 100%;
-      max-width: 508px;
+      max-width: 530px;
       margin: 0 auto;
     }
     .landscape-card-inner {
       width: 100%;
-      max-width: 508px;
-      height: 320px;
+      max-width: 530px;
       aspect-ratio: 85.6 / 54;
       position: relative;
       transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -640,13 +639,14 @@
       height: 100%;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
-      border-radius: 20px;
+      border-radius: 16px;
       box-shadow: 0 15px 35px rgba(0,0,0,0.2);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 20px 24px;
+      padding: 18px 22px;
+      box-sizing: border-box;
     }
     .landscape-front {
       background: linear-gradient(135deg, #091e17 0%, #112a22 50%, #064e3b 100%);
@@ -4523,14 +4523,14 @@ function downloadIDCard() {
         try {
           new QRCode(qrBox, {
             text: scanTargetUrl,
-            width: 70,
-            height: 70,
+            width: 140,
+            height: 140,
             colorDark: "#1e1b4b",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
           });
 
-          // Embed First QR Model Center Logo
+          // Embed First QR Model Center Logo with solid white backing and subtle gold border
           setTimeout(() => {
             const canvas = qrBox.querySelector('canvas');
             if (canvas) {
@@ -4541,22 +4541,21 @@ function downloadIDCard() {
                 const logoSize = Math.floor(canvas.width * 0.28);
                 const pos = Math.floor((canvas.width - logoSize) / 2);
                 ctx.fillStyle = '#ffffff';
-                if (ctx.roundRect) {
-                  ctx.beginPath();
-                  ctx.roundRect(pos - 2, pos - 2, logoSize + 4, logoSize + 4, 3);
-                  ctx.fill();
-                } else {
-                  ctx.fillRect(pos - 2, pos - 2, logoSize + 4, logoSize + 4);
-                }
+                ctx.fillRect(pos - 3, pos - 3, logoSize + 6, logoSize + 6);
+                ctx.strokeStyle = '#d4af37';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(pos - 3, pos - 3, logoSize + 6, logoSize + 6);
                 ctx.drawImage(logo, pos, pos, logoSize, logoSize);
                 const imgTag = qrBox.querySelector('img');
-                if (imgTag && imgTag.style.display !== 'none') {
+                if (imgTag) {
                   imgTag.src = canvas.toDataURL();
+                  imgTag.style.width = '70px';
+                  imgTag.style.height = '70px';
                 }
               };
               logo.src = 'img/new_logo.png';
             }
-          }, 50);
+          }, 80);
         } catch(e) {
           console.error('QR code generation error:', e);
         }
@@ -4582,7 +4581,7 @@ function downloadIDCard() {
       const origHtml = btn ? btn.innerHTML : '';
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Generating 2-Page PDF...';
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Generating CR80 PDF...';
       }
 
       try {
@@ -4590,36 +4589,88 @@ function downloadIDCard() {
         const backSide = document.getElementById('landscapeBackSide');
         if (!frontSide || !backSide) throw new Error('ID card elements not found');
 
-        // Capture side cleanly with high scale for 300+ DPI print quality
-        async function captureSide(element, isBack) {
-          const origTransform = element.style.transform;
-          const origVisibility = element.style.visibility;
-          const origBackface = element.style.backfaceVisibility;
+        // Capture side cleanly using an isolated 2D clone off-screen
+        // Completely eliminates 3D perspective/flip mirroring and enforces exact 85.6mm x 54mm CR80 aspect ratio
+        async function captureSideCleanly(sourceElem, isBack) {
+          const clone = sourceElem.cloneNode(true);
+          clone.id = 'temp_render_' + (isBack ? 'back' : 'front');
+
+          // Strict CR80 ATM dimensions: 535px x 337.5px (exact 1.585185 ratio)
+          clone.style.position = 'fixed';
+          clone.style.top = '-9999px';
+          clone.style.left = '-9999px';
+          clone.style.width = '535px';
+          clone.style.height = '337.5px';
+          clone.style.minWidth = '535px';
+          clone.style.minHeight = '337.5px';
+          clone.style.maxWidth = '535px';
+          clone.style.maxHeight = '337.5px';
+          clone.style.aspectRatio = '85.6 / 54';
+          clone.style.margin = '0';
+          clone.style.padding = '18px 22px';
+          clone.style.boxSizing = 'border-box';
+          clone.style.display = 'flex';
+          clone.style.flexDirection = 'column';
+          clone.style.justifyContent = 'space-between';
+          clone.style.borderRadius = '16px';
+          clone.style.boxShadow = 'none';
+          clone.style.overflow = 'hidden';
+          clone.style.zIndex = '-9999';
+
+          // REMOVE ALL 3D FLIP/TRANSFORM STYLES COMPLETELY
+          clone.style.transform = 'none';
+          clone.style.webkitTransform = 'none';
+          clone.style.backfaceVisibility = 'visible';
+          clone.style.webkitBackfaceVisibility = 'visible';
+          clone.style.visibility = 'visible';
+          clone.classList.remove('landscape-back');
+          clone.classList.remove('landscape-front');
 
           if (isBack) {
-            element.style.transform = 'none';
-            element.style.visibility = 'visible';
-            element.style.backfaceVisibility = 'visible';
+            clone.style.background = '#ffffff';
+            clone.style.border = '2px solid #cbd5e1';
+            clone.style.color = '#1e293b';
+          } else {
+            clone.style.background = 'linear-gradient(135deg, #091e17 0%, #112a22 50%, #064e3b 100%)';
+            clone.style.border = '2px solid rgba(212, 175, 55, 0.7)';
+            clone.style.color = '#ffffff';
+
+            // Transfer rendered QR canvas/img from source to clone
+            const origCanvas = sourceElem.querySelector('#landscapeQrBox canvas');
+            const origImg = sourceElem.querySelector('#landscapeQrBox img');
+            const cloneQrBox = clone.querySelector('#landscapeQrBox');
+            if (cloneQrBox) {
+              let qrSrc = '';
+              if (origCanvas) {
+                try { qrSrc = origCanvas.toDataURL(); } catch(e){}
+              }
+              if (!qrSrc && origImg && origImg.src) {
+                qrSrc = origImg.src;
+              }
+              if (qrSrc) {
+                cloneQrBox.innerHTML = '<img src="' + qrSrc + '" style="width:100%; height:100%; object-fit:contain; border-radius:10px;">';
+              }
+            }
           }
 
-          const canvas = await html2canvas(element, {
-            scale: 3,
+          document.body.appendChild(clone);
+
+          // Allow DOM reflow and font rendering
+          await new Promise(r => setTimeout(r, 60));
+
+          const canvas = await html2canvas(clone, {
+            scale: 3, // ~476 DPI on CR80 physical card for ultra-crisp print quality
             useCORS: true,
             backgroundColor: isBack ? '#ffffff' : null,
             logging: false
           });
 
-          if (isBack) {
-            element.style.transform = origTransform;
-            element.style.visibility = origVisibility;
-            element.style.backfaceVisibility = origBackface;
-          }
-
+          document.body.removeChild(clone);
           return canvas;
         }
 
-        const frontCanvas = await captureSide(frontSide, false);
-        const backCanvas = await captureSide(backSide, true);
+        const frontCanvas = await captureSideCleanly(frontSide, false);
+        const backCanvas = await captureSideCleanly(backSide, true);
 
         const frontImg = frontCanvas.toDataURL('image/jpeg', 0.98);
         const backImg = backCanvas.toDataURL('image/jpeg', 0.98);
@@ -4629,14 +4680,14 @@ function downloadIDCard() {
         const pdf = new jsPDF({
           orientation: 'landscape',
           unit: 'mm',
-          format: [54, 85.6]
+          format: [85.6, 54]
         });
 
         // Page 1: Front Side (85.6 mm x 54 mm)
         pdf.addImage(frontImg, 'JPEG', 0, 0, 85.6, 54, '', 'FAST');
 
         // Page 2: Back Side (85.6 mm x 54 mm)
-        pdf.addPage([54, 85.6], 'landscape');
+        pdf.addPage([85.6, 54], 'landscape');
         pdf.addImage(backImg, 'JPEG', 0, 0, 85.6, 54, '', 'FAST');
 
         const rawName = (currentUserSession && currentUserSession.name) ? currentUserSession.name : 'ID_Card';
@@ -4655,23 +4706,6 @@ function downloadIDCard() {
 
     function downloadLandscapeCard() {
       downloadLandscapeCardPDF();
-    }
-
-    function downloadLandscapePNG() {
-      if (typeof html2canvas === 'undefined') {
-        alert('Canvas library loading, please try again.');
-        return;
-      }
-      const isFlipped = document.getElementById('landscapeFlipCardInner').classList.contains('flipped');
-      const targetSide = isFlipped ? document.getElementById('landscapeBackSide') : document.getElementById('landscapeFrontSide');
-      const fileName = ((currentUserSession && currentUserSession.name) || 'ID_Card') + (isFlipped ? '_Back' : '_Front') + '.png';
-
-      html2canvas(targetSide, { scale: 3, backgroundColor: null, useCORS: true }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = fileName;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      });
     }
 
     // Auto-Lookup from QR Code on Load (?STD=101 or ?UST=1)
@@ -5788,10 +5822,7 @@ function downloadIDCard() {
           </button>
           <div class="d-flex align-items-center gap-2 flex-wrap">
             <button type="button" class="btn btn-secondary rounded-pill font-weight-bold btn-sm" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-outline-info rounded-pill font-weight-bold btn-sm" onclick="downloadLandscapePNG()" title="Download current side as PNG image">
-              <i class="fa fa-image mr-1"></i> PNG
-            </button>
-            <button type="button" class="btn btn-success rounded-pill font-weight-bold px-3 py-2 shadow" id="btnDownloadCR80PDF" onclick="downloadLandscapeCardPDF()">
+            <button type="button" class="btn btn-success rounded-pill font-weight-bold px-4 py-2 shadow" id="btnDownloadCR80PDF" onclick="downloadLandscapeCardPDF()">
               <i class="fa fa-file-pdf-o mr-1"></i> Download CR80 PVC Card PDF (2 Pages)
             </button>
           </div>
