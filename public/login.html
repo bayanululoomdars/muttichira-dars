@@ -3821,40 +3821,56 @@ function ensureThirtyStudentsInBatch(batchName) {
 
 <script>
 function renderQRCodeForUser(user) {
+  if (!user) return;
   const qrContainerDash = document.getElementById('dashQRCode');
   const qrContainerID = document.getElementById('idCardQR');
-  if (!qrContainerDash || !qrContainerID) return;
-  qrContainerDash.innerHTML = '';
-  qrContainerID.innerHTML = '';
   
-  if (!user || user.role !== 'student') return;
-  
-  const scanUrl = window.location.origin + '/login.html?user=' + (user.admissionNo || user._id);
-  
-  try {
-    new QRCode(qrContainerDash, {
-      text: scanUrl,
-      width: 60,
-      height: 60,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.L
-    });
-    
-    new QRCode(qrContainerID, {
-      text: scanUrl,
-      width: 80,
-      height: 80,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.L
-    });
-  } catch (e) {
-    console.error('QRCode generation failed', e);
+  let scanUrl = window.location.origin + '/login.html';
+  if (user.role === 'usthad') {
+    const rawU = String(user.usthadId || user.admissionNo || user._id || '').trim();
+    const cleanU = rawU.replace(/^ust-?/i, '');
+    scanUrl += '?UST=' + encodeURIComponent(cleanU || rawU || '1');
+  } else {
+    const rawS = String(user.admissionNo || user._id || '').trim();
+    const cleanS = rawS.replace(/^std-?/i, '');
+    scanUrl += '?STD=' + encodeURIComponent(cleanS || rawS || '101');
   }
   
-  qrContainerDash.style.display = 'block';
-  document.getElementById('btnDownloadID').style.display = 'inline-block';
+  if (qrContainerDash) {
+    qrContainerDash.innerHTML = '';
+    try {
+      new QRCode(qrContainerDash, {
+        text: scanUrl,
+        width: 60,
+        height: 60,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      qrContainerDash.style.display = 'block';
+    } catch (e) {
+      console.error('QRCode dash generation error', e);
+    }
+  }
+  
+  if (qrContainerID) {
+    qrContainerID.innerHTML = '';
+    try {
+      new QRCode(qrContainerID, {
+        text: scanUrl,
+        width: 80,
+        height: 80,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } catch (e) {
+      console.error('QRCode ID card generation error', e);
+    }
+  }
+  
+  const btnDl = document.getElementById('btnDownloadID');
+  if (btnDl) btnDl.style.display = 'inline-block';
 }
 
 function downloadIDCard() {
@@ -3865,7 +3881,11 @@ function downloadIDCard() {
   document.getElementById('idCardName').textContent = user.name || '';
   document.getElementById('idCardFather').textContent = user.fatherName || 'N/A';
   document.getElementById('idCardBatch').textContent = 'Batch ' + (user.batchNumber || 'N/A');
-  document.getElementById('idCardAdmNo').textContent = user.admissionNo || '';
+  document.getElementById('idCardAdmNo').textContent = user.role === 'usthad' ? ('ID: ' + (user.usthadId || '1')) : (user.admissionNo || '');
+  if (user.role === 'usthad') {
+    document.getElementById('idCardBatch').textContent = user.designation || 'Usthad';
+    document.getElementById('idCardFather').textContent = user.subject || 'Faculty';
+  }
   document.getElementById('idCardPhone').textContent = user.phone || '';
   
   const idCardEl = document.getElementById('idCardTemplate');
@@ -3883,20 +3903,7 @@ function downloadIDCard() {
   }, 300);
 }
 
-// Check URL for ?user= to auto-lookup
-window.addEventListener('DOMContentLoaded', () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const autoUser = urlParams.get('user');
-  if (autoUser) {
-    const input = document.getElementById('inputIdentifier');
-    if(input) {
-      input.value = autoUser;
-      setTimeout(() => {
-        handleLiveLookup();
-      }, 500);
-    }
-  }
-});
+
 
     // ==================== VIEW PROFILE MODAL ====================
     function openViewProfileModal() {
@@ -4304,22 +4311,33 @@ window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('licBatch').textContent = user.role === 'usthad' ? (user.designation || 'Usthad') : ('Batch ' + (user.batchNumber || '1'));
       document.getElementById('licFrontBadge').textContent = user.role === 'usthad' ? 'USTHAD ID' : 'STUDENT ID';
 
-      // Dynamic QR Code pointing to this user's pre-password login preview
+      // Dynamic QR Code pointing to this user's pre-password login preview (?STD=101 or ?UST=1)
       const qrBox = document.getElementById('landscapeQrBox');
-      qrBox.innerHTML = '';
-      const scanTargetUrl = window.location.origin + window.location.pathname + '?id=' + encodeURIComponent(user.admissionNo || user.usthadId);
+      if (qrBox) {
+        qrBox.innerHTML = '';
+        let scanTargetUrl = window.location.origin + '/login.html';
+        if (user.role === 'usthad') {
+          const rawU = String(user.usthadId || user.admissionNo || user._id || '').trim();
+          const cleanU = rawU.replace(/^ust-?/i, '');
+          scanTargetUrl += '?UST=' + encodeURIComponent(cleanU || rawU || '1');
+        } else {
+          const rawS = String(user.admissionNo || user._id || '').trim();
+          const cleanS = rawS.replace(/^std-?/i, '');
+          scanTargetUrl += '?STD=' + encodeURIComponent(cleanS || rawS || '101');
+        }
 
-      try {
-        new QRCode(qrBox, {
-          text: scanTargetUrl,
-          width: 60,
-          height: 60,
-          colorDark: "#064e3b",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      } catch(e) {
-        console.error('QR code generation error:', e);
+        try {
+          new QRCode(qrBox, {
+            text: scanTargetUrl,
+            width: 60,
+            height: 60,
+            colorDark: "#064e3b",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        } catch(e) {
+          console.error('QR code generation error:', e);
+        }
       }
 
       document.getElementById('landscapeFlipCardInner').classList.remove('flipped');
@@ -4348,16 +4366,36 @@ window.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Auto-Lookup from QR Code on Load
+    // Auto-Lookup from QR Code on Load (?STD=101 or ?UST=1)
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const autoUser = urlParams.get('id') || urlParams.get('user') || urlParams.get('adm') || urlParams.get('lookup');
-      if (autoUser) {
+      const stdParam = urlParams.get('STD') || urlParams.get('std');
+      const ustParam = urlParams.get('UST') || urlParams.get('ust');
+      const legacyParam = urlParams.get('id') || urlParams.get('user') || urlParams.get('adm') || urlParams.get('lookup');
+
+      let targetRole = 'student';
+      let targetId = '';
+
+      if (ustParam) {
+        targetRole = 'usthad';
+        targetId = ustParam.trim();
+      } else if (stdParam) {
+        targetRole = 'student';
+        targetId = stdParam.trim();
+      } else if (legacyParam) {
+        targetId = legacyParam.trim();
+        if (/^ust/i.test(targetId)) {
+          targetRole = 'usthad';
+        }
+      }
+
+      if (targetId) {
+        switchRole(targetRole);
         const input = document.getElementById('inputIdentifier');
         if (input) {
-          input.value = autoUser;
+          input.value = targetId;
           setTimeout(() => {
-            fetch('/api/portal/lookup?q=' + encodeURIComponent(autoUser) + '&role=' + currentRole)
+            fetch('/api/portal/lookup?q=' + encodeURIComponent(targetId) + '&role=' + targetRole)
               .then(r => r.json())
               .then(data => {
                 if (data.success && data.matches && data.matches.length > 0) {
@@ -4368,8 +4406,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
                   }
                 }
-              });
-          }, 300);
+              })
+              .catch(err => console.error('Auto lookup error:', err));
+          }, 350);
         }
       }
     });

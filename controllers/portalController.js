@@ -87,6 +87,7 @@ async function findStudentByIdentifier(query) {
   if (!query) return null;
   const qStr = String(query).trim();
   const qLower = qStr.toLowerCase();
+  const cleanQ = qLower.replace(/^std-?/i, '').trim();
 
   let students = [];
   try {
@@ -97,11 +98,12 @@ async function findStudentByIdentifier(query) {
     students = memoryStudents;
   }
 
-  // Exact match by admissionNo or phone first
-  let found = students.find(s => 
-    String(s.admissionNo || '').toLowerCase() === qLower ||
-    String(s.phone || '').trim() === qStr
-  );
+  // Exact match by admissionNo (STD-101 or 101) or phone first
+  let found = students.find(s => {
+    const adm = String(s.admissionNo || '').toLowerCase();
+    const cleanAdm = adm.replace(/^std-?/i, '').trim();
+    return adm === qLower || (cleanAdm && cleanAdm === cleanQ) || String(s.phone || '').trim() === qStr;
+  });
   if (found) return found;
 
   // Substring match by name or place
@@ -116,6 +118,7 @@ async function findUsthadByIdentifier(query) {
   if (!query) return null;
   const qStr = String(query).trim();
   const qLower = qStr.toLowerCase();
+  const cleanQ = qLower.replace(/^ust-?/i, '').trim();
 
   let usthads = [];
   try {
@@ -126,11 +129,12 @@ async function findUsthadByIdentifier(query) {
     usthads = memoryUsthads;
   }
 
-  // Exact match by usthadId or phone first
-  let found = usthads.find(u => 
-    String(u.usthadId || '').toLowerCase() === qLower ||
-    String(u.phone || '').trim() === qStr
-  );
+  // Exact match by usthadId (UST1 or 1) or phone first
+  let found = usthads.find(u => {
+    const uid = String(u.usthadId || '').toLowerCase();
+    const cleanUid = uid.replace(/^ust-?/i, '').trim();
+    return uid === qLower || (cleanUid && cleanUid === cleanQ) || String(u.phone || '').trim() === qStr;
+  });
   if (found) return found;
 
   // Substring match by name or place
@@ -163,8 +167,11 @@ exports.lookup = async (req, res) => {
     const requestedRole = req.query.role;
     // Filter students
     if (!requestedRole || requestedRole === 'student') {
+    const cleanQStudent = qLower.replace(/^std-?/i, '').trim();
     allStudents.forEach(s => {
-      const admMatch = String(s.admissionNo || '').toLowerCase() === qLower;
+      const admLower = String(s.admissionNo || '').toLowerCase();
+      const cleanAdm = admLower.replace(/^std-?/i, '').trim();
+      const admMatch = (admLower === qLower) || (cleanAdm && cleanAdm === cleanQStudent);
       const phoneMatch = String(s.phone || '').includes(q);
       const nameMatch = (s.name || '').toLowerCase().includes(qLower);
       const placeMatch = (s.place || '').toLowerCase().includes(qLower);
@@ -188,8 +195,11 @@ exports.lookup = async (req, res) => {
     }
     // Filter usthads
     if (!requestedRole || requestedRole === 'usthad') {
+    const cleanQUsthad = qLower.replace(/^ust-?/i, '').trim();
     allUsthads.forEach(u => {
-      const idMatch = String(u.usthadId || '').toLowerCase() === qLower;
+      const idLower = String(u.usthadId || '').toLowerCase();
+      const cleanId = idLower.replace(/^ust-?/i, '').trim();
+      const idMatch = (idLower === qLower) || (cleanId && cleanId === cleanQUsthad);
       const phoneMatch = String(u.phone || '').includes(q);
       const nameMatch = (u.name || '').toLowerCase().includes(qLower);
       const placeMatch = (u.place || '').toLowerCase().includes(qLower);
