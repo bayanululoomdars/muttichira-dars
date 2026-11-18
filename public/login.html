@@ -816,16 +816,16 @@
             <!-- Live Selectable Search Results Dropdown List -->
             <div id="liveSearchResultsSelect" style="display: none;" class="mb-3"></div>
 
-            <!-- Live Preview Card (Single Selected Item - Name, Place, Father ONLY) -->
+            <!-- Live Preview Card (Single Selected Item - Name, Place, Father/Designation) -->
             <div id="livePreviewBox" style="display: none;" class="prelogin-card mb-3">
               <div class="d-flex align-items-center gap-3">
                 <img id="previewPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar">
                 <div class="flex-grow-1 text-left pl-2">
-                  <div class="text-muted" style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Student Name:</div>
+                  <div id="previewRoleLabel" class="text-muted" style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">STUDENT NAME:</div>
                   <h4 id="previewName" class="font-weight-bold mb-2 text-dark" style="font-size:1.15rem; line-height:1.2;">-</h4>
                   
-                  <div class="prelogin-field">
-                    <i class="fa fa-user-circle text-success mr-1"></i> Father's Name: <strong id="previewFatherText" class="text-dark">-</strong>
+                  <div class="prelogin-field" id="previewSubRow">
+                    <i id="previewFatherIcon" class="fa fa-user-circle text-success mr-1"></i> <span id="previewFatherLabel">Father's Name:</span> <strong id="previewFatherText" class="text-dark">-</strong>
                   </div>
                   <div class="prelogin-field mb-0">
                     <i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="previewPlaceText" class="text-dark">-</strong>
@@ -848,15 +848,16 @@
           <!-- Step 2: Password Prompt -->
           <div id="stepPassword" style="display: none;">
             
-            <!-- Selected User Banner (Name, Place, Father ONLY) -->
+            <!-- Selected User Banner (Name, Place, Father/Designation) -->
             <div class="prelogin-card mb-3 p-3 bg-light">
               <div class="d-flex align-items-center gap-3">
                 <img id="selectedPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar" style="width:60px; height:60px;">
                 <div class="text-left flex-grow-1 pl-2">
+                  <div id="selectedRoleLabel" style="font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;" class="text-primary">STUDENT</div>
                   <h4 id="selectedName" class="font-weight-bold mb-1 text-dark" style="font-size:1.05rem;">User Name</h4>
                   <div class="small font-weight-bold text-muted">
-                    <span><i class="fa fa-user-circle text-primary"></i> Father: <strong id="selectedFatherText" class="text-dark">-</strong></span> &nbsp;•&nbsp; 
-                    <span><i class="fa fa-map-marker text-danger"></i> Place: <strong id="selectedPlaceText" class="text-dark">-</strong></span>
+                    <span><i id="selectedFatherIcon" class="fa fa-user-circle text-primary mr-1"></i> <span id="selectedFatherLabel">Father:</span> <strong id="selectedFatherText" class="text-dark">-</strong></span> &nbsp;•&nbsp; 
+                    <span><i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="selectedPlaceText" class="text-dark">-</strong></span>
                   </div>
                 </div>
               </div>
@@ -905,7 +906,7 @@
                 <div>
                   <h3 class="font-weight-bold mb-1 text-white" id="dashUserName" style="font-size:1.45rem;">-</h3>
                   <div class="text-white-50 small mb-1" style="font-size:0.92rem;">
-                    <span>Father's Name: <strong id="dashUserFather" class="text-white">-</strong></span> &nbsp;•&nbsp; 
+                    <span><span id="dashUserFatherLabel">Father's Name:</span> <strong id="dashUserFather" class="text-white">-</strong></span> &nbsp;•&nbsp; 
                     <span>Place: <strong id="dashUserPlace" class="text-white">-</strong></span>
                   </div>
                   <div class="text-white-50 small font-weight-bold">
@@ -1311,6 +1312,41 @@
 
         </div>
     </div>
+
+    <!-- DARS STATS COUNTER SECTION (PORTAL PAGE) -->
+    <div id="portalStatsSection" class="mt-4 pt-3 pb-2">
+      <div class="row text-center counter-row justify-content-center">
+        <div class="col-6 col-lg-3 col-md-6 mb-3">
+          <div class="counter-card">
+            <i class="fa fa-book counter-icon"></i>
+            <div id="cntStudents" class="counter-number">104</div>
+            <div class="counter-label">Students</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3 col-md-6 mb-3">
+          <div class="counter-card">
+            <i class="fa fa-users counter-icon"></i>
+            <div id="cntUsthads" class="counter-number">9</div>
+            <div class="counter-label">Usthads</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3 col-md-6 mb-3">
+          <div class="counter-card">
+            <i class="fa fa-university counter-icon"></i>
+            <div id="cntYears" class="counter-number">25</div>
+            <div class="counter-label">Years of Tradition</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3 col-md-6 mb-3">
+          <div class="counter-card">
+            <i class="fa fa-graduation-cap counter-icon"></i>
+            <div id="cntAlumni" class="counter-number">58</div>
+            <div class="counter-label">Distinguished Alumni</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1452,14 +1488,30 @@
       const sub = document.getElementById('loginSub');
       const input = document.getElementById('inputIdentifier');
 
+      const previewRoleLabel = document.getElementById('previewRoleLabel');
+      const previewFatherLabel = document.getElementById('previewFatherLabel');
+      const previewFatherIcon = document.getElementById('previewFatherIcon');
+
       if (role === 'usthad') {
         title.textContent = 'Usthad Portal Access';
         sub.textContent = 'Enter your Name to look up your profile';
         input.placeholder = 'Enter your Name...';
+        if (previewRoleLabel) {
+          previewRoleLabel.textContent = 'MUDARRIS / USTHAD:';
+          previewRoleLabel.style.color = '#d97706';
+        }
+        if (previewFatherLabel) previewFatherLabel.textContent = 'Designation:';
+        if (previewFatherIcon) previewFatherIcon.className = 'fa fa-graduation-cap text-warning mr-1';
       } else {
         title.textContent = 'Student Portal Access';
         sub.textContent = 'Enter your Admission Number (e.g. ADM101) or Phone Number';
         input.placeholder = 'e.g. ADM101 or 9876543210';
+        if (previewRoleLabel) {
+          previewRoleLabel.textContent = 'STUDENT NAME:';
+          previewRoleLabel.style.color = '#2563eb';
+        }
+        if (previewFatherLabel) previewFatherLabel.textContent = "Father's Name:";
+        if (previewFatherIcon) previewFatherIcon.className = 'fa fa-user-circle text-success mr-1';
       }
 
       // Reset step
@@ -1574,12 +1626,26 @@
                   '<div style="font-size:0.75rem; font-weight:700; color:#64748b; padding:6px 10px; border-bottom:1px solid #f1f5f9; text-transform:uppercase;"><i class="fa fa-list"></i> Select matching profile (' + currentMatchesList.length + ' found):</div>';
 
                 currentMatchesList.forEach((item, index) => {
+                  const isUsthad = (item.role === 'usthad' || item.type === 'usthad' || currentRole === 'usthad');
+                  const roleBadgeHtml = isUsthad
+                    ? '<span class="badge badge-warning text-dark" style="font-size:9px; padding:2px 6px; font-weight:800; border-radius:6px; background:#fef3c7; color:#b45309; border:1px solid #fcd34d;">MUDARRIS</span>'
+                    : (item.isAlumni 
+                        ? '<span class="badge badge-info" style="font-size:9px; padding:2px 6px; font-weight:800; border-radius:6px;">ALUMNI</span>' 
+                        : '<span class="badge badge-primary" style="font-size:9px; padding:2px 6px; font-weight:800; border-radius:6px;">STUDENT</span>');
+
+                  const subDetailHtml = isUsthad
+                    ? '<span><i class="fa fa-graduation-cap text-warning"></i> Designation: ' + (item.designation || item.subject || 'Mudarris') + '</span>'
+                    : '<span><i class="fa fa-user-circle text-primary"></i> Father: ' + (item.fatherName || '-') + '</span>';
+
                   selectHtml += '<div onclick="selectUserFromList(' + index + ', false)" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid #f8fafc;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\'transparent\'">' +
                     '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:42px; height:42px; border-radius:10px; object-fit:cover; border:1px solid #e2e8f0;">' +
                     '<div style="flex:1; text-align:left;">' +
-                      '<div style="font-weight:700; color:#1e293b; font-size:0.95rem;">' + item.name + '</div>' +
-                      '<div style="font-size:0.78rem; color:#64748b; font-weight:600;">' +
-                        '<span><i class="fa fa-user-circle text-primary"></i> Father: ' + (item.fatherName || '-') + '</span> &nbsp;•&nbsp; ' +
+                      '<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+                        roleBadgeHtml +
+                        '<span style="font-weight:700; color:#1e293b; font-size:0.95rem;">' + item.name + '</span>' +
+                      '</div>' +
+                      '<div style="font-size:0.78rem; color:#64748b; font-weight:600; margin-top:3px;">' +
+                        subDetailHtml + ' &nbsp;•&nbsp; ' +
                         '<span><i class="fa fa-map-marker text-danger"></i> Place: ' + (item.place || 'Muttichira') + '</span>' +
                       '</div>' +
                     '</div>' +
@@ -1608,7 +1674,7 @@
       }, 250);
     }
 
-    // Select profile - Populates ONLY Name, Place, Father's Name!
+    // Select profile - Populates ONLY Name, Place, Father's Name / Designation!
     function selectUserFromList(index, autoProceed = false) {
       if (!currentMatchesList || !currentMatchesList[index]) return;
       selectedUserObject = currentMatchesList[index];
@@ -1620,8 +1686,31 @@
 
       document.getElementById('previewPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
       document.getElementById('previewName').textContent = selectedUserObject.name || '-';
-      document.getElementById('previewFatherText').textContent = selectedUserObject.fatherName || '-';
       document.getElementById('previewPlaceText').textContent = selectedUserObject.place || 'Muttichira';
+
+      const isUsthad = (selectedUserObject.role === 'usthad' || selectedUserObject.type === 'usthad' || currentRole === 'usthad');
+      const roleLabel = document.getElementById('previewRoleLabel');
+      const fatherLabel = document.getElementById('previewFatherLabel');
+      const fatherIcon = document.getElementById('previewFatherIcon');
+      const fatherText = document.getElementById('previewFatherText');
+
+      if (isUsthad) {
+        if (roleLabel) {
+          roleLabel.textContent = 'MUDARRIS / USTHAD:';
+          roleLabel.style.color = '#d97706';
+        }
+        if (fatherLabel) fatherLabel.textContent = 'Designation:';
+        if (fatherIcon) fatherIcon.className = 'fa fa-graduation-cap text-warning mr-1';
+        if (fatherText) fatherText.textContent = selectedUserObject.designation || selectedUserObject.subject || 'Mudarris';
+      } else {
+        if (roleLabel) {
+          roleLabel.textContent = selectedUserObject.isAlumni ? 'ALUMNI / GRADUATE:' : 'STUDENT NAME:';
+          roleLabel.style.color = '#2563eb';
+        }
+        if (fatherLabel) fatherLabel.textContent = "Father's Name:";
+        if (fatherIcon) fatherIcon.className = 'fa fa-user-circle text-success mr-1';
+        if (fatherText) fatherText.textContent = selectedUserObject.fatherName || '-';
+      }
 
       previewBox.style.display = 'block';
 
@@ -1634,8 +1723,32 @@
       if (!selectedUserObject) return;
       document.getElementById('selectedPhoto').src = selectedUserObject.photoUrl || 'img/new_logo.png';
       document.getElementById('selectedName').textContent = selectedUserObject.name;
-      document.getElementById('selectedFatherText').textContent = selectedUserObject.fatherName || '-';
       document.getElementById('selectedPlaceText').textContent = selectedUserObject.place || 'Muttichira';
+
+      const isUsthad = (selectedUserObject.role === 'usthad' || selectedUserObject.type === 'usthad' || currentRole === 'usthad');
+      const selRoleLabel = document.getElementById('selectedRoleLabel');
+      const selFatherLabel = document.getElementById('selectedFatherLabel');
+      const selFatherIcon = document.getElementById('selectedFatherIcon');
+      const selFatherText = document.getElementById('selectedFatherText');
+
+      if (isUsthad) {
+        if (selRoleLabel) {
+          selRoleLabel.textContent = 'MUDARRIS / USTHAD';
+          selRoleLabel.className = 'text-warning font-weight-bold';
+        }
+        if (selFatherLabel) selFatherLabel.textContent = 'Designation:';
+        if (selFatherIcon) selFatherIcon.className = 'fa fa-graduation-cap text-warning mr-1';
+        if (selFatherText) selFatherText.textContent = selectedUserObject.designation || selectedUserObject.subject || 'Mudarris';
+      } else {
+        if (selRoleLabel) {
+          selRoleLabel.textContent = selectedUserObject.isAlumni ? 'ALUMNI / GRADUATE' : 'STUDENT';
+          selRoleLabel.className = 'text-primary font-weight-bold';
+        }
+        if (selFatherLabel) selFatherLabel.textContent = 'Father:';
+        if (selFatherIcon) selFatherIcon.className = 'fa fa-user-circle text-primary mr-1';
+        if (selFatherText) selFatherText.textContent = selectedUserObject.fatherName || '-';
+      }
+
       document.getElementById('stepLookup').style.display = 'none';
       document.getElementById('stepPassword').style.display = 'block';
 
@@ -1749,6 +1862,8 @@
 
     function renderDashboard(user) {
       document.getElementById('loginCard').style.display = 'none';
+      const statsSec = document.getElementById('portalStatsSection');
+      if (statsSec) statsSec.style.display = 'none';
       const alumniSec = document.getElementById('publicAlumniSection');
       if (alumniSec) alumniSec.style.display = 'none';
       const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-11 col-xl-10 transition-all duration-300';
@@ -1758,7 +1873,14 @@
       // 1. Populate New Top Header Details
       document.getElementById('dashUserPhoto').src = user.photoUrl || 'img/new_logo.png';
       document.getElementById('dashUserName').textContent = user.name || '-';
-      document.getElementById('dashUserFather').textContent = user.fatherName || user.guardianName || '-';
+      const dashFatherLabel = document.getElementById('dashUserFatherLabel');
+      if (user.role === 'usthad') {
+        if (dashFatherLabel) dashFatherLabel.textContent = 'Designation:';
+        document.getElementById('dashUserFather').textContent = user.designation || user.subject || 'Mudarris';
+      } else {
+        if (dashFatherLabel) dashFatherLabel.textContent = "Father's Name:";
+        document.getElementById('dashUserFather').textContent = user.fatherName || user.guardianName || '-';
+      }
       document.getElementById('dashUserPlace').textContent = user.place || 'Muttichira';
       document.getElementById('dashUserPhone').textContent = user.phone || '-';
       
@@ -1846,6 +1968,8 @@
       const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-6 col-md-8 transition-all duration-300';
       const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container-fluid'); pContainer.classList.add('container'); }
       document.getElementById('loginCard').style.display = 'block';
+      const statsSec = document.getElementById('portalStatsSection');
+      if (statsSec) statsSec.style.display = 'block';
       const alumniSec = document.getElementById('publicAlumniSection');
       if (alumniSec) alumniSec.style.display = 'block';
       backToLookup();
@@ -3090,17 +3214,41 @@ function ensureThirtyStudentsInBatch(batchName) {
   .catch(err => showToast(err.message, true));
 }
 
+    function animatePortalCounter(id, target) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const numTarget = parseInt(target, 10) || 0;
+      if (numTarget <= 0) {
+        el.textContent = target || '0';
+        return;
+      }
+      let current = 0;
+      const step = Math.max(1, Math.floor(numTarget / 25));
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= numTarget) {
+          el.textContent = numTarget;
+          clearInterval(timer);
+        } else {
+          el.textContent = current;
+        }
+      }, 25);
+    }
+
     // Counter Stats Loader
     function loadCounterStats() {
       fetch('/api/portal/counter')
         .then(r => r.json())
         .then(data => {
-          if (data.success && data.stats) {
-            document.getElementById('cntAlumni').textContent = data.stats.alumniBiruthadhari;
-            document.getElementById('cntStudents').textContent = data.stats.currentStudents;
-            document.getElementById('cntUsthads').textContent = data.stats.totalUsthads;
-            document.getElementById('cntYears').textContent = data.stats.yearsOfTradition || String(new Date().getFullYear() - 2001);
+          if (data && data.success && data.stats) {
+            animatePortalCounter('cntStudents', data.stats.currentStudents || 104);
+            animatePortalCounter('cntUsthads', data.stats.totalUsthads || 9);
+            animatePortalCounter('cntYears', data.stats.yearsOfTradition || 25);
+            animatePortalCounter('cntAlumni', data.stats.alumniBiruthadhari || 58);
           }
+        })
+        .catch(err => {
+          console.warn('Error loading portal counter stats:', err);
         });
     }
 

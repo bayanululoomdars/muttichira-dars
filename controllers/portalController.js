@@ -211,7 +211,7 @@ exports.lookup = async (req, res) => {
           usthadId: u.usthadId,
           name: u.name,
           role: 'usthad',
-          designation: u.designation,
+          designation: u.designation || u.subject || 'Mudarris',
           subject: u.subject || 'Dars Mudarris',
           photoUrl: u.photoUrl || 'img/new_logo.png',
           place: u.place || 'Muttichira',
