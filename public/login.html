@@ -1054,7 +1054,7 @@
               <!-- User Profile Details -->
               <div class="d-flex flex-column flex-sm-row align-items-center text-center text-sm-left gap-3">
                 <div class="position-relative">
-                  <img id="dashUserPhoto" src="img/new_logo.png" alt="Profile Photo" class="dash-user-photo-lg" style="cursor:pointer;" onclick="triggerDirectPhotoCrop()" title="Click to crop &amp; change profile photo">
+                  <img id="dashUserPhoto" src="img/new_logo.png" alt="Profile Photo" class="dash-user-photo-lg" style="width:72px; height:96px; border-radius:14px; object-fit:cover; aspect-ratio:3/4; border:2.5px solid #d4af37; box-shadow:0 4px 14px rgba(0,0,0,0.4); cursor:pointer;" onclick="triggerDirectPhotoCrop()" title="Click to crop &amp; change profile photo">
                   <span id="dashRoleBadge" class="badge badge-warning position-absolute" style="bottom:-5px; right:-5px; font-weight:800; border-radius:10px; font-size:10px; padding:3px 8px; border:2px solid #fff;">STUDENT</span>
                   <button type="button" class="btn btn-sm btn-warning rounded-circle position-absolute shadow" style="top:-4px; right:-4px; width:28px; height:28px; padding:0; display:flex; align-items:center; justify-content:center; border:2px solid #fff; cursor:pointer;" onclick="triggerDirectPhotoCrop()" title="Crop &amp; Change Profile Photo">
                     <i class="fa fa-camera text-dark" style="font-size:12px;"></i>
@@ -4955,9 +4955,9 @@ function downloadIDCard() {
         setTimeout(() => {
           if (typeof Cropper !== 'undefined' && img) {
             profileCropperInstance = new Cropper(img, {
-              aspectRatio: 1, // 1:1 Square / Passport Size
+              aspectRatio: 3 / 4, // Portrait 3:4 Academic Passport Size
               viewMode: 1,
-              autoCropArea: 0.9,
+              autoCropArea: 0.95,
               responsive: true,
               background: false
             });
@@ -5005,8 +5005,8 @@ function downloadIDCard() {
       }
 
       const canvas = profileCropperInstance.getCroppedCanvas({
-        width: 400,
-        height: 400,
+        width: 360,
+        height: 480, // Strict Portrait 3:4 Ratio
         imageSmoothingQuality: 'high'
       });
 
@@ -5918,7 +5918,7 @@ function downloadIDCard() {
 
                 <!-- Middle Content -->
                 <div class="d-flex align-items-center justify-content-between my-auto gap-3">
-                  <img id="licPhoto" src="img/new_logo.png" style="width:75px; height:90px; border-radius:12px; object-fit:cover; border:2px solid #d4af37; box-shadow:0 4px 10px rgba(0,0,0,0.3); flex-shrink:0;">
+                  <img id="licPhoto" src="img/new_logo.png" style="width:72px; height:96px; border-radius:12px; object-fit:cover; aspect-ratio:3/4; border:2px solid #d4af37; box-shadow:0 4px 10px rgba(0,0,0,0.3); flex-shrink:0;">
                   
                   <div class="text-left flex-grow-1 pl-2">
                     <h5 id="licName" class="font-weight-bold mb-1 text-white" style="font-size:1.15rem; line-height:1.2;">-</h5>
