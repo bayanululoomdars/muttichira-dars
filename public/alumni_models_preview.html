@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biruthadhari (Alumni) Redesign Models Preview</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Outfit', 'Manjari', sans-serif;
+    }
+    .model-tab.active {
+      background: linear-gradient(135deg, #d4af37, #f59e0b);
+      color: #061121;
+      font-weight: 800;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 sm:p-6 antialiased">
+
+  <!-- Top Selector Header -->
+  <div class="max-w-6xl mx-auto mb-6 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-3">
+      <i class="fa fa-graduation-cap"></i> ബിരുദധാരികൾ (ALUMNI) REDESIGN MODELS
+    </div>
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-white mb-2">
+      ഏത് മോഡൽ ഡിസൈനാണ് നിങ്ങൾക്ക് കൂടുതൽ അനുയോജ്യം?
+    </h1>
+    <p class="text-slate-400 text-sm max-w-2xl mx-auto mb-6">
+      നിങ്ങൾ ആവശ്യപ്പെട്ടതുപോലെ ബാച്ച് സെലക്റ്റ് ഡ്രോപ്പ്ഡൗണുകൾ ഒഴിവാക്കി, <strong class="text-amber-400">ജസ്റ്റ് ഒരു സെർച്ച് ബാറും ആകെ ആളുകളുടെ എണ്ണവും (Total Count)</strong> മാത്രം ഉൾപ്പെടുത്തി രൂപകൽപ്പന ചെയ്ത 3 വ്യത്യസ്ത മോഡലുകൾ താഴെ കാണാം:
+    </p>
+
+    <!-- Tab Buttons -->
+    <div class="inline-flex p-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl gap-1 sm:gap-2 flex-wrap justify-center">
+      <button onclick="switchModel(1)" id="tabBtn1" class="model-tab active px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+        <i class="fa fa-star"></i> മോഡൽ 1: Royal Midnight & Gold
+      </button>
+      <button onclick="switchModel(2)" id="tabBtn2" class="model-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-2">
+        <i class="fa fa-leaf"></i> മോഡൽ 2: Emerald Heritage
+      </button>
+      <button onclick="switchModel(3)" id="tabBtn3" class="model-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-2">
+        <i class="fa fa-mobile"></i> മോഡൽ 3: Minimalist Modern Dock
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto">
+
+    <!-- ==================== MODEL 1: ROYAL MIDNIGHT & GOLD ==================== -->
+    <div id="model1View" class="model-content space-y-4">
+      <div class="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 rounded-xl p-3 text-xs text-amber-300 flex items-center justify-between">
+        <span><strong>മോഡൽ 1 പ്രത്യേകത:</strong> നിലവിലെ റോയൽ മിഡ്‌നൈറ്റ് ബ്ലൂ & ഗോൾഡ് പോർട്ടൽ തീമുമായി 100% പൊരുത്തപ്പെടുന്ന ലക്ഷ്വറി ലുക്ക്.</span>
+        <span class="bg-amber-500/20 px-2.5 py-0.5 rounded text-[11px] font-bold">Recommended</span>
+      </div>
+
+      <!-- Section Container -->
+      <div class="rounded-3xl border border-amber-500/30 bg-gradient-to-b from-[#091528] via-[#0b1b33] to-[#060e1a] p-5 sm:p-7 shadow-2xl">
+        
+        <!-- Header: Title + Count + Search ONLY -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-amber-500/20">
+          <div>
+            <div class="flex items-center gap-2.5 mb-1.5">
+              <span class="bg-amber-400 text-slate-950 text-xs font-black px-2.5 py-0.5 rounded-full tracking-wider uppercase">
+                <i class="fa fa-graduation-cap"></i> ബിരുദധാരികൾ
+              </span>
+              <!-- TOTAL COUNT BADGE -->
+              <span class="inline-flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-xs font-bold px-3 py-0.5 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="m1Count">59 ബിരുദധാരികൾ</span>
+              </span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold text-white tracking-wide">
+              പൂർവ്വ വിദ്യാർത്ഥി ഡയറക്ടറി
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
+              മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസിൽ നിന്നും പഠനം പൂർത്തിയാക്കിയ പ്രിയപ്പെട്ടവർ
+            </p>
+          </div>
+
+          <!-- JUST THE SEARCH BAR -->
+          <div class="relative w-full md:w-80">
+            <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-amber-400 text-sm"></i>
+            <input type="text" id="m1Search" oninput="filterCards(1, this.value)" placeholder="പേര്, സ്ഥലം തിരയുക..." 
+                   class="w-full bg-slate-900/90 border border-amber-500/40 rounded-full pl-11 pr-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 shadow-inner">
+          </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div id="m1Grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-6">
+          <!-- Card 1 -->
+          <div class="alumni-item bg-slate-900/80 border border-amber-500/20 hover:border-amber-400 rounded-2xl p-4 flex items-center gap-3.5 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10" data-name="മുഹമ്മദ് റാഷിദ്" data-place="മലപ്പുറം" data-batch="14">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-16 h-20 rounded-xl object-cover border-2 border-amber-400/80 shadow-md flex-shrink-0" alt="Alumni">
+            <div class="flex-grow min-w-0">
+              <span class="inline-block bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-md mb-1">
+                ബാച്ച് 14 (2024)
+              </span>
+              <h3 class="text-sm font-bold text-white truncate">മുഹമ്മദ് റാഷിദ് വി.പി</h3>
+              <p class="text-xs text-slate-400 truncate flex items-center gap-1 mt-0.5">
+                <i class="fa fa-map-marker text-rose-400"></i> മലപ്പുറം
+              </p>
+              <div class="mt-2 flex items-center gap-2">
+                <button class="bg-amber-400/20 hover:bg-amber-400 text-amber-300 hover:text-slate-950 border border-amber-400/40 text-[11px] font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1">
+                  <i class="fa fa-phone"></i> ബന്ധപ്പെടുക
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="alumni-item bg-slate-900/80 border border-amber-500/20 hover:border-amber-400 rounded-2xl p-4 flex items-center gap-3.5 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10" data-name="അബ്ദുൽ ബാസിത്" data-place="കോഴിക്കോട്" data-batch="13">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" class="w-16 h-20 rounded-xl object-cover border-2 border-amber-400/80 shadow-md flex-shrink-0" alt="Alumni">
+            <div class="flex-grow min-w-0">
+              <span class="inline-block bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-md mb-1">
+                ബാച്ച് 13 (2023)
+              </span>
+              <h3 class="text-sm font-bold text-white truncate">അബ്ദുൽ ബാസിത് കെ.ടി</h3>
+              <p class="text-xs text-slate-400 truncate flex items-center gap-1 mt-0.5">
+                <i class="fa fa-map-marker text-rose-400"></i> വടകര, കോഴിക്കോട്
+              </p>
+              <div class="mt-2 flex items-center gap-2">
+                <button class="bg-amber-400/20 hover:bg-amber-400 text-amber-300 hover:text-slate-950 border border-amber-400/40 text-[11px] font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1">
+                  <i class="fa fa-phone"></i> ബന്ധപ്പെടുക
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="alumni-item bg-slate-900/80 border border-amber-500/20 hover:border-amber-400 rounded-2xl p-4 flex items-center gap-3.5 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10" data-name="ശംസുദ്ദീൻ ഫൈസി" data-place="വയനാട്" data-batch="12">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" class="w-16 h-20 rounded-xl object-cover border-2 border-amber-400/80 shadow-md flex-shrink-0" alt="Alumni">
+            <div class="flex-grow min-w-0">
+              <span class="inline-block bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-md mb-1">
+                ബാച്ച് 12 (2022)
+              </span>
+              <h3 class="text-sm font-bold text-white truncate">ശംസുദ്ദീൻ ഫൈസി</h3>
+              <p class="text-xs text-slate-400 truncate flex items-center gap-1 mt-0.5">
+                <i class="fa fa-map-marker text-rose-400"></i> മാനന്തവാടി, വയനാട്
+              </p>
+              <div class="mt-2 flex items-center gap-2">
+                <button class="bg-amber-400/20 hover:bg-amber-400 text-amber-300 hover:text-slate-950 border border-amber-400/40 text-[11px] font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1">
+                  <i class="fa fa-phone"></i> ബന്ധപ്പെടുക
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODEL 2: EMERALD HERITAGE ==================== -->
+    <div id="model2View" class="model-content space-y-4 hidden">
+      <div class="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/20 rounded-xl p-3 text-xs text-emerald-300 flex items-center justify-between">
+        <span><strong>മോഡൽ 2 പ്രത്യേകത:</strong> പാരമ്പര്യ ഇസ്‌ലാമിക എമറാൾഡ് ഗ്രീൻ തീം. സെൻട്രൽ സെർച്ച് ബോക്സും പ്രത്യേക കൗണ്ടർ ടാഗും.</span>
+        <span class="bg-emerald-500/20 px-2.5 py-0.5 rounded text-[11px] font-bold">Classic Emerald</span>
+      </div>
+
+      <div class="rounded-3xl border border-emerald-500/30 bg-gradient-to-b from-[#052317] via-[#083020] to-[#04160e] p-5 sm:p-7 shadow-2xl">
+        <!-- Centered Header Box -->
+        <div class="text-center max-w-xl mx-auto pb-6">
+          <div class="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-3">
+            <i class="fa fa-check-circle text-emerald-400"></i> ആകെ <span id="m2Count">59</span> ബിരുദധാരികൾ രജിസ്റ്റർ ചെയ്തു
+          </div>
+          <h2 class="text-2xl font-bold text-white mb-2">മുട്ടിച്ചിറ ദർസ് ബിരുദധാരികൾ</h2>
+          
+          <!-- Large Integrated Search Bar -->
+          <div class="relative mt-4">
+            <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400 text-base"></i>
+            <input type="text" id="m2Search" oninput="filterCards(2, this.value)" placeholder="പേരോ സ്ഥലമോ ടൈപ്പ് ചെയ്യുക..." 
+                   class="w-full bg-slate-900/90 border-2 border-emerald-500/50 rounded-2xl pl-12 pr-4 py-3 text-sm text-white placeholder-emerald-200/50 focus:outline-none focus:border-emerald-300 focus:ring-4 focus:ring-emerald-500/20 shadow-xl">
+          </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div id="m2Grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t border-emerald-500/20">
+          <!-- Card 1 -->
+          <div class="alumni-item bg-[#082a1d]/80 border border-emerald-500/30 hover:border-emerald-400 rounded-2xl p-4 flex items-center gap-3.5 transition-all hover:-translate-y-1" data-name="മുഹമ്മദ് റാഷിദ്" data-place="മലപ്പുറം" data-batch="14">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-16 h-20 rounded-xl object-cover border-2 border-emerald-400 shadow flex-shrink-0" alt="Alumni">
+            <div class="flex-grow min-w-0">
+              <span class="inline-block bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-md mb-1">
+                ബാച്ച് 14
+              </span>
+              <h3 class="text-sm font-bold text-white truncate">മുഹമ്മദ് റാഷിദ് വി.പി</h3>
+              <p class="text-xs text-emerald-200/70 truncate flex items-center gap-1 mt-0.5">
+                <i class="fa fa-map-marker text-emerald-400"></i> മലപ്പുറം
+              </p>
+              <div class="mt-2">
+                <button class="bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1">
+                  <i class="fa fa-user"></i> പ്രൊഫൈൽ
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="alumni-item bg-[#082a1d]/80 border border-emerald-500/30 hover:border-emerald-400 rounded-2xl p-4 flex items-center gap-3.5 transition-all hover:-translate-y-1" data-name="അബ്ദുൽ ബാസിത്" data-place="കോഴിക്കോട്" data-batch="13">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" class="w-16 h-20 rounded-xl object-cover border-2 border-emerald-400 shadow flex-shrink-0" alt="Alumni">
+            <div class="flex-grow min-w-0">
+              <span class="inline-block bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-md mb-1">
+                ബാച്ച് 13
+              </span>
+              <h3 class="text-sm font-bold text-white truncate">അബ്ദുൽ ബാസിത് കെ.ടി</h3>
+              <p class="text-xs text-emerald-200/70 truncate flex items-center gap-1 mt-0.5">
+                <i class="fa fa-map-marker text-emerald-400"></i> വടകര, കോഴിക്കോട്
+              </p>
+              <div class="mt-2">
+                <button class="bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1">
+                  <i class="fa fa-user"></i> പ്രൊഫൈൽ
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="alumni-item bg-[#082a1d]/80 border border-emerald-500/30 hover:border-emerald-400 rounded-2xl p-4 flex items-center gap-3.5 transition-all hover:-translate-y-1" data-name="ശംസുദ്ദീൻ ഫൈസി" data-place="വയനാട്" data-batch="12">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" class="w-16 h-20 rounded-xl object-cover border-2 border-emerald-400 shadow flex-shrink-0" alt="Alumni">
+            <div class="flex-grow min-w-0">
+              <span class="inline-block bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-md mb-1">
+                ബാച്ച് 12
+              </span>
+              <h3 class="text-sm font-bold text-white truncate">ശംസുദ്ദീൻ ഫൈസി</h3>
+              <p class="text-xs text-emerald-200/70 truncate flex items-center gap-1 mt-0.5">
+                <i class="fa fa-map-marker text-emerald-400"></i> മാനന്തവാടി, വയനാട്
+              </p>
+              <div class="mt-2">
+                <button class="bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1">
+                  <i class="fa fa-user"></i> പ്രൊഫൈൽ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODEL 3: MINIMALIST MODERN DOCK ==================== -->
+    <div id="model3View" class="model-content space-y-4 hidden">
+      <div class="bg-gradient-to-r from-blue-500/10 via-blue-500/5 to-transparent border border-blue-500/20 rounded-xl p-3 text-xs text-blue-300 flex items-center justify-between">
+        <span><strong>മോഡൽ 3 പ്രത്യേകത:</strong> മൊബൈലിൽ സ്ക്രോളിംഗ് കുറയ്ക്കാനും വേഗത കൂട്ടാനും സഹായിക്കുന്ന സൂപ്പർ-സ്ലീക്ക് മിനിമലിസ്റ്റ് ഡോക്ക് ഡിസൈൻ.</span>
+        <span class="bg-blue-500/20 px-2.5 py-0.5 rounded text-[11px] font-bold">Ultra Compact</span>
+      </div>
+
+      <div class="rounded-3xl border border-slate-800 bg-slate-900/90 p-5 sm:p-7 shadow-2xl">
+        <!-- Ultra-clean Floating Dock Search Bar with Count Inside -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-5 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg font-extrabold text-white">ബിരുദധാരികൾ</h2>
+            <span class="text-xs bg-slate-800 text-amber-400 border border-slate-700 font-mono font-bold px-2.5 py-0.5 rounded-full">
+              <span id="m3Count">59</span>
+            </span>
+          </div>
+
+          <!-- Dock Search Bar -->
+          <div class="relative w-full sm:w-80">
+            <i class="fa fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" id="m3Search" oninput="filterCards(3, this.value)" placeholder="തിരയുക..." 
+                   class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400">
+          </div>
+        </div>
+
+        <!-- Compact List Grid -->
+        <div id="m3Grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-5">
+          <!-- Card 1 -->
+          <div class="alumni-item bg-slate-950/60 border-l-4 border-l-amber-400 border border-slate-800 hover:border-slate-700 rounded-xl p-3 flex items-center justify-between transition-all" data-name="മുഹമ്മദ് റാഷിദ്" data-place="മലപ്പുറം" data-batch="14">
+            <div class="flex items-center gap-3 min-w-0">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-11 h-14 rounded-lg object-cover border border-slate-700 flex-shrink-0" alt="Alumni">
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-white truncate">മുഹമ്മദ് റാഷിദ്</h4>
+                <p class="text-[11px] text-slate-400 truncate">മലപ്പുറം • ബാച്ച് 14</p>
+              </div>
+            </div>
+            <button class="bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs p-2 rounded-lg ml-2 flex-shrink-0" title="ബന്ധപ്പെടുക">
+              <i class="fa fa-phone"></i>
+            </button>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="alumni-item bg-slate-950/60 border-l-4 border-l-amber-400 border border-slate-800 hover:border-slate-700 rounded-xl p-3 flex items-center justify-between transition-all" data-name="അബ്ദുൽ ബാസിത്" data-place="കോഴിക്കോട്" data-batch="13">
+            <div class="flex items-center gap-3 min-w-0">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" class="w-11 h-14 rounded-lg object-cover border border-slate-700 flex-shrink-0" alt="Alumni">
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-white truncate">അബ്ദുൽ ബാസിത്</h4>
+                <p class="text-[11px] text-slate-400 truncate">കോഴിക്കോട് • ബാച്ച് 13</p>
+              </div>
+            </div>
+            <button class="bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs p-2 rounded-lg ml-2 flex-shrink-0" title="ബന്ധപ്പെടുക">
+              <i class="fa fa-phone"></i>
+            </button>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="alumni-item bg-slate-950/60 border-l-4 border-l-amber-400 border border-slate-800 hover:border-slate-700 rounded-xl p-3 flex items-center justify-between transition-all" data-name="ശംസുദ്ദീൻ ഫൈസി" data-place="വയനാട്" data-batch="12">
+            <div class="flex items-center gap-3 min-w-0">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" class="w-11 h-14 rounded-lg object-cover border border-slate-700 flex-shrink-0" alt="Alumni">
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-white truncate">ശംസുദ്ദീൻ ഫൈസി</h4>
+                <p class="text-[11px] text-slate-400 truncate">വയനാട് • ബാച്ച് 12</p>
+              </div>
+            </div>
+            <button class="bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs p-2 rounded-lg ml-2 flex-shrink-0" title="ബന്ധപ്പെടുക">
+              <i class="fa fa-phone"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchModel(num) {
+      document.querySelectorAll('.model-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.model-tab').forEach(el => el.classList.remove('active'));
+      
+      const targetView = document.getElementById('model' + num + 'View');
+      const targetBtn = document.getElementById('tabBtn' + num);
+      if (targetView) targetView.classList.remove('hidden');
+      if (targetBtn) targetBtn.classList.add('active');
+    }
+
+    function filterCards(modelNum, query) {
+      const q = query.toLowerCase().trim();
+      const grid = document.getElementById('m' + modelNum + 'Grid');
+      if (!grid) return;
+      const items = grid.querySelectorAll('.alumni-item');
+      let visible = 0;
+      items.forEach(card => {
+        const name = (card.getAttribute('data-name') || '').toLowerCase();
+        const place = (card.getAttribute('data-place') || '').toLowerCase();
+        const batch = (card.getAttribute('data-batch') || '').toLowerCase();
+        if (!q || name.includes(q) || place.includes(q) || batch.includes(q)) {
+          card.style.display = 'flex';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      const countEl = document.getElementById('m' + modelNum + 'Count');
+      if (countEl) {
+        if (modelNum === 1) countEl.textContent = visible + ' ബിരുദധാരികൾ';
+        else if (modelNum === 2) countEl.textContent = visible;
+        else if (modelNum === 3) countEl.textContent = visible;
+      }
+    }
+  </script>
+</body>
+</html>
