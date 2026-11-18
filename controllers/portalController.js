@@ -1497,9 +1497,19 @@ exports.uploadProfilePhoto = async (req, res) => {
     // Delete old photo and update user
     let user;
     if (role === 'student' || role === 'alumni') {
-      user = await Student.findOne({ _id: userId });
+      try {
+        user = await Student.findOne({ $or: [{ _id: userId }, { admissionNo: userId }] });
+      } catch (e) {}
+      if (!user) {
+        user = memoryStudents.find(s => s._id === userId || s.admissionNo === userId);
+      }
     } else {
-      user = await Usthad.findOne({ _id: userId });
+      try {
+        user = await Usthad.findOne({ $or: [{ _id: userId }, { usthadId: userId }] });
+      } catch (e) {}
+      if (!user) {
+        user = memoryUsthads.find(u => u._id === userId || u.usthadId === userId);
+      }
     }
 
     if (user) {
@@ -1510,6 +1520,9 @@ exports.uploadProfilePhoto = async (req, res) => {
         }
       }
       user.photoUrl = photoUrl;
+      try {
+        if (user.save) await user.save();
+      } catch (e) {}
       
       const tdb = require('../config/telegramDB');
       if (tdb.uploadDbToTelegram) {
