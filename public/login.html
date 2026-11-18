@@ -23,6 +23,7 @@
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <link href="lib/animate/animate.min.css" rel="stylesheet">
   <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
   
@@ -617,12 +618,14 @@
     .landscape-perspective {
       perspective: 1200px;
       width: 100%;
-      max-width: 560px;
+      max-width: 508px;
       margin: 0 auto;
     }
     .landscape-card-inner {
       width: 100%;
-      height: 310px;
+      max-width: 508px;
+      height: 320px;
+      aspect-ratio: 85.6 / 54;
       position: relative;
       transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
       transform-style: preserve-3d;
@@ -4551,14 +4554,100 @@ function downloadIDCard() {
       if (card) card.classList.toggle('flipped');
     }
 
+    // ==================== CR80 PVC ID CARD PDF GENERATOR (2 PAGES: FRONT & BACK) ====================
+    async function downloadLandscapeCardPDF() {
+      if (typeof window.jspdf === 'undefined' || typeof html2canvas === 'undefined') {
+        alert('PDF & Canvas libraries are loading, please wait 2 seconds and try again.');
+        return;
+      }
+
+      const btn = document.getElementById('btnDownloadCR80PDF');
+      const origHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Generating 2-Page PDF...';
+      }
+
+      try {
+        const frontSide = document.getElementById('landscapeFrontSide');
+        const backSide = document.getElementById('landscapeBackSide');
+        if (!frontSide || !backSide) throw new Error('ID card elements not found');
+
+        // Capture side cleanly with high scale for 300+ DPI print quality
+        async function captureSide(element, isBack) {
+          const origTransform = element.style.transform;
+          const origVisibility = element.style.visibility;
+          const origBackface = element.style.backfaceVisibility;
+
+          if (isBack) {
+            element.style.transform = 'none';
+            element.style.visibility = 'visible';
+            element.style.backfaceVisibility = 'visible';
+          }
+
+          const canvas = await html2canvas(element, {
+            scale: 3,
+            useCORS: true,
+            backgroundColor: isBack ? '#ffffff' : null,
+            logging: false
+          });
+
+          if (isBack) {
+            element.style.transform = origTransform;
+            element.style.visibility = origVisibility;
+            element.style.backfaceVisibility = origBackface;
+          }
+
+          return canvas;
+        }
+
+        const frontCanvas = await captureSide(frontSide, false);
+        const backCanvas = await captureSide(backSide, true);
+
+        const frontImg = frontCanvas.toDataURL('image/jpeg', 0.98);
+        const backImg = backCanvas.toDataURL('image/jpeg', 0.98);
+
+        const { jsPDF } = window.jspdf;
+        // Exact CR80 PVC ID Card dimensions: 85.6 mm x 54.0 mm
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: [54, 85.6]
+        });
+
+        // Page 1: Front Side (85.6 mm x 54 mm)
+        pdf.addImage(frontImg, 'JPEG', 0, 0, 85.6, 54, '', 'FAST');
+
+        // Page 2: Back Side (85.6 mm x 54 mm)
+        pdf.addPage([54, 85.6], 'landscape');
+        pdf.addImage(backImg, 'JPEG', 0, 0, 85.6, 54, '', 'FAST');
+
+        const rawName = (currentUserSession && currentUserSession.name) ? currentUserSession.name : 'ID_Card';
+        const safeName = rawName.replace(/[^a-zA-Z0-9_-]/g, '_');
+        pdf.save(safeName + '_CR80_PVC_Card.pdf');
+      } catch (err) {
+        console.error('Error generating CR80 PDF:', err);
+        alert('Error generating PDF: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+        }
+      }
+    }
+
     function downloadLandscapeCard() {
+      downloadLandscapeCardPDF();
+    }
+
+    function downloadLandscapePNG() {
       if (typeof html2canvas === 'undefined') {
         alert('Canvas library loading, please try again.');
         return;
       }
       const isFlipped = document.getElementById('landscapeFlipCardInner').classList.contains('flipped');
       const targetSide = isFlipped ? document.getElementById('landscapeBackSide') : document.getElementById('landscapeFrontSide');
-      const fileName = (currentUserSession.name || 'ID_Card') + (isFlipped ? '_Back' : '_Front') + '.png';
+      const fileName = ((currentUserSession && currentUserSession.name) || 'ID_Card') + (isFlipped ? '_Back' : '_Front') + '.png';
 
       html2canvas(targetSide, { scale: 3, backgroundColor: null, useCORS: true }).then(canvas => {
         const link = document.createElement('a');
@@ -5395,8 +5484,8 @@ function downloadIDCard() {
       <div class="modal-content" style="background:#0f172a; color:#ffffff; border-radius:24px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 25px 50px rgba(0,0,0,0.5);">
         <div class="modal-header border-bottom-0 pb-0">
           <div>
-            <span class="badge badge-success px-2 py-1" style="font-size:10px;">Official Academic Card</span>
-            <h5 class="modal-title font-weight-bold text-white mt-1"><i class="fa fa-id-card text-primary"></i> Minimal Landscape ID Card</h5>
+            <span class="badge badge-warning text-dark px-2.5 py-1" style="font-size:10px; font-weight:800;"><i class="fa fa-id-card mr-1"></i> CR80 PVC CARD (85.6 × 54 mm)</span>
+            <h5 class="modal-title font-weight-bold text-white mt-1"><i class="fa fa-id-card-o text-warning mr-1"></i> Official Academic PVC ID Card</h5>
           </div>
           <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
         </div>
@@ -5487,15 +5576,22 @@ function downloadIDCard() {
             </div>
           </div>
 
+          <!-- Print Shop PVC Card Specs Notice -->
+          <div class="mt-3 p-2.5 rounded-3 text-center" style="background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); font-size:11px; color:#fef08a;">
+            <i class="fa fa-check-circle text-warning mr-1"></i> <strong>PVC Card Printing Ready:</strong> സൈസ്: <strong>85.6 × 54 mm (Standard CR80 / ATM Card Size)</strong>. പി.ഡി.എഫിൽ 2 പേജുകളായി ഫ്രണ്ട് &amp; ബാക്ക് സൈഡുകൾ തയ്യാറാണ് (Direct Print for PVC / Inkjet Card Printers).
+          </div>
         </div>
-        <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">
-          <button type="button" class="btn btn-outline-light rounded-pill font-weight-bold" onclick="flipLandscapeCard()">
-            <i class="fa fa-refresh"></i> Flip Card (Front / Back)
+        <div class="modal-footer border-top-0 pt-0 d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <button type="button" class="btn btn-outline-light rounded-pill font-weight-bold btn-sm" onclick="flipLandscapeCard()">
+            <i class="fa fa-refresh mr-1"></i> Flip Card (Front / Back)
           </button>
-          <div>
-            <button type="button" class="btn btn-secondary rounded-pill font-weight-bold" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success rounded-pill font-weight-bold px-4" onclick="downloadLandscapeCard()">
-              <i class="fa fa-download"></i> Download ID Card (PNG)
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <button type="button" class="btn btn-secondary rounded-pill font-weight-bold btn-sm" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline-info rounded-pill font-weight-bold btn-sm" onclick="downloadLandscapePNG()" title="Download current side as PNG image">
+              <i class="fa fa-image mr-1"></i> PNG
+            </button>
+            <button type="button" class="btn btn-success rounded-pill font-weight-bold px-3 py-2 shadow" id="btnDownloadCR80PDF" onclick="downloadLandscapeCardPDF()">
+              <i class="fa fa-file-pdf-o mr-1"></i> Download CR80 PVC Card PDF (2 Pages)
             </button>
           </div>
         </div>
