@@ -425,12 +425,14 @@
       gap: 12px !important;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
       color: #ffffff !important;
+      cursor: pointer !important;
     }
     .alumni-card:hover {
       transform: translateY(-2px) !important;
-      border-color: rgba(212, 175, 55, 0.45) !important;
+      border-color: rgba(212, 175, 55, 0.5) !important;
       border-left-color: #ffd700 !important;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.15) !important;
+      background: rgba(20, 32, 56, 0.95) !important;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 18px rgba(212, 175, 55, 0.2) !important;
     }
     .alumni-card img {
       width: 48px !important;
@@ -3872,40 +3874,69 @@ function ensureThirtyStudentsInBatch(batchName) {
       const displayItems = filteredAlumniList.slice(start, start + alumniPageSize);
 
       let html = '';
-      displayItems.forEach(a => {
+      displayItems.forEach((a, idx) => {
         const photo = a.photoUrl || 'img/new_logo.png';
         const name = a.name || 'ബിരുദധാരി';
         const place = a.place || 'Muttichira';
-        const rawBatch = a.batchNumber || a.batchYear || '';
-        const batchText = rawBatch ? (rawBatch.toLowerCase().startsWith('batch') ? rawBatch : ('ബാച്ച് ' + rawBatch.replace(/^batch\s*/i, ''))) : 'ബിരുദധാരി';
-        const phone = a.phone ? String(a.phone).trim() : '';
+        const globalIdx = start + idx;
 
+        // Display ONLY Name and Place (Batch is hidden before login as requested)
         html += `
           <div class="col-12 col-md-6 col-lg-4 mb-3">
-            <div class="alumni-card shadow-sm">
+            <div class="alumni-card shadow-sm" onclick="selectAlumniForLogin(${globalIdx})" title="${name} - ലോഗിൻ ചെയ്യാൻ ക്ലിക്ക് ചെയ്യുക">
               <div class="d-flex align-items-center gap-3" style="min-width:0; flex-grow:1;">
                 <img src="${photo}" alt="${name}" onerror="this.src='img/new_logo.png'">
                 <div style="min-width:0; flex-grow:1;">
-                  <h6 class="font-weight-bold text-white mb-0 text-truncate" style="font-size:0.95rem; font-family:'Outfit',sans-serif;" title="${name}">${name}</h6>
-                  <div class="d-flex align-items-center gap-1 mt-1 flex-wrap">
-                    <span class="badge badge-alumni"><i class="fa fa-graduation-cap mr-1"></i>${batchText}</span>
-                    <span class="small text-white-50 text-truncate" style="font-size:11px;" title="${place}">
-                      <i class="fa fa-map-marker text-danger mr-1"></i>${place}
-                    </span>
+                  <h6 class="font-weight-bold text-white mb-1 text-truncate" style="font-size:0.96rem; font-family:'Outfit',sans-serif;" title="${name}">${name}</h6>
+                  <div class="small text-white-50 text-truncate" style="font-size:12px;" title="${place}">
+                    <i class="fa fa-map-marker text-danger mr-1"></i>${place}
                   </div>
                 </div>
               </div>
-              ${phone ? `
-                <a href="tel:${phone}" class="btn btn-sm flex-shrink-0" style="background:rgba(212,175,55,0.18); color:#ffd700; border:1px solid rgba(212,175,55,0.35); border-radius:10px; padding:6px 10px; font-size:11px;" title="വിളിക്കുക: ${phone}">
-                  <i class="fa fa-phone"></i>
-                </a>
-              ` : ''}
+              <div class="btn btn-sm flex-shrink-0 d-flex align-items-center gap-1" style="background:rgba(212,175,55,0.18); color:#ffd700; border:1px solid rgba(212,175,55,0.35); border-radius:10px; padding:6px 12px; font-size:11px; font-weight:700;">
+                <i class="fa fa-sign-in"></i> <span class="d-none d-sm-inline">ലോഗിൻ</span>
+              </div>
             </div>
           </div>
         `;
       });
 
       container.innerHTML = html;
+    }
+
+    // Click Biruthadhari -> Smooth scroll to top loginCard, select user & proceed to password
+    function selectAlumniForLogin(index) {
+      const alumni = (filteredAlumniList && filteredAlumniList[index]) || rawAlumniList[index];
+      if (!alumni) return;
+
+      // 1. Ensure role is set to student
+      if (typeof switchRole === 'function') {
+        switchRole('student');
+      }
+
+      // 2. Set selected user
+      selectedUserObject = alumni;
+
+      // 3. Pre-fill identifier input
+      const idInput = document.getElementById('inputIdentifier');
+      if (idInput) {
+        idInput.value = alumni.admissionNo || alumni.name || '';
+      }
+
+      // 4. Proceed directly to password screen
+      proceedToPassword();
+
+      // 5. Scroll smoothly up to loginCard
+      const loginCard = document.getElementById('loginCard') || document.getElementById('stepPassword');
+      if (loginCard) {
+        loginCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // 6. Auto-focus on password field after smooth scroll
+      setTimeout(() => {
+        const passInput = document.getElementById('inputPassword');
+        if (passInput) passInput.focus();
+      }, 450);
     }
 
     function renderAlumniPagination() {
