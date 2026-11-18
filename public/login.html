@@ -400,36 +400,101 @@
 
     /* Alumni / Biruthadhari Section */
     .alumni-section {
-      padding: 40px 0 60px;
+      background: linear-gradient(180deg, #050d1a 0%, #081426 50%, #030811 100%) !important;
+      padding: 50px 0 70px !important;
+      border-top: 1px solid rgba(212, 175, 55, 0.25) !important;
+      position: relative;
     }
-
+    .alumni-header-box {
+      background: linear-gradient(135deg, rgba(13, 27, 49, 0.95), rgba(20, 42, 74, 0.95)) !important;
+      border: 1.5px solid rgba(212, 175, 55, 0.35) !important;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5) !important;
+    }
     .alumni-card {
-      background: #ffffff;
-      border-radius: 16px;
-      border: 1px solid #e2e8f0;
-      padding: 20px;
-      height: 100%;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      background: rgba(13, 27, 49, 0.88) !important;
+      border: 1.5px solid rgba(212, 175, 55, 0.25) !important;
+      border-radius: 18px !important;
+      padding: 16px !important;
+      height: 100% !important;
+      transition: all 0.25s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 15px !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+      color: #ffffff !important;
     }
-
     .alumni-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(13, 71, 161, 0.15);
-      border-color: #a7f3d0;
+      transform: translateY(-4px) !important;
+      border-color: #ffd700 !important;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2) !important;
     }
-
     .alumni-card img {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #10b981;
-      background: #f1f5f9;
-      flex-shrink: 0;
+      width: 65px !important;
+      height: 86px !important;
+      border-radius: 12px !important;
+      object-fit: cover !important;
+      aspect-ratio: 3/4 !important;
+      border: 2px solid #d4af37 !important;
+      background: #0f172a !important;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5) !important;
+      flex-shrink: 0 !important;
+    }
+    .badge-alumni {
+      background: rgba(212, 175, 55, 0.18) !important;
+      color: #ffd700 !important;
+      border: 1px solid rgba(212, 175, 55, 0.35) !important;
+      font-weight: 700 !important;
+      padding: 4px 10px !important;
+      border-radius: 10px !important;
+      font-size: 11px !important;
+    }
+    .alumni-page-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #e2e8f0;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .alumni-page-btn:hover {
+      background: rgba(30, 41, 59, 0.95);
+      border-color: #ffd700;
+      color: #ffd700;
+    }
+    .alumni-page-btn.active {
+      background: linear-gradient(135deg, #d4af37, #b89327);
+      color: #061121;
+      border-color: #ffd700;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    }
+    .alumni-page-nav {
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #e2e8f0;
+      font-weight: 700;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .alumni-page-nav:hover:not(:disabled) {
+      border-color: #ffd700;
+      color: #ffd700;
+    }
+    .alumni-page-nav:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
 
     /* Dashboard UI (After Login) */
@@ -1775,39 +1840,73 @@
   </div>
 </div>
 
-  <!-- ALUMNI / BIRUTHADHARI PUBLIC SECTION -->
+  <!-- ALUMNI / BIRUTHADHARI PUBLIC SECTION (MODEL 1 LUXURY WITH SMART PAGINATION & LIVE FILTER) -->
   <section class="alumni-section" id="publicAlumniSection">
     <div class="container">
       
-      <!-- Section Header -->
-      <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 pb-2 border-bottom">
-        <div class="mb-3 mb-md-0">
-          <div class="d-flex align-items-center gap-2 mb-1">
-            <span class="badge badge-primary px-3 py-1 font-weight-bold" style="background:linear-gradient(135deg, #0d47a1, #1e88e5); font-size:12px; letter-spacing:0.5px;">ALUMNI</span>
-            <h2 class="font-weight-bold text-success m-0" style="font-family:'Outfit', sans-serif; font-size:1.85rem;">
-              ബിരുദധാരികൾ <span style="font-size:1.15rem; font-weight:600; color:#64748b;">(Graduates &amp; Alumni)</span>
+      <!-- Section Header Box -->
+      <div class="alumni-header-box mb-4 p-4 rounded-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <span class="badge badge-warning text-dark px-3 py-1 font-weight-bold" style="background:#ffd700; font-size:11px; letter-spacing:0.8px; border-radius:20px;">
+                <i class="fa fa-graduation-cap mr-1"></i> ALUMNI DIRECTORY
+              </span>
+              <span class="badge badge-pill badge-success px-3 py-1 font-weight-bold" id="alumniTotalCountBadge" style="background:#10b981; font-size:11px;">
+                59 ബിരുദധാരികൾ
+              </span>
+            </div>
+            <h2 class="font-weight-bold text-white m-0" style="font-family:'Outfit', sans-serif; font-size:1.85rem; letter-spacing:0.3px;">
+              ബിരുദധാരികൾ <span style="font-size:1.15rem; font-weight:600; color:#ffd700;">(Graduates &amp; Alumni Network)</span>
             </h2>
+            <p class="text-white-50 m-0 mt-1" style="font-size:0.92rem; max-width:700px; line-height:1.6;">
+              മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസിൽ നിന്നും പഠനം പൂർത്തിയാക്കി സമൂഹത്തിൽ ദീനീ സേവനരംഗങ്ങളിൽ പ്രശോഭിക്കുന്ന പ്രിയപ്പെട്ട ബിരുദധാരികൾ.
+            </p>
           </div>
-          <p class="text-muted m-0" style="font-size:0.95rem; max-width:700px; line-height:1.6;">
-            മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസിൽ നിന്നും പഠനം പൂർത്തിയാക്കി സമൂഹത്തിൽ ദീനീ സേവനരംഗങ്ങളിൽ പ്രശോഭിക്കുന്ന പ്രിയപ്പെട്ട ബിരുദധാരികൾ.
-          </p>
+
+          <!-- Controls: Instant Search + Batch Filter -->
+          <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 flex-grow-1 flex-md-grow-0" style="min-width:320px;">
+            <!-- Instant Live Search Bar -->
+            <div class="position-relative flex-grow-1">
+              <i class="fa fa-search position-absolute" style="left:15px; top:50%; transform:translateY(-50%); font-size:13px; color:#ffd700;"></i>
+              <input type="text" id="searchAlumniInput" class="form-control rounded-pill pr-4 py-2" placeholder="പേര്, സ്ഥലം, ബാച്ച് തിരയുക..." oninput="handleAlumniSearch(this.value)" style="background:rgba(15,23,42,0.9); border:1.5px solid rgba(212,175,55,0.4); color:#fff; font-size:0.9rem; padding-left:38px !important;">
+              <button id="btnClearAlumniSearch" class="btn btn-sm text-white-50 position-absolute" style="right:8px; top:50%; transform:translateY(-50%); display:none; background:none; border:none; padding:2px 8px;" onclick="clearAlumniSearch()" title="Clear">
+                <i class="fa fa-times-circle"></i>
+              </button>
+            </div>
+
+            <!-- Batch Filter Dropdown -->
+            <select id="filterAlumniBatch" class="form-control rounded-pill px-3 py-2" onchange="handleAlumniBatchChange(this.value)" style="background:rgba(15,23,42,0.9); border:1.5px solid rgba(212,175,55,0.4); color:#ffd700; font-size:0.88rem; font-weight:700; width:auto; cursor:pointer;">
+              <option value="ALL">എല്ലാ ബാച്ചുകളും (All Batches)</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Search Input -->
-        <div class="d-flex align-items-center gap-2" style="min-width:280px;">
-          <div class="position-relative flex-grow-1">
-            <i class="fa fa-search text-muted position-absolute" style="left:14px; top:50%; transform:translateY(-50%); font-size:14px;"></i>
-            <input type="text" id="searchAlumniInput" class="form-control rounded-pill pl-4 pr-3 py-2" placeholder="പേര്, സ്ഥലം, ബാച്ച് തിരയുക..." oninput="loadAlumniDirectory()" style="border:2px solid #e2e8f0; font-size:0.92rem;">
+        <!-- Secondary Info & View Toggle Bar -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3 pt-3 border-top" style="border-color:rgba(212,175,55,0.2) !important;">
+          <div class="small text-white-50" id="alumniResultsSummary">
+            ലോഡ് ചെയ്യുന്നു...
           </div>
-          <button class="btn btn-success rounded-pill px-3 py-2 font-weight-bold shadow-sm" onclick="loadAlumniDirectory()" title="Search Alumni">
-            <i class="fa fa-search"></i>
-          </button>
+          <div class="d-flex align-items-center gap-2">
+            <span class="small text-white-50 d-none d-sm-inline">വ്യൂ:</span>
+            <button class="btn btn-sm rounded-pill font-weight-bold px-3" id="btnAlumniPaged" onclick="setAlumniViewMode(12)" style="background:#ffd700; color:#061121; border:none; font-size:11px;">
+              <i class="fa fa-th-large mr-1"></i> പേജ് വ്യൂ (12)
+            </button>
+            <button class="btn btn-sm rounded-pill font-weight-bold px-3 text-white-50" id="btnAlumniAll" onclick="setAlumniViewMode(0)" style="background:rgba(15,23,42,0.7); border:1px solid rgba(212,175,55,0.3); font-size:11px;">
+              <i class="fa fa-list mr-1"></i> മുഴുവൻ കാണുക
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Alumni Cards Container -->
+      <!-- Alumni Cards Grid Container -->
       <div class="row" id="alumniCardsContainer">
-        <!-- Dynamically populated via loadAlumniDirectory() -->
+        <!-- Dynamically populated via renderAlumniCards() -->
+      </div>
+
+      <!-- Smart Pagination Navigation Bar -->
+      <div id="alumniPaginationContainer" class="d-flex justify-content-center align-items-center flex-wrap gap-2 mt-4 pt-2">
+        <!-- Dynamically populated via renderAlumniPagination() -->
       </div>
 
     </div>
@@ -3689,62 +3788,255 @@ function ensureThirtyStudentsInBatch(batchName) {
     }
 
     // Alumni / Biruthadhari Directory Loader
+    let rawAlumniList = [];
+    let filteredAlumniList = [];
+    let currentAlumniPage = 1;
+    let alumniPageSize = 12; // 12 cards per page (eliminates excessive scrolling on mobile!)
+    let alumniSearchDebounce = null;
+
     function loadAlumniDirectory() {
-      const inputEl = document.getElementById('searchAlumniInput');
-      const q = inputEl ? inputEl.value.trim() : '';
       const container = document.getElementById('alumniCardsContainer');
       if (!container) return;
+      container.innerHTML = '<div class="col-12 text-center text-white-50 py-5"><i class="fa fa-spinner fa-spin fa-2x mb-2 text-warning"></i><br>ബിരുദധാരികളുടെ വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</div>';
 
-      container.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fa fa-spinner fa-spin mr-1"></i> ബിരുദധാരികളുടെ വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</div>';
-
-      fetch('/api/portal/alumni?search=' + encodeURIComponent(q))
+      fetch('/api/portal/alumni')
         .then(r => r.json())
         .then(data => {
-          if (data.success && data.alumni && data.alumni.length > 0) {
-            let html = '';
-            data.alumni.forEach(a => {
-              const photo = a.photoUrl || 'img/new_logo.png';
-              const name = a.name || 'ബിരുദധാരി';
-              const father = a.fatherName || '-';
-              const place = a.place || 'Muttichira';
-              const batchText = a.batchNumber ? ('Batch ' + a.batchNumber) : (a.batchYear ? ('Batch ' + a.batchYear) : 'Biruthadhari');
+          if (data.success && data.alumni) {
+            rawAlumniList = data.alumni;
+            
+            // Populate Batch dropdown dynamically
+            const batchSelect = document.getElementById('filterAlumniBatch');
+            if (batchSelect) {
+              const batches = new Set();
+              rawAlumniList.forEach(a => {
+                const b = a.batchNumber || a.batchYear;
+                if (b) batches.add(String(b).trim());
+              });
+              // Sort batches
+              const sortedBatches = Array.from(batches).sort((a,b) => {
+                const numA = parseInt(a.replace(/\D/g, '')) || 0;
+                const numB = parseInt(b.replace(/\D/g, '')) || 0;
+                return numB - numA;
+              });
+              let opts = '<option value="ALL">എല്ലാ ബാച്ചുകളും (All Batches)</option>';
+              sortedBatches.forEach(b => {
+                opts += `<option value="${b}">Batch ${b.replace(/^batch\s*/i, '')}</option>`;
+              });
+              batchSelect.innerHTML = opts;
+            }
 
-              html += `
-                <div class="col-lg-4 col-md-6 mb-4">
-                  <div class="alumni-card shadow-sm">
-                    <img src="${photo}" alt="${name}" onerror="this.src='img/new_logo.png'">
-                    <div style="flex-grow:1; min-width:0;">
-                      <h5 class="font-weight-bold text-primary mb-1 text-truncate" style="font-size:1.05rem;" title="${name}">${name}</h5>
-                      <span class="badge badge-alumni mb-2"><i class="fa fa-graduation-cap mr-1"></i> ${batchText}</span>
-                      
-                      <div class="small text-muted mb-1 text-truncate" title="പിതാവ്: ${father}">
-                        <i class="fa fa-user-circle text-success mr-1"></i> <strong class="text-dark">പിതാവ്:</strong> ${father}
-                      </div>
-                      <div class="small text-muted text-truncate" title="സ്ഥലം: ${place}">
-                        <i class="fa fa-map-marker text-danger mr-1"></i> <strong class="text-dark">സ്ഥലം:</strong> ${place}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              `;
-            });
-            container.innerHTML = html;
+            const totalBadge = document.getElementById('alumniTotalCountBadge');
+            if (totalBadge) totalBadge.textContent = rawAlumniList.length + ' ബിരുദധാരികൾ';
+
+            applyAlumniFilter();
           } else {
-            container.innerHTML = `
-              <div class="col-12 text-center text-muted py-5">
-                <i class="fa fa-user-graduate fa-2x mb-2 text-secondary d-block"></i>
-                <div>ബിരുദധാരികളുടെ വിവരങ്ങൾ ഒന്നും ലഭ്യമായിട്ടില്ല.</div>
-              </div>`;
+            container.innerHTML = '<div class="col-12 text-center text-white-50 py-5">വിവരങ്ങൾ ലഭ്യമല്ല.</div>';
           }
-        }).catch(err => {
-          console.error('Error loading alumni:', err);
-          if (container) {
-            container.innerHTML = '<div class="col-12 text-center text-danger py-4"><i class="fa fa-exclamation-triangle mr-1"></i> വിവരങ്ങൾ ലഭ്യമാക്കാൻ സാധിച്ചില്ല. വീണ്ടും ശ്രമിക്കുക.</div>';
-          }
+        })
+        .catch(err => {
+          container.innerHTML = `<div class="col-12 text-center text-danger py-4">Error loading alumni: ${err.message}</div>`;
         });
     }
 
-    
+    function handleAlumniSearch(val) {
+      clearTimeout(alumniSearchDebounce);
+      const clearBtn = document.getElementById('btnClearAlumniSearch');
+      if (clearBtn) clearBtn.style.display = val ? 'inline-block' : 'none';
+
+      alumniSearchDebounce = setTimeout(() => {
+        currentAlumniPage = 1;
+        applyAlumniFilter();
+      }, 200);
+    }
+
+    function clearAlumniSearch() {
+      const input = document.getElementById('searchAlumniInput');
+      if (input) input.value = '';
+      const clearBtn = document.getElementById('btnClearAlumniSearch');
+      if (clearBtn) clearBtn.style.display = 'none';
+      currentAlumniPage = 1;
+      applyAlumniFilter();
+    }
+
+    function handleAlumniBatchChange(batchVal) {
+      currentAlumniPage = 1;
+      applyAlumniFilter();
+    }
+
+    function setAlumniViewMode(size) {
+      alumniPageSize = size;
+      currentAlumniPage = 1;
+      const btnPaged = document.getElementById('btnAlumniPaged');
+      const btnAll = document.getElementById('btnAlumniAll');
+      if (btnPaged && btnAll) {
+        if (size > 0) {
+          btnPaged.style.background = '#ffd700';
+          btnPaged.style.color = '#061121';
+          btnPaged.className = 'btn btn-sm rounded-pill font-weight-bold px-3';
+          btnAll.style.background = 'rgba(15,23,42,0.7)';
+          btnAll.className = 'btn btn-sm rounded-pill font-weight-bold px-3 text-white-50';
+        } else {
+          btnAll.style.background = '#ffd700';
+          btnAll.style.color = '#061121';
+          btnAll.className = 'btn btn-sm rounded-pill font-weight-bold px-3';
+          btnPaged.style.background = 'rgba(15,23,42,0.7)';
+          btnPaged.className = 'btn btn-sm rounded-pill font-weight-bold px-3 text-white-50';
+        }
+      }
+      applyAlumniFilter();
+    }
+
+    function applyAlumniFilter() {
+      const q = (document.getElementById('searchAlumniInput')?.value || '').toLowerCase().trim();
+      const batch = document.getElementById('filterAlumniBatch')?.value || 'ALL';
+
+      filteredAlumniList = rawAlumniList.filter(a => {
+        // Batch match
+        if (batch !== 'ALL') {
+          const b = String(a.batchNumber || a.batchYear || '').trim().toLowerCase();
+          const target = batch.toLowerCase();
+          if (b !== target && b !== ('batch ' + target) && b.replace(/^batch\s*/i, '') !== target) {
+            return false;
+          }
+        }
+        // Search query match
+        if (q) {
+          const n = (a.name || '').toLowerCase();
+          const p = (a.place || '').toLowerCase();
+          const f = (a.fatherName || '').toLowerCase();
+          const b = (String(a.batchNumber || '') + ' ' + String(a.batchYear || '')).toLowerCase();
+          const adm = (a.admissionNo || '').toLowerCase();
+          return n.includes(q) || p.includes(q) || f.includes(q) || b.includes(q) || adm.includes(q);
+        }
+        return true;
+      });
+
+      renderAlumniCards();
+      renderAlumniPagination();
+    }
+
+    function renderAlumniCards() {
+      const container = document.getElementById('alumniCardsContainer');
+      const summaryEl = document.getElementById('alumniResultsSummary');
+      if (!container) return;
+
+      if (filteredAlumniList.length === 0) {
+        container.innerHTML = `
+          <div class="col-12 text-center text-white-50 py-5">
+            <i class="fa fa-search fa-2x mb-3 text-warning opacity-50"></i>
+            <h5 class="text-white font-weight-bold">തിരഞ്ഞ വിവരങ്ങൾ കണ്ടെത്തിയില്ല</h5>
+            <p class="small text-white-50 mb-3">മറ്റൊരു പേരോ സ്ഥലമോ ബാച്ചോ നൽകി തിരയുക.</p>
+            <button class="btn btn-sm rounded-pill px-4 py-1.5 font-weight-bold" onclick="clearAlumniSearch()" style="background:#ffd700; color:#061121; border:none;">
+              തിരച്ചിൽ പുനഃക്രമീകരിക്കുക (Reset)
+            </button>
+          </div>
+        `;
+        if (summaryEl) summaryEl.textContent = 'കണ്ടെത്തിയവ: 0 ബിരുദധാരികൾ';
+        return;
+      }
+
+      // Slice for pagination
+      let displayItems = filteredAlumniList;
+      if (alumniPageSize > 0) {
+        const start = (currentAlumniPage - 1) * alumniPageSize;
+        displayItems = filteredAlumniList.slice(start, start + alumniPageSize);
+        if (summaryEl) {
+          const from = start + 1;
+          const to = Math.min(start + alumniPageSize, filteredAlumniList.length);
+          summaryEl.innerHTML = `കാണിക്കുന്നത്: <strong class="text-warning">${from}–${to}</strong> (ആകെ <strong class="text-white">${filteredAlumniList.length}</strong> ബിരുദധാരികൾ)`;
+        }
+      } else {
+        if (summaryEl) summaryEl.innerHTML = `മുഴുവൻ കാണിക്കുന്നു: <strong class="text-warning">${filteredAlumniList.length}</strong> ബിരുദധാരികൾ`;
+      }
+
+      let html = '';
+      displayItems.forEach(a => {
+        const photo = a.photoUrl || 'img/new_logo.png';
+        const name = a.name || 'ബിരുദധാരി';
+        const father = a.fatherName || '-';
+        const place = a.place || 'Muttichira';
+        const rawBatch = a.batchNumber || a.batchYear || '';
+        const batchText = rawBatch ? (rawBatch.toLowerCase().startsWith('batch') ? rawBatch : ('Batch ' + rawBatch)) : 'Biruthadhari';
+
+        html += `
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="alumni-card shadow-sm">
+              <img src="${photo}" alt="${name}" onerror="this.src='img/new_logo.png'">
+              <div style="flex-grow:1; min-width:0;">
+                <h5 class="font-weight-bold text-white mb-1 text-truncate" style="font-size:1.02rem; font-family:'Outfit',sans-serif;" title="${name}">${name}</h5>
+                <span class="badge badge-alumni mb-2"><i class="fa fa-graduation-cap mr-1"></i> ${batchText}</span>
+                
+                <div class="small text-white-50 mb-1 text-truncate" title="പിതാവ്: ${father}">
+                  <i class="fa fa-user-circle text-warning mr-1"></i> <span>പിതാവ്:</span> <strong class="text-white font-weight-normal">${father}</strong>
+                </div>
+                <div class="small text-white-50 text-truncate" title="സ്ഥലം: ${place}">
+                  <i class="fa fa-map-marker text-danger mr-1"></i> <span>സ്ഥലം:</span> <strong class="text-white font-weight-normal">${place}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function renderAlumniPagination() {
+      const pagContainer = document.getElementById('alumniPaginationContainer');
+      if (!pagContainer) return;
+
+      if (alumniPageSize === 0 || filteredAlumniList.length <= alumniPageSize) {
+        pagContainer.innerHTML = '';
+        return;
+      }
+
+      const totalPages = Math.ceil(filteredAlumniList.length / alumniPageSize);
+      let html = '';
+
+      // Prev Button
+      html += `
+        <button class="alumni-page-nav" onclick="goToAlumniPage(${currentAlumniPage - 1})" ${currentAlumniPage === 1 ? 'disabled' : ''}>
+          <i class="fa fa-chevron-left"></i> മുൻപത്തേത് (Prev)
+        </button>
+      `;
+
+      // Page numbers (smart window)
+      for (let p = 1; p <= totalPages; p++) {
+        if (p === 1 || p === totalPages || (p >= currentAlumniPage - 2 && p <= currentAlumniPage + 2)) {
+          html += `
+            <button class="alumni-page-btn ${p === currentAlumniPage ? 'active' : ''}" onclick="goToAlumniPage(${p})">
+              ${p}
+            </button>
+          `;
+        } else if (p === currentAlumniPage - 3 || p === currentAlumniPage + 3) {
+          html += `<span class="text-white-50 px-1">...</span>`;
+        }
+      }
+
+      // Next Button
+      html += `
+        <button class="alumni-page-nav" onclick="goToAlumniPage(${currentAlumniPage + 1})" ${currentAlumniPage === totalPages ? 'disabled' : ''}>
+          അടുത്തത് (Next) <i class="fa fa-chevron-right"></i>
+        </button>
+      `;
+
+      pagContainer.innerHTML = html;
+    }
+
+    function goToAlumniPage(page) {
+      const totalPages = Math.ceil(filteredAlumniList.length / alumniPageSize) || 1;
+      if (page < 1 || page > totalPages) return;
+      currentAlumniPage = page;
+      renderAlumniCards();
+      renderAlumniPagination();
+      
+      const sec = document.getElementById('publicAlumniSection');
+      if (sec) {
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     function safeGetValue(id) {
       var el = document.getElementById(id);
       return el ? el.value.trim() : '';

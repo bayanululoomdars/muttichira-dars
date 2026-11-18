@@ -477,7 +477,27 @@ exports.getAlumniList = async (req, res) => {
       }
     });
 
-    res.json({ success: true, count: merged.length, alumni: merged });
+    let finalAlumni = merged;
+    if (batchYear) {
+      finalAlumni = finalAlumni.filter(s => {
+        const b = String(s.batchNumber || s.batchYear || '').trim();
+        const target = String(batchYear).trim();
+        return b === target || b.toLowerCase() === ('batch ' + target).toLowerCase() || b.replace(/^batch\s*/i, '') === target;
+      });
+    }
+    if (search) {
+      finalAlumni = finalAlumni.filter(s => {
+        const n = (s.name || '').toLowerCase();
+        const p = (s.place || '').toLowerCase();
+        const f = (s.fatherName || '').toLowerCase();
+        const b = (String(s.batchNumber || '') + ' ' + String(s.batchYear || '')).toLowerCase();
+        const st = (s.status || '').toLowerCase();
+        const adm = (s.admissionNo || '').toLowerCase();
+        return n.includes(search) || p.includes(search) || f.includes(search) || b.includes(search) || st.includes(search) || adm.includes(search);
+      });
+    }
+
+    res.json({ success: true, count: finalAlumni.length, alumni: finalAlumni });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
