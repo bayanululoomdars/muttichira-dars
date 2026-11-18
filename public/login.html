@@ -50,67 +50,130 @@
       flex-direction: column;
     }
 
-    /* Hero Banner */
+    /* Luxury Hero Banner - Deep Midnight Navy & Gold Ambient Glow */
     .portal-hero {
-      background: var(--bg-gradient);
-      padding: 100px 20px 65px;
+      background: radial-gradient(circle at 50% 18%, rgba(30, 64, 175, 0.32) 0%, rgba(6, 17, 33, 0) 70%),
+                  linear-gradient(180deg, #07172e 0%, #061121 100%);
+      padding: 115px 20px 85px;
       color: #ffffff;
       text-align: center;
       position: relative;
       overflow: hidden;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
+    .portal-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #fef08a;
+      text-transform: uppercase;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .live-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e;
+      animation: pulseGlow 1.8s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     .portal-hero h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 2.3rem;
-      margin-bottom: 8px;
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #ffffff 10%, #fef08a 50%, #d4af37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .portal-hero p {
-      font-size: 0.98rem;
-      opacity: 0.9;
-      max-width: 600px;
+      font-size: 1.02rem;
+      color: #cbd5e1;
+      max-width: 650px;
       margin: 0 auto;
+      line-height: 1.6;
     }
 
     /* Main Container floating card */
     .portal-card-container {
-      margin-top: -35px;
-      margin-bottom: 40px;
+      margin-top: -45px;
+      margin-bottom: 45px;
       z-index: 10;
     }
 
+    /* High-End Dark Luxury Glassmorphism Login Card */
+    #loginCard {
+      background: rgba(13, 27, 49, 0.92) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border-radius: 26px !important;
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.6), 0 0 35px rgba(212, 175, 55, 0.12) !important;
+      border: 1.5px solid rgba(212, 175, 55, 0.35) !important;
+      padding: 36px 32px !important;
+      transition: all 0.35s ease !important;
+      position: relative;
+      overflow: hidden;
+      color: #ffffff;
+    }
+
+    #loginCard::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #d4af37 30%, #fef08a 50%, #d4af37 70%, transparent);
+    }
+
     .portal-box {
-      background: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 20px 45px rgba(13, 71, 161, 0.15);
-      border: 1px solid rgba(13, 71, 161, 0.15);
-      padding: 30px;
+      border-radius: 26px;
       transition: all 0.3s ease;
     }
 
-    /* Role Switcher Pill Popup Tabs */
+    /* Role Switcher Pill Segmented Control */
     .role-switcher {
       display: flex;
-      background: #f1f5f9;
+      background: rgba(6, 17, 33, 0.85);
       padding: 6px;
       border-radius: 50px;
-      margin-bottom: 25px;
-      border: 1px solid #e2e8f0;
+      margin-bottom: 26px;
+      border: 1.5px solid rgba(212, 175, 55, 0.25);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .role-btn {
       flex: 1;
-      padding: 11px 20px;
+      padding: 12px 20px;
       border-radius: 50px;
       border: none;
       background: transparent;
       font-weight: 700;
       font-size: 0.92rem;
-      color: #64748b;
+      color: #94a3b8;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -118,12 +181,18 @@
     }
 
     .role-btn.active {
-      background: var(--primary-color);
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
       color: #ffffff;
-      box-shadow: 0 6px 15px rgba(13, 71, 161, 0.3);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
     }
 
-    /* Input & Preview Card */
+    .role-btn#btnRoleUsthad.active {
+      background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.45);
+    }
+
+    /* Translucent Modern Glass Input */
     .input-group-custom {
       position: relative;
       margin-bottom: 20px;
@@ -131,20 +200,27 @@
 
     .form-control-custom {
       width: 100%;
-      padding: 14px 18px 14px 48px;
-      border-radius: 12px;
-      border: 2px solid #e2e8f0;
-      font-size: 1rem;
+      padding: 15px 18px 15px 48px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(212, 175, 55, 0.25);
+      font-size: 0.98rem;
       font-weight: 500;
       transition: all 0.25s ease;
       outline: none;
-      background: #f8fafc;
+      background: rgba(6, 17, 33, 0.75);
+      color: #ffffff;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
     }
 
     .form-control-custom:focus {
-      border-color: var(--primary-color);
-      background: #ffffff;
-      box-shadow: 0 0 0 4px rgba(13, 71, 161, 0.15);
+      border-color: #d4af37;
+      background: rgba(6, 17, 33, 0.95);
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.25);
+      color: #ffffff;
+    }
+
+    .form-control-custom::placeholder {
+      color: #64748b;
     }
 
     .input-icon {
@@ -152,8 +228,78 @@
       left: 16px;
       top: 50%;
       transform: translateY(-50%);
+      color: #d4af37;
+      font-size: 1.15rem;
+    }
+
+    /* Pre-Login Preview Card */
+    .prelogin-card {
+      background: rgba(6, 17, 33, 0.8) !important;
+      border: 1.5px solid rgba(212, 175, 55, 0.4) !important;
+      border-radius: 18px !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4) !important;
+      color: #ffffff !important;
+    }
+    .prelogin-card h4, .prelogin-card strong {
+      color: #ffffff !important;
+    }
+    .prelogin-avatar {
+      border: 2px solid #d4af37 !important;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5) !important;
+    }
+
+    /* Counter Cards (Below Portal Login) */
+    .counter-card {
+      background: rgba(13, 27, 49, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(212, 175, 55, 0.25);
+      border-radius: 20px;
+      padding: 26px 16px;
+      text-align: center;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .counter-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(212, 175, 55, 0.6);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(212, 175, 55, 0.2);
+    }
+
+    .counter-icon {
+      font-size: 2.4rem;
+      color: #d4af37;
+      margin-bottom: 10px;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .counter-card:hover .counter-icon {
+      transform: scale(1.15);
+    }
+
+    .counter-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, #ffffff 40%, #fef08a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .counter-label {
+      font-size: 0.85rem;
+      font-weight: 700;
       color: #94a3b8;
-      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
 
     /* Preview Profile Card */
@@ -781,8 +927,12 @@
   <!-- Hero Banner -->
   <section class="portal-hero">
     <div class="container">
-      <h1>Student & Usthad Portal</h1>
-      <p>Welcome to Muttichira Bayanul Uloom Dars Academic Portal. Access grades, notifications, direct messages, and alumni records.</p>
+      <div class="portal-badge-pill mb-3">
+        <span class="live-pulse-dot"></span>
+        <span>Academic Portal &amp; Digital Dossier</span>
+      </div>
+      <h1>Student &amp; Usthad <span class="gold-gradient-text">Portal</span></h1>
+      <p>Welcome to Muttichira Bayanul Uloom Dars official academic gateway. Access examinations, student records, digital ID cards, and institutional announcements.</p>
     </div>
   </section>
 
@@ -806,8 +956,8 @@
 
           <!-- Instruction Text -->
           <div class="text-center mb-4">
-            <h3 class="font-weight-bold mb-1" id="loginTitle">Student Portal Access</h3>
-            <p class="text-muted small" id="loginSub">Enter your Admission Number or Phone Number to look up your profile</p>
+            <h3 class="font-weight-bold mb-1 text-white" id="loginTitle" style="font-family:'Outfit', sans-serif; letter-spacing:0.3px;">Student Portal Access</h3>
+            <p class="small text-white-50" id="loginSub">Enter your Admission Number or Phone Number to look up your profile</p>
           </div>
 
           <!-- Step 1: Admission No / Identifier Lookup -->
@@ -838,14 +988,14 @@
               </div>
               <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center">
                 <span class="text-success small font-weight-bold"><i class="fa fa-check-circle"></i> Profile Verified</span>
-                <button class="btn btn-sm btn-success rounded-pill font-weight-bold px-4 py-2 shadow-sm" onclick="proceedToPassword()">
+                <button class="btn btn-sm rounded-pill font-weight-bold px-4 py-2 shadow-sm" onclick="proceedToPassword()" style="background:linear-gradient(135deg, #059669, #10b981); color:#fff; border:none;">
                   Proceed to Login <i class="fa fa-arrow-right ml-1"></i>
                 </button>
               </div>
             </div>
 
-            <button class="btn btn-block btn-success py-3 rounded-pill font-weight-bold shadow-sm" id="btnCheckProfile" onclick="handleManualLookup()">
-              <i class="fa fa-search"></i> Search Profile
+            <button class="btn btn-block py-3 rounded-pill font-weight-bold shadow" id="btnCheckProfile" onclick="handleManualLookup()" style="background:linear-gradient(135deg, #d4af37 0%, #b89327 50%, #d4af37 100%); color:#061121; font-size:1rem; letter-spacing:0.5px; border:none; box-shadow:0 8px 25px rgba(212,175,55,0.35);">
+              <i class="fa fa-search mr-1"></i> Search Profile
             </button>
           </div>
 
@@ -1630,8 +1780,8 @@
 
               if (currentMatchesList.length > 1) {
                 // Render Selectable Options List (Showing ONLY Name, Place, Father)
-                let selectHtml = '<div style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:12px; max-height:240px; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.08); margin-bottom:15px; padding:6px;">' +
-                  '<div style="font-size:0.75rem; font-weight:700; color:#64748b; padding:6px 10px; border-bottom:1px solid #f1f5f9; text-transform:uppercase;"><i class="fa fa-list"></i> Select matching profile (' + currentMatchesList.length + ' found):</div>';
+                let selectHtml = '<div style="background:rgba(13,27,49,0.98); border:1.5px solid rgba(212,175,55,0.4); border-radius:14px; max-height:240px; overflow-y:auto; box-shadow:0 15px 35px rgba(0,0,0,0.5); margin-bottom:15px; padding:6px; color:#ffffff;">' +
+                  '<div style="font-size:0.75rem; font-weight:700; color:#d4af37; padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.08); text-transform:uppercase;"><i class="fa fa-list"></i> Select matching profile (' + currentMatchesList.length + ' found):</div>';
 
                 currentMatchesList.forEach((item, index) => {
                   const isUsthad = (item.role === 'usthad' || item.type === 'usthad' || currentRole === 'usthad');
@@ -1643,21 +1793,21 @@
 
                   const subDetailHtml = isUsthad
                     ? '<span><i class="fa fa-graduation-cap text-warning"></i> Designation: ' + (item.designation || item.subject || 'Mudarris') + '</span>'
-                    : '<span><i class="fa fa-user-circle text-primary"></i> Father: ' + (item.fatherName || '-') + '</span>';
+                    : '<span><i class="fa fa-user-circle text-info"></i> Father: ' + (item.fatherName || '-') + '</span>';
 
-                  selectHtml += '<div onclick="selectUserFromList(' + index + ', false)" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid #f8fafc;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\'transparent\'">' +
-                    '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:42px; height:42px; border-radius:10px; object-fit:cover; border:1px solid #e2e8f0;">' +
+                  selectHtml += '<div onclick="selectUserFromList(' + index + ', false)" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:10px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid rgba(255,255,255,0.05);" onmouseover="this.style.background=\'rgba(255,255,255,0.08)\'" onmouseout="this.style.background=\'transparent\'">' +
+                    '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:42px; height:42px; border-radius:10px; object-fit:cover; border:1.5px solid rgba(212,175,55,0.4);">' +
                     '<div style="flex:1; text-align:left;">' +
                       '<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
                         roleBadgeHtml +
-                        '<span style="font-weight:700; color:#1e293b; font-size:0.95rem;">' + item.name + '</span>' +
+                        '<span style="font-weight:700; color:#ffffff; font-size:0.95rem;">' + item.name + '</span>' +
                       '</div>' +
-                      '<div style="font-size:0.78rem; color:#64748b; font-weight:600; margin-top:3px;">' +
+                      '<div style="font-size:0.78rem; color:#94a3b8; font-weight:600; margin-top:3px;">' +
                         subDetailHtml + ' &nbsp;•&nbsp; ' +
                         '<span><i class="fa fa-map-marker text-danger"></i> Place: ' + (item.place || 'Muttichira') + '</span>' +
                       '</div>' +
                     '</div>' +
-                    '<button class="btn btn-xs btn-outline-success font-weight-bold rounded-pill px-2.5 py-1" style="font-size:11px;">Select</button>' +
+                    '<button class="btn btn-xs btn-outline-warning font-weight-bold rounded-pill px-2.5 py-1" style="font-size:11px; border-color:#d4af37; color:#d4af37;">Select</button>' +
                   '</div>';
                 });
 
@@ -4531,7 +4681,7 @@ function downloadIDCard() {
 
         // If default master profile or QRCodeStyling unavailable, use pristine 1000x1000 HD QR image
         if (isMasterUsthad || isMasterStudent || typeof QRCodeStyling === 'undefined') {
-          qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:70px; height:70px; object-fit:contain; border-radius:8px;">';
+          qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:84px; height:84px; object-fit:contain; border-radius:8px;">';
         } else {
           try {
             const qrCodeObj = new QRCodeStyling({
@@ -4570,15 +4720,15 @@ function downloadIDCard() {
             setTimeout(() => {
               const cv = qrBox.querySelector('canvas');
               if (cv) {
-                cv.style.width = '70px';
-                cv.style.height = '70px';
+                cv.style.width = '84px';
+                cv.style.height = '84px';
                 cv.style.objectFit = 'contain';
                 cv.style.borderRadius = '8px';
               }
             }, 60);
           } catch(err) {
             console.error('Error rendering styled QR:', err);
-            qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:70px; height:70px; object-fit:contain; border-radius:8px;">';
+            qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:84px; height:84px; object-fit:contain; border-radius:8px;">';
           }
         }
       }
@@ -4662,6 +4812,8 @@ function downloadIDCard() {
             const origImg = sourceElem.querySelector('#landscapeQrBox img');
             const cloneQrBox = clone.querySelector('#landscapeQrBox');
             if (cloneQrBox) {
+              cloneQrBox.style.width = '106px';
+              cloneQrBox.style.height = '106px';
               let qrSrc = '';
               if (origImg && origImg.src) {
                 qrSrc = origImg.src;
@@ -5777,12 +5929,9 @@ function downloadIDCard() {
                     </div>
                   </div>
 
-                  <!-- QR CODE (First QR Model with Curved Box and 'Scan to Login' badge) -->
-                  <div class="text-center bg-white" style="padding:6px 6px 4px 6px; border-radius:14px; border:2px solid rgba(212,175,55,0.5); box-shadow:0 4px 14px rgba(0,0,0,0.25); flex-shrink:0; display:inline-flex; flex-direction:column; align-items:center; justify-content:center;">
-                    <div id="landscapeQrBox" style="width:70px; height:70px; display:flex; align-items:center; justify-content:center; overflow:hidden;"></div>
-                    <div style="font-size:7px; font-weight:800; color:#1e1b4b; text-transform:uppercase; letter-spacing:0.3px; margin-top:3px; background:#f1f5f9; border-radius:6px; padding:2px 5px; border:1px solid #cbd5e1; width:100%; display:flex; align-items:center; justify-content:center; gap:2px; line-height:1.2;">
-                      <i class="fa fa-qrcode text-primary" style="font-size:8px;"></i> <span>Scan to Login</span>
-                    </div>
+                  <!-- QR CODE (First QR Model - Maximum Size Curved Box, No 'Scan to Login' text) -->
+                  <div class="text-center bg-white" style="padding:4px; border-radius:14px; border:2px solid rgba(212,175,55,0.6); box-shadow:0 4px 14px rgba(0,0,0,0.3); flex-shrink:0; display:inline-flex; align-items:center; justify-content:center;">
+                    <div id="landscapeQrBox" style="width:84px; height:84px; display:flex; align-items:center; justify-content:center; overflow:hidden;"></div>
                   </div>
                 </div>
 
