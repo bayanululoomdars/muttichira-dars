@@ -157,10 +157,14 @@
       background: rgba(255, 255, 255, 0.12) !important;
       backdrop-filter: blur(20px) !important;
       -webkit-backdrop-filter: blur(20px) !important;
-      border-radius: 24px !important;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
-      padding: 0 !important;
+      border-radius: 26px !important;
+      background: rgba(255, 255, 255, 0.14) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+      padding: 28px !important;
+      gap: 28px;
       transition: all 0.35s ease !important;
       position: relative;
       overflow: hidden;
@@ -175,12 +179,13 @@
 
     /* Left info panel inside card */
     .eth-left-panel {
-      flex: 0 0 42%;
-      padding: 40px 30px;
+      flex: 0 0 44%;
+      padding: 24px 20px;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      text-align: center;
       justify-content: center;
-      border-right: 1px solid rgba(255,255,255,0.12);
     }
 
     .eth-islamic-pattern {
@@ -235,7 +240,11 @@
     /* Right login form panel */
     .eth-right-panel {
       flex: 1;
-      padding: 36px 30px;
+      padding: 32px 28px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.38);
+      border-radius: 20px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -4909,7 +4918,12 @@ function downloadIDCard() {
       // Personal
       document.getElementById('vpFather').textContent = user.fatherName || user.guardianName || '-';
       document.getElementById('vpMother').textContent = user.motherName || '-';
-      document.getElementById('vpDob').textContent = user.dob || '-';
+      const formatDobDDMMYYYY = (val) => {
+        if (!val) return '-';
+        const m = String(val).match(/^(\d{4})-(\d{2})-(\d{2})/);
+        return m ? `${m[3]}-${m[2]}-${m[1]}` : val;
+      };
+      document.getElementById('vpDob').textContent = formatDobDDMMYYYY(user.dob);
       document.getElementById('vpBlood').textContent = user.bloodGroup || 'Unknown';
       document.getElementById('vpPhone').textContent = user.phone || '-';
       document.getElementById('vpEmail').textContent = user.email || '-';
