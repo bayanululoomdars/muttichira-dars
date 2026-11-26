@@ -56,16 +56,40 @@
       flex-direction: column;
     }
 
-    /* Luxury Hero Banner - Deep Midnight Navy & Gold Ambient Glow */
+    /* ETH-Pool Full-Screen Blurred Background */
     .portal-hero {
-      background: radial-gradient(circle at 50% 18%, rgba(30, 64, 175, 0.32) 0%, rgba(6, 17, 33, 0) 70%),
-                  linear-gradient(180deg, #07172e 0%, #061121 100%);
-      padding: 115px 20px 85px;
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #ffffff;
       text-align: center;
-      position: relative;
       overflow: hidden;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      padding: 100px 20px 40px;
+    }
+
+    .portal-hero::before {
+      content: '';
+      position: absolute;
+      top: -20px; left: -20px; right: -20px; bottom: -20px;
+      background: url('img/banner1.jpg') center/cover no-repeat;
+      filter: blur(12px);
+      -webkit-filter: blur(12px);
+      z-index: 0;
+    }
+
+    .portal-hero::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+
+    .portal-hero > * {
+      position: relative;
+      z-index: 2;
     }
 
     .portal-badge-pill {
@@ -128,29 +152,109 @@
       z-index: 10;
     }
 
-    /* High-End Dark Luxury Glassmorphism Login Card */
+    /* ETH-Pool Glassmorphism Login Card */
     #loginCard {
-      background: rgba(13, 27, 49, 0.92) !important;
-      backdrop-filter: blur(24px) !important;
-      -webkit-backdrop-filter: blur(24px) !important;
-      border-radius: 26px !important;
-      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.6), 0 0 35px rgba(212, 175, 55, 0.12) !important;
-      border: 1.5px solid rgba(212, 175, 55, 0.35) !important;
-      padding: 36px 32px !important;
+      background: rgba(255, 255, 255, 0.12) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-radius: 24px !important;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+      padding: 0 !important;
       transition: all 0.35s ease !important;
       position: relative;
       overflow: hidden;
       color: #ffffff;
+      display: flex;
+      min-height: 480px;
     }
 
     #loginCard::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #d4af37 30%, #fef08a 50%, #d4af37 70%, transparent);
+      display: none;
+    }
+
+    /* Left info panel inside card */
+    .eth-left-panel {
+      flex: 0 0 42%;
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .eth-islamic-pattern {
+      width: 65px;
+      height: 65px;
+      background: linear-gradient(135deg, #d4af37, #f5d76e, #d4af37);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 4px 20px rgba(212,175,55,0.4);
+      margin-bottom: 10px;
+    }
+
+    .eth-bismillah {
+      font-size: 1.2rem;
+      color: #d4af37;
+      margin: 8px 0 4px;
+    }
+
+    .eth-inst-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+    }
+
+    .eth-detail-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .eth-detail-icon {
+      width: 28px;
+      height: 28px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    /* Right login form panel */
+    .eth-right-panel {
+      flex: 1;
+      padding: 36px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      #loginCard {
+        flex-direction: column !important;
+        min-height: auto !important;
+      }
+      .eth-left-panel {
+        flex: none !important;
+        padding: 28px 24px 20px !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+      }
+      .eth-right-panel {
+        padding: 24px !important;
+      }
     }
 
     .portal-box {
@@ -158,28 +262,28 @@
       transition: all 0.3s ease;
     }
 
-    /* Role Switcher Pill Segmented Control */
+    /* ETH-Pool Role Switcher */
     .role-switcher {
       display: flex;
-      background: rgba(6, 17, 33, 0.85);
-      padding: 6px;
-      border-radius: 50px;
-      margin-bottom: 26px;
-      border: 1.5px solid rgba(212, 175, 55, 0.25);
-      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      overflow: hidden;
     }
 
     .role-btn {
       flex: 1;
-      padding: 12px 20px;
-      border-radius: 50px;
+      padding: 10px 16px;
+      border-radius: 10px;
       border: none;
       background: transparent;
       font-weight: 700;
-      font-size: 0.92rem;
-      color: #94a3b8;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.6);
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -187,15 +291,17 @@
     }
 
     .role-btn.active {
-      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-      color: #ffffff;
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+      background: rgba(255, 255, 255, 0.92);
+      color: #1e293b;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      font-weight: 800;
     }
 
     .role-btn#btnRoleUsthad.active {
-      background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
-      color: #ffffff;
-      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.45);
+      background: rgba(255, 255, 255, 0.92);
+      color: #b45309;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      font-weight: 800;
     }
 
     /* Translucent Modern Glass Input */
@@ -206,27 +312,27 @@
 
     .form-control-custom {
       width: 100%;
-      padding: 15px 18px 15px 48px;
-      border-radius: 14px;
-      border: 1.5px solid rgba(212, 175, 55, 0.25);
-      font-size: 0.98rem;
+      padding: 14px 18px 14px 48px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.95rem;
       font-weight: 500;
       transition: all 0.25s ease;
       outline: none;
-      background: rgba(6, 17, 33, 0.75);
+      background: rgba(255, 255, 255, 0.08);
       color: #ffffff;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+      backdrop-filter: blur(5px);
     }
 
     .form-control-custom:focus {
-      border-color: #d4af37;
-      background: rgba(6, 17, 33, 0.95);
-      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.14);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
       color: #ffffff;
     }
 
     .form-control-custom::placeholder {
-      color: #64748b;
+      color: rgba(255,255,255,0.45);
     }
 
     .input-icon {
@@ -234,8 +340,8 @@
       left: 16px;
       top: 50%;
       transform: translateY(-50%);
-      color: #d4af37;
-      font-size: 1.15rem;
+      color: rgba(255,255,255,0.6);
+      font-size: 1.1rem;
     }
 
     /* Pre-Login Preview Card */
@@ -1178,125 +1284,143 @@
     </div>
   </header>
 
-  <!-- Hero Banner -->
+  <!-- Hero Banner replaced with ETH-Pool Glassmorphism Viewport -->
   <section class="portal-hero">
-    <div class="container">
-      <div class="portal-badge-pill mb-3">
-        <span class="live-pulse-dot"></span>
-        <span>Academic Portal &amp; Digital Dossier</span>
-      </div>
-      <h1>Student &amp; Usthad <span class="gold-gradient-text">Portal</span></h1>
-      <p>Welcome to Muttichira Bayanul Uloom Dars official academic gateway. Access examinations, student records, digital ID cards, and institutional announcements.</p>
-    </div>
-  </section>
-
-  <!-- Main Container Card (LOGIN / LOOKUP VIEW) -->
-  <div class="container portal-card-container">
-    <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-8 transition-all duration-300" id="mainLayoutCol">
-        
-        <!-- LOGIN CARD -->
-        <div class="portal-box" id="loginCard">
+    <div class="container portal-card-container" style="margin-top: 0; margin-bottom: 0; max-width: 980px;">
+      <div class="row justify-content-center">
+        <div class="col-12" id="mainLayoutCol">
           
-          <!-- Role Selector Tabs -->
-          <div class="role-switcher">
-            <button class="role-btn active" id="btnRoleStudent" onclick="switchRole('student')">
-              <i class="fa fa-book"></i> Student Login
-            </button>
-            <button class="role-btn" id="btnRoleUsthad" onclick="switchRole('usthad')">
-              <i class="fa fa-users"></i> Usthad Login
-            </button>
-          </div>
+          <!-- LOGIN CARD -->
+          <div class="portal-box" id="loginCard">
 
-          <!-- Instruction Text -->
-          <div class="text-center mb-4">
-            <h3 class="font-weight-bold mb-1 text-white" id="loginTitle" style="font-family:'Outfit', sans-serif; letter-spacing:0.3px;">Student Portal Access</h3>
-            <p class="small text-white-50" id="loginSub">Enter your Admission Number or Phone Number to look up your profile</p>
-          </div>
-
-          <!-- Step 1: Admission No / Identifier Lookup -->
-          <div id="stepLookup">
-            <div class="input-group-custom">
-              <i class="fa fa-search input-icon"></i>
-              <input type="text" id="inputIdentifier" class="form-control-custom" placeholder="Search by Name, Adm No, Usthad ID, Phone..." oninput="handleLiveLookup()">
+            <!-- Left Details Panel -->
+            <div class="eth-left-panel">
+              <div class="eth-islamic-pattern">
+                <i class="fa fa-star-o" style="font-size: 28px; color: #061121;"></i>
+              </div>
+              <div class="eth-bismillah">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+              <div class="eth-inst-name">Muttichira Dars</div>
+              
+              <div class="eth-detail-item">
+                <div class="eth-detail-icon"><i class="fa fa-book"></i></div>
+                <span>Kitab &amp; Academic Tracking</span>
+              </div>
+              <div class="eth-detail-item">
+                <div class="eth-detail-icon"><i class="fa fa-calendar-check-o"></i></div>
+                <span>Daily Attendance</span>
+              </div>
+              <div class="eth-detail-item">
+                <div class="eth-detail-icon"><i class="fa fa-map-marker"></i></div>
+                <span>Location: <strong class="text-white">Puramannur, Kerala</strong></span>
+              </div>
             </div>
 
-            <!-- Live Selectable Search Results Dropdown List -->
-            <div id="liveSearchResultsSelect" style="display: none;" class="mb-3"></div>
-
-            <!-- Live Preview Card (Single Selected Item - Name, Place, Father/Designation) -->
-            <div id="livePreviewBox" style="display: none;" class="prelogin-card mb-3">
-              <div class="d-flex align-items-center gap-3">
-                <img id="previewPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar">
-                <div class="flex-grow-1 text-left pl-2">
-                  <div id="previewRoleLabel" class="text-muted" style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">STUDENT NAME:</div>
-                  <h4 id="previewName" class="font-weight-bold mb-2 text-dark" style="font-size:1.15rem; line-height:1.2;">-</h4>
-                  
-                  <div class="prelogin-field" id="previewSubRow">
-                    <i id="previewFatherIcon" class="fa fa-user-circle text-success mr-1"></i> <span id="previewFatherLabel">Father's Name:</span> <strong id="previewFatherText" class="text-dark">-</strong>
-                  </div>
-                  <div class="prelogin-field mb-0">
-                    <i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="previewPlaceText" class="text-dark">-</strong>
-                  </div>
-                </div>
-              </div>
-              <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center">
-                <span class="text-success small font-weight-bold"><i class="fa fa-check-circle"></i> Profile Verified</span>
-                <button class="btn btn-sm rounded-pill font-weight-bold px-4 py-2 shadow-sm" onclick="proceedToPassword()" style="background:linear-gradient(135deg, #059669, #10b981); color:#fff; border:none;">
-                  Proceed to Login <i class="fa fa-arrow-right ml-1"></i>
+            <!-- Right Login Form Panel -->
+            <div class="eth-right-panel">
+              <!-- Role Selector Tabs -->
+              <div class="role-switcher">
+                <button class="role-btn active" id="btnRoleStudent" onclick="switchRole('student')">
+                  <i class="fa fa-graduation-cap"></i> Student
+                </button>
+                <button class="role-btn" id="btnRoleUsthad" onclick="switchRole('usthad')">
+                  <i class="fa fa-user-circle"></i> Usthad
                 </button>
               </div>
-            </div>
 
-            <button class="btn btn-block py-3 rounded-pill font-weight-bold shadow" id="btnCheckProfile" onclick="handleManualLookup()" style="background:linear-gradient(135deg, #d4af37 0%, #b89327 50%, #d4af37 100%); color:#061121; font-size:1rem; letter-spacing:0.5px; border:none; box-shadow:0 8px 25px rgba(212,175,55,0.35);">
-              <i class="fa fa-search mr-1"></i> Search Profile
-            </button>
-          </div>
+              <!-- Instruction Text -->
+              <div class="text-left mb-3">
+                <h4 class="font-weight-bold mb-1 text-white" id="loginTitle" style="font-family:'Outfit', sans-serif; letter-spacing:0.3px;">Portal Access</h4>
+                <p class="small text-white-50 mb-0" id="loginSub">Enter your Admission Number or Phone Number</p>
+              </div>
 
-          <!-- Step 2: Password Prompt -->
-          <div id="stepPassword" style="display: none;">
-            
-            <!-- Selected User Banner (Name, Place, Father/Designation) -->
-            <div class="prelogin-card mb-3 p-3 bg-light">
-              <div class="d-flex align-items-center gap-3">
-                <img id="selectedPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar" style="width:60px; height:80px; object-fit:cover; aspect-ratio:3/4; border-radius:12px;">
-                <div class="text-left flex-grow-1 pl-2">
-                  <div id="selectedRoleLabel" style="font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;" class="text-primary">STUDENT</div>
-                  <h4 id="selectedName" class="font-weight-bold mb-1 text-dark" style="font-size:1.05rem;">User Name</h4>
-                  <div class="small font-weight-bold text-muted">
-                    <span><i id="selectedFatherIcon" class="fa fa-user-circle text-primary mr-1"></i> <span id="selectedFatherLabel">Father:</span> <strong id="selectedFatherText" class="text-dark">-</strong></span> &nbsp;•&nbsp; 
-                    <span><i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="selectedPlaceText" class="text-dark">-</strong></span>
+              <!-- Step 1: Admission No / Identifier Lookup -->
+              <div id="stepLookup">
+                <div class="input-group-custom">
+                  <i class="fa fa-user input-icon"></i>
+                  <input type="text" id="inputIdentifier" class="form-control-custom" placeholder="User ID / Adm No / Phone..." oninput="handleLiveLookup()">
+                </div>
+
+                <!-- Live Selectable Search Results Dropdown List -->
+                <div id="liveSearchResultsSelect" style="display: none;" class="mb-3"></div>
+
+                <!-- Live Preview Card (Single Selected Item - Name, Place, Father/Designation) -->
+                <div id="livePreviewBox" style="display: none;" class="prelogin-card mb-3">
+                  <div class="d-flex align-items-center gap-3">
+                    <img id="previewPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar">
+                    <div class="flex-grow-1 text-left pl-2">
+                      <div id="previewRoleLabel" class="text-muted" style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">STUDENT NAME:</div>
+                      <h4 id="previewName" class="font-weight-bold mb-2 text-dark" style="font-size:1.15rem; line-height:1.2;">-</h4>
+                      
+                      <div class="prelogin-field" id="previewSubRow">
+                        <i id="previewFatherIcon" class="fa fa-user-circle text-success mr-1"></i> <span id="previewFatherLabel">Father's Name:</span> <strong id="previewFatherText" class="text-dark">-</strong>
+                      </div>
+                      <div class="prelogin-field mb-0">
+                        <i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="previewPlaceText" class="text-dark">-</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center">
+                    <span class="text-success small font-weight-bold"><i class="fa fa-check-circle"></i> Profile Verified</span>
+                    <button class="btn btn-sm rounded-pill font-weight-bold px-4 py-2 shadow-sm" onclick="proceedToPassword()" style="background:linear-gradient(135deg, #059669, #10b981); color:#fff; border:none;">
+                      Proceed <i class="fa fa-arrow-right ml-1"></i>
+                    </button>
                   </div>
                 </div>
+
+                <button class="btn btn-block py-2.5 rounded-pill font-weight-bold shadow-sm" id="btnCheckProfile" onclick="handleManualLookup()" style="background: linear-gradient(135deg, #0ea5e9, #2563eb); color:#fff; font-size:1rem; letter-spacing:0.5px; border:none; box-shadow:0 6px 20px rgba(37,99,235,0.4);">
+                  <i class="fa fa-sign-in mr-1"></i> Sign In / Search
+                </button>
+              </div>
+
+              <!-- Step 2: Password Prompt -->
+              <div id="stepPassword" style="display: none;">
+                
+                <!-- Selected User Banner (Name, Place, Father/Designation) -->
+                <div class="prelogin-card mb-3 p-3 bg-light">
+                  <div class="d-flex align-items-center gap-3">
+                    <img id="selectedPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar" style="width:60px; height:80px; object-fit:cover; aspect-ratio:3/4; border-radius:12px;">
+                    <div class="text-left flex-grow-1 pl-2">
+                      <div id="selectedRoleLabel" style="font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;" class="text-primary">STUDENT</div>
+                      <h4 id="selectedName" class="font-weight-bold mb-1 text-dark" style="font-size:1.05rem;">User Name</h4>
+                      <div class="small font-weight-bold text-muted">
+                        <span><i id="selectedFatherIcon" class="fa fa-user-circle text-primary mr-1"></i> <span id="selectedFatherLabel">Father:</span> <strong id="selectedFatherText" class="text-dark">-</strong></span> &nbsp;•&nbsp; 
+                        <span><i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="selectedPlaceText" class="text-dark">-</strong></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="input-group-custom">
+                  <i class="fa fa-key input-icon"></i>
+                  <input type="password" id="inputPassword" class="form-control-custom" placeholder="Enter Password" onkeypress="if(event.key==='Enter') submitLogin()">
+                  <button type="button" class="btn text-muted" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);" onclick="togglePasswordVis()">
+                    <i class="fa fa-eye text-white-50" id="passEyeIcon"></i>
+                  </button>
+                </div>
+                
+                <p class="text-white-50 small mb-3">
+                  <i class="fa fa-shield text-success"></i> Enter account password to unlock dashboard.
+                </p>
+
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-light rounded-pill px-3" onclick="backToLookup()">
+                    <i class="fa fa-arrow-left"></i>
+                  </button>
+                  <button class="btn btn-primary flex-grow-1 rounded-pill font-weight-bold py-2.5" id="btnLoginSubmit" onclick="submitLogin()" style="background: linear-gradient(135deg, #0ea5e9, #2563eb); border: none;">
+                    <i class="fa fa-sign-in"></i> Sign In
+                  </button>
+                </div>
+              </div>
+
+              <!-- Alert Output -->
+              <div id="loginAlert" class="mt-3"></div>
+
+              <div class="text-center mt-3">
+                <small class="text-white-50">Don't have an account? <a href="/contact" class="text-white font-weight-bold">Contact Admin</a></small>
               </div>
             </div>
 
-            <div class="input-group-custom">
-              <i class="fa fa-lock input-icon"></i>
-              <input type="password" id="inputPassword" class="form-control-custom" placeholder="Enter Login Password" onkeypress="if(event.key==='Enter') submitLogin()">
-              <button type="button" class="btn text-muted" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);" onclick="togglePasswordVis()">
-                <i class="fa fa-eye" id="passEyeIcon"></i>
-              </button>
-            </div>
-            
-            <p class="text-muted small mb-3">
-              <i class="fa fa-shield text-success"></i> Secure Login: Enter your personal account password.
-            </p>
-
-            <div class="d-flex gap-2">
-              <button class="btn btn-light rounded-pill px-4" onclick="backToLookup()">
-                <i class="fa fa-arrow-left"></i> Back
-              </button>
-              <button class="btn btn-success flex-grow-1 rounded-pill font-weight-bold py-2.5" id="btnLoginSubmit" onclick="submitLogin()">
-                <i class="fa fa-sign-in"></i> Log In to Dashboard
-              </button>
-            </div>
           </div>
-
-          <!-- Alert Output -->
-          <div id="loginAlert" class="mt-3"></div>
-
-        </div>
 
         <!-- DASHBOARD CONTAINER (REPLACES LOGIN AFTER SUCCESSFUL AUTH) -->
         <div class="portal-box dashboard-panel" id="dashboardCard">
@@ -2389,7 +2513,7 @@
       const alumniSec = document.getElementById('publicAlumniSection');
       if (alumniSec) alumniSec.style.display = 'none';
       const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-11 col-xl-10 transition-all duration-300';
-      const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container'); pContainer.classList.add('container-fluid'); }
+      const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container'); pContainer.classList.add('container-fluid'); pContainer.style.maxWidth = '100%'; }
       document.getElementById('dashboardCard').style.display = 'block';
 
       // 1. Populate New Top Header Details
@@ -2497,7 +2621,7 @@
       } catch(e) {}
       document.getElementById('dashboardCard').style.display = 'none';
       const mainCol = document.getElementById('mainLayoutCol'); if(mainCol) mainCol.className = 'col-lg-6 col-md-8 transition-all duration-300';
-      const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container-fluid'); pContainer.classList.add('container'); }
+      const pContainer = document.querySelector('.portal-card-container'); if(pContainer) { pContainer.classList.remove('container-fluid'); pContainer.classList.add('container'); pContainer.style.maxWidth = '980px'; }
       document.getElementById('loginCard').style.display = 'block';
       const statsSec = document.getElementById('portalStatsSection');
       if (statsSec) statsSec.style.display = 'block';
@@ -5710,6 +5834,32 @@ function downloadIDCard() {
     let croppedPhotoBase64 = null;
     let isDirectDashboardCrop = false;
 
+    async function pasteProfilePhoto() {
+      if (!navigator.clipboard || !navigator.clipboard.read) {
+        alert('ഈ ബ്രൗസറിൽ Paste സൗകര്യം ലഭ്യമല്ല (HTTPS ആവശ്യമാണ്). ദയവായി Choose File ഉപയോഗിക്കുക.');
+        return;
+      }
+      try {
+        const items = await navigator.clipboard.read();
+        for (const item of items) {
+          const imgType = item.types.find(t => t.startsWith('image/'));
+          if (imgType) {
+            const blob = await item.getType(imgType);
+            const ext = imgType.split('/')[1] || 'png';
+            const file = new File([blob], 'pasted_profile.' + ext, { type: imgType });
+            const lbl = document.getElementById('epPhotoLabel');
+            if (lbl) lbl.textContent = 'Pasted image ready';
+            initProfileCropper({ target: { files: [file] } }, false);
+            return;
+          }
+        }
+        alert('ക്ലിപ്പ്‌ബോർഡിൽ കോപ്പി ചെയ്ത ചിത്രം ഒന്നും കണ്ടെത്തിയില്ല. ആദ്യം ഒരു ഫോട്ടോ കോപ്പി ചെയ്യുക.');
+      } catch (err) {
+        console.error('Clipboard paste error:', err);
+        alert('ക്ലിപ്പ്‌ബോർഡ് അനുമതി ലഭിച്ചില്ല. ബ്രൗസർ പെർമിഷൻ Allow ചെയ്യുക.');
+      }
+    }
+
     function initProfileCropper(event, isDirect = false) {
       isDirectDashboardCrop = isDirect;
       const file = event.target.files && event.target.files[0];
@@ -6693,12 +6843,15 @@ function downloadIDCard() {
               </div>
               <div class="form-group col-md-6 mb-3">
                 <label for="epPhoto" class="small font-weight-bold text-dark">Upload Photo / ഫോട്ടോ <span class="text-muted">(Crop to passport size)</span></label>
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
                   <img id="epPhotoPreviewThumbnail" src="img/new_logo.png" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid #d4af37; flex-shrink:0;">
                   <div class="custom-file flex-grow-1">
                     <input type="file" class="custom-file-input" name="photo" id="epPhoto" accept="image/*" onchange="initProfileCropper(event, false)">
                     <label class="custom-file-label text-truncate" id="epPhotoLabel" for="epPhoto">Choose photo to crop...</label>
                   </div>
+                  <button type="button" id="btnPasteProfilePhoto" class="btn btn-outline-primary btn-sm font-weight-bold px-3" onclick="pasteProfilePhoto()" title="Paste last copied image" style="white-space:nowrap; height:38px; border-radius:8px; flex-shrink:0;">
+                    <i class="fa fa-paste mr-1"></i> Paste
+                  </button>
                 </div>
               </div>
             </div>
