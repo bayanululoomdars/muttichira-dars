@@ -1,3 +1,4 @@
+const settingsController = require('../controllers/settingsController');
 const express = require('express');
 const router = express.Router();
 const portalController = require('../controllers/portalController');
@@ -46,5 +47,9 @@ router.post('/upload-photo', portalController.uploadProfilePhoto);
 router.post('/my-data', portalController.uploadMyData);
 router.delete('/my-data', portalController.deleteMyData);
 router.get('/usthad/messages', portalController.getUsthadMessages); // Usthad messages use the same DB method
+
+// Profile Editing Status
+router.get('/settings/profile-editing', settingsController.getProfileEditingStatus);
+
 module.exports = router;
 

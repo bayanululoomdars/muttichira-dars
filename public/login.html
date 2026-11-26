@@ -1341,8 +1341,11 @@
                   <button class="dash-action-btn dash-action-btn-gold" onclick="openLandscapeIdCardModal()">
                     <i class="fa fa-id-card"></i> CR80 ID Card
                   </button>
-                  <button class="dash-action-btn dash-action-btn-navy" onclick="openEditProfileModal()">
+                  <button class="dash-action-btn dash-action-btn-navy" id="dashBtnEditProfileStudent" onclick="openEditProfileModal()">
                     <i class="fa fa-pencil"></i> Edit Profile
+                  </button>
+                  <button class="dash-action-btn dash-action-btn-navy" onclick="openChangePasswordModal()">
+                    <i class="fa fa-key"></i> Change Password
                   </button>
                   <button class="dash-action-btn dash-action-btn-navy" onclick="openMyDatasModal()">
                     <i class="fa fa-folder-open"></i> My Datas
@@ -1369,8 +1372,11 @@
                   <button class="dash-action-btn dash-action-btn-gold" onclick="openLandscapeIdCardModal()">
                     <i class="fa fa-id-card"></i> Usthad ID Card
                   </button>
-                  <button class="dash-action-btn dash-action-btn-navy" onclick="openEditProfileModal()">
+                  <button class="dash-action-btn dash-action-btn-navy" id="dashBtnEditProfileUsthad" onclick="openEditProfileModal()">
                     <i class="fa fa-pencil"></i> Edit Profile
+                  </button>
+                  <button class="dash-action-btn dash-action-btn-navy" onclick="openChangePasswordModal()">
+                    <i class="fa fa-key"></i> Change Password
                   </button>
                   <button class="dash-action-btn dash-action-btn-danger" onclick="handleLogout()">
                     <i class="fa fa-sign-out"></i> Logout
@@ -4817,12 +4823,52 @@ function downloadIDCard() {
       }
     }
 
-    function openEditProfileModal() {
+    let isProfileEditingAllowed = true;
+
+    async function checkProfileEditingSetting() {
+      try {
+        const r = await fetch('/api/settings/profile-editing');
+        const data = await r.json();
+        isProfileEditingAllowed = (data.allowProfileEditing !== false);
+      } catch(e) {
+        isProfileEditingAllowed = true;
+      }
+    }
+
+    function togglePasswordInputVis(inputId, eyeIconId) {
+      const p = document.getElementById(inputId);
+      const icon = document.getElementById(eyeIconId);
+      if (!p || !icon) return;
+      if (p.type === 'password') {
+        p.type = 'text';
+        icon.className = 'fa fa-eye-slash';
+      } else {
+        p.type = 'password';
+        icon.className = 'fa fa-eye';
+      }
+    }
+
+    async function openEditProfileModal() {
       const user = currentUserSession;
       if (!user) return;
+      const isUsthad = (user.role === 'usthad');
 
-      // Personal Details
+      // Check live Admin Permission Setting
+      await checkProfileEditingSetting();
+
+      // Section 1: Academic & Personal Details
       document.getElementById('epName').value = user.name || '';
+      
+      const admLabel = document.getElementById('epAdmissionNoLabel');
+      const admInput = document.getElementById('epAdmissionNo');
+      if (admLabel) admLabel.innerHTML = (isUsthad ? 'Usthad ID / അധ്യാപക ഐഡി' : 'Admission No / അഡ്മിഷൻ നമ്പർ') + ' <span class="text-danger">*</span>';
+      if (admInput) admInput.value = (user.admissionNo || user.usthadId || '').trim();
+
+      const batchLabel = document.getElementById('epBatchLabel');
+      const batchInput = document.getElementById('epBatch');
+      if (batchLabel) batchLabel.innerHTML = (isUsthad ? 'Department / Dept' : 'Batch / ബാച്ച്') + ' <span class="text-danger">*</span>';
+      if (batchInput) batchInput.value = isUsthad ? (user.designation || user.subject || 'Mudarris') : (user.batchNumber || '1');
+
       document.getElementById('epDob').value = user.dob || '';
       document.getElementById('epFather').value = user.fatherName || user.guardianName || '';
       document.getElementById('epMother').value = user.motherName || '';
@@ -4830,7 +4876,7 @@ function downloadIDCard() {
       document.getElementById('epEmail').value = user.email || '';
       document.getElementById('epBlood').value = user.bloodGroup || '';
 
-      // Address Details
+      // Section 2: Address Details
       document.getElementById('epHouseName').value = user.houseName || '';
       document.getElementById('epHomePhone').value = user.homePhone || '';
       document.getElementById('epPlace').value = user.place || 'Muttichira';
@@ -4838,16 +4884,16 @@ function downloadIDCard() {
       document.getElementById('epDistrict').value = user.district || '';
       document.getElementById('epPincode').value = user.pincode || '';
 
-      // Education & Guardian Details
+      // Section 3: Education & Guardian Details
       document.getElementById('epEduReligious').value = user.educationReligious || user.education || '';
       document.getElementById('epEduSecular').value = user.educationSecular || user.job || '';
       document.getElementById('epGuardianName').value = user.guardianName || '';
       document.getElementById('epRelationship').value = user.relationship || '';
       document.getElementById('epGuardianPhone').value = user.guardianPhone || '';
 
-      // Usthad specific fields
+      // Section 4: Usthad specific fields
       const usthadBox = document.getElementById('epUsthadSpecificFields');
-      if (user.role === 'usthad') {
+      if (isUsthad) {
         if (usthadBox) usthadBox.style.display = 'block';
         document.getElementById('epDesignation').value = user.designation || '';
         document.getElementById('epSubject').value = user.subject || '';
@@ -4855,8 +4901,10 @@ function downloadIDCard() {
         if (usthadBox) usthadBox.style.display = 'none';
       }
 
-      // Password & Photo
-      document.getElementById('epPassword').value = '';
+      // Section 5: Password & Photo
+      document.getElementById('epCurrentPassword').value = '';
+      document.getElementById('epNewPassword').value = '';
+      document.getElementById('epConfirmPassword').value = '';
       document.getElementById('epPhoto').value = '';
       croppedPhotoBlob = null;
       croppedPhotoBase64 = null;
@@ -4865,6 +4913,51 @@ function downloadIDCard() {
       const label = document.getElementById('epPhotoLabel');
       if (label) label.textContent = 'Choose photo to crop...';
 
+      // ── ADMIN LOCK HANDLING (PREVIEW ONLY vs EDITABLE) ──
+      const lockNotice = document.getElementById('epAdminLockedNotice');
+      const saveBtn = document.getElementById('btnSaveEditProfile');
+      const modalTitle = document.querySelector('#modalEditProfile .modal-title');
+      const formInputs = document.querySelectorAll('#modalEditProfile input, #modalEditProfile select, #modalEditProfile textarea');
+      const photoInputs = document.querySelectorAll('#epPhoto, #btnStartCrop, #epPhotoLabel');
+
+      if (!isProfileEditingAllowed) {
+        // PREVIEW ONLY MODE: Show notice, disable all inputs, lock save button
+        if (lockNotice) lockNotice.style.display = 'block';
+        if (modalTitle) modalTitle.innerHTML = '<i class="fa fa-id-card-o text-info mr-1"></i> Profile Details (Preview Mode)';
+        formInputs.forEach(el => {
+          el.disabled = true;
+          el.style.backgroundColor = '#f1f5f9';
+          el.style.cursor = 'not-allowed';
+        });
+        photoInputs.forEach(el => {
+          el.style.pointerEvents = 'none';
+          el.style.opacity = '0.5';
+        });
+        if (saveBtn) {
+          saveBtn.disabled = true;
+          saveBtn.className = 'btn btn-secondary px-4 font-weight-bold';
+          saveBtn.innerHTML = '<i class="fa fa-lock mr-1"></i> Editing Locked by Admin';
+        }
+      } else {
+        // EDITABLE MODE: Enable all inputs, enable save button
+        if (lockNotice) lockNotice.style.display = 'none';
+        if (modalTitle) modalTitle.innerHTML = '<i class="fa fa-pencil text-warning mr-1"></i> Edit Profile Details';
+        formInputs.forEach(el => {
+          el.disabled = false;
+          el.style.backgroundColor = '';
+          el.style.cursor = '';
+        });
+        photoInputs.forEach(el => {
+          el.style.pointerEvents = '';
+          el.style.opacity = '1';
+        });
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.className = 'btn btn-primary px-4 font-weight-bold';
+          saveBtn.innerHTML = '<i class="fa fa-save mr-1"></i> Save Changes / സേവ് ചെയ്യുക';
+        }
+      }
+
       $('#modalEditProfile').modal('show');
     }
 
@@ -4872,13 +4965,47 @@ function downloadIDCard() {
       e.preventDefault();
       const user = currentUserSession;
       if (!user) return;
-      const isUsthad = user.role === 'usthad';
+
+      if (!isProfileEditingAllowed) {
+        alert('പ്രൊഫൈൽ എഡിറ്റിംഗ് അഡ്മിൻ താൽക്കാലികമായി നിർത്തിവെച്ചിരിക്കുന്നു (Preview Mode). മാറ്റങ്ങൾ വരുത്താൻ സാധിക്കില്ല.');
+        return;
+      }
+
+      const isUsthad = (user.role === 'usthad');
       const targetId = user._id || user.admissionNo || user.usthadId;
       const url = isUsthad ? ('/api/portal/usthad/' + targetId) : ('/api/portal/student/' + targetId);
 
+      // Validate Password Change if any password field is populated
+      const curPass = document.getElementById('epCurrentPassword').value.trim();
+      const newPass = document.getElementById('epNewPassword').value.trim();
+      const confPass = document.getElementById('epConfirmPassword').value.trim();
+
+      if (curPass || newPass || confPass) {
+        if (!curPass) {
+          alert('പുതിയ പാസ്‌വേഡ് മാറ്റുന്നതിന് നിലവിലെ പാസ്‌വേഡ് (Current Password) നിർബന്ധമായും നൽകണം.');
+          document.getElementById('epCurrentPassword').focus();
+          return;
+        }
+        if (!newPass || newPass.length < 4) {
+          alert('പുതിയ പാസ്‌വേഡിൽ കുറഞ്ഞത് 4 അക്ഷരങ്ങൾ/അക്കങ്ങൾ ഉണ്ടായിരിക്കണം.');
+          document.getElementById('epNewPassword').focus();
+          return;
+        }
+        if (newPass !== confPass) {
+          alert('പുതിയ പാസ്‌വേഡും സ്ഥിരീകരണ പാസ്‌വേഡും ഒരേപോലെ ആയിരിക്കണം (Passwords do not match).');
+          document.getElementById('epConfirmPassword').focus();
+          return;
+        }
+      }
+
       const formData = new FormData();
-      // Section 1: Personal
+      // Section 1: Academic & Personal Details
       formData.append('name', document.getElementById('epName').value.trim());
+      formData.append('admissionNo', document.getElementById('epAdmissionNo').value.trim());
+      formData.append('batchNumber', document.getElementById('epBatch').value.trim());
+      if (isUsthad) {
+        formData.append('usthadId', document.getElementById('epAdmissionNo').value.trim());
+      }
       formData.append('dob', document.getElementById('epDob').value);
       formData.append('fatherName', document.getElementById('epFather').value.trim());
       formData.append('motherName', document.getElementById('epMother').value.trim());
@@ -4886,7 +5013,7 @@ function downloadIDCard() {
       formData.append('email', document.getElementById('epEmail').value.trim());
       formData.append('bloodGroup', document.getElementById('epBlood').value);
 
-      // Section 2: Address
+      // Section 2: Address Details
       formData.append('houseName', document.getElementById('epHouseName').value.trim());
       formData.append('homePhone', document.getElementById('epHomePhone').value.trim());
       formData.append('place', document.getElementById('epPlace').value.trim());
@@ -4894,25 +5021,27 @@ function downloadIDCard() {
       formData.append('district', document.getElementById('epDistrict').value.trim());
       formData.append('pincode', document.getElementById('epPincode').value.trim());
 
-      // Section 3: Education & Guardian
+      // Section 3: Education & Guardian Details
       formData.append('educationReligious', document.getElementById('epEduReligious').value.trim());
       formData.append('educationSecular', document.getElementById('epEduSecular').value.trim());
-      // Backwards-compatibility aliases for legacy fields
       formData.append('education', document.getElementById('epEduReligious').value.trim() || document.getElementById('epEduSecular').value.trim());
       formData.append('job', document.getElementById('epEduSecular').value.trim());
       formData.append('guardianName', document.getElementById('epGuardianName').value.trim());
       formData.append('relationship', document.getElementById('epRelationship').value.trim());
       formData.append('guardianPhone', document.getElementById('epGuardianPhone').value.trim());
 
-      // Section 4: Usthad Specific
+      // Section 4: Usthad Specific Fields
       if (isUsthad) {
         formData.append('designation', document.getElementById('epDesignation').value.trim());
         formData.append('subject', document.getElementById('epSubject').value.trim());
       }
 
       // Section 5: Password & Photo
-      const pass = document.getElementById('epPassword').value.trim();
-      if (pass) formData.append('password', pass);
+      if (newPass) {
+        formData.append('password', newPass);
+        formData.append('currentPassword', curPass);
+      }
+
       if (croppedPhotoBlob) {
         formData.append('photo', croppedPhotoBlob, 'cropped_profile.jpg');
       } else {
@@ -4925,7 +5054,7 @@ function downloadIDCard() {
 
       const btn = document.getElementById('btnSaveEditProfile');
       const oldText = btn.innerHTML;
-      btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+      btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Saving...';
       btn.disabled = true;
 
       fetch(url, { method: 'PUT', body: formData })
@@ -4935,15 +5064,18 @@ function downloadIDCard() {
           btn.disabled = false;
           if (res.success) {
             showToast('Profile updated successfully!', false);
+            alert('Profile updated successfully! (വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു)');
             $('#modalEditProfile').modal('hide');
             const updated = res.student || res.usthad || {};
             Object.assign(currentUserSession, updated);
+            if (newPass) currentUserSession.password = newPass;
             try {
               localStorage.setItem('bu_user_session', JSON.stringify(currentUserSession));
             } catch(e) {}
             renderDashboard(currentUserSession);
           } else {
             showToast(res.message || 'Error updating profile', true);
+            alert(res.message || 'Error updating profile');
           }
         })
         .catch(err => {
@@ -4951,6 +5083,68 @@ function downloadIDCard() {
           btn.disabled = false;
           showToast('Network error while updating profile', true);
         });
+    }
+
+    // ── Dedicated Change Password Submit Handler ──
+    function handleChangePasswordSubmit(e) {
+      e.preventDefault();
+      const oldP = document.getElementById('chgOldPass').value.trim();
+      const newP = document.getElementById('chgNewPass').value.trim();
+      const confP = document.getElementById('chgConfirmPass').value.trim();
+      if (!currentUserSession) return;
+
+      const alertBox = document.getElementById('chgPassAlert');
+      if (alertBox) alertBox.innerHTML = '';
+
+      if (!oldP) {
+        if (alertBox) alertBox.innerHTML = '<div class="alert alert-warning small p-2 mb-3">നിലവിലെ പാസ്‌വേഡ് (Current Password) നൽകുക.</div>';
+        return;
+      }
+      if (!newP || newP.length < 4) {
+        if (alertBox) alertBox.innerHTML = '<div class="alert alert-warning small p-2 mb-3">പുതിയ പാസ്‌വേഡിൽ കുറഞ്ഞത് 4 അക്ഷരങ്ങൾ/അക്കങ്ങൾ ഉണ്ടായിരിക്കണം.</div>';
+        return;
+      }
+      if (newP !== confP) {
+        if (alertBox) alertBox.innerHTML = '<div class="alert alert-danger small p-2 mb-3">പുതിയ പാസ്‌വേഡും സ്ഥിരീകരണ പാസ്‌വേഡും ഒരേപോലെ ആയിരിക്കണം.</div>';
+        return;
+      }
+
+      const submitBtn = document.getElementById('btnSubmitChangePass');
+      const origHtml = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Updating...';
+      submitBtn.disabled = true;
+
+      fetch('/api/portal/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          role: currentUserSession.role,
+          identifier: currentUserSession.admissionNo || currentUserSession.usthadId,
+          oldPassword: oldP,
+          currentPassword: oldP,
+          newPassword: newP
+        })
+      })
+      .then(r => r.json())
+      .then(res => {
+        submitBtn.innerHTML = origHtml;
+        submitBtn.disabled = false;
+        if (res.success) {
+          alert('Password changed successfully! (പാസ്‌വേഡ് വിജയകരമായി മാറ്റി).');
+          $('#modalChangePassword').modal('hide');
+          currentUserSession.password = newP;
+          try {
+            localStorage.setItem('bu_user_session', JSON.stringify(currentUserSession));
+          } catch(e) {}
+        } else {
+          if (alertBox) alertBox.innerHTML = `<div class="alert alert-danger small p-2 mb-3">${res.message}</div>`;
+        }
+      })
+      .catch(err => {
+        submitBtn.innerHTML = origHtml;
+        submitBtn.disabled = false;
+        if (alertBox) alertBox.innerHTML = '<div class="alert alert-danger small p-2 mb-3">Network error occurred.</div>';
+      });
     }
 
     // ==================== MY DATAS (IMAGE VAULT) ====================
@@ -5937,6 +6131,68 @@ function downloadIDCard() {
     </div>
   </div>
 
+  <!-- DEDICATED CHANGE PASSWORD MODAL -->
+  <div class="modal fade" id="modalChangePassword" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="background:#ffffff; color:#1e293b; border-radius:20px; border:1px solid #cbd5e1; box-shadow:0 20px 40px rgba(0,0,0,0.25);">
+        <div class="modal-header border-bottom-0 pb-0">
+          <h5 class="modal-title font-weight-bold text-dark"><i class="fa fa-key text-warning mr-1"></i> Change Login Password / പാസ്‌വേഡ് മാറ്റുക</h5>
+          <button type="button" class="close text-dark" data-dismiss="modal" onclick="$('#modalChangePassword').modal('hide')" aria-label="Close" style="opacity:0.8; font-size:1.6rem;">&times;</button>
+        </div>
+        <form onsubmit="handleChangePasswordSubmit(event)">
+          <div class="modal-body p-4">
+            <div id="chgPassAlert"></div>
+
+            <div class="form-group mb-3">
+              <label for="chgOldPass" class="small font-weight-bold text-dark">Current Password / പഴയ പാസ്‌വേഡ് <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="chgOldPass" placeholder="Enter Current Password" required>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('chgOldPass', 'eyeChgOldPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                    <i id="eyeChgOldPass" class="fa fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <small class="text-muted">നിലവിൽ ലോഗിൻ ചെയ്യാൻ ഉപയോഗിക്കുന്ന പാസ്‌വേഡ്</small>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="chgNewPass" class="small font-weight-bold text-dark">New Password / പുതിയ പാസ്‌വേഡ് <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="chgNewPass" placeholder="Enter New Password (min 4 chars)" required>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('chgNewPass', 'eyeChgNewPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                    <i id="eyeChgNewPass" class="fa fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <small class="text-muted">കുറഞ്ഞത് 4 അക്ഷരങ്ങൾ/അക്കങ്ങൾ ഉണ്ടായിരിക്കണം</small>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="chgConfirmPass" class="small font-weight-bold text-dark">Confirm New Password / പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="chgConfirmPass" placeholder="Re-enter New Password" required>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('chgConfirmPass', 'eyeChgConfPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                    <i id="eyeChgConfPass" class="fa fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer border-top-0 pt-0">
+            <button type="button" class="btn btn-outline-secondary px-4 font-weight-bold" data-dismiss="modal" onclick="$('#modalChangePassword').modal('hide')">Cancel</button>
+            <button type="submit" id="btnSubmitChangePass" class="btn btn-primary px-4 font-weight-bold">
+              <i class="fa fa-check mr-1"></i> Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- BATCH MARK REPORT & PRINT MODAL -->
   <div class="modal fade" id="modalBatchMarkReport" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -6235,14 +6491,35 @@ function downloadIDCard() {
         </div>
         <form onsubmit="handleSaveEditProfile(event)">
           <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:25px;">
-            <!-- SECTION 1: PERSONAL INFORMATION -->
-            <h5 class="text-primary border-bottom pb-2 mb-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-user mr-2"></i> Personal Details / വ്യക്തിഗത വിവരങ്ങൾ</h5>
+            <!-- Admin Lock Notice Banner -->
+            <div id="epAdminLockedNotice" style="display:none;" class="alert alert-warning border border-warning rounded-3 p-3 mb-4">
+              <div class="d-flex align-items-center gap-2 font-weight-bold text-dark mb-1">
+                <i class="fa fa-lock text-warning" style="font-size:18px;"></i> പ്രൊഫൈൽ എഡിറ്റിംഗ് താൽക്കാലികമായി നിർത്തിവെച്ചിരിക്കുന്നു (Preview Only)
+              </div>
+              <div class="small text-muted">
+                അഡ്മിനിസ്ട്രേറ്റർ പ്രൊഫൈൽ എഡിറ്റിംഗ് ഓഫാക്കിയിരിക്കുന്നതിനാൽ വിവരങ്ങൾ കാണാൻ മാത്രമേ സാധിക്കൂ. മാറ്റങ്ങൾ വരുത്താൻ സാധിക്കില്ല.
+              </div>
+            </div>
+
+            <!-- SECTION 1: ACADEMIC & PERSONAL INFORMATION -->
+            <h5 class="text-primary border-bottom pb-2 mb-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-id-card mr-2"></i> Academic &amp; Personal Details / അക്കാദമിക് &amp; വ്യക്തിഗത വിവരങ്ങൾ</h5>
             
             <div class="form-row">
               <div class="form-group col-md-6 mb-3">
-                <label for="epName" class="small font-weight-bold text-dark">Student / Usthad Name / പേര് <span class="text-danger">*</span></label>
+                <label for="epName" class="small font-weight-bold text-dark">Full Name / പേര് <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="name" id="epName" placeholder="Full Name" required>
               </div>
+              <div class="form-group col-md-3 mb-3">
+                <label for="epAdmissionNo" id="epAdmissionNoLabel" class="small font-weight-bold text-dark">Admission No / ഐഡി <span class="text-danger">*</span></label>
+                <input type="text" class="form-control font-weight-bold" name="admissionNo" id="epAdmissionNo" placeholder="e.g. 101 or UST1" required>
+              </div>
+              <div class="form-group col-md-3 mb-3">
+                <label for="epBatch" id="epBatchLabel" class="small font-weight-bold text-dark">Batch / ബാച്ച് <span class="text-danger">*</span></label>
+                <input type="text" class="form-control font-weight-bold" name="batchNumber" id="epBatch" placeholder="e.g. Batch 14 or 14" required>
+              </div>
+            </div>
+
+            <div class="form-row">
               <div class="form-group col-md-6 mb-3">
                 <label for="epDob" class="small font-weight-bold text-dark">Date of Birth / ജനനതീയതി <span class="text-danger">*</span></label>
                 <input type="date" class="form-control" name="dob" id="epDob">
@@ -6371,19 +6648,48 @@ function downloadIDCard() {
             </div>
 
             <!-- SECTION 5: ACCOUNT & PHOTO -->
-            <h5 class="text-info border-bottom pb-2 mb-4 mt-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-lock mr-2"></i> Account &amp; Photo / പാസ്‌വേഡ് &amp; ഫോട്ടോ</h5>
+            <h5 class="text-info border-bottom pb-2 mb-4 mt-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-lock mr-2"></i> Account Password &amp; Photo / പാസ്‌വേഡ് &amp; ഫോട്ടോ</h5>
             <div class="form-row">
-              <div class="form-group col-md-6 mb-3">
-                <label for="epPassword" class="small font-weight-bold text-dark">Login Password / ലോഗിൻ പാസ്‌വേഡ്</label>
+              <!-- Current Password -->
+              <div class="form-group col-md-4 mb-3">
+                <label for="epCurrentPassword" class="small font-weight-bold text-dark">Current Password / പഴയ പാസ്‌വേഡ്</label>
                 <div class="input-group">
-                  <input type="password" class="form-control" name="password" id="epPassword" placeholder="Enter new password to change">
+                  <input type="password" class="form-control" id="epCurrentPassword" placeholder="Current Password">
                   <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="toggleEpPasswordVis()" title="Show/Hide Password" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
-                      <i id="eyeEpPassword" class="fa fa-eye"></i>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('epCurrentPassword', 'eyeEpCurrentPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                      <i id="eyeEpCurrentPass" class="fa fa-eye"></i>
                     </button>
                   </div>
                 </div>
-                <small class="text-muted">മാറ്റം വരുത്താൻ പുതിയ പാസ്‌വേഡ് നൽകുക (ഓപ്ഷണൽ)</small>
+                <small class="text-muted">പാസ്‌വേഡ് മാറ്റാൻ നിർബന്ധമാണ്</small>
+              </div>
+
+              <!-- New Password -->
+              <div class="form-group col-md-4 mb-3">
+                <label for="epNewPassword" class="small font-weight-bold text-dark">New Password / പുതിയ പാസ്‌വേഡ്</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="epNewPassword" placeholder="New Password (min 4 chars)">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('epNewPassword', 'eyeEpNewPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                      <i id="eyeEpNewPass" class="fa fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <small class="text-muted">കുറഞ്ഞത് 4 അക്കങ്ങൾ (ഓപ്ഷണൽ)</small>
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="form-group col-md-4 mb-3">
+                <label for="epConfirmPassword" class="small font-weight-bold text-dark">Confirm New / സ്ഥിരീകരിക്കുക</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="epConfirmPassword" placeholder="Confirm New Password">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('epConfirmPassword', 'eyeEpConfirmPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
+                      <i id="eyeEpConfirmPass" class="fa fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <small class="text-muted">പുതിയ പാസ്‌വേഡ് വീണ്ടും നൽകുക</small>
               </div>
               <div class="form-group col-md-6 mb-3">
                 <label for="epPhoto" class="small font-weight-bold text-dark">Upload Photo / ഫോട്ടോ <span class="text-muted">(Crop to passport size)</span></label>

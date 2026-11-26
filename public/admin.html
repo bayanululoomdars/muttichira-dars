@@ -2067,6 +2067,27 @@
                 <button class="add-btn" onclick="openAddUserModal()"><i class="fa fa-plus-circle"></i> Add New User</button>
             </div>
 
+            <!-- Profile Editing Permission Toggle Card -->
+            <div class="card mb-3" style="background:var(--bg-card); border:1.5px solid var(--border-soft); border-radius:14px; padding:16px 20px; box-shadow:0 4px 15px rgba(0,0,0,0.05); margin-bottom:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                <div>
+                  <h4 style="margin:0; font-size:15px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:8px;">
+                    <i class="fa fa-id-card-o text-warning"></i> Student &amp; Usthad Profile Editing Permission
+                  </h4>
+                  <small style="color:var(--text-soft); font-size:12px;">
+                    വിദ്യാർത്ഥികൾക്കും ഉസ്താദുമാർക്കും പോർട്ടലിൽ പേര്, അഡ്മിഷൻ നമ്പർ, ബാച്ച്, വിവരങ്ങൾ എഡിറ്റ് ചെയ്യാനുള്ള അനുമതി (ഓഫാക്കിയാൽ പ്രിവ്യൂ മാത്രമേ കാണാൻ സാധിക്കൂ).
+                  </small>
+                </div>
+                <div class="toggle-wrap" style="display:flex; align-items:center; gap:10px;">
+                  <label class="toggle" style="margin-bottom:0;">
+                    <input type="checkbox" id="profileEditingToggle" onchange="toggleProfileEditing(this.checked)">
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <span class="toggle-label font-weight-bold" id="profileEditingToggleLabel" style="font-size:13px;">Loading...</span>
+                </div>
+              </div>
+            </div>
+
             <!-- Search & Filter Bar -->
             <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center; background:var(--bg-card); padding:14px; border-radius:12px; border:1px solid var(--border-soft);">
               <input type="text" id="portalSearchInput" oninput="filterPortalUsersAdmin()" placeholder="🔍 Search by Name, ID, Place..." class="form-control" style="flex:1; min-width:220px; background:var(--bg-input); border-color:var(--border-soft); color:var(--text);">
@@ -4109,6 +4130,49 @@ function toggleAdmission(isOpen) {
     }
   });
 }
+
+function loadProfileEditingStatus() {
+  fetch('/api/settings/profile-editing')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var isAllowed = (data.allowProfileEditing !== false);
+      var toggle = document.getElementById('profileEditingToggle');
+      if (toggle) toggle.checked = isAllowed;
+      var label = document.getElementById('profileEditingToggleLabel');
+      if (label) {
+        label.textContent = isAllowed ? 'Editing Allowed (ഓൺ)' : 'Editing Turned Off (ഓഫ് - Preview Only)';
+        label.style.color = isAllowed ? '#10b981' : '#ef4444';
+      }
+    })
+    .catch(function() {});
+}
+
+function toggleProfileEditing(isOpen) {
+  var label = document.getElementById('profileEditingToggleLabel');
+  if (label) label.textContent = 'Updating...';
+  fetch('/api/settings/profile-editing', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ allowProfileEditing: isOpen })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) {
+      var isAllowed = (data.allowProfileEditing !== false);
+      var toggle = document.getElementById('profileEditingToggle');
+      if (toggle) toggle.checked = isAllowed;
+      if (label) {
+        label.textContent = isAllowed ? 'Editing Allowed (ഓൺ)' : 'Editing Turned Off (ഓഫ് - Preview Only)';
+        label.style.color = isAllowed ? '#10b981' : '#ef4444';
+      }
+      showToast('Profile editing permission updated: ' + (isAllowed ? 'ALLOWED' : 'LOCKED (PREVIEW ONLY)'), false);
+    }
+  })
+  .catch(function(err) {
+    alert('Error updating profile editing status');
+  });
+}
+
 
 /* ═══════════════════════════════════════
    BANNER & POSTER

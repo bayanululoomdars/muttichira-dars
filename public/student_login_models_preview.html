@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student & Usthad Search-Login Models Preview | Bayanul Uloom Dars</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Outfit', 'Manjari', sans-serif;
+    }
+    .model-tab.active {
+      background: linear-gradient(135deg, #d4af37, #f59e0b);
+      color: #061121;
+      font-weight: 800;
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.45);
+    }
+    .glass-card {
+      background: rgba(11, 26, 48, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, 0.35);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(212, 175, 55, 0.7);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-3 sm:p-6 antialiased selection:bg-amber-400 selection:text-slate-950">
+
+  <!-- Top Sticky Navigation & Header -->
+  <header class="max-w-6xl mx-auto mb-6 text-center">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-3">
+      <i class="fa fa-sliders"></i> ഡിസൈൻ സെലക്ഷൻ പോർട്ടൽ (DESIGN SELECTION PORTAL)
+    </div>
+    
+    <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+      സ്റ്റുഡന്റ് & ഉസ്താദ് സെർച്ച്-ലോഗിൻ <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-500">പുതിയ ഡിസൈൻ മോഡലുകൾ</span>
+    </h1>
+    
+    <p class="text-slate-400 text-xs sm:text-sm max-w-3xl mx-auto mb-5 leading-relaxed">
+      വെബ്സൈറ്റിലെ <strong class="text-amber-400">Student & Usthad Search & Login</strong> ഭാഗത്തിനായി തയ്യാറാക്കിയ 4 വ്യത്യസ്ത ഡിസൈൻ മോഡലുകൾ താഴെ തത്സമയം പരീക്ഷിച്ചു നോക്കാം. ഓരോ മോഡലിലും സെർച്ച് ചെയ്യാനും, റോൾ മാറ്റാനും, പ്രൊഫൈൽ സെലക്ട് ചെയ്യാനും സാധിക്കും. നിങ്ങൾക്ക് ഏറ്റവും ഇഷ്ടപ്പെട്ട മോഡൽ സെലക്ട് ചെയ്യാം!
+    </p>
+
+    <!-- Model Switcher Tabs Bar -->
+    <div class="inline-flex p-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl gap-1 sm:gap-2 flex-wrap justify-center shadow-2xl">
+      <button onclick="switchModel(1)" id="tabBtn1" class="model-tab active px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+        <i class="fa fa-crown text-amber-400"></i> മോഡൽ 1: Royal Midnight & Gold
+      </button>
+      <button onclick="switchModel(2)" id="tabBtn2" class="model-tab px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-2">
+        <i class="fa fa-leaf text-emerald-400"></i> മോഡൽ 2: Emerald Heritage (ഇസ്ലാമിക്)
+      </button>
+      <button onclick="switchModel(3)" id="tabBtn3" class="model-tab px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-2">
+        <i class="fa fa-bolt text-cyan-400"></i> മോഡൽ 3: Smart Auto-Detect Bento
+      </button>
+      <button onclick="switchModel(4)" id="tabBtn4" class="model-tab px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-2">
+        <i class="fa fa-columns text-purple-400"></i> മോഡൽ 4: Split Dual-Zone Gateway
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto pb-16">
+
+    <!-- ========================================================================= -->
+    <!-- MODEL 1: ROYAL MIDNIGHT & GOLD SOVEREIGN                                  -->
+    <!-- ========================================================================= -->
+    <div id="model1View" class="model-content space-y-4">
+      <!-- Model 1 Highlight Badge -->
+      <div class="bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent border border-amber-500/25 rounded-2xl p-3 sm:p-4 text-xs sm:text-sm text-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-black">1</span>
+          <div>
+            <strong class="text-white block font-bold">റോയൽ മിഡ്‌നൈറ്റ് & ഗോൾഡ് (Royal Midnight Luxury)</strong>
+            <span class="text-slate-400 text-xs">നിലവിലെ വെബ്സൈറ്റിന്റെ ഗോൾഡ് & ഡീപ് നേവി തീമിനോട് 100% ചേരുന്ന ആഡംബര ഡിസൈൻ. ഗ്ലാസ്സ്മോർഫിസം, ലൈവ് പ്രൊഫൈൽ കാർഡ്, ഗോൾഡൻ ബാഡ്ജ്.</span>
+          </div>
+        </div>
+        <button onclick="chooseModel(1, 'Royal Midnight & Gold')" class="flex-shrink-0 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-4 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5">
+          <i class="fa fa-check"></i> ഈ മോഡൽ തിരഞ്ഞെടുക്കുക
+        </button>
+      </div>
+
+      <!-- Live Mockup Box -->
+      <div class="rounded-3xl border border-amber-500/30 bg-gradient-to-b from-[#07172e] via-[#091b36] to-[#040e1c] p-4 sm:p-8 shadow-2xl relative overflow-hidden">
+        
+        <!-- Subtle Background Glows -->
+        <div class="absolute -top-24 -right-24 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Portal Header -->
+        <div class="text-center max-w-xl mx-auto mb-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-bold mb-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> അക്കാദമിക് പോർട്ടൽ & ലൈവ് വെരിഫിക്കേഷൻ
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+            Student &amp; Usthad <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-500">Portal</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            മുട്ടിച്ചിറ ബയാനുൽ ഉലൂം ദർസ് അക്കാദമിക് പ്രൊഫൈൽ, പരീക്ഷാ ഫലങ്ങൾ, ഡിജിറ്റൽ ഐഡി കാർഡ്
+          </p>
+        </div>
+
+        <!-- Center Card Container -->
+        <div class="max-w-lg mx-auto bg-slate-900/85 border border-amber-500/30 rounded-3xl p-5 sm:p-7 shadow-2xl backdrop-blur-xl relative">
+          
+          <!-- Role Switcher -->
+          <div class="flex bg-slate-950/80 p-1.5 rounded-full border border-amber-500/30 mb-5 relative">
+            <button onclick="m1SetRole('student')" id="m1RoleStudent" class="flex-1 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-blue-700 to-blue-600 text-white shadow-lg">
+              <i class="fa fa-graduation-cap"></i> സ്റ്റുഡന്റ് ലോഗിൻ
+            </button>
+            <button onclick="m1SetRole('usthad')" id="m1RoleUsthad" class="flex-1 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all text-slate-400 hover:text-white">
+              <i class="fa fa-user-circle"></i> ഉസ്താദ് ലോഗിൻ
+            </button>
+          </div>
+
+          <!-- STEP 1: SEARCH & LOOKUP -->
+          <div id="m1Step1">
+            <label class="block text-xs font-semibold text-amber-300/90 mb-1.5 flex items-center justify-between">
+              <span id="m1InputLabel"><i class="fa fa-search text-amber-400"></i> വിദ്യാർത്ഥിയെ തിരയുക (Search Student)</span>
+              <span class="text-[11px] text-slate-400 font-normal">പേര് / അഡ്മിഷൻ നമ്പർ / സ്ഥലം</span>
+            </label>
+
+            <!-- Search Input Box -->
+            <div class="relative mb-3">
+              <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-amber-400"></i>
+              <input type="text" id="m1SearchInput" oninput="m1HandleSearch(this.value)" placeholder="പേരോ അഡ്മിഷൻ നമ്പറോ ടൈപ്പ് ചെയ്യുക..." 
+                     class="w-full bg-slate-950/90 border border-amber-500/40 focus:border-amber-400 rounded-2xl pl-11 pr-10 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400/20 shadow-inner transition-all">
+              <button onclick="m1ClearSearch()" id="m1ClearBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs bg-slate-800 p-1 rounded-full w-5 h-5 flex items-center justify-center">✕</button>
+            </div>
+
+            <!-- Instant Live Results Dropdown -->
+            <div id="m1ResultsBox" class="hidden mb-4 bg-slate-950/95 border border-amber-500/40 rounded-2xl p-2 max-h-56 overflow-y-auto shadow-2xl">
+              <div class="text-[11px] font-bold text-amber-400/80 px-2 py-1 uppercase tracking-wider flex items-center justify-between border-b border-slate-800 mb-1">
+                <span><i class="fa fa-users"></i> കണ്ടെത്തിയ പ്രൊഫൈലുകൾ</span>
+                <span id="m1ResultsCount" class="text-slate-400 font-mono">0 കണ്ടെത്തി</span>
+              </div>
+              <div id="m1ResultsList" class="space-y-1">
+                <!-- Dynamically populated via JS -->
+              </div>
+            </div>
+
+            <!-- Verified Preview Profile Card (When Selected) -->
+            <div id="m1PreviewCard" class="hidden mb-4 bg-gradient-to-br from-slate-900 to-slate-950 border-2 border-emerald-500/50 rounded-2xl p-3.5 sm:p-4 shadow-xl relative animate-fadeIn">
+              <div class="flex items-center gap-3">
+                <img id="m1PreviewPhoto" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-14 h-18 sm:w-16 sm:h-20 rounded-xl object-cover border-2 border-amber-400 shadow-md flex-shrink-0" alt="Avatar">
+                <div class="flex-grow min-w-0">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <span id="m1PreviewBadge" class="bg-blue-500/20 border border-blue-400/40 text-blue-300 text-[10px] font-extrabold px-2 py-0.5 rounded-md">STUDENT</span>
+                    <span class="text-emerald-400 text-xs font-bold flex items-center gap-1">
+                      <i class="fa fa-check-circle"></i> വെരിഫൈഡ്
+                    </span>
+                  </div>
+                  <h3 id="m1PreviewName" class="text-sm sm:text-base font-bold text-white truncate">മുഹമ്മദ് റാഷിദ് വി.പി</h3>
+                  <div class="text-xs text-slate-300 mt-0.5 space-y-0.5">
+                    <p id="m1PreviewSub" class="truncate flex items-center gap-1 text-slate-400">
+                      <i class="fa fa-user text-amber-400"></i> പിതാവ്: <strong class="text-slate-200">അബ്ദുൽ റഹ്മാൻ</strong>
+                    </p>
+                    <p id="m1PreviewPlace" class="truncate flex items-center gap-1 text-slate-400">
+                      <i class="fa fa-map-marker text-rose-400"></i> സ്ഥലം: <strong class="text-slate-200">മലപ്പുറം</strong>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Bar inside Preview -->
+              <div class="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between">
+                <span class="text-[11px] text-slate-400">ഈ പ്രൊഫൈലിലേക്ക് പ്രവേശിക്കുക:</span>
+                <button onclick="m1ProceedToPass()" class="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold text-xs px-4 py-1.5 rounded-xl shadow-lg transition-all flex items-center gap-1.5">
+                  തുടരുക (Proceed) <i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Fallback Search Button -->
+            <button onclick="m1SimulateFind()" class="w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:opacity-95 text-slate-950 font-extrabold text-sm py-3.5 rounded-2xl shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2">
+              <i class="fa fa-search"></i> പ്രൊഫൈൽ തിരയുക
+            </button>
+
+            <!-- Quick Demo Helper Chips -->
+            <div class="mt-4 pt-3 border-t border-slate-800/80 text-center">
+              <span class="text-[11px] text-slate-400 block mb-1.5">ഡെമോ പരീക്ഷിക്കാൻ താഴെയുള്ളവ ക്ലിക്ക് ചെയ്യുക:</span>
+              <div class="flex flex-wrap gap-1.5 justify-center">
+                <button onclick="m1QuickFill('റാഷിദ്')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-amber-300 px-2.5 py-1 rounded-lg border border-slate-700">റാഷിദ് (1042)</button>
+                <button onclick="m1QuickFill('ബാസിത്')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-amber-300 px-2.5 py-1 rounded-lg border border-slate-700">ബാസിത് (1038)</button>
+                <button onclick="m1QuickFill('ഷംസുദ്ദീൻ')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-amber-300 px-2.5 py-1 rounded-lg border border-slate-700">ഉസ്താദ് ഷംസുദ്ദീൻ</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: PASSWORD SCREEN (Hidden by default) -->
+          <div id="m1Step2" class="hidden space-y-4">
+            <div class="bg-slate-950/90 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
+              <img id="m1Step2Photo" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-12 h-14 rounded-lg object-cover border border-amber-400" alt="Avatar">
+              <div class="flex-grow min-w-0">
+                <span id="m1Step2Badge" class="bg-blue-500/20 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded">STUDENT</span>
+                <h4 id="m1Step2Name" class="text-sm font-bold text-white truncate">മുഹമ്മദ് റാഷിദ് വി.പി</h4>
+                <p id="m1Step2Place" class="text-xs text-slate-400 truncate">മലപ്പുറം • അഡ്മിഷൻ: 1042</p>
+              </div>
+              <button onclick="m1BackToSearch()" class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-slate-800">
+                മാറ്റുക
+              </button>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">
+                <i class="fa fa-lock text-amber-400"></i> പാസ്‌വേർഡ് നൽകുക (Enter Password)
+              </label>
+              <div class="relative">
+                <input type="password" id="m1PasswordInput" value="••••••••" placeholder="പാസ്‌വേർഡ് ടൈപ്പ് ചെയ്യുക..." 
+                       class="w-full bg-slate-950 border border-amber-500/40 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400">
+                <button type="button" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs">
+                  <i class="fa fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button onclick="alert('ലോഗിൻ വിജയകരമായി പൂർത്തിയായി! പോർട്ടലിലേക്ക് പ്രവേശിക്കുന്നു...')" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:opacity-95 text-slate-950 font-black text-sm py-3.5 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
+              <i class="fa fa-sign-in"></i> ലോഗിൻ ചെയ്യുക (Login)
+            </button>
+
+            <button onclick="m1BackToSearch()" class="w-full text-center text-xs text-slate-400 hover:text-amber-300 pt-1">
+              ← തിരികെ സെർച്ചിലേക്ക് പോകുക
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODEL 2: EMERALD HERITAGE & ISLAMIC ARCH (TRADITIONAL SANCTUARY)           -->
+    <!-- ========================================================================= -->
+    <div id="model2View" class="model-content space-y-4 hidden">
+      <!-- Model 2 Highlight Badge -->
+      <div class="bg-gradient-to-r from-emerald-500/15 via-emerald-500/5 to-transparent border border-emerald-500/25 rounded-2xl p-3 sm:p-4 text-xs sm:text-sm text-emerald-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-black">2</span>
+          <div>
+            <strong class="text-white block font-bold">എമറാൾഡ് ഹെറിറ്റേജ് (Emerald Islamic Heritage)</strong>
+            <span class="text-slate-400 text-xs">പരമ്പരാഗത ഇസ്ലാമിക് എമറാൾഡ് ഗ്രീൻ, മനോഹരമായ ആർച്ച് ബോർഡറുകൾ, മലയാളം & അറബിക് ബാഡ്ജുകൾ, ശാന്തവും വ്യക്തവുമായ ലേഔട്ട്.</span>
+          </div>
+        </div>
+        <button onclick="chooseModel(2, 'Emerald Islamic Heritage')" class="flex-shrink-0 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-extrabold text-xs px-4 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5">
+          <i class="fa fa-check"></i> ഈ മോഡൽ തിരഞ്ഞെടുക്കുക
+        </button>
+      </div>
+
+      <!-- Live Mockup Box -->
+      <div class="rounded-3xl border border-emerald-500/30 bg-gradient-to-b from-[#031d14] via-[#052b1e] to-[#02130d] p-4 sm:p-8 shadow-2xl relative overflow-hidden">
+        
+        <div class="text-center max-w-xl mx-auto mb-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-bold mb-2">
+            <i class="fa fa-book text-emerald-400"></i> ദർസ് അക്കാദമിക് കവാടം (ACADEMIC GATEWAY)
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+            ത്വാലിബ് &amp; മുദരിസ്സ് <span class="text-emerald-400">പോർട്ടൽ</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-emerald-200/70 mt-1">
+            വിദ്യാർത്ഥികൾക്കും ഉസ്താദുമാർക്കുമുള്ള സംയോജിത ലോഗിൻ &amp; അക്കാദമിക് പ്ലാറ്റ്‌ഫോം
+          </p>
+        </div>
+
+        <div class="max-w-lg mx-auto bg-[#072419]/90 border border-emerald-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl relative">
+          
+          <!-- Large Visual Role Tabs -->
+          <div class="grid grid-cols-2 gap-2 mb-5">
+            <button onclick="m2SetRole('student')" id="m2RoleStudent" class="p-3 rounded-2xl border-2 border-emerald-400 bg-emerald-500/20 text-white font-bold text-xs sm:text-sm text-left flex items-center gap-2.5 transition-all shadow-lg">
+              <div class="w-8 h-8 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black">
+                <i class="fa fa-graduation-cap"></i>
+              </div>
+              <div>
+                <span class="block text-white font-extrabold">വിദ്യാർത്ഥി</span>
+                <span class="text-[10px] text-emerald-300 font-normal">താലിബുൽ ഇൽമ്</span>
+              </div>
+            </button>
+            <button onclick="m2SetRole('usthad')" id="m2RoleUsthad" class="p-3 rounded-2xl border border-emerald-500/30 bg-slate-900/60 text-slate-300 font-bold text-xs sm:text-sm text-left flex items-center gap-2.5 hover:border-emerald-400/60 transition-all">
+              <div class="w-8 h-8 rounded-xl bg-slate-800 text-emerald-400 flex items-center justify-center font-black">
+                <i class="fa fa-users"></i>
+              </div>
+              <div>
+                <span class="block text-slate-200 font-extrabold">മുദരിസ്സ്</span>
+                <span class="text-[10px] text-slate-400 font-normal">ഉസ്താദുമാർക്ക്</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Search Input -->
+          <div class="relative mb-3">
+            <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400 text-sm"></i>
+            <input type="text" id="m2SearchInput" oninput="m2HandleSearch(this.value)" placeholder="വിദ്യാർത്ഥിയുടെ പേരോ അഡ്മിഷൻ നമ്പറോ ടൈപ്പ് ചെയ്യുക..." 
+                   class="w-full bg-[#031810] border-2 border-emerald-500/40 focus:border-emerald-400 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-emerald-200/40 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 shadow-inner">
+          </div>
+
+          <!-- M2 Search Results Dropdown -->
+          <div id="m2ResultsBox" class="hidden mb-4 bg-[#03150d] border border-emerald-500/40 rounded-2xl p-2 max-h-56 overflow-y-auto">
+            <div id="m2ResultsList" class="space-y-1"></div>
+          </div>
+
+          <!-- M2 Preview Box -->
+          <div id="m2PreviewCard" class="hidden mb-4 bg-gradient-to-r from-[#0a3525] to-[#052317] border border-emerald-400/60 rounded-2xl p-4 shadow-xl">
+            <div class="flex items-center gap-3">
+              <img id="m2PreviewPhoto" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" class="w-14 h-18 rounded-xl object-cover border-2 border-emerald-400 flex-shrink-0" alt="Avatar">
+              <div class="flex-grow min-w-0">
+                <span id="m2PreviewBadge" class="bg-emerald-500/30 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded uppercase">STUDENT</span>
+                <h4 id="m2PreviewName" class="text-sm font-bold text-white truncate">അബ്ദുൽ ബാസിത് കെ.ടി</h4>
+                <p id="m2PreviewPlace" class="text-xs text-emerald-200/80 truncate mt-0.5">വടകര, കോഴിക്കോട് • അഡ്മിഷൻ: 1038</p>
+              </div>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-emerald-500/30 flex justify-end">
+              <button onclick="alert('ലോഗിൻ സ്റ്റെപ്പിലേക്ക് കടക്കുന്നു (മോഡൽ 2)')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-md">
+                പാസ്‌വേർഡ് നൽകുക <i class="fa fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <button onclick="m2SimulateFind()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm py-3.5 rounded-2xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2">
+            <i class="fa fa-search"></i> വിവരങ്ങൾ കണ്ടെത്തുക
+          </button>
+
+          <!-- Quick Test Tags -->
+          <div class="mt-4 pt-3 border-t border-emerald-500/20 text-center">
+            <span class="text-[11px] text-emerald-200/70 block mb-1">ടെസ്റ്റ് ചെയ്യാൻ ക്ലിക്ക് ചെയ്യുക:</span>
+            <div class="flex flex-wrap gap-1.5 justify-center">
+              <button onclick="m2QuickFill('ബാസിത്')" class="text-[10px] bg-[#031a11] hover:bg-emerald-950 text-emerald-300 px-2.5 py-1 rounded-lg border border-emerald-500/30">ബാസിത് (1038)</button>
+              <button onclick="m2QuickFill('റാഷിദ്')" class="text-[10px] bg-[#031a11] hover:bg-emerald-950 text-emerald-300 px-2.5 py-1 rounded-lg border border-emerald-500/30">റാഷിദ് (1042)</button>
+              <button onclick="m2QuickFill('ബഖവി')" class="text-[10px] bg-[#031a11] hover:bg-emerald-950 text-emerald-300 px-2.5 py-1 rounded-lg border border-emerald-500/30">ഉസ്താദ് ബഖവി</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODEL 3: SMART AUTO-DETECT BENTO (1-BAR INSTANT DISCOVERY)                -->
+    <!-- ========================================================================= -->
+    <div id="model3View" class="model-content space-y-4 hidden">
+      <!-- Model 3 Highlight Badge -->
+      <div class="bg-gradient-to-r from-cyan-500/15 via-blue-500/5 to-transparent border border-cyan-500/25 rounded-2xl p-3 sm:p-4 text-xs sm:text-sm text-cyan-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-black">3</span>
+          <div>
+            <strong class="text-white block font-bold">സ്മാർട്ട് ഓട്ടോ-ഡിറ്റക്റ്റ് ബെന്റോ (Smart Auto-Detect Bento)</strong>
+            <span class="text-slate-400 text-xs">വിദ്യാർത്ഥിയോ ഉസ്താദോ എന്ന് പ്രത്യേകം തിരഞ്ഞെടുക്കേണ്ടതില്ല! ഒരൊറ്റ സെർച്ച് ബാറിൽ ആരെയും തത്സമയം സിസ്റ്റം സ്വയം തിരിച്ചറിയും (Smart Auto-Detection). അതിവേഗ മൊബൈൽ എക്സ്പീരിയൻസ്.</span>
+          </div>
+        </div>
+        <button onclick="chooseModel(3, 'Smart Auto-Detect Bento')" class="flex-shrink-0 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-extrabold text-xs px-4 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5">
+          <i class="fa fa-check"></i> ഈ മോഡൽ തിരഞ്ഞെടുക്കുക
+        </button>
+      </div>
+
+      <!-- Live Mockup Box -->
+      <div class="rounded-3xl border border-cyan-500/30 bg-gradient-to-b from-[#081528] via-[#091b33] to-[#040914] p-4 sm:p-8 shadow-2xl relative overflow-hidden">
+        
+        <div class="text-center max-w-xl mx-auto mb-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 text-xs font-bold mb-2">
+            <i class="fa fa-bolt text-cyan-400"></i> ഇൻസ്റ്റന്റ് യൂണിവേഴ്സൽ ഡിസ്കവറി
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+            സ്മാർട്ട് അക്കാദമിക് <span class="text-cyan-400">പോർട്ടൽ</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            വിദ്യാർത്ഥികളുടെയും ഉസ്താദുമാരുടെയും വിവരങ്ങൾ ഒരൊറ്റ തിരച്ചിലിൽ ലഭ്യമാക്കുന്നു
+          </p>
+        </div>
+
+        <div class="max-w-lg mx-auto bg-slate-900/90 border border-cyan-500/30 rounded-3xl p-5 sm:p-7 shadow-2xl relative">
+          
+          <!-- Bento Feature Badge -->
+          <div class="bg-cyan-500/10 border border-cyan-500/20 rounded-xl p-2.5 mb-4 text-center text-xs text-cyan-300 flex items-center justify-center gap-2">
+            <i class="fa fa-magic text-cyan-400"></i>
+            <span>ആരെ തിരഞ്ഞാലും സിസ്റ്റം സ്വയം തിരിച്ചറിയും (No tab switching needed)</span>
+          </div>
+
+          <!-- Single Universal Search Bar -->
+          <div class="relative mb-3">
+            <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400"></i>
+            <input type="text" id="m3SearchInput" oninput="m3HandleSearch(this.value)" placeholder="പേര്, അഡ്മിഷൻ നമ്പർ, അല്ലെങ്കിൽ ഉസ്താദ് ഐഡി..." 
+                   class="w-full bg-slate-950 border-2 border-cyan-500/40 focus:border-cyan-400 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-cyan-500/20 shadow-inner transition-all">
+          </div>
+
+          <!-- M3 Results List -->
+          <div id="m3ResultsBox" class="hidden mb-4 bg-slate-950 border border-cyan-500/40 rounded-2xl p-2 max-h-60 overflow-y-auto">
+            <div id="m3ResultsList" class="space-y-1.5"></div>
+          </div>
+
+          <!-- M3 Selected Card -->
+          <div id="m3PreviewCard" class="hidden mb-4 bg-gradient-to-br from-slate-950 to-slate-900 border-2 border-cyan-400 rounded-2xl p-4 shadow-xl">
+            <div class="flex items-center gap-3">
+              <img id="m3PreviewPhoto" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" class="w-14 h-18 rounded-xl object-cover border-2 border-cyan-400 flex-shrink-0" alt="Avatar">
+              <div class="flex-grow min-w-0">
+                <span id="m3PreviewBadge" class="bg-amber-500/20 text-amber-300 text-[10px] font-black px-2 py-0.5 rounded">MUDARRIS</span>
+                <h4 id="m3PreviewName" class="text-sm font-bold text-white truncate">ഷംസുദ്ദീൻ ഫൈസി</h4>
+                <p id="m3PreviewSub" class="text-xs text-slate-300 truncate mt-0.5">വിഷയം: ഫിഖ്ഹ് & ഉസൂൽ • വയനാട്</p>
+              </div>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-800 flex justify-end">
+              <button onclick="alert('പോർട്ടൽ ലോഗിൻ സ്റ്റെപ്പിലേക്ക് കടക്കുന്നു (മോഡൽ 3)')" class="bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black text-xs px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-md">
+                ലോഗിനിലേക്ക് തുടരുക <i class="fa fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Test Tags -->
+          <div class="pt-2 text-center">
+            <span class="text-[11px] text-slate-400 block mb-1">ടെസ്റ്റ് ചെയ്യാൻ ടാപ്പ് ചെയ്യുക:</span>
+            <div class="flex flex-wrap gap-1.5 justify-center">
+              <button onclick="m3QuickFill('ഷംസുദ്ദീൻ')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-amber-300 px-2.5 py-1 rounded-lg border border-slate-700">👳‍♂️ ഉസ്താദ് ഷംസുദ്ദീൻ ഫൈസി</button>
+              <button onclick="m3QuickFill('1042')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2.5 py-1 rounded-lg border border-slate-700">👨‍🎓 അഡ്മിഷൻ: 1042 (റാഷിദ്)</button>
+              <button onclick="m3QuickFill('ശമ്മസ്')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2.5 py-1 rounded-lg border border-slate-700">👨‍🎓 ശമ്മസ് (1055)</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODEL 4: SPLIT DUAL-ZONE GATEWAY (DISTINCT DEDICATED DOORS)               -->
+    <!-- ========================================================================= -->
+    <div id="model4View" class="model-content space-y-4 hidden">
+      <!-- Model 4 Highlight Badge -->
+      <div class="bg-gradient-to-r from-purple-500/15 via-purple-500/5 to-transparent border border-purple-500/25 rounded-2xl p-3 sm:p-4 text-xs sm:text-sm text-purple-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center font-black">4</span>
+          <div>
+            <strong class="text-white block font-bold">സ്പ്ലിറ്റ് ഡ്യുവൽ-സോൺ ഗേറ്റ്‌വേ (Split Dual-Zone Gateway)</strong>
+            <span class="text-slate-400 text-xs">വിദ്യാർത്ഥികൾക്കും ഉസ്താദുമാർക്കും രണ്ട് വ്യക്തമായ, പ്രത്യേക കവാടങ്ങൾ (Dedicated Wings). ഓരോ വിഭാഗത്തിനും അനുയോജ്യമായ ഫീച്ചറുകളും ലിങ്കുകളും അടങ്ങിയ വിഷ്വൽ ലേഔട്ട്.</span>
+          </div>
+        </div>
+        <button onclick="chooseModel(4, 'Split Dual-Zone Gateway')" class="flex-shrink-0 bg-purple-400 hover:bg-purple-300 text-slate-950 font-extrabold text-xs px-4 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5">
+          <i class="fa fa-check"></i> ഈ മോഡൽ തിരഞ്ഞെടുക്കുക
+        </button>
+      </div>
+
+      <!-- Live Mockup Box -->
+      <div class="rounded-3xl border border-purple-500/30 bg-gradient-to-b from-[#130924] via-[#1a0e33] to-[#0a0514] p-4 sm:p-8 shadow-2xl relative overflow-hidden">
+        
+        <div class="text-center max-w-xl mx-auto mb-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-300 text-xs font-bold mb-2">
+            <i class="fa fa-columns text-purple-400"></i> രണ്ട് പ്രത്യേക കവാടങ്ങൾ
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+            പ്രവേശന <span class="text-purple-400">കവാടം തിരഞ്ഞെടുക്കുക</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            നിങ്ങളുടെ വിഭാഗം തിരഞ്ഞെടുത്ത് നേരിട്ട് ലോഗിൻ ചെയ്യുക
+          </p>
+        </div>
+
+        <!-- 2 Side-by-Side Door Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+          
+          <!-- Left Wing: Student Portal Door -->
+          <div class="bg-gradient-to-b from-[#0b1c3a] to-[#071328] border-2 border-blue-500/40 hover:border-blue-400 rounded-3xl p-5 sm:p-6 shadow-xl transition-all hover:-translate-y-1 group">
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/40 text-blue-300 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa fa-graduation-cap"></i>
+            </div>
+            <span class="bg-blue-500/20 text-blue-300 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">STUDENT WING</span>
+            <h3 class="text-xl font-bold text-white mt-2">വിദ്യാർത്ഥി കവാടം</h3>
+            <p class="text-xs text-slate-300 mt-1 mb-4 leading-relaxed">
+              പരീക്ഷാ ഫലങ്ങൾ, ഹാജർ, വ്യക്തിഗത മാർക്ക് ഷീറ്റുകൾ, ഡിജിറ്റൽ തിരിച്ചറിയൽ കാർഡ്.
+            </p>
+            <div class="space-y-2">
+              <input type="text" placeholder="അഡ്മിഷൻ നമ്പർ അല്ലെങ്കിൽ പേര്..." class="w-full bg-slate-950/80 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-400">
+              <button onclick="alert('സ്റ്റുഡന്റ് പോർട്ടൽ ഓപ്പൺ ചെയ്യുന്നു')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
+                <i class="fa fa-sign-in"></i> സ്റ്റുഡന്റ് ലോഗിൻ
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Wing: Usthad Portal Door -->
+          <div class="bg-gradient-to-b from-[#2a1708] to-[#1a0e04] border-2 border-amber-500/40 hover:border-amber-400 rounded-3xl p-5 sm:p-6 shadow-xl transition-all hover:-translate-y-1 group">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa fa-users"></i>
+            </div>
+            <span class="bg-amber-500/20 text-amber-300 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">MUDARRIS SUITE</span>
+            <h3 class="text-xl font-bold text-white mt-2">ഉസ്താദ് കവാടം</h3>
+            <p class="text-xs text-amber-200/70 mt-1 mb-4 leading-relaxed">
+              മാർക്ക് എൻട്രി, വിദ്യാർത്ഥികളുടെ മെസ്സേജുകൾ, ഒഫീഷ്യൽ അനൗൺസ്‌മെന്റുകൾ.
+            </p>
+            <div class="space-y-2">
+              <input type="text" placeholder="ഉസ്താദ് ഐഡി അല്ലെങ്കിൽ പേര്..." class="w-full bg-slate-950/80 border border-amber-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400">
+              <button onclick="alert('ഉസ്താദ് പോർട്ടൽ ഓപ്പൺ ചെയ്യുന്നു')" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
+                <i class="fa fa-lock"></i> ഉസ്താദ് ലോഗിൻ
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- COMPARISON MATRIX & FINAL SELECTION BAR                                   -->
+    <!-- ========================================================================= -->
+    <section class="mt-8 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-2xl">
+      <h3 class="text-lg sm:text-xl font-bold text-white mb-2 flex items-center gap-2">
+        <i class="fa fa-table text-amber-400"></i> മോഡലുകളുടെ താരതമ്യം (Comparison & Features)
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-400 mb-5">
+        ഓരോ മോഡലിന്റെയും പ്രധാന സവിശേഷതകൾ പരിശോധിച്ച് നിങ്ങളുടെ പ്രോജക്ടിന് ഏറ്റവും ഇണങ്ങുന്നത് തിരഞ്ഞെടുക്കാം:
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-300 border-collapse">
+          <thead>
+            <tr class="border-b border-slate-800 text-slate-400 font-semibold bg-slate-950/50">
+              <th class="p-3">ഫീച്ചറുകൾ</th>
+              <th class="p-3 text-amber-300">മോഡൽ 1: Royal Gold</th>
+              <th class="p-3 text-emerald-300">മോഡൽ 2: Emerald</th>
+              <th class="p-3 text-cyan-300">മോഡൽ 3: Auto-Detect</th>
+              <th class="p-3 text-purple-300">മോഡൽ 4: Dual-Zone</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr>
+              <td class="p-3 font-bold text-white">വെബ്സൈറ്റ് ബ്രാൻഡിംഗ് മാച്ചിംഗ്</td>
+              <td class="p-3 text-emerald-400 font-bold"><i class="fa fa-star text-amber-400"></i> 100% Perfect</td>
+              <td class="p-3 text-slate-300">പരമ്പരാഗതം (Classic)</td>
+              <td class="p-3 text-slate-300">മോഡേൺ (Tech)</td>
+              <td class="p-3 text-slate-300">ഡ്യുവൽ കളർ</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-white">സെർച്ച് അനുഭവം</td>
+              <td class="p-3">തത്സമയം ലൈവ് ഡ്രോപ്പ്ഡൗൺ</td>
+              <td class="p-3">ഗ്രീൻ കാർഡുകൾ</td>
+              <td class="p-3 text-cyan-300 font-bold">സ്വയം തിരിച്ചറിയൽ (Auto)</td>
+              <td class="p-3">പ്രത്യേക ബോക്സുകൾ</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-white">മൊബൈൽ ഉപയോഗക്ഷമത</td>
+              <td class="p-3 text-emerald-400">വളരെ എളുപ്പം</td>
+              <td class="p-3">നല്ലത്</td>
+              <td class="p-3 text-cyan-300 font-bold">ഏറ്റവും വേഗതയേറിയത്</td>
+              <td class="p-3">നല്ലത്</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-white">ലോഗിൻ സ്റ്റെപ്പുകൾ</td>
+              <td class="p-3">2-സ്റ്റെപ്പ് ഫ്ലൂയിഡ് ട്രാൻസിഷൻ</td>
+              <td class="p-3">സെന്റർ കാർഡ്</td>
+              <td class="p-3">ഇൻസ്റ്റന്റ് ഡ്രോവർ</td>
+              <td class="p-3">ഡെഡിക്കേറ്റഡ് ഡോർ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Action Choice Banner -->
+      <div id="selectionBanner" class="mt-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-center">
+        <h4 class="text-sm font-bold text-amber-300 mb-1">നിങ്ങൾക്ക് ഇഷ്ടപ്പെട്ട മോഡൽ ഏതാണ്?</h4>
+        <p class="text-xs text-slate-300 mb-3">ചാറ്റിൽ <strong>"മോഡൽ 1"</strong>, <strong>"മോഡൽ 2"</strong>, <strong>"മോഡൽ 3"</strong>, അല്ലെങ്കിൽ <strong>"മോഡൽ 4"</strong> എന്ന് ടൈപ്പ് ചെയ്യുക, അതനുസരിച്ച് സൈറ്റിൽ ലോഗിൻ പേജ് അപ്ഡേറ്റ് ചെയ്യുന്നതാണ്!</p>
+        <div class="flex flex-wrap gap-2 justify-center">
+          <button onclick="chooseModel(1, 'Royal Midnight & Gold')" class="px-3.5 py-1.5 rounded-xl bg-amber-400 text-slate-950 font-bold text-xs hover:bg-amber-300">
+            മോഡൽ 1 സെലക്ട് ചെയ്യുക
+          </button>
+          <button onclick="chooseModel(2, 'Emerald Islamic Heritage')" class="px-3.5 py-1.5 rounded-xl bg-emerald-400 text-slate-950 font-bold text-xs hover:bg-emerald-300">
+            മോഡൽ 2 സെലക്ട് ചെയ്യുക
+          </button>
+          <button onclick="chooseModel(3, 'Smart Auto-Detect Bento')" class="px-3.5 py-1.5 rounded-xl bg-cyan-400 text-slate-950 font-bold text-xs hover:bg-cyan-300">
+            മോഡൽ 3 സെലക്ട് ചെയ്യുക
+          </button>
+          <button onclick="chooseModel(4, 'Split Dual-Zone Gateway')" class="px-3.5 py-1.5 rounded-xl bg-purple-400 text-slate-950 font-bold text-xs hover:bg-purple-300">
+            മോഡൽ 4 സെലക്ട് ചെയ്യുക
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT LOGIC FOR LIVE SEARCH & INTERACTION                            -->
+  <!-- ========================================================================= -->
+  <script>
+    // Sample Real-Feeling Mock Database for Live Interactive Test
+    const sampleProfiles = [
+      {
+        id: 1042,
+        name: "മുഹമ്മദ് റാഷിദ് വി.പി",
+        role: "student",
+        place: "മലപ്പുറം",
+        father: "അബ്ദുൽ റഹ്മാൻ",
+        photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+        admNo: "1042"
+      },
+      {
+        id: 1038,
+        name: "അബ്ദുൽ ബാസിത് കെ.ടി",
+        role: "student",
+        place: "വടകര, കോഴിക്കോട്",
+        father: "അബൂബക്കർ",
+        photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+        admNo: "1038"
+      },
+      {
+        id: 1055,
+        name: "ശമ്മസ് കെ.",
+        role: "student",
+        place: "മാനന്തവാടി, വയനാട്",
+        father: "ഉസ്മാൻ",
+        photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80",
+        admNo: "1055"
+      },
+      {
+        id: "UST-01",
+        name: "ഷംസുദ്ദീൻ ഫൈസി",
+        role: "usthad",
+        place: "മാനന്തവാടി, വയനാട്",
+        designation: "ഫിഖ്ഹ് & ഉസൂൽ മുദരിസ്സ്",
+        photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+        admNo: "UST-01"
+      },
+      {
+        id: "UST-02",
+        name: "അബ്ദുൽ അസീസ് ബാഖവി",
+        role: "usthad",
+        place: "വേങ്ങര, മലപ്പുറം",
+        designation: "തഫ്സീർ & ഹദീസ് മുദരിസ്സ്",
+        photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80",
+        admNo: "UST-02"
+      }
+    ];
+
+    let m1CurrentRole = 'student';
+    let m2CurrentRole = 'student';
+
+    // Model Tab Switching
+    function switchModel(num) {
+      document.querySelectorAll('.model-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.model-tab').forEach(el => el.classList.remove('active'));
+      
+      const targetView = document.getElementById('model' + num + 'View');
+      const targetBtn = document.getElementById('tabBtn' + num);
+      if (targetView) targetView.classList.remove('hidden');
+      if (targetBtn) targetBtn.classList.add('active');
+    }
+
+    // ==========================================
+    // MODEL 1 LOGIC
+    // ==========================================
+    function m1SetRole(role) {
+      m1CurrentRole = role;
+      const btnStd = document.getElementById('m1RoleStudent');
+      const btnUst = document.getElementById('m1RoleUsthad');
+      const input = document.getElementById('m1SearchInput');
+      const label = document.getElementById('m1InputLabel');
+
+      if (role === 'student') {
+        btnStd.className = "flex-1 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-blue-700 to-blue-600 text-white shadow-lg";
+        btnUst.className = "flex-1 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all text-slate-400 hover:text-white";
+        input.placeholder = "വിദ്യാർത്ഥിയുടെ പേരോ അഡ്മിഷൻ നമ്പറോ ടൈപ്പ് ചെയ്യുക...";
+        label.innerHTML = '<i class="fa fa-graduation-cap text-amber-400"></i> വിദ്യാർത്ഥിയെ തിരയുക (Search Student)';
+      } else {
+        btnUst.className = "flex-1 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-amber-600 to-yellow-600 text-white shadow-lg";
+        btnStd.className = "flex-1 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all text-slate-400 hover:text-white";
+        input.placeholder = "ഉസ്താദിന്റെ പേരോ ഐഡിയോ ടൈപ്പ് ചെയ്യുക...";
+        label.innerHTML = '<i class="fa fa-users text-amber-400"></i> ഉസ്താദിനെ തിരയുക (Search Usthad)';
+      }
+      m1HandleSearch(input.value);
+    }
+
+    function m1HandleSearch(val) {
+      const q = val.trim().toLowerCase();
+      const resultsBox = document.getElementById('m1ResultsBox');
+      const resultsList = document.getElementById('m1ResultsList');
+      const countEl = document.getElementById('m1ResultsCount');
+      const clearBtn = document.getElementById('m1ClearBtn');
+
+      if (!q) {
+        resultsBox.classList.add('hidden');
+        clearBtn.classList.add('hidden');
+        return;
+      }
+      clearBtn.classList.remove('hidden');
+
+      const matches = sampleProfiles.filter(p => {
+        const matchesRole = p.role === m1CurrentRole;
+        const matchesQuery = p.name.toLowerCase().includes(q) || 
+                             p.admNo.toLowerCase().includes(q) || 
+                             p.place.toLowerCase().includes(q);
+        return matchesRole && matchesQuery;
+      });
+
+      countEl.textContent = matches.length + ' കണ്ടെത്തി';
+      resultsList.innerHTML = '';
+
+      if (matches.length === 0) {
+        resultsList.innerHTML = '<div class="p-3 text-center text-xs text-slate-400">പ്രൊഫൈലുകൾ ഒന്നും കണ്ടെത്തിയില്ല</div>';
+      } else {
+        matches.forEach(item => {
+          const div = document.createElement('div');
+          div.className = "p-2.5 rounded-xl hover:bg-slate-900 border border-transparent hover:border-amber-400/40 flex items-center justify-between cursor-pointer transition-all";
+          div.onclick = () => m1SelectProfile(item);
+          div.innerHTML = `
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="${item.photo}" class="w-9 h-11 rounded-lg object-cover border border-amber-400/50 flex-shrink-0" alt="avatar">
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-white truncate">${item.name}</div>
+                <div class="text-[11px] text-slate-400 truncate">${item.role === 'student' ? 'അഡ്മിഷൻ: ' + item.admNo : item.designation} • ${item.place}</div>
+              </div>
+            </div>
+            <span class="text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2 py-1 rounded-md border border-amber-400/30">സെലക്ട്</span>
+          `;
+          resultsList.appendChild(div);
+        });
+      }
+      resultsBox.classList.remove('hidden');
+    }
+
+    let m1Selected = null;
+    function m1SelectProfile(item) {
+      m1Selected = item;
+      document.getElementById('m1ResultsBox').classList.add('hidden');
+      
+      const card = document.getElementById('m1PreviewCard');
+      document.getElementById('m1PreviewPhoto').src = item.photo;
+      document.getElementById('m1PreviewName').textContent = item.name;
+      document.getElementById('m1PreviewPlace').innerHTML = `<i class="fa fa-map-marker text-rose-400"></i> സ്ഥലം: <strong class="text-slate-200">${item.place}</strong>`;
+      
+      if (item.role === 'student') {
+        document.getElementById('m1PreviewBadge').textContent = 'STUDENT';
+        document.getElementById('m1PreviewBadge').className = 'bg-blue-500/20 border border-blue-400/40 text-blue-300 text-[10px] font-extrabold px-2 py-0.5 rounded-md';
+        document.getElementById('m1PreviewSub').innerHTML = `<i class="fa fa-user text-amber-400"></i> പിതാവ്: <strong class="text-slate-200">${item.father}</strong> • അഡ്മിഷൻ: ${item.admNo}`;
+      } else {
+        document.getElementById('m1PreviewBadge').textContent = 'MUDARRIS';
+        document.getElementById('m1PreviewBadge').className = 'bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded-md';
+        document.getElementById('m1PreviewSub').innerHTML = `<i class="fa fa-graduation-cap text-amber-400"></i> ${item.designation}`;
+      }
+      card.classList.remove('hidden');
+    }
+
+    function m1ProceedToPass() {
+      if (!m1Selected) return;
+      document.getElementById('m1Step1').classList.add('hidden');
+      document.getElementById('m1Step2').classList.remove('hidden');
+      document.getElementById('m1Step2Photo').src = m1Selected.photo;
+      document.getElementById('m1Step2Name').textContent = m1Selected.name;
+      document.getElementById('m1Step2Place').textContent = m1Selected.place + ' • ' + (m1Selected.role === 'student' ? 'അഡ്മിഷൻ: ' + m1Selected.admNo : m1Selected.designation);
+      document.getElementById('m1Step2Badge').textContent = m1Selected.role.toUpperCase();
+    }
+
+    function m1BackToSearch() {
+      document.getElementById('m1Step2').classList.add('hidden');
+      document.getElementById('m1Step1').classList.remove('hidden');
+    }
+
+    function m1ClearSearch() {
+      document.getElementById('m1SearchInput').value = '';
+      m1HandleSearch('');
+    }
+
+    function m1QuickFill(term) {
+      if (term === 'ഷംസുദ്ദീൻ') m1SetRole('usthad');
+      else m1SetRole('student');
+      document.getElementById('m1SearchInput').value = term;
+      m1HandleSearch(term);
+    }
+
+    function m1SimulateFind() {
+      const val = document.getElementById('m1SearchInput').value;
+      if (!val) {
+        m1QuickFill('റാഷിദ്');
+      } else {
+        m1HandleSearch(val);
+      }
+    }
+
+    // ==========================================
+    // MODEL 2 LOGIC
+    // ==========================================
+    function m2SetRole(role) {
+      m2CurrentRole = role;
+      const bStd = document.getElementById('m2RoleStudent');
+      const bUst = document.getElementById('m2RoleUsthad');
+      const input = document.getElementById('m2SearchInput');
+
+      if (role === 'student') {
+        bStd.className = "p-3 rounded-2xl border-2 border-emerald-400 bg-emerald-500/20 text-white font-bold text-xs sm:text-sm text-left flex items-center gap-2.5 transition-all shadow-lg";
+        bUst.className = "p-3 rounded-2xl border border-emerald-500/30 bg-slate-900/60 text-slate-300 font-bold text-xs sm:text-sm text-left flex items-center gap-2.5 hover:border-emerald-400/60 transition-all";
+        input.placeholder = "വിദ്യാർത്ഥിയുടെ പേരോ അഡ്മിഷൻ നമ്പറോ ടൈപ്പ് ചെയ്യുക...";
+      } else {
+        bUst.className = "p-3 rounded-2xl border-2 border-emerald-400 bg-emerald-500/20 text-white font-bold text-xs sm:text-sm text-left flex items-center gap-2.5 transition-all shadow-lg";
+        bStd.className = "p-3 rounded-2xl border border-emerald-500/30 bg-slate-900/60 text-slate-300 font-bold text-xs sm:text-sm text-left flex items-center gap-2.5 hover:border-emerald-400/60 transition-all";
+        input.placeholder = "ഉസ്താദിന്റെ പേരോ ഐഡിയോ ടൈപ്പ് ചെയ്യുക...";
+      }
+      m2HandleSearch(input.value);
+    }
+
+    function m2HandleSearch(val) {
+      const q = val.trim().toLowerCase();
+      const rBox = document.getElementById('m2ResultsBox');
+      const rList = document.getElementById('m2ResultsList');
+      if (!q) { rBox.classList.add('hidden'); return; }
+
+      const matches = sampleProfiles.filter(p => p.role === m2CurrentRole && (p.name.toLowerCase().includes(q) || p.admNo.toLowerCase().includes(q)));
+      rList.innerHTML = '';
+      if (matches.length === 0) {
+        rList.innerHTML = '<div class="p-2 text-center text-xs text-slate-400">പ്രൊഫൈലുകൾ കണ്ടെത്തിയില്ല</div>';
+      } else {
+        matches.forEach(item => {
+          const div = document.createElement('div');
+          div.className = "p-2 rounded-xl hover:bg-[#062417] border border-emerald-500/20 flex items-center justify-between cursor-pointer";
+          div.onclick = () => {
+            rBox.classList.add('hidden');
+            const pCard = document.getElementById('m2PreviewCard');
+            document.getElementById('m2PreviewPhoto').src = item.photo;
+            document.getElementById('m2PreviewName').textContent = item.name;
+            document.getElementById('m2PreviewPlace').textContent = item.place + ' • ' + (item.role === 'student' ? 'അഡ്മിഷൻ: ' + item.admNo : item.designation);
+            pCard.classList.remove('hidden');
+          };
+          div.innerHTML = `
+            <div class="flex items-center gap-2 min-w-0">
+              <img src="${item.photo}" class="w-8 h-10 rounded object-cover border border-emerald-400">
+              <div class="min-w-0">
+                <span class="text-xs font-bold text-white truncate block">${item.name}</span>
+                <span class="text-[10px] text-emerald-300 truncate">${item.place}</span>
+              </div>
+            </div>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-bold">തിരഞ്ഞെടുക്കുക</span>
+          `;
+          rList.appendChild(div);
+        });
+      }
+      rBox.classList.remove('hidden');
+    }
+
+    function m2QuickFill(term) {
+      if (term === 'ബഖവി') m2SetRole('usthad');
+      else m2SetRole('student');
+      document.getElementById('m2SearchInput').value = term;
+      m2HandleSearch(term);
+    }
+
+    function m2SimulateFind() {
+      m2QuickFill('ബാസിത്');
+    }
+
+    // ==========================================
+    // MODEL 3 LOGIC (SMART AUTO-DETECT)
+    // ==========================================
+    function m3HandleSearch(val) {
+      const q = val.trim().toLowerCase();
+      const rBox = document.getElementById('m3ResultsBox');
+      const rList = document.getElementById('m3ResultsList');
+      if (!q) { rBox.classList.add('hidden'); return; }
+
+      // Searches BOTH students and usthads without manual role filtering!
+      const matches = sampleProfiles.filter(p => p.name.toLowerCase().includes(q) || p.admNo.toLowerCase().includes(q) || p.place.toLowerCase().includes(q));
+      rList.innerHTML = '';
+      if (matches.length === 0) {
+        rList.innerHTML = '<div class="p-2 text-center text-xs text-slate-400">പ്രൊഫൈലുകൾ കണ്ടെത്തിയില്ല</div>';
+      } else {
+        matches.forEach(item => {
+          const div = document.createElement('div');
+          const isUsthad = item.role === 'usthad';
+          div.className = "p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-cyan-400 flex items-center justify-between cursor-pointer transition-all";
+          div.onclick = () => {
+            rBox.classList.add('hidden');
+            const pCard = document.getElementById('m3PreviewCard');
+            document.getElementById('m3PreviewPhoto').src = item.photo;
+            document.getElementById('m3PreviewName').textContent = item.name;
+            document.getElementById('m3PreviewBadge').textContent = isUsthad ? 'MUDARRIS' : 'STUDENT';
+            document.getElementById('m3PreviewBadge').className = isUsthad ? 'bg-amber-500/20 text-amber-300 text-[10px] font-black px-2 py-0.5 rounded' : 'bg-blue-500/20 text-blue-300 text-[10px] font-black px-2 py-0.5 rounded';
+            document.getElementById('m3PreviewSub').textContent = (isUsthad ? item.designation : 'പിതാവ്: ' + item.father + ' • അഡ്മിഷൻ: ' + item.admNo) + ' • ' + item.place;
+            pCard.classList.remove('hidden');
+          };
+          div.innerHTML = `
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="${item.photo}" class="w-9 h-11 rounded-lg object-cover border ${isUsthad ? 'border-amber-400' : 'border-cyan-400'}">
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xs font-bold text-white truncate">${item.name}</span>
+                  <span class="text-[9px] px-1.5 py-0.2 rounded font-black ${isUsthad ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40' : 'bg-cyan-400/20 text-cyan-300 border border-cyan-400/40'}">${isUsthad ? 'ഉസ്താദ്' : 'സ്റ്റുഡന്റ്'}</span>
+                </div>
+                <div class="text-[11px] text-slate-400 truncate">${isUsthad ? item.designation : 'അഡ്മിഷൻ: ' + item.admNo} • ${item.place}</div>
+              </div>
+            </div>
+            <i class="fa fa-chevron-right text-slate-500 text-xs mr-1"></i>
+          `;
+          rList.appendChild(div);
+        });
+      }
+      rBox.classList.remove('hidden');
+    }
+
+    function m3QuickFill(term) {
+      document.getElementById('m3SearchInput').value = term;
+      m3HandleSearch(term);
+    }
+
+    // ==========================================
+    // CHOOSE MODEL ACTION
+    // ==========================================
+    function chooseModel(num, name) {
+      alert(`നിങ്ങൾ തിരഞ്ഞെടുക്കാൻ ആഗ്രഹിക്കുന്നത്: മോഡൽ ${num} (${name}). \n\nഈ മോഡൽ യഥാർത്ഥ ലോഗിൻ പേജിൽ (login.html) നടപ്പിലാക്കണമെന്ന് ചാറ്റിൽ മറുപടി നൽകുക!`);
+    }
+  </script>
+</body>
+</html>

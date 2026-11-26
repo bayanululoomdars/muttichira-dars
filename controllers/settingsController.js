@@ -379,3 +379,35 @@ exports.adminReset = async (req, res) => {
     res.status(500).json({ success: false, message: 'Reset failed: ' + err.message });
   }
 };
+
+// GET /api/settings/profile-editing — Get student & usthad profile editing permission
+exports.getProfileEditingStatus = async (req, res) => {
+  try {
+    let setting = await Settings.findOne({ key: 'allowProfileEditing' });
+    if (!setting) {
+      setting = new Settings({ key: 'allowProfileEditing', value: true });
+      await setting.save();
+    }
+    res.json({ success: true, allowProfileEditing: setting.value !== false });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// POST /api/settings/profile-editing — Update student & usthad profile editing permission
+exports.updateProfileEditingStatus = async (req, res) => {
+  try {
+    const { allowProfileEditing } = req.body;
+    let setting = await Settings.findOne({ key: 'allowProfileEditing' });
+    if (!setting) {
+      setting = new Settings({ key: 'allowProfileEditing', value: Boolean(allowProfileEditing) });
+    } else {
+      setting.value = Boolean(allowProfileEditing);
+    }
+    await setting.save();
+    res.json({ success: true, allowProfileEditing: setting.value });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+

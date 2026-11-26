@@ -53,4 +53,9 @@ router.post('/burda', (req, res, next) => {
   uploader.single('burda')(req, res, next);
 }, settingsController.uploadBurda);
 
+
+// Profile Editing Status Toggle
+router.get('/profile-editing', settingsController.getProfileEditingStatus);
+router.post('/profile-editing', settingsController.updateProfileEditingStatus);
+
 module.exports = router;

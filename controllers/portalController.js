@@ -1,3 +1,4 @@
+const Settings = require('../models/Settings');
 const path = require('path');
 const fs = require('fs');
 const Student = require('../models/Student');
@@ -590,10 +591,58 @@ exports.updateStudentAdmin = async (req, res) => {
   try {
     const { id } = req.params;
     let student = null;
-    try { student = await Student.findById(id); } catch(e) {} if (!student) { try { let sList = await Student.find({ admissionNo: id }); if(sList && sList.data && sList.data.length > 0) student = sList.data[0]; else if(sList && sList.length > 0) student = sList[0]; } catch(e) {} } const isMemory = !student; if (!student) student = memoryStudents.find(s => String(s._id) === String(id) || String(s.admissionNo) === String(id));
+    try { student = await Student.findById(id); } catch(e) {}
+    if (!student) {
+      try {
+        let sList = await Student.find({ admissionNo: id });
+        if (sList && sList.data && sList.data.length > 0) student = sList.data[0];
+        else if (sList && sList.length > 0) student = sList[0];
+      } catch(e) {}
+    }
+    const isMemory = !student;
+    if (!student) student = memoryStudents.find(s => String(s._id) === String(id) || String(s.admissionNo) === String(id));
     if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
 
     const updates = req.body;
+    const isAdminReq = req.headers['x-admin-request'] === 'true' || (req.session && req.session.adminUser);
+
+    // If request comes from student/portal, check if Admin has locked profile editing
+    if (!isAdminReq) {
+      try {
+        const setting = await Settings.findOne({ key: 'allowProfileEditing' });
+        const isAllowed = setting ? setting.value !== false : true;
+        if (!isAllowed) {
+          return res.status(403).json({
+            success: false,
+            message: 'Profile editing is currently turned off by Admin. You can only preview your details. (പ്രൊഫൈൽ എഡിറ്റിംഗ് അഡ്മിൻ താൽക്കാലികമായി ഓഫാക്കിയിരിക്കുന്നു).'
+          });
+        }
+      } catch (e) {}
+    }
+
+    // PASSWORD CHANGE SECURITY (Must verify current password before updating password)
+    if (updates.password && String(updates.password).trim() !== '') {
+      if (!isAdminReq) {
+        const curPass = updates.currentPassword || updates.oldPassword;
+        const validPass = student.password || student.phone || student.admissionNo;
+        if (!curPass || String(curPass).trim() !== String(validPass).trim()) {
+          return res.status(401).json({
+            success: false,
+            message: 'Current password does not match. (നിലവിലെ പാസ്‌വേഡ് തെറ്റാണ്).'
+          });
+        }
+      }
+      student.password = String(updates.password).trim();
+    }
+    delete updates.password;
+    delete updates.currentPassword;
+    delete updates.oldPassword;
+
+    // Student self-editable core fields: Name, Admission Number, Batch
+    if (updates.name && updates.name.trim()) student.name = updates.name.trim();
+    if (updates.admissionNo && updates.admissionNo.trim()) student.admissionNo = String(updates.admissionNo).trim();
+    if (updates.batchNumber && updates.batchNumber.trim()) student.batchNumber = String(updates.batchNumber).replace(/^batch\s*/i, '').trim();
+
     if (req.file && req.file.path) {
       updates.photoUrl = req.file.path;
     } else if (updates.photoUrl && updates.photoUrl.startsWith('data:image')) {
@@ -685,10 +734,60 @@ exports.updateUsthadAdmin = async (req, res) => {
   try {
     const { id } = req.params;
     let usthad = null;
-    try { usthad = await Usthad.findById(id); } catch(e) {} if (!usthad) { try { let uList = await Usthad.find({ usthadId: id }); if(uList && uList.data && uList.data.length > 0) usthad = uList.data[0]; else if(uList && uList.length > 0) usthad = uList[0]; } catch(e) {} } const isMemory = !usthad; if (!usthad) usthad = memoryUsthads.find(u => String(u._id) === String(id) || String(u.usthadId) === String(id));
+    try { usthad = await Usthad.findById(id); } catch(e) {}
+    if (!usthad) {
+      try {
+        let uList = await Usthad.find({ usthadId: id });
+        if (uList && uList.data && uList.data.length > 0) usthad = uList.data[0];
+        else if (uList && uList.length > 0) usthad = uList[0];
+      } catch(e) {}
+    }
+    const isMemory = !usthad;
+    if (!usthad) usthad = memoryUsthads.find(u => String(u._id) === String(id) || String(u.usthadId) === String(id));
     if (!usthad) return res.status(404).json({ success: false, message: 'Usthad not found' });
 
     const updates = req.body;
+    const isAdminReq = req.headers['x-admin-request'] === 'true' || (req.session && req.session.adminUser);
+
+    // If request comes from usthad/portal, check if Admin has locked profile editing
+    if (!isAdminReq) {
+      try {
+        const setting = await Settings.findOne({ key: 'allowProfileEditing' });
+        const isAllowed = setting ? setting.value !== false : true;
+        if (!isAllowed) {
+          return res.status(403).json({
+            success: false,
+            message: 'Profile editing is currently turned off by Admin. You can only preview your details. (പ്രൊഫൈൽ എഡിറ്റിംഗ് അഡ്മിൻ താൽക്കാലികമായി ഓഫാക്കിയിരിക്കുന്നു).'
+          });
+        }
+      } catch (e) {}
+    }
+
+    // PASSWORD CHANGE SECURITY (Must verify current password before updating password)
+    if (updates.password && String(updates.password).trim() !== '') {
+      if (!isAdminReq) {
+        const curPass = updates.currentPassword || updates.oldPassword;
+        const validPass = usthad.password || usthad.phone || usthad.usthadId;
+        if (!curPass || String(curPass).trim() !== String(validPass).trim()) {
+          return res.status(401).json({
+            success: false,
+            message: 'Current password does not match. (നിലവിലെ പാസ്‌വേഡ് തെറ്റാണ്).'
+          });
+        }
+      }
+      usthad.password = String(updates.password).trim();
+    }
+    delete updates.password;
+    delete updates.currentPassword;
+    delete updates.oldPassword;
+
+    // Usthad self-editable core fields: Name, Usthad ID, Batch/Designation
+    if (updates.name && updates.name.trim()) usthad.name = updates.name.trim();
+    if (updates.admissionNo && updates.admissionNo.trim()) usthad.usthadId = String(updates.admissionNo).trim();
+    if (updates.usthadId && updates.usthadId.trim()) usthad.usthadId = String(updates.usthadId).trim();
+    if (updates.batchNumber && updates.batchNumber.trim()) usthad.batchNumber = String(updates.batchNumber).trim();
+    if (updates.designation && updates.designation.trim()) usthad.designation = String(updates.designation).trim();
+
     if (req.file && req.file.path) {
       updates.photoUrl = req.file.path;
     } else if (updates.photoUrl && updates.photoUrl.startsWith('data:image')) {
