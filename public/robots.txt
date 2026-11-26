@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
 
 Sitemap: https://muttichira-dars.onrender.com/sitemap.xml

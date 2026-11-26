@@ -40,8 +40,18 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', apiRoutes);
 
-app.get('/', (req, res) => res.redirect('/home'));
-app.get('/home', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+// Serve sitemap and robots with proper headers for search engines
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml');
+  res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
+});
+app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.sendFile(path.join(__dirname, 'public', 'robots.txt'));
+});
+
+// Root and primary pages - serve 200 OK directly for Google SEO
+app.get(['/', '/home', '/index.html'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/gallery', (req, res) => res.sendFile(path.join(__dirname, 'public', 'gallery.html')));
 app.get('/admission', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admission.html')));
 app.get(['/about', '/about-us', '/about us', '/about  us'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'about.html')));
