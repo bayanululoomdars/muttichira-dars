@@ -1407,16 +1407,19 @@
                 <!-- Live Selectable Search Results Dropdown List -->
                 <div id="liveSearchResultsSelect" style="display: none;" class="mb-3"></div>
 
-                <!-- Live Preview Card (Single Selected Item - Name, Place, Father/Designation) -->
+                <!-- Live Preview Card (Single Selected Item - Photo, Name, Place, ID, Status) -->
                 <div id="livePreviewBox" style="display: none;" class="prelogin-card mb-3">
                   <div class="d-flex align-items-center gap-3">
                     <img id="previewPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar">
                     <div class="flex-grow-1 text-left pl-2">
-                      <div id="previewRoleLabel" class="text-muted" style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">STUDENT NAME:</div>
-                      <h4 id="previewName" class="font-weight-bold mb-2 text-dark" style="font-size:1.15rem; line-height:1.2;">-</h4>
+                      <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span id="previewRoleLabel" style="font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">STUDENT</span>
+                        <span id="previewStatusBadge" class="badge badge-pill badge-success" style="font-size:10px; padding:3px 8px;">Current Student</span>
+                      </div>
+                      <h4 id="previewName" class="font-weight-bold mb-1 text-dark" style="font-size:1.15rem; line-height:1.2;">-</h4>
                       
-                      <div class="prelogin-field" id="previewSubRow">
-                        <i id="previewFatherIcon" class="fa fa-user-circle text-success mr-1"></i> <span id="previewFatherLabel">Father's Name:</span> <strong id="previewFatherText" class="text-dark">-</strong>
+                      <div class="prelogin-field mb-1" id="previewSubRow">
+                        <i id="previewFatherIcon" class="fa fa-id-badge text-warning mr-1"></i> <span id="previewFatherLabel">ID / Adm No:</span> <strong id="previewFatherText" class="text-dark">-</strong>
                       </div>
                       <div class="prelogin-field mb-0">
                         <i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="previewPlaceText" class="text-dark">-</strong>
@@ -1439,15 +1442,18 @@
               <!-- Step 2: Password Prompt -->
               <div id="stepPassword" style="display: none;">
                 
-                <!-- Selected User Banner (Name, Place, Father/Designation) -->
+                <!-- Selected User Banner (Name, Place, ID, Status) -->
                 <div class="prelogin-card mb-3 p-3 bg-light">
                   <div class="d-flex align-items-center gap-3">
                     <img id="selectedPhoto" src="img/new_logo.png" alt="Avatar" class="prelogin-avatar" style="width:60px; height:80px; object-fit:cover; aspect-ratio:3/4; border-radius:12px;">
                     <div class="text-left flex-grow-1 pl-2">
-                      <div id="selectedRoleLabel" style="font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;" class="text-primary">STUDENT</div>
+                      <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span id="selectedRoleLabel" style="font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;" class="text-primary">STUDENT</span>
+                        <span id="selectedStatusBadge" class="badge badge-pill badge-success" style="font-size:10px; padding:2px 7px;">Current Student</span>
+                      </div>
                       <h4 id="selectedName" class="font-weight-bold mb-1 text-dark" style="font-size:1.05rem;">User Name</h4>
                       <div class="small font-weight-bold text-muted">
-                        <span><i id="selectedFatherIcon" class="fa fa-user-circle text-primary mr-1"></i> <span id="selectedFatherLabel">Father:</span> <strong id="selectedFatherText" class="text-dark">-</strong></span> &nbsp;•&nbsp; 
+                        <span><i id="selectedFatherIcon" class="fa fa-id-badge text-warning mr-1"></i> <span id="selectedFatherLabel">ID:</span> <strong id="selectedFatherText" class="text-dark">-</strong></span> &nbsp;•&nbsp; 
                         <span><i class="fa fa-map-marker text-danger mr-1"></i> Place: <strong id="selectedPlaceText" class="text-dark">-</strong></span>
                       </div>
                     </div>
@@ -2365,7 +2371,7 @@
 
                   const subDetailHtml = isUsthad
                     ? '<span><i class="fa fa-graduation-cap text-warning"></i> Designation: ' + (item.designation || item.subject || 'Mudarris') + '</span>'
-                    : '<span><i class="fa fa-user-circle text-info"></i> Father: ' + (item.fatherName || '-') + '</span>';
+                    : '<span><i class="fa fa-id-badge text-warning"></i> ID: ' + (item.admissionNo || '-') + '</span>';
 
                   selectHtml += '<div onclick="selectUserFromList(' + index + ', false)" style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:10px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid rgba(255,255,255,0.05);" onmouseover="this.style.background=\'rgba(255,255,255,0.08)\'" onmouseout="this.style.background=\'transparent\'">' +
                     '<img src="' + (item.photoUrl || 'img/new_logo.png') + '" style="width:42px; height:42px; border-radius:10px; object-fit:cover; border:1.5px solid rgba(212,175,55,0.4);">' +
@@ -2423,23 +2429,33 @@
       const fatherLabel = document.getElementById('previewFatherLabel');
       const fatherIcon = document.getElementById('previewFatherIcon');
       const fatherText = document.getElementById('previewFatherText');
+      const statusBadge = document.getElementById('previewStatusBadge');
 
       if (isUsthad) {
         if (roleLabel) {
-          roleLabel.textContent = 'MUDARRIS / USTHAD:';
+          roleLabel.textContent = 'MUDARRIS / USTHAD';
           roleLabel.style.color = '#d97706';
         }
         if (fatherLabel) fatherLabel.textContent = 'Designation:';
         if (fatherIcon) fatherIcon.className = 'fa fa-graduation-cap text-warning mr-1';
         if (fatherText) fatherText.textContent = selectedUserObject.designation || selectedUserObject.subject || 'Mudarris';
+        if (statusBadge) {
+          statusBadge.textContent = 'Faculty';
+          statusBadge.className = 'badge badge-pill badge-warning';
+        }
       } else {
+        const isAlumni = selectedUserObject.isAlumni || (String(selectedUserObject.status || '').toLowerCase().includes('alumni'));
         if (roleLabel) {
-          roleLabel.textContent = selectedUserObject.isAlumni ? 'ALUMNI / GRADUATE:' : 'STUDENT NAME:';
+          roleLabel.textContent = isAlumni ? 'ALUMNI / GRADUATE' : 'STUDENT';
           roleLabel.style.color = '#2563eb';
         }
-        if (fatherLabel) fatherLabel.textContent = "Father's Name:";
-        if (fatherIcon) fatherIcon.className = 'fa fa-user-circle text-success mr-1';
-        if (fatherText) fatherText.textContent = selectedUserObject.fatherName || '-';
+        if (fatherLabel) fatherLabel.textContent = 'ID / Adm No:';
+        if (fatherIcon) fatherIcon.className = 'fa fa-id-badge text-warning mr-1';
+        if (fatherText) fatherText.textContent = selectedUserObject.admissionNo || '-';
+        if (statusBadge) {
+          statusBadge.textContent = isAlumni ? 'Alumni' : 'Current Student';
+          statusBadge.className = isAlumni ? 'badge badge-pill badge-warning' : 'badge badge-pill badge-success';
+        }
       }
 
       previewBox.style.display = 'block';
@@ -2460,6 +2476,7 @@
       const selFatherLabel = document.getElementById('selectedFatherLabel');
       const selFatherIcon = document.getElementById('selectedFatherIcon');
       const selFatherText = document.getElementById('selectedFatherText');
+      const selStatusBadge = document.getElementById('selectedStatusBadge');
 
       if (isUsthad) {
         if (selRoleLabel) {
@@ -2469,14 +2486,23 @@
         if (selFatherLabel) selFatherLabel.textContent = 'Designation:';
         if (selFatherIcon) selFatherIcon.className = 'fa fa-graduation-cap text-warning mr-1';
         if (selFatherText) selFatherText.textContent = selectedUserObject.designation || selectedUserObject.subject || 'Mudarris';
+        if (selStatusBadge) {
+          selStatusBadge.textContent = 'Faculty';
+          selStatusBadge.className = 'badge badge-pill badge-warning';
+        }
       } else {
+        const isAlumni = selectedUserObject.isAlumni || (String(selectedUserObject.status || '').toLowerCase().includes('alumni'));
         if (selRoleLabel) {
-          selRoleLabel.textContent = selectedUserObject.isAlumni ? 'ALUMNI / GRADUATE' : 'STUDENT';
+          selRoleLabel.textContent = isAlumni ? 'ALUMNI / GRADUATE' : 'STUDENT';
           selRoleLabel.className = 'text-primary font-weight-bold';
         }
-        if (selFatherLabel) selFatherLabel.textContent = 'Father:';
-        if (selFatherIcon) selFatherIcon.className = 'fa fa-user-circle text-primary mr-1';
-        if (selFatherText) selFatherText.textContent = selectedUserObject.fatherName || '-';
+        if (selFatherLabel) selFatherLabel.textContent = 'ID / Adm No:';
+        if (selFatherIcon) selFatherIcon.className = 'fa fa-id-badge text-warning mr-1';
+        if (selFatherText) selFatherText.textContent = selectedUserObject.admissionNo || '-';
+        if (selStatusBadge) {
+          selStatusBadge.textContent = isAlumni ? 'Alumni' : 'Current Student';
+          selStatusBadge.className = isAlumni ? 'badge badge-pill badge-warning' : 'badge badge-pill badge-success';
+        }
       }
 
       document.getElementById('stepLookup').style.display = 'none';
