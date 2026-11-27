@@ -9,6 +9,41 @@ const ExamResult = require('../models/ExamResult');
 const Batch = require('../models/Batch');
 const { scheduleSave, saveLocalDb, uploadDbToTelegram, dbState } = require('../config/telegramDB');
 
+// Utility to format dates as DD MM YYYY
+function formatDateDMY(val) {
+  if (!val) return '';
+  if (val instanceof Date) {
+    if (isNaN(val.getTime())) return '';
+    const d = String(val.getDate()).padStart(2, '0');
+    const m = String(val.getMonth() + 1).padStart(2, '0');
+    const y = val.getFullYear();
+    return `${d} ${m} ${y}`;
+  }
+  const str = String(val).trim();
+  const ymd = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (ymd) return `${ymd[3]} ${ymd[2]} ${ymd[1]}`;
+  const dmy = str.match(/^(\d{2})[\s-/](\d{2})[\s-/](\d{4})$/);
+  if (dmy) return `${dmy[1]} ${dmy[2]} ${dmy[3]}`;
+  const parsed = new Date(str);
+  if (isNaN(parsed.getTime())) return str;
+  const d = String(parsed.getDate()).padStart(2, '0');
+  const m = String(parsed.getMonth() + 1).padStart(2, '0');
+  const y = parsed.getFullYear();
+  return `${d} ${m} ${y}`;
+}
+
+// Normalize DOB input into YYYY-MM-DD for <input type="date"> storage
+function normalizeDobValue(val) {
+  if (val === undefined || val === null) return '';
+  const str = String(val).trim();
+  if (!str) return '';
+  const ymd = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (ymd) return `${ymd[1]}-${ymd[2]}-${ymd[3]}`;
+  const dmy = str.match(/^(\d{2})[\s-/](\d{2})[\s-/](\d{4})$/);
+  if (dmy) return `${dmy[3]}-${dmy[2]}-${dmy[1]}`;
+  return str;
+}
+
 // In-Memory Fallback Stores for when DB is offline or for rapid demo
 const memoryExams = [
   {
@@ -154,6 +189,7 @@ exports.lookup = async (req, res) => {
     }
 
     const qLower = q.toLowerCase();
+    const exactOnly = req.query.exact === '1' || req.query.exact === 'true';
 
     let allStudents = [];
     try { allStudents = await Student.find({}); } catch (e) {}
@@ -168,67 +204,77 @@ exports.lookup = async (req, res) => {
     const requestedRole = req.query.role;
     // Filter students
     if (!requestedRole || requestedRole === 'student') {
-    const cleanQStudent = qLower.replace(/^std-?/i, '').trim();
-    allStudents.forEach(s => {
-      const admLower = String(s.admissionNo || '').toLowerCase();
-      const cleanAdm = admLower.replace(/^std-?/i, '').trim();
-      const admMatch = (admLower === qLower) || (cleanAdm && cleanAdm === cleanQStudent);
-      const phoneMatch = String(s.phone || '').includes(q);
-      const nameMatch = (s.name || '').toLowerCase().includes(qLower);
-      const placeMatch = (s.place || '').toLowerCase().includes(qLower);
+      const cleanQStudent = qLower.replace(/^std-?/i, '').trim();
+      allStudents.forEach(s => {
+        const admLower = String(s.admissionNo || '').toLowerCase();
+        const cleanAdm = admLower.replace(/^std-?/i, '').trim();
+        const objIdMatch = String(s._id || '').toLowerCase() === qLower;
+        const admMatch = (admLower === qLower) || (cleanAdm && cleanAdm === cleanQStudent) || objIdMatch;
+        const phoneStr = String(s.phone || '').trim();
+        const phoneExact = phoneStr === q;
+        const phoneMatch = phoneStr.includes(q);
+        const nameMatch = (s.name || '').toLowerCase().includes(qLower);
+        const placeMatch = (s.place || '').toLowerCase().includes(qLower);
 
-      if (admMatch || phoneMatch || nameMatch || placeMatch) {
-        results.push({
-          type: 'student',
-          admissionNo: s.admissionNo,
-          name: s.name,
-          role: 'student',
-          batchNumber: s.batchNumber,
+        const matched = exactOnly ? admMatch : (admMatch || phoneMatch || nameMatch || placeMatch);
+        if (matched) {
+          results.push({
+            _priority: admMatch ? 0 : (phoneExact ? 1 : 2),
+            type: 'student',
+            admissionNo: s.admissionNo,
+            name: s.name,
+            role: 'student',
+            batchNumber: s.batchNumber,
             status: s.status || (s.isAlumni ? 'Biruthadhari / Alumni' : 'Current Student'),
             isAlumni: s.isAlumni,
-          photoUrl: s.photoUrl || 'img/new_logo.png',
-          place: s.place || 'Muttichira',
-          fatherName: s.fatherName || s.guardianName || ''
-        });
-      }
-    });
-
+            photoUrl: s.photoUrl || 'img/new_logo.png',
+            place: s.place || 'Muttichira',
+            fatherName: s.fatherName || s.guardianName || ''
+          });
+        }
+      });
     }
     // Filter usthads
     if (!requestedRole || requestedRole === 'usthad') {
-    const cleanQUsthad = qLower.replace(/^ust-?/i, '').trim();
-    allUsthads.forEach(u => {
-      const idLower = String(u.usthadId || '').toLowerCase();
-      const cleanId = idLower.replace(/^ust-?/i, '').trim();
-      const idMatch = (idLower === qLower) || (cleanId && cleanId === cleanQUsthad);
-      const phoneMatch = String(u.phone || '').includes(q);
-      const nameMatch = (u.name || '').toLowerCase().includes(qLower);
-      const placeMatch = (u.place || '').toLowerCase().includes(qLower);
+      const cleanQUsthad = qLower.replace(/^ust-?/i, '').trim();
+      allUsthads.forEach(u => {
+        const idLower = String(u.usthadId || '').toLowerCase();
+        const cleanId = idLower.replace(/^ust-?/i, '').trim();
+        const objIdMatch = String(u._id || '').toLowerCase() === qLower;
+        const idMatch = (idLower === qLower) || (cleanId && cleanId === cleanQUsthad) || objIdMatch;
+        const phoneStr = String(u.phone || '').trim();
+        const phoneExact = phoneStr === q;
+        const phoneMatch = phoneStr.includes(q);
+        const nameMatch = (u.name || '').toLowerCase().includes(qLower);
+        const placeMatch = (u.place || '').toLowerCase().includes(qLower);
 
-      if (idMatch || phoneMatch || nameMatch || placeMatch) {
-        results.push({
-          type: 'usthad',
-          admissionNo: u.usthadId,
-          usthadId: u.usthadId,
-          name: u.name,
-          role: 'usthad',
-          designation: u.designation || u.subject || 'Mudarris',
-          subject: u.subject || 'Dars Mudarris',
-          photoUrl: u.photoUrl || 'img/new_logo.png',
-          place: u.place || 'Muttichira',
-          phone: u.phone,
-          fatherName: u.fatherName || ''
-        });
-      }
-    });
-
+        const matched = exactOnly ? idMatch : (idMatch || phoneMatch || nameMatch || placeMatch);
+        if (matched) {
+          results.push({
+            _priority: idMatch ? 0 : (phoneExact ? 1 : 2),
+            type: 'usthad',
+            admissionNo: u.usthadId,
+            usthadId: u.usthadId,
+            name: u.name,
+            role: 'usthad',
+            designation: u.designation || u.subject || 'Mudarris',
+            subject: u.subject || 'Dars Mudarris',
+            photoUrl: u.photoUrl || 'img/new_logo.png',
+            place: u.place || 'Muttichira',
+            phone: u.phone,
+            fatherName: u.fatherName || ''
+          });
+        }
+      });
     }
 
     if (results.length > 0) {
+      results.sort((a, b) => a._priority - b._priority);
+      const cleanResults = results.slice(0, 15).map(({ _priority, ...item }) => item);
       return res.json({
         success: true,
-        user: results[0],
-        matches: results.slice(0, 15) // Top 15 matching items
+        user: cleanResults[0],
+        matches: cleanResults
       });
     }
 
@@ -255,26 +301,42 @@ exports.login = async (req, res) => {
       if (!usthad) {
         return res.status(404).json({ success: false, message: 'Usthad record not found' });
       }
-      const validPass = usthad.password || usthad.phone || usthad.usthadId;
+      const validPass = (usthad.password !== undefined && usthad.password !== null && String(usthad.password).trim() !== '')
+        ? String(usthad.password).trim()
+        : String(usthad.phone || usthad.usthadId || '').trim();
       if (cleanPass !== validPass) {
         return res.status(401).json({ success: false, message: 'Incorrect Password' });
       }
       req.session.portalUser = {
         role: 'usthad',
+        _id: usthad._id,
         id: usthad._id,
         usthadId: usthad.usthadId,
         admissionNo: usthad.usthadId,
         name: usthad.name,
         phone: usthad.phone,
+        dob: usthad.dob || '',
         designation: usthad.designation,
         subject: usthad.subject,
+        batchNumber: usthad.batchNumber || '',
         photoUrl: usthad.photoUrl,
-        place: usthad.place || 'Muttichira',
         fatherName: usthad.fatherName || '',
+        motherName: usthad.motherName || '',
+        email: usthad.email || '',
+        bloodGroup: usthad.bloodGroup || '',
+        houseName: usthad.houseName || '',
+        homePhone: usthad.homePhone || '',
+        place: usthad.place || 'Muttichira',
         postOffice: usthad.postOffice || usthad.address || '',
+        district: usthad.district || '',
+        pincode: usthad.pincode || '',
+        educationReligious: usthad.educationReligious || '',
+        educationSecular: usthad.educationSecular || '',
         education: usthad.education || 'Baqavi / Faizi',
         job: usthad.job || 'Mudarris / Scholar',
-        bloodGroup: usthad.bloodGroup || '',
+        guardianName: usthad.guardianName || '',
+        relationship: usthad.relationship || '',
+        guardianPhone: usthad.guardianPhone || '',
         myDatas: usthad.myDatas || [],
         bio: usthad.bio || ''
       };
@@ -285,31 +347,44 @@ exports.login = async (req, res) => {
       if (!student) {
         return res.status(404).json({ success: false, message: 'Student record not found' });
       }
-      const validPass = student.password || student.phone || student.admissionNo;
-      console.log('Login student:', student);
-      console.log('Login validPass:', validPass, 'cleanPass:', cleanPass);
+      const validPass = (student.password !== undefined && student.password !== null && String(student.password).trim() !== '')
+        ? String(student.password).trim()
+        : String(student.phone || student.admissionNo || '').trim();
       if (cleanPass !== validPass) {
         return res.status(401).json({ success: false, message: 'Incorrect Password' });
       }
       req.session.portalUser = {
         role: 'student',
+        _id: student._id,
         id: student._id,
         admissionNo: student.admissionNo,
         name: student.name,
         phone: student.phone,
+        dob: student.dob || '',
         batchNumber: student.batchNumber,
-          status: student.status,
-          isAlumni: student.isAlumni,
+        status: student.status,
+        isAlumni: student.isAlumni,
         photoUrl: student.photoUrl,
-        place: student.place || 'Muttichira',
         fatherName: student.fatherName || student.guardianName || '',
-        guardianName: student.guardianName,
+        motherName: student.motherName || '',
+        email: student.email || '',
+        bloodGroup: student.bloodGroup || '',
+        houseName: student.houseName || '',
+        homePhone: student.homePhone || '',
+        place: student.place || 'Muttichira',
         postOffice: student.postOffice || student.post || student.address || '',
+        district: student.district || '',
+        pincode: student.pincode || '',
+        educationReligious: student.educationReligious || '',
+        educationSecular: student.educationSecular || '',
         education: student.education || 'SSLC / Dars',
         job: student.job || student.occupation || 'Student',
-        bloodGroup: student.bloodGroup || '',
+        guardianName: student.guardianName || '',
+        relationship: student.relationship || '',
+        guardianPhone: student.guardianPhone || '',
         myDatas: student.myDatas || [],
-        bio: student.bio
+        bio: student.bio || '',
+        batchChangedAt: student.batchChangedAt ? formatDateDMY(student.batchChangedAt) : undefined
       };
       return res.json({ success: true, message: 'Student Login successful', user: req.session.portalUser });
     }
@@ -323,52 +398,61 @@ exports.login = async (req, res) => {
 exports.changePassword = async (req, res) => {
   try {
     const { role, identifier, oldPassword, newPassword } = req.body;
-    if (!newPassword || newPassword.length < 4) {
+    const cleanId = String(identifier || '').trim();
+    const cleanOld = String(oldPassword || '').trim();
+    const cleanNew = String(newPassword || '').trim();
+
+    if (!cleanNew || cleanNew.length < 4) {
       return res.status(400).json({ success: false, message: 'Password must be at least 4 characters long' });
     }
 
     if (role === 'usthad') {
       try {
-        let u = await Usthad.findOne({ $or: [{ usthadId: identifier }, { phone: identifier }] });
+        let u = await Usthad.findOne({ $or: [{ usthadId: cleanId }, { phone: cleanId }] });
         if (u) {
-          if (u.password !== oldPassword) {
+          const validOld = String(u.password || u.phone || u.usthadId || '').trim();
+          if (validOld !== cleanOld) {
             return res.status(401).json({ success: false, message: 'Old password does not match' });
           }
-          u.password = newPassword;
+          u.password = cleanNew;
           await u.save();
-          // PASSWORD SYNC HOOK
           const tdb = require('../config/telegramDB');
           if (tdb.uploadDbToTelegram) tdb.uploadDbToTelegram();
-          return res.json({ success: true, message: 'Password updated successfully!' });
+          return res.json({ success: true, message: 'Password updated successfully!', updatedOn: formatDateDMY(new Date()) });
         }
       } catch (e) {}
-      let memU = memoryUsthads.find(u => u.usthadId === identifier || u.phone === identifier);
+      let memU = memoryUsthads.find(u => u.usthadId === cleanId || u.phone === cleanId);
       if (memU) {
-        if (memU.password !== oldPassword) {
+        const validOld = String(memU.password || memU.phone || memU.usthadId || '').trim();
+        if (validOld !== cleanOld) {
           return res.status(401).json({ success: false, message: 'Old password does not match' });
         }
-        memU.password = newPassword;
-        return res.json({ success: true, message: 'Password updated successfully!' });
+        memU.password = cleanNew;
+        return res.json({ success: true, message: 'Password updated successfully!', updatedOn: formatDateDMY(new Date()) });
       }
     } else {
       try {
-        let s = await Student.findOne({ $or: [{ admissionNo: identifier }, { phone: identifier }] });
+        let s = await Student.findOne({ $or: [{ admissionNo: cleanId }, { phone: cleanId }] });
         if (s) {
-          if (s.password !== oldPassword) {
+          const validOld = String(s.password || s.phone || s.admissionNo || '').trim();
+          if (validOld !== cleanOld) {
             return res.status(401).json({ success: false, message: 'Old password does not match' });
           }
-          s.password = newPassword;
+          s.password = cleanNew;
           await s.save();
-          return res.json({ success: true, message: 'Password updated successfully!' });
+          const tdb = require('../config/telegramDB');
+          if (tdb.uploadDbToTelegram) tdb.uploadDbToTelegram();
+          return res.json({ success: true, message: 'Password updated successfully!', updatedOn: formatDateDMY(new Date()) });
         }
       } catch (e) {}
-      let memS = memoryStudents.find(s => s.admissionNo === identifier || s.phone === identifier);
+      let memS = memoryStudents.find(s => s.admissionNo === cleanId || s.phone === cleanId);
       if (memS) {
-        if (memS.password !== oldPassword) {
+        const validOld = String(memS.password || memS.phone || memS.admissionNo || '').trim();
+        if (validOld !== cleanOld) {
           return res.status(401).json({ success: false, message: 'Old password does not match' });
         }
-        memS.password = newPassword;
-        return res.json({ success: true, message: 'Password updated successfully!' });
+        memS.password = cleanNew;
+        return res.json({ success: true, message: 'Password updated successfully!', updatedOn: formatDateDMY(new Date()) });
       }
     }
     res.status(404).json({ success: false, message: 'User not found' });
@@ -603,8 +687,8 @@ exports.updateStudentAdmin = async (req, res) => {
     if (!student) student = memoryStudents.find(s => String(s._id) === String(id) || String(s.admissionNo) === String(id));
     if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
 
-    const updates = req.body;
-    const isAdminReq = req.headers['x-admin-request'] === 'true' || (req.session && req.session.adminUser);
+    const updates = { ...req.body };
+    const isAdminReq = req.headers['x-admin-request'] === 'true' || Boolean(req.session && (req.session.isAdmin || req.session.adminUser));
 
     // If request comes from student/portal, check if Admin has locked profile editing
     if (!isAdminReq) {
@@ -621,18 +705,20 @@ exports.updateStudentAdmin = async (req, res) => {
     }
 
     // PASSWORD CHANGE SECURITY (Must verify current password before updating password)
-    if (updates.password && String(updates.password).trim() !== '') {
+    const incomingPass = updates.password !== undefined ? String(updates.password).trim() : '';
+    const currentStoredPass = String(student.password || '').trim();
+    if (incomingPass !== '' && incomingPass !== currentStoredPass) {
       if (!isAdminReq) {
         const curPass = updates.currentPassword || updates.oldPassword;
-        const validPass = student.password || student.phone || student.admissionNo;
-        if (!curPass || String(curPass).trim() !== String(validPass).trim()) {
+        const validPass = currentStoredPass !== '' ? currentStoredPass : String(student.phone || student.admissionNo || '').trim();
+        if (!curPass || String(curPass).trim() !== validPass) {
           return res.status(401).json({
             success: false,
             message: 'Current password does not match. (നിലവിലെ പാസ്‌വേഡ് തെറ്റാണ്).'
           });
         }
       }
-      student.password = String(updates.password).trim();
+      student.password = incomingPass;
     }
     delete updates.password;
     delete updates.currentPassword;
@@ -640,8 +726,21 @@ exports.updateStudentAdmin = async (req, res) => {
 
     // Student self-editable core fields: Name, Admission Number, Batch
     if (updates.name && updates.name.trim()) student.name = updates.name.trim();
-    if (updates.admissionNo && updates.admissionNo.trim()) student.admissionNo = String(updates.admissionNo).trim();
-    if (updates.batchNumber && updates.batchNumber.trim()) student.batchNumber = String(updates.batchNumber).replace(/^batch\s*/i, '').trim();
+    delete updates.name;
+    if (updates.admissionNo && String(updates.admissionNo).trim()) student.admissionNo = String(updates.admissionNo).trim();
+    delete updates.admissionNo;
+    if (updates.batchNumber && String(updates.batchNumber).trim()) {
+      const cleanedBatch = String(updates.batchNumber).replace(/^batch\s*/i, '').trim();
+      if (cleanedBatch && String(student.batchNumber || '').trim() !== cleanedBatch) {
+        student.batchChangedAt = new Date().toISOString();
+      }
+      student.batchNumber = cleanedBatch;
+    }
+    delete updates.batchNumber;
+
+    if (updates.dob !== undefined) {
+      updates.dob = normalizeDobValue(updates.dob);
+    }
 
     if (req.file && req.file.path) {
       updates.photoUrl = req.file.path;
@@ -652,7 +751,12 @@ exports.updateStudentAdmin = async (req, res) => {
 
     Object.assign(student, updates);
     if (!isMemory && student.save) await student.save();
-    res.json({ success: true, message: 'Student updated successfully!', student });
+    res.json({
+      success: true,
+      message: 'Student updated successfully!',
+      student,
+      batchChangedAt: student.batchChangedAt ? formatDateDMY(student.batchChangedAt) : undefined
+    });
   } catch(err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -746,8 +850,8 @@ exports.updateUsthadAdmin = async (req, res) => {
     if (!usthad) usthad = memoryUsthads.find(u => String(u._id) === String(id) || String(u.usthadId) === String(id));
     if (!usthad) return res.status(404).json({ success: false, message: 'Usthad not found' });
 
-    const updates = req.body;
-    const isAdminReq = req.headers['x-admin-request'] === 'true' || (req.session && req.session.adminUser);
+    const updates = { ...req.body };
+    const isAdminReq = req.headers['x-admin-request'] === 'true' || Boolean(req.session && (req.session.isAdmin || req.session.adminUser));
 
     // If request comes from usthad/portal, check if Admin has locked profile editing
     if (!isAdminReq) {
@@ -764,18 +868,20 @@ exports.updateUsthadAdmin = async (req, res) => {
     }
 
     // PASSWORD CHANGE SECURITY (Must verify current password before updating password)
-    if (updates.password && String(updates.password).trim() !== '') {
+    const incomingPass = updates.password !== undefined ? String(updates.password).trim() : '';
+    const currentStoredPass = String(usthad.password || '').trim();
+    if (incomingPass !== '' && incomingPass !== currentStoredPass) {
       if (!isAdminReq) {
         const curPass = updates.currentPassword || updates.oldPassword;
-        const validPass = usthad.password || usthad.phone || usthad.usthadId;
-        if (!curPass || String(curPass).trim() !== String(validPass).trim()) {
+        const validPass = currentStoredPass !== '' ? currentStoredPass : String(usthad.phone || usthad.usthadId || '').trim();
+        if (!curPass || String(curPass).trim() !== validPass) {
           return res.status(401).json({
             success: false,
             message: 'Current password does not match. (നിലവിലെ പാസ്‌വേഡ് തെറ്റാണ്).'
           });
         }
       }
-      usthad.password = String(updates.password).trim();
+      usthad.password = incomingPass;
     }
     delete updates.password;
     delete updates.currentPassword;
@@ -783,10 +889,19 @@ exports.updateUsthadAdmin = async (req, res) => {
 
     // Usthad self-editable core fields: Name, Usthad ID, Batch/Designation
     if (updates.name && updates.name.trim()) usthad.name = updates.name.trim();
-    if (updates.admissionNo && updates.admissionNo.trim()) usthad.usthadId = String(updates.admissionNo).trim();
-    if (updates.usthadId && updates.usthadId.trim()) usthad.usthadId = String(updates.usthadId).trim();
-    if (updates.batchNumber && updates.batchNumber.trim()) usthad.batchNumber = String(updates.batchNumber).trim();
-    if (updates.designation && updates.designation.trim()) usthad.designation = String(updates.designation).trim();
+    delete updates.name;
+    if (updates.usthadId && String(updates.usthadId).trim()) usthad.usthadId = String(updates.usthadId).trim();
+    else if (updates.admissionNo && String(updates.admissionNo).trim()) usthad.usthadId = String(updates.admissionNo).trim();
+    delete updates.usthadId;
+    delete updates.admissionNo;
+    if (updates.batchNumber && String(updates.batchNumber).trim()) usthad.batchNumber = String(updates.batchNumber).trim();
+    delete updates.batchNumber;
+    if (updates.designation && String(updates.designation).trim()) usthad.designation = String(updates.designation).trim();
+    delete updates.designation;
+
+    if (updates.dob !== undefined) {
+      updates.dob = normalizeDobValue(updates.dob);
+    }
 
     if (req.file && req.file.path) {
       updates.photoUrl = req.file.path;

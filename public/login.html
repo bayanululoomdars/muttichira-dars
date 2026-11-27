@@ -2189,6 +2189,43 @@
     let currentUserSession = null;
     let debounceTimer = null;
 
+    function formatDateDMY(val) {
+      if (!val) return '';
+      if (val instanceof Date) {
+        if (isNaN(val.getTime())) return '';
+        const d = String(val.getDate()).padStart(2, '0');
+        const m = String(val.getMonth() + 1).padStart(2, '0');
+        const y = val.getFullYear();
+        return `${d} ${m} ${y}`;
+      }
+      const str = String(val).trim();
+      const ymd = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (ymd) return `${ymd[3]} ${ymd[2]} ${ymd[1]}`;
+      const dmy = str.match(/^(\d{2})[\s\-\/](\d{2})[\s\-\/](\d{4})$/);
+      if (dmy) return `${dmy[1]} ${dmy[2]} ${dmy[3]}`;
+      const parsed = new Date(str);
+      if (isNaN(parsed.getTime())) return str;
+      const d = String(parsed.getDate()).padStart(2, '0');
+      const m = String(parsed.getMonth() + 1).padStart(2, '0');
+      const y = parsed.getFullYear();
+      return `${d} ${m} ${y}`;
+    }
+
+    function toDateInputValue(val) {
+      if (!val) return '';
+      const str = String(val).trim();
+      const ymd = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (ymd) return `${ymd[1]}-${ymd[2]}-${ymd[3]}`;
+      const dmy = str.match(/^(\d{2})[\s\-\/](\d{2})[\s\-\/](\d{4})$/);
+      if (dmy) return `${dmy[3]}-${dmy[2]}-${dmy[1]}`;
+      const parsed = new Date(str);
+      if (isNaN(parsed.getTime())) return '';
+      const y = parsed.getFullYear();
+      const m = String(parsed.getMonth() + 1).padStart(2, '0');
+      const d = String(parsed.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
     
     
     function viewIdCard(elemId) {
@@ -2793,7 +2830,7 @@
                   <div class="card-header text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, rgba(13,27,49,0.95), rgba(20,42,74,0.95)); border-bottom:1px solid rgba(212,175,55,0.25);">
                     <div>
                       <h5 class="font-weight-bold m-0 text-warning" style="font-family:'Outfit',sans-serif;">${res.examName}</h5>
-                      <small class="opacity-75">${res.className} • ${new Date(res.createdAt).toLocaleDateString()}</small>
+                      <small class="opacity-75">${res.className} • ${formatDateDMY(res.createdAt)}</small>
                     </div>
                     <div class="text-right">
                       <span class="badge badge-warning text-dark font-weight-bold px-3 py-2 text-uppercase" style="font-size:0.9rem;">
@@ -2940,7 +2977,7 @@
                   <div class="p-3 mb-3 rounded-4" style="background:rgba(15,23,42,0.85); border:1px solid rgba(56,189,248,0.3); border-left:4px solid #38bdf8 !important; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                       <h6 class="font-weight-bold text-info m-0" style="font-size:0.95rem;"><i class="fa fa-bullhorn mr-1"></i> ${n.subject || 'Announcement'}</h6>
-                      <small class="text-white-50">${new Date(n.createdAt).toLocaleDateString()}</small>
+                      <small class="text-white-50">${formatDateDMY(n.createdAt)}</small>
                     </div>
                     <p class="m-0 small text-white-50" style="color:#e2e8f0 !important; line-height:1.5;">${n.content}</p>
                   </div>
@@ -2955,7 +2992,7 @@
                   <div class="p-2 mb-2 rounded border-left" style="background:${isMe ? 'var(--bg-card)' : 'var(--bg-card-2)'}; border-left:4px solid ${isMe ? 'var(--secondary)' : 'var(--success)'} !important;">
                     <div class="d-flex justify-content-between">
                       <strong class="small text-${isMe ? 'secondary' : 'success'}">${isMe ? 'You' : m.senderName}</strong>
-                      <small class="text-muted">${new Date(m.createdAt).toLocaleDateString()}</small>
+                      <small class="text-muted">${formatDateDMY(m.createdAt)}</small>
                     </div>
                     <p class="m-0 small text-dark mt-1">${m.content}</p>
                   </div>
@@ -3769,7 +3806,7 @@ function openBatchMarkReport(batchName) {
   const dateElem = document.getElementById('reportDate');
   if (examTitleElem) examTitleElem.textContent = exam.examName || 'Academic Examination';
   if (batchTitleElem) batchTitleElem.textContent = `${batchName} • Academic Session ${exam.batchYear || '2025-2026'}`;
-  if (dateElem) dateElem.textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  if (dateElem) dateElem.textContent = formatDateDMY(new Date());
 
   // Compute Class Stats
   let evaluatedCount = 0;
@@ -4695,7 +4732,7 @@ function ensureThirtyStudentsInBatch(batchName) {
                 const senderAdm = m.senderId || '';
                 const senderName = m.senderName || 'Student';
                 const role = m.senderRole || 'Student';
-                const dateStr = m.createdAt ? new Date(m.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
+                const dateStr = m.createdAt ? formatDateDMY(m.createdAt) : '';
                 
                 h += `
                   <div class="card mb-3 border-0 shadow-sm rounded-4 overflow-hidden" style="background:rgba(15,23,42,0.92); color:#ffffff; border:1px solid rgba(212,175,55,0.35); border-left:4px solid #d4af37 !important;">
@@ -4821,31 +4858,6 @@ function ensureThirtyStudentsInBatch(batchName) {
         targetEl.innerHTML = opts;
       }
       $('#modalPostNotif').modal('show');
-    }
-
-    function handleChangePasswordSubmit(e) {
-      e.preventDefault();
-      const oldP = document.getElementById('chgOldPass').value;
-      const newP = document.getElementById('chgNewPass').value;
-      if (!currentUserSession) return;
-
-      fetch('/api/portal/change-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          role: currentUserSession.role,
-          identifier: currentUserSession.admissionNo || currentUserSession.usthadId,
-          oldPassword: oldP,
-          newPassword: newP
-        })
-      }).then(r => r.json()).then(res => {
-        if (res.success) {
-          alert('Password changed successfully!');
-          $('#modalChangePassword').modal('hide');
-        } else {
-          document.getElementById('chgPassAlert').innerHTML = `<div class="alert alert-danger small p-2 mt-2">${res.message}</div>`;
-        }
-      });
     }
 
     function handleSendStudentMsg(e) {
@@ -5128,12 +5140,7 @@ function downloadIDCard() {
       // Personal
       document.getElementById('vpFather').textContent = user.fatherName || user.guardianName || '-';
       document.getElementById('vpMother').textContent = user.motherName || '-';
-      const formatDobDDMMYYYY = (val) => {
-        if (!val) return '-';
-        const m = String(val).match(/^(\d{4})-(\d{2})-(\d{2})/);
-        return m ? `${m[3]}-${m[2]}-${m[1]}` : val;
-      };
-      document.getElementById('vpDob').textContent = formatDobDDMMYYYY(user.dob);
+      document.getElementById('vpDob').textContent = formatDateDMY(user.dob) || '-';
       document.getElementById('vpBlood').textContent = user.bloodGroup || 'Unknown';
       document.getElementById('vpPhone').textContent = user.phone || '-';
       document.getElementById('vpEmail').textContent = user.email || '-';
@@ -5217,7 +5224,7 @@ function downloadIDCard() {
       if (batchLabel) batchLabel.innerHTML = (isUsthad ? 'Department / Dept' : 'Batch / ബാച്ച്') + ' <span class="text-danger">*</span>';
       if (batchInput) batchInput.value = isUsthad ? (user.designation || user.subject || 'Mudarris') : (user.batchNumber || '1');
 
-      document.getElementById('epDob').value = user.dob || '';
+      document.getElementById('epDob').value = toDateInputValue(user.dob);
       document.getElementById('epFather').value = user.fatherName || user.guardianName || '';
       document.getElementById('epMother').value = user.motherName || '';
       document.getElementById('epPhone').value = user.phone || '';
@@ -5266,7 +5273,7 @@ function downloadIDCard() {
       const saveBtn = document.getElementById('btnSaveEditProfile');
       const modalTitle = document.querySelector('#modalEditProfile .modal-title');
       const formInputs = document.querySelectorAll('#modalEditProfile input, #modalEditProfile select, #modalEditProfile textarea');
-      const photoInputs = document.querySelectorAll('#epPhoto, #btnStartCrop, #epPhotoLabel');
+      const photoInputs = document.querySelectorAll('#epPhoto, #btnStartCrop, #epPhotoLabel, #btnPasteProfilePhoto');
 
       if (!isProfileEditingAllowed) {
         // PREVIEW ONLY MODE: Show notice, disable all inputs, lock save button
@@ -5278,6 +5285,7 @@ function downloadIDCard() {
           el.style.cursor = 'not-allowed';
         });
         photoInputs.forEach(el => {
+          el.disabled = true;
           el.style.pointerEvents = 'none';
           el.style.opacity = '0.5';
         });
@@ -5296,6 +5304,7 @@ function downloadIDCard() {
           el.style.cursor = '';
         });
         photoInputs.forEach(el => {
+          el.disabled = false;
           el.style.pointerEvents = '';
           el.style.opacity = '1';
         });
@@ -5791,12 +5800,30 @@ function downloadIDCard() {
           scanTargetUrl += '?STD=' + encodeURIComponent(cleanS || rawS || '101');
         }
 
-        const isMasterUsthad = isUsthad && (!cleanU || cleanU === '1');
-        const isMasterStudent = !isUsthad && (!cleanS || cleanS === '101');
+        const isMasterUsthad = isUsthad && (cleanU === '1');
+        const isMasterStudent = !isUsthad && (cleanS === '101');
 
-        // If default master profile or QRCodeStyling unavailable, use pristine 1000x1000 HD QR image
-        if (isMasterUsthad || isMasterStudent || typeof QRCodeStyling === 'undefined') {
+        function renderFallbackQr() {
+          if (typeof QRCode !== 'undefined') {
+            qrBox.innerHTML = '';
+            new QRCode(qrBox, {
+              text: scanTargetUrl,
+              width: qrSize,
+              height: qrSize,
+              colorDark: "#1e1b4b",
+              colorLight: "#ffffff",
+              correctLevel: QRCode.CorrectLevel.H
+            });
+          } else {
+            qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:' + qrSize + 'px; height:' + qrSize + 'px; object-fit:contain; border-radius:' + (isUsthad ? '6px' : '8px') + ';">';
+          }
+        }
+
+        // If default master profile, use pristine 1000x1000 HD QR image; otherwise always generate user-specific QR
+        if (isMasterUsthad || isMasterStudent) {
           qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:' + qrSize + 'px; height:' + qrSize + 'px; object-fit:contain; border-radius:' + (isUsthad ? '6px' : '8px') + ';">';
+        } else if (typeof QRCodeStyling === 'undefined') {
+          renderFallbackQr();
         } else {
           try {
             const qrCodeObj = new QRCodeStyling({
@@ -5843,7 +5870,7 @@ function downloadIDCard() {
             }, 60);
           } catch(err) {
             console.error('Error rendering styled QR:', err);
-            qrBox.innerHTML = '<img src="' + defaultMasterImg + '" style="width:' + qrSize + 'px; height:' + qrSize + 'px; object-fit:contain; border-radius:' + (isUsthad ? '6px' : '8px') + ';">';
+            renderFallbackQr();
           }
         }
       }
@@ -5938,9 +5965,12 @@ function downloadIDCard() {
               cloneQrBox.style.width = pdfQrSize + 'px';
               cloneQrBox.style.height = pdfQrSize + 'px';
               let qrSrc = '';
-              if (origImg && origImg.src) {
+              if (origCanvas && (!origImg || origImg.style.display === 'none' || !origImg.getAttribute('src'))) {
+                try { qrSrc = origCanvas.toDataURL(); } catch(e){}
+              }
+              if (!qrSrc && origImg && origImg.src) {
                 qrSrc = origImg.src;
-              } else if (origCanvas) {
+              } else if (!qrSrc && origCanvas) {
                 try { qrSrc = origCanvas.toDataURL(); } catch(e){}
               }
               if (qrSrc) {
@@ -6029,16 +6059,29 @@ function downloadIDCard() {
 
       if (targetId) {
         switchRole(targetRole);
+        clearTimeout(debounceTimer);
         const input = document.getElementById('inputIdentifier');
         if (input) {
           input.value = targetId;
+          const isExactQrParam = Boolean(ustParam || stdParam);
           setTimeout(() => {
-            fetch('/api/portal/lookup?q=' + encodeURIComponent(targetId) + '&role=' + targetRole)
+            fetch('/api/portal/lookup?q=' + encodeURIComponent(targetId) + '&role=' + targetRole + (isExactQrParam ? '&exact=1' : ''))
               .then(r => r.json())
               .then(data => {
                 if (data.success && data.matches && data.matches.length > 0) {
                   currentMatchesList = data.matches;
-                  selectUserFromList(0, false);
+                  const targetLower = targetId.toLowerCase();
+                  const cleanTarget = targetRole === 'usthad'
+                    ? targetLower.replace(/^ust-?/i, '').trim()
+                    : targetLower.replace(/^std-?/i, '').trim();
+                  const exactIdx = data.matches.findIndex(m => {
+                    const rawId = String(m.usthadId || m.admissionNo || m._id || '').toLowerCase().trim();
+                    const cleanId = targetRole === 'usthad'
+                      ? rawId.replace(/^ust-?/i, '').trim()
+                      : rawId.replace(/^std-?/i, '').trim();
+                    return rawId === targetLower || (cleanId && cleanId === cleanTarget);
+                  });
+                  selectUserFromList(exactIdx >= 0 ? exactIdx : 0, false);
                   const preview = document.getElementById('livePreviewBox');
                   if (preview) {
                     preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -7054,7 +7097,7 @@ function downloadIDCard() {
               <div class="form-group col-md-4 mb-3">
                 <label for="epCurrentPassword" class="small font-weight-bold text-dark">Current Password / പഴയ പാസ്‌വേഡ്</label>
                 <div class="input-group">
-                  <input type="password" class="form-control" id="epCurrentPassword" placeholder="Current Password">
+                  <input type="password" class="form-control" id="epCurrentPassword" placeholder="Current Password" autocomplete="new-password">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('epCurrentPassword', 'eyeEpCurrentPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
                       <i id="eyeEpCurrentPass" class="fa fa-eye"></i>
@@ -7068,7 +7111,7 @@ function downloadIDCard() {
               <div class="form-group col-md-4 mb-3">
                 <label for="epNewPassword" class="small font-weight-bold text-dark">New Password / പുതിയ പാസ്‌വേഡ്</label>
                 <div class="input-group">
-                  <input type="password" class="form-control" id="epNewPassword" placeholder="New Password (min 4 chars)">
+                  <input type="password" class="form-control" id="epNewPassword" placeholder="New Password (min 4 chars)" autocomplete="new-password">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('epNewPassword', 'eyeEpNewPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
                       <i id="eyeEpNewPass" class="fa fa-eye"></i>
@@ -7082,7 +7125,7 @@ function downloadIDCard() {
               <div class="form-group col-md-4 mb-3">
                 <label for="epConfirmPassword" class="small font-weight-bold text-dark">Confirm New / സ്ഥിരീകരിക്കുക</label>
                 <div class="input-group">
-                  <input type="password" class="form-control" id="epConfirmPassword" placeholder="Confirm New Password">
+                  <input type="password" class="form-control" id="epConfirmPassword" placeholder="Confirm New Password" autocomplete="new-password">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordInputVis('epConfirmPassword', 'eyeEpConfirmPass')" style="border-radius: 0 8px 8px 0; border:1px solid #cbd5e1; background:#f8fafc;">
                       <i id="eyeEpConfirmPass" class="fa fa-eye"></i>

@@ -3000,6 +3000,27 @@
     var el = document.getElementById(id);
     if (el) el.addEventListener(event, fn);
   }
+  function formatDateDMY(val) {
+    if (!val) return '';
+    if (val instanceof Date) {
+      if (isNaN(val.getTime())) return '';
+      var d = String(val.getDate()).padStart(2, '0');
+      var m = String(val.getMonth() + 1).padStart(2, '0');
+      var y = val.getFullYear();
+      return d + ' ' + m + ' ' + y;
+    }
+    var str = String(val).trim();
+    var ymd = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (ymd) return ymd[3] + ' ' + ymd[2] + ' ' + ymd[1];
+    var dmy = str.match(/^(\d{2})[\s\-\/](\d{2})[\s\-\/](\d{4})$/);
+    if (dmy) return dmy[1] + ' ' + dmy[2] + ' ' + dmy[3];
+    var parsed = new Date(str);
+    if (isNaN(parsed.getTime())) return str;
+    var dd = String(parsed.getDate()).padStart(2, '0');
+    var mm = String(parsed.getMonth() + 1).padStart(2, '0');
+    var yy = parsed.getFullYear();
+    return dd + ' ' + mm + ' ' + yy;
+  }
   
   /* 
 ═══════════════════════════════════════
@@ -3244,6 +3265,8 @@ function renderPortalUsersAdmin() {
               '</div>' +
             '</div>' +
             (u.place ? '<div style="display:flex; flex-direction:column; gap:2px;"><small style="color:var(--text-soft); font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">Place</small><div style="color:var(--text); font-size:0.85rem;"><i class="fa fa-map-marker text-danger" style="margin-right:4px;"></i>' + u.place + '</div></div>' : '') +
+            (u.dob ? '<div style="display:flex; flex-direction:column; gap:2px;"><small style="color:var(--text-soft); font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">Date of Birth</small><div style="color:var(--text); font-size:0.85rem;"><i class="fa fa-calendar text-info" style="margin-right:4px;"></i>' + formatDateDMY(u.dob) + '</div></div>' : '') +
+            (u.batchChangedAt ? '<div style="display:flex; flex-direction:column; gap:2px;"><small style="color:var(--text-soft); font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">Batch Updated</small><div style="color:var(--text); font-size:0.85rem;"><i class="fa fa-clock-o text-warning" style="margin-right:4px;"></i>' + formatDateDMY(u.batchChangedAt) + '</div></div>' : '') +
           '</div>' +
           '<div>' +
             '<button type="button" class="btn btn-sm btn-ghost" onclick="togglePortalUserDetails(' + uIdx + ')" style="font-size:11px; color:var(--text-muted); padding:3px 8px; border:1px solid var(--border-soft); border-radius:12px;">' +
@@ -3708,6 +3731,7 @@ function submitAddStudentAdmin(e) {
 
   fetch(url, {
     method: method,
+    headers: { 'x-admin-request': 'true' },
     body: fd
   }).then(r => r.json()).then(res => {
     showToast(res.message || (editingUserId ? 'Student record updated!' : 'Student record saved!'), !res.success);
@@ -3757,6 +3781,7 @@ function submitAddUsthadAdmin(e) {
 
   fetch(url, {
     method: method,
+    headers: { 'x-admin-request': 'true' },
     body: fd
   }).then(r => r.json()).then(res => {
     showToast(res.message || (editingUserId ? 'Usthad record updated!' : 'Usthad record saved!'), !res.success);
@@ -3791,7 +3816,7 @@ function loadUsersAdmin() {
         safeSetText('badge-users', data.users.length);
         let html = '';
         data.users.forEach((u, idx) => {
-          var joinDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+          var joinDate = u.createdAt ? formatDateDMY(u.createdAt) : '—';
           html += '<tr>' +
             '<td>' + (idx + 1) + '</td>' +
             '<td><img src="' + (u.picture || '') + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0;" onerror="this.style.display=\'none\'"></td>' +
@@ -4021,7 +4046,7 @@ function loadStoriesAdmin() {
         var exp = new Date(item.expiresAt);
         var now = new Date();
         var isActive = exp > now;
-        var d = exp.toLocaleDateString('en-IN');
+        var d = formatDateDMY(exp);
         html += '<tr>' +
           '<td><img src="' + item.imageUrl + '" style="width:50px;height:38px;object-fit:cover;border-radius:6px;"></td>' +
           '<td><strong>' + (item.title || '—') + '</strong></td>' +
@@ -4324,12 +4349,12 @@ function loadAdmissions() {
 
       var html = '';
       data.forEach(function(item) {
-        var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+        var d = formatDateDMY(item.createdAt);
         html += '<tr><td><strong>' + item.name + '</strong></td>' +
           '<td>' + item.fatherName + '</td>' +
           '<td>' + item.motherName + '</td>' +
           '<td>' + item.phone + '</td>' +
-          '<td>' + (item.dob || '-') + '</td>' +
+          '<td>' + (item.dob ? formatDateDMY(item.dob) : '-') + '</td>' +
           '<td>' + d + '</td>' +
           '<td style="white-space:nowrap;display:flex;gap:6px;">' +
           '<button class="btn btn-ghost btn-sm" onclick="viewAdmission(\'' + item._id + '\')"><i class="fa fa-eye"></i></button>' +
@@ -4342,7 +4367,7 @@ function loadAdmissions() {
       // Overview panel
       var ovHtml = data.slice(0,5).map(function(a) {
         return '<div style="padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:0.84rem;display:flex;justify-content:space-between;">' +
-          '<span>' + a.name + '</span><span style="color:var(--text-muted);">' + new Date(a.createdAt).toLocaleDateString('en-IN') + '</span></div>';
+          '<span>' + a.name + '</span><span style="color:var(--text-muted);">' + formatDateDMY(a.createdAt) + '</span></div>';
       }).join('');
       safeSetHtml('overviewAdmissions', ovHtml || '<span style="color:var(--text-muted);">No applications yet</span>');
     }).catch(function() {});
@@ -4358,7 +4383,7 @@ function viewAdmission(id) {
 
   var html = '<div class="applicant-header">' + avatarHtml +
     '<div><h3 style="font-family:Outfit,sans-serif;color:var(--accent);margin-bottom:4px;">' + item.name + '</h3>' +
-    '<div style="font-size:0.82rem;color:var(--text-muted);">DOB: ' + (item.dob || '-') + ' | Blood: ' + (item.bloodGroup || '-') + '</div></div></div>';
+    '<div style="font-size:0.82rem;color:var(--text-muted);">DOB: ' + (item.dob ? formatDateDMY(item.dob) : '-') + ' | Blood: ' + (item.bloodGroup || '-') + '</div></div></div>';
 
   html += '<div class="modal-detail-grid">';
   var fields = [
@@ -4370,7 +4395,7 @@ function viewAdmission(id) {
     ["Secular Ed.", item.educationSecular || '-'],
     ["Guardian", (item.guardianName || '-') + ' (' + (item.relationship || '-') + ')'],
     ["Guardian Phone", item.guardianPhone || '-'],
-    ["Applied", new Date(item.createdAt).toLocaleString('en-IN')]
+    ["Applied", formatDateDMY(item.createdAt)]
   ];
   fields.forEach(function(f) {
     html += '<div class="modal-detail-item"><label>' + f[0] + '</label><span>' + f[1] + '</span></div>';
@@ -4388,7 +4413,7 @@ function fillPdfTemplate(item) {
   safeSetText('pdf_fatherName', item.fatherName || '');
   safeSetText('pdf_phone', item.phone || '');
   safeSetText('pdf_motherName', item.motherName || '');
-  safeSetText('pdf_dob', item.dob || '');
+  safeSetText('pdf_dob', item.dob ? formatDateDMY(item.dob) : '');
   safeSetText('pdf_houseName', item.houseName || '______');
   safeSetText('pdf_homePhone', item.homePhone || '______');
   safeSetText('pdf_place', item.place || '______');
@@ -4401,7 +4426,7 @@ function fillPdfTemplate(item) {
   safeSetText('pdf_guardianName', item.guardianName || '______');
   safeSetText('pdf_relationship', item.relationship || '______');
   safeSetText('pdf_guardianPhone', item.guardianPhone || '______');
-  safeSetText('pdf_date', new Date(item.createdAt).toLocaleDateString('en-IN'));
+  safeSetText('pdf_date', formatDateDMY(item.createdAt));
   safeSetText('pdf_signature', (item.name || '').split(' ')[0] || '');
 
   var photoImg   = document.getElementById('pdfPhotoImg');
@@ -4589,7 +4614,7 @@ function loadNewsAdmin() {
       safeSetText('badge-news', data.length);
       var html = '';
       data.forEach(function(item) {
-        var d = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN') : '—';
+        var d = item.createdAt ? formatDateDMY(item.createdAt) : '—';
         var catBadge = item.category ? '<span style="background:rgba(13,71,161,0.12); color:#0d47a1; font-weight:700; padding:3px 8px; border-radius:4px; font-size:0.75rem; text-transform:uppercase;">' + item.category + '</span>' : '<span style="color:var(--text-muted);">News</span>';
         var linkIcon = item.link ? ' <a href="' + item.link + '" target="_blank" title="Open Link" style="color:var(--accent); margin-left:4px;"><i class="fa fa-external-link"></i></a>' : '';
 
@@ -4747,7 +4772,7 @@ function loadGalleryAdmin() {
     }
     var html = '';
     data.forEach(function(item) {
-      var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+      var d = formatDateDMY(item.createdAt);
       var mediaTag = '';
       if (item.mediaType === 'video') {
         if (item.imageUrl && (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be'))) {
@@ -5005,7 +5030,7 @@ function loadContacts() {
     safeSetText('badge-contacts', data.length);
     var html = '';
     data.forEach(function(item) {
-      var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+      var d = formatDateDMY(item.createdAt);
       html += '<tr>' +
         '<td><strong>' + item.name + '</strong></td>' +
         '<td style="color:var(--text-muted);">' + item.email + '</td>' +
@@ -5018,7 +5043,7 @@ function loadContacts() {
 
     var ovHtml = data.slice(0,5).map(function(c) {
       return '<div style="padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:0.84rem;display:flex;justify-content:space-between;">' +
-        '<span>' + c.name + ': ' + (c.subject || '') + '</span><span style="color:var(--text-muted);">' + new Date(c.createdAt).toLocaleDateString('en-IN') + '</span></div>';
+        '<span>' + c.name + ': ' + (c.subject || '') + '</span><span style="color:var(--text-muted);">' + formatDateDMY(c.createdAt) + '</span></div>';
     }).join('');
     safeSetHtml('overviewContacts', ovHtml || '<span style="color:var(--text-muted);">No messages yet</span>');
   }).catch(function() {});
@@ -5033,7 +5058,7 @@ function loadSubscribers() {
     safeSetText('badge-subscribers', data.length);
     var html = '';
     data.forEach(function(item, i) {
-      var d = new Date(item.subscribedAt).toLocaleDateString('en-IN');
+      var d = formatDateDMY(item.subscribedAt);
       html += '<tr><td>' + (i + 1) + '</td><td>' + item.email + '</td><td>' + d + '</td></tr>';
     });
     safeSetHtml('subscribersTableBody', html || '<tr class="empty-row"><td colspan="3">No subscribers yet</td></tr>');
@@ -5377,7 +5402,7 @@ function loadAllComments() {
       if (item.comments && item.comments.length > 0) {
         item.comments.forEach(function(c) {
           var user = c.user ? (c.user.name || 'Unknown') : 'Unknown';
-          var date = new Date(c.createdAt || Date.now()).toLocaleDateString('en-IN');
+          var date = formatDateDMY(c.createdAt || Date.now());
           html += '<div style="display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid var(--border-soft);">' +
             '<i class="fa fa-user-circle" style="color:var(--accent);font-size:1.4rem;margin-top:2px;"></i>' +
             '<div style="flex:1;">' +
@@ -5612,7 +5637,7 @@ function renderExamTableList() {
       <td><span class="badge badge-info">${e.term || 'Semester'}</span></td>
       <td><code>${e.batchYear || '2025'}</code></td>
       <td>${classCount} Batches configured</td>
-      <td><small style="color:var(--text-soft);">${new Date(e.createdAt || Date.now()).toLocaleDateString()}</small></td>
+      <td><small style="color:var(--text-soft);">${formatDateDMY(e.createdAt || Date.now())}</small></td>
       <td>
         <button class="btn btn-danger btn-sm" onclick="deleteExamAdmin('${e._id}')"><i class="fa fa-trash"></i> Delete</button>
       </td>
